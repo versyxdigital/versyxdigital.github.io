@@ -11,6 +11,7 @@
     <meta property="og:image" content="https://versyxdigital.github.io/psmonitor/demo.png" />
     <title>PSMonitor - A simple monitoring utility.</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=Noto+Sans&family=Oxygen&family=Manrope&family=Nunito&family=Poppins&display=swap" rel="stylesheet">
@@ -135,8 +136,8 @@
 </head>
 <body>
     <a class="github-fork-ribbon d-none d-md-block" href="https://github.com/sentrychris/psmonitor/" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
-    <div class="container py-5">
-        <header class="d-flex align-items-center justify-content-between pb-3 mb-5 border-bottom">
+    <div class="pt-5 pb-3">
+        <header class="container d-flex align-items-center justify-content-between pb-3 mb-5 border-bottom">
             <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                 <img src="logo.png" class="img-fluid rounded me-2" width="50" alt="">
                 <div>
@@ -146,58 +147,93 @@
             </a>
         </header>
         
-        <main>
-            <div class="row pb-5 d-flex flex-row align-items-center justify-content-center">
-                <div class="col-sm-12 col-lg-6 text-center">
-                    <h1 class="heading">Get started with PSMonitor</h1>
-                    <p class="heading__sub-heading mt-3">Quickly and easily monitor your system health. A built-in server is also included for remote monitoring capabilities.</p>
-                    <div class="d-flex flex-row align-items-center justify-content-center gap-3 pt-2 pb-3 mt-md-0">
-                        <a href="https://github.com/sentrychris/psmonitor/releases/download/v1.5.0.1001/psmonitor.exe" download class="d-flex flex-row align-items-center gap-2 btn-download rounded">
-                            <i class="fa-brands fa-2xl fa-windows me-2"></i>
-                            <div>
-                                <p class="release-info">Download for Windows</p>
-                                <p class="release-info">v1.5.0.1001</p>
+        <section class="py-5 text-light" style="background: linear-gradient(135deg, #292e47 0%, #9699bb 100%);border-bottom: 10px solid #212529;border-top: 10px solid #212529;">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 text-center text-lg-start">
+                        <h1 class="display-5 text-white fw-bold">Get started with PSMonitor</h1>
+                        <p class="lead mt-3 mb-4">Track and manage your system health in real-time. Lightweight, modern, and includes remote monitoring out of the box.</p>
+                        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                            <a href="https://github.com/sentrychris/psmonitor/releases/download/v1.5.0.1001/psmonitor.exe" class="btn btn-lg btn-dark shadow">
+                                <i class="fa-brands fa-windows me-2"></i> <small>Windows v1.5.0.1001</small>
+                            </a>
+                            <a href="https://github.com/sentrychris/psmonitor/releases/download/v1.2.2.1551/psmonitor" class="btn btn-lg btn-light shadow">
+                                <i class="fa-brands fa-linux me-2"></i> <small>Linux v1.2.2.1551</small>
+                            </a>
+                        </div>
+                        <div class="mt-3">
+                            <hr />
+                            <p class="mt-3 mb-2">More Downloads:</p>
+                            <div class="d-flex flex-column">
+                                <a class="small text-decoration-none  text-light"
+                                    href="https://github.com/sentrychris/psmonitor/releases/download/v1.5.0.1001/psmonitor-headless.exe" download="">
+                                    <i class="fa-brands fa-windows me-2" aria-hidden="true"></i>
+                                    Headless server (no gui) for Windows v1.5.0.1001
+                                </a>
+                                <a class="small text-decoration-none mt-1 text-light"
+                                    href="https://github.com/sentrychris/psmonitor/releases/download/v1.2.2.1551/psmonitor-standalone-server-no-gui" download="">
+                                    <i class="fa-brands fa-linux me-2" aria-hidden="true"></i>
+                                    Headless server (no gui) for Linux v1.2.2.1551
+                                </a>
                             </div>
-                        </a>
-                        <a href="https://github.com/sentrychris/psmonitor/releases/download/v1.2.2.1551/psmonitor" download class="d-flex flex-row align-items-center gap-2 btn-download rounded">
-                            <i class="fa-brands fa-2xl fa-linux me-2"></i>
-                            <div>
-                                <p class="release-info">Download for Linux</p>
-                                <p class="release-info">v1.2.2.1551</p>
-                            </div>
-                        </a>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-light">MIT Licensed · <a href="https://github.com/sentrychris/psmonitor" class="text-light text-decoration-underline">Source on GitHub</a></small>
+                        </div>
                     </div>
-                    <p class="mt-3 mb-2 text-muted">More Downloads:</p>
-                    <div class="d-flex flex-column">
-                        <a class="small text-decoration-none" href="https://github.com/sentrychris/psmonitor/releases/download/v1.5.0.1001/psmonitor-headless.exe" download>
-                            <i class="fa-brands fa-windows me-2"></i>
-                            Headless server (no gui) for Windows v1.5.0.1001
-                        </a>
-                        <a class="small text-decoration-none mt-1" href="https://github.com/sentrychris/psmonitor/releases/download/v1.2.2.1551/psmonitor-standalone-server-no-gui" download>
-                            <i class="fa-brands fa-linux me-2"></i>
-                            Headless server (no gui) for Linux v1.2.2.1551
-                        </a>
-                    </div>
-
-                    <p class="mt-4 release-info text-muted mb-2">
-                        This software is released under an MIT License.
-                    </p>
-                    <p class="release-info text-muted">
-                        View on Github
-                        <a class="text-decoration-underline" href="https://github.com/sentrychris/psmonitor">here</a>.
-                    </p>
-                </div>
-                <div class="col-sm-12 col-lg-6 mt-4 mt-lg-0">
-                    <div class="position-relative text-center">
-                        <img class="shadow img-fluid" src="./demo.png" />
+                    <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                        <img src="./demo.png" class="img-fluid rounded shadow-lg" alt="PSMonitor screenshot" />
                     </div>
                 </div>
             </div>
-        </main>
-        <footer class="pt-5 my-5 text-muted border-top small">
-            Made with&nbsp;
-            <svg class="svg-inline--fa fa-heart fa-w-16 love" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="heart" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"></path></svg>
-            &nbsp;by <a class="text-dark" href="https://versyx.dev">Chris Rowles</a> &middot; &copy; <script>document.write(new Date().getFullYear())</script>
+        </section>
+
+        <section class="py-5 bg-light text-center">
+            <div class="container">
+                <h2 class="mb-5 fw-bold text-dark">Why PSMonitor?</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <i class="fas fa-microchip fa-3x mb-3" style="color: #383f5f;"></i>
+                        <h5 class="fw-bold">Live System Stats</h5>
+                        <p class="text-muted">Track CPU, memory, disk, top processes by usage and more useful metrics in real time.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-network-wired fa-3x mb-3" style="color: #383f5f;"></i>
+                        <h5 class="fw-bold">Remote Monitoring</h5>
+                        <p class="text-muted">Headless server enables monitoring remotely. Also available as a separate download.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <i class="fas fa-feather-alt fa-3x mb-3" style="color: #383f5f;"></i>
+                        <h5 class="fw-bold">Lightweight & Fast</h5>
+                        <p class="text-muted">No bloat. Minimal CPU/memory footprint. Perfect for servers laptops and small devices alike.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="container pt-5 text-muted border-top small d-flex align-items-end justify-content-between">
+            <div>
+                Made with&nbsp;
+                ❤️
+                &nbsp;by <a class="text-dark" href="https://versyx.dev">Chris Rowles</a> &middot; &copy; <script>document.write(new Date().getFullYear())</script>
+            </div>
+            <div class="d-flex flex-column">
+                <span class="ls-2 fs-5">☕ Would you like to hire me?</span>
+                <hr />
+                <span>Email: <a href="mailto:christopher.rowles@outlook.com">christopher.rowles@outlook.com</a></span>
+                <span>Phone: <a href="tel:+44(0)7522 267 722">+44(0)7522 267 722</a></span>
+                <div class="d-flex align-items-center gap-3 mt-3">
+                    <a href="https://github.com/sentrychris/">
+                        <i class="fa-brands fa-square-github fa-2x"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/chris-rowles/">
+                        <i class="fa-brands fa-linkedin fa-2x"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/chris-rowles/">
+                        <i class="fa-brands fa-y-combinator fa-2x"></i>
+                    </a>
+                </div>
+            </div>
         </footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
