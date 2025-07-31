@@ -190,13 +190,13 @@
                             </div>
                         </div>
                         <div class="col-lg-6 text-center mt-4 mt-lg-0">
-                            <img src="./assets/img4.png" class="img-fluid rounded shadow-lg" alt="PSMonitor screenshot">
+                            <img src="./assets/img4.png" class="img-fluid rounded shadow" alt="PSMonitor screenshot">
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="py-5 bg-light text-center shadow-lg" style="border-bottom: 1px solid #212529;">
+            <section class="py-5 bg-white text-center shadow-lg">
                 <div class="container">
                     <h2 class="mb-5 fw-bold text-dark">
                         <i class="fas fa-chart-line me-2"></i> PSMonitor Overview
@@ -221,7 +221,7 @@
                 </div>
             </section>
 
-            <section class="py-5 bg-light text-center shadow-lg" style="border-bottom: 1px solid #212529;">
+            <section class="py-5 bg-white text-center shadow-lg">
                 <div class="container pb-3">
                     <h2 class="mb-5 fw-bold text-dark">
                         <i class="fas fa-cogs me-2"></i> How to Configure
@@ -235,7 +235,7 @@
                     </div>
                     <div class="text-left mt-3 row g-4 d-flex align-items-center">
                         <div class="col-md-5">
-                            <img src="./assets/img3.png" class="img-fluid shadow-lg" style="border: 1px solid #cccccc; border-radius: 8px;" alt="PSMonitor screenshot">
+                            <img src="./assets/img3.png" class="img-fluid shadow-lg" style="border-radius: 9px;" alt="PSMonitor screenshot">
                         </div>
                         <div class="col-md-7 text-left">
                             <div class="psmonitor-settings-list">
@@ -270,54 +270,61 @@
                 </div>
             </section>
 
-            <section class="py-5 bg-white text-center shadow-lg">
+            <section class="bg-white py-5 text-center shadow-lg">
                 <div class="container pb-3">
-                    <h2 class="fw-bold">
-                        <i class="fas fa-user-plus me-2"></i> Additional Features
+                    <h2 class="mb-5 fw-bold">
+                        <i class="fas fa-line-chart me-2"></i> Graphs
                     </h2>
-                    <div class="py-5">
-                        <h3>Graphs</h3>
-                        <div class="row mt-5 text-left d-flex align-items-center">
-                            <div class="col-md-6">
-                                <img class="img-fluid mt-3" style="border-radius: 9px;border:1px solid #cccccc;" src="./assets/img2.png">
-                                <img class="img-fluid mt-3" style="border-radius: 9px;border:1px solid #cccccc;" src="./assets/img1.png">
-                            </div>
-                            <div class="col-md-6">
-                                <p>
-                                    PSMonitor features a set of real-time system graphs that visually display key performance metrics including CPU temperature, 
-                                    CPU usage, and memory consumption. Each graph updates at a regular interval defined in the settings, providing a continuous 
-                                    view of current system load.
-                                </p>
-                                <p>
-                                    These graphs help users quickly identify performance bottlenecks or abnormal spikes in resource usage, and are especially useful
-                                    for tracking system behavior over time during intensive tasks or remote monitoring scenarios.
-                                </p>
-                            </div>
+                    <div class="row mt-3 text-left d-flex align-items-center">
+                        <div class="col-md-6">
+                            <a href="./assets/img2.png" target="_blank">
+                                <img class="img-fluid shadow mt-3" style="border-radius: 9px;" src="./assets/img2.png">
+                            </a>
+                            <a href="./assets/img1.png" target="_blank">
+                                <img class="img-fluid shadow mt-3" style="border-radius: 9px;" src="./assets/img1.png">
+                            </a>
                         </div>
-                    </div>
-
-                    <div class="py-5">
-                        <h3>Web UI</h3>
-                        <div class="row mt-5 text-left d-flex align-items-center">
-                            <div class="col-md-6">
-                                <p>
-                                    PSMonitor includes a built-in web-based user interface that runs on the same address and port as the embedded WebSocket server.
-                                    This interface provides a lightweight, read-only view of system statistics, making it ideal for remote monitoring or headless environments. 
-                                </p>
-                                <p>
-                                    It is particularly useful for testing connectivity or accessing monitoring data from another device on the network. The Web UI can be launched 
-                                    directly from the desktop application via the File > Open Web UI menu option, which opens the interface in the default browser.
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <img class="img-fluid mt-3" style="border-radius: 9px;border:1px solid #cccccc;" src="./assets/webui.png">
-                            </div>
+                        <div class="col-md-6">
+                            <p>
+                                PSMonitor features a set of real-time system graphs that visually display key performance metrics including CPU temperature, 
+                                CPU usage, and memory consumption. Each graph updates at a regular interval defined in the settings, providing a continuous 
+                                view of current system load.
+                            </p>
+                            <p>
+                                These graphs help users quickly identify performance bottlenecks or abnormal spikes in resource usage, and are especially useful
+                                for tracking system behavior over time during intensive tasks or remote monitoring scenarios.
+                            </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="py-5 text-center" style="border-top: 1px solid #212529">
+            <section class="py-5 text-center shadow" style="background: #e7eff3">
+                <div class="container pb-3">
+                    <h2 class="mb-5 fw-bold">
+                        <i class="fas fa-globe me-2"></i> Web UI
+                    </h2>
+                    <div class="row mt-5 text-left d-flex align-items-center">
+                        <div class="col-md-6">
+                            <p>
+                                PSMonitor includes a built-in web-based user interface that runs on the same address and port as the embedded WebSocket server.
+                                This interface provides a lightweight, read-only view of system statistics, making it ideal for remote monitoring or headless environments. 
+                            </p>
+                            <p>
+                                It is particularly useful for testing connectivity or accessing monitoring data from another device on the network. The Web UI can be launched 
+                                directly from the desktop application via the File > Open Web UI menu option, which opens the interface in the default browser.
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="./assets/webui.png" target="_blank">
+                                <img class="img-fluid mt-3" src="./assets/webui.png">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-5 text-center">
                 <h2 class="fw-bold mb-3">
                     <i class="fas fa-download me-2"></i> Download
                 </h2>
