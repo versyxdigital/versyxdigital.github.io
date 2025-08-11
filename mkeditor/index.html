@@ -241,10 +241,22 @@
 
             <section clas="py-5">
                 <div class="d-flex flex-row align-items-center shadow-lg">
-                    <img class="w-50" src="./assets/demo-dark.png">
-                    <img class="w-50" src="./assets/demo.png">
+                <img class="img-fluid w-50" src="./assets/demo-dark.png" alt="Demo (dark)"
+                    style="cursor: zoom-in"
+                    data-bs-toggle="modal" data-bs-target="#imageModal" data-full="./assets/demo-dark.png">
+                <img class="img-fluid w-50" src="./assets/demo.png" alt="Demo"
+                    style="cursor: zoom-in"
+                    data-bs-toggle="modal" data-bs-target="#imageModal" data-full="./assets/demo.png">
                 </div>
             </section>
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+                    <div class="modal-content bg-transparent border-0">
+                    <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <img id="imageModalImg" class="img-fluid rounded shadow" alt="">
+                    </div>
+                </div>
+            </div>
 
             <section class="py-5 bg-white text-center shadow-lg">
                 <div class="container pb-3">
@@ -526,7 +538,7 @@
                             </p>
                         </div>
                         <div class="col-md-6">
-                            <a href="./demo-dark.png" target="_blank">
+                            <a href="./assets/demo-dark.png" target="_blank">
                                 <img class="img-fluid rounded mt-3 shadow-lg" src="./assets/demo-dark.png">
                             </a>
                         </div>
@@ -609,6 +621,14 @@
         <script>
             particlesJS.load("particles-js", "assets/particles-2.json", function () {
                 console.log("callback - particles.js config loaded");
+            });
+            document.addEventListener('click', function (e) {
+                const img = e.target.closest('img[data-bs-target="#imageModal"]');
+                if (!img) return;
+
+                const modalImg = document.getElementById('imageModalImg');
+                modalImg.src = img.getAttribute('data-full') || img.src; // use full-size if provided
+                modalImg.alt = img.alt || '';
             });
         </script>
     </body>
