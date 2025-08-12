@@ -141,6 +141,12 @@
             .btn-edit:hover {
                 color: #545c86;
             }
+            .btn-web {
+                color: #316d65;
+            }
+            .btn-web:hover {
+                color: #118374;
+            }
             .settings-list li {
                 margin-bottom: 20px;
                 font-size: 0.9rem;
@@ -193,8 +199,8 @@
                                 </a>
                             </div>
                             <div class="pt-1">
-                                <div class="d-flex flex-column">
-                                    <a href="/mkeditor/web" target="_blank" class="d-flex flex-row align-items-center gap-2 btn-edit text-light">
+                                <div class="d-flex flex-column text-center">
+                                    <a href="/mkeditor/web" target="_blank" class="mx-auto mx-md-0 d-flex flex-row align-items-center gap-2 btn-edit text-light">
                                         <i class="fa-solid fa-2xl fa-external-link me-2"></i>
                                         <div>
                                             <p class="release-info">Launch web browser edition</p>
@@ -261,7 +267,7 @@
             <section class="py-5 bg-white text-center shadow-lg">
                 <div class="container pb-3">
                     <h2 class="mb-5 text-dark">
-                        <i class="far fa-window-restore me-2"></i> How to Configure
+                        <i class="far fa-window-restore me-2"></i> Settings Overview
                     </h2>
                     <div class="text-left">
                         <p>MKEditor stores its configuration settings in a JSON file located at <code>%USERPROFILE%/.mkeditor/settings.json</code>.</p>
@@ -276,9 +282,9 @@
                         </div>
                         <div class="col-md-7 text-left">
                             <div class="mkeditor-settings-list">
-                                <h3 class="mb-3">MKEditor Settings Overview</h3>
+                                <h3 class="mb-4 fw-light text-muted">Customize to your style</h3>
                                 <div class="formatting-settings pb-4">
-                                    <h5 class="mb-3 fs-6 fw-bold text-muted">Formatting</h5>
+                                    <h6 class="fw-semibold text-muted">Formatting</h6>
                                     <ul class="settings-list">
                                         <li>
                                             <strong>Toggle Automatic Indentation</strong> - When enabled, MKEditor will automatically indent your text when you press <code>Enter</code>, following the indentation level of the previous line. This is especially useful for lists, code blocks, and nested content.
@@ -290,7 +296,7 @@
                                 </div>
 
                                 <div class="editing-settings pb-4">
-                                    <h5 class="mb-3 fs-6 fw-bold text-muted">Editing</h5>
+                                    <h6 class="fw-semibold text-muted">Editing</h6>
                                     <ul class="settings-list">
                                         <li>
                                             <strong>Render Whitespace</strong> - Visually display spaces, tabs, and other whitespace characters directly in the editor. Useful for aligning code, spotting formatting issues, or maintaining strict markdown layouts.
@@ -299,7 +305,7 @@
                                 </div>
 
                                 <div class="miscellaneous-settings pb-4">
-                                    <h5 class="mb-3 fs-6 fw-bold text-muted">Miscellaneous</h5>
+                                    <h6 class="fw-semibold text-muted">Miscellaneous</h6>
                                     <ul class="settings-list">
                                         <li>
                                             <strong>Display Minimap</strong> - Shows a miniature overview of your document along the side of the editor. Quickly navigate large files by clicking or dragging within the minimap view.
@@ -318,207 +324,62 @@
             <section class="bg-white py-5 text-center shadow">
                 <div class="container pb-3">
                     <h2 class="mb-5">
-                        <i class="fas fa-line-chart me-2"></i> Shortcuts
+                        <i class="fas fa-line-chart me-2"></i> Shortcuts Overview
                     </h2>
-                    <div>
-                        <div class="row">
-                            <div class="col-6">
-                                <h5>Basic Editing</h5>
-                                <table class="table small">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Shortcut</th>
-                                        <th scope="col">Description</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><strong>Ctrl + X</strong></td>
-                                        <td>Cut line (empty selection)</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + C</strong></td>
-                                        <td>Copy line (empty selection)</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Alt + ↑ / ↓</strong></td>
-                                        <td>Move line up/down</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Shift + Alt + ↑ / ↓</strong></td>
-                                        <td>Copy line up/down</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + Shift + K</strong></td>
-                                        <td>Delete line</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + Enter</strong></td>
-                                        <td>Insert line below</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + Shift + Enter</strong></td>
-                                        <td>Insert line above</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + ] / [</strong></td>
-                                        <td>Indent/outdent line</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Home / End</strong></td>
-                                        <td>Go to beginning/end of line</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + Home</strong></td>
-                                        <td>Go to beginning of file</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + End</strong></td>
-                                        <td>Go to end of file</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + ↑ / ↓</strong></td>
-                                        <td>Scroll line up/down</td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Alt + PgUp / PgDn</strong></td>
-                                        <td>Scroll page up/down</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h5>Text Formatting</h5>
-                                        <table class="table small">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">Shortcut</th>
-                                                <th scope="col">Description</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td><strong>Ctrl + B</strong></td>
-                                                <td>Make text bold</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Ctrl + I</strong></td>
-                                                <td>Make text italic</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Ctrl + G</strong></td>
-                                                <td>Strikethrough text</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Ctrl + 1</strong></td>
-                                                <td>Create unordered list</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Ctrl + 2</strong></td>
-                                                <td>Create ordered list</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-12 mt-3">
-                                        <h5>Search and Replace</h5>
-                                        <table class="table small">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">Shortcut</th>
-                                                <th scope="col">Description</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td><strong>Ctrl + F</strong></td>
-                                                <td>Find</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Ctrl + H</strong></td>
-                                                <td>Replace</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>F3 / Shift + F3</strong></td>
-                                                <td>Find next/previous</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Alt + Enter</strong></td>
-                                                <td>Select all occurrences of find match</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Alt + C / R / W</strong></td>
-                                                <td>Toggle case-sensitive / regex / whole word</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                    <div class="text-left mt-4 row g-4 d-flex align-items-center">
+                        <div class="col-md-6 text-left">
+                            <h3 class="mb-4 text-muted">Speed up your workflow</h3>
+                            <div class="shortcuts-settings">
+                                <div class="shortcut-category pb-3">
+                                    <h6 class="fw-semibold text-muted">Basic Editing</h6>
+                                    <ul class="settings-list">
+                                        <li>
+                                            <strong>Basic Editing</strong> - Core navigation and editing commands for quickly modifying your document, including moving or duplicating lines, deleting content, and scrolling through text without altering selection.
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="shortcut-category pb-3">
+                                    <h6 class="fw-semibold text-muted">Text Formatting</h6>
+                                    <ul class="settings-list">
+                                        <li>
+                                            <strong>Text Formatting</strong> - Commands to apply styles such as bold, italic, and strikethrough, or to create structured content like ordered and unordered lists directly from the keyboard.
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="shortcut-category pb-3">
+                                    <h6 class="fw-semibold text-muted">Search and Replace</h6>
+                                    <ul class="settings-list">
+                                        <li>
+                                            <strong>Search and Replace</strong> - Tools to locate and update text within your document, with options for case sensitivity, regular expressions, whole word matching, and multi-result selection.
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="shortcut-category pb-3">
+                                    <h6 class="fw-semibold text-muted">Multi-cursor and Selection</h6>
+                                    <ul class="settings-list">
+                                        <li>
+                                            <strong>Multi-cursor and Selection</strong> - Advanced selection features for editing multiple locations simultaneously, including column selection, multi-line cursors, and selecting all occurrences of specific text.
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <h5>Multi-cursor and selection</h5>
-                                <table class="table small">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Shortcut</th>
-                                        <th scope="col">Description</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><strong>Alt + Click</strong></td>
-                                        <td>Insert cursor</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + Alt + ↑ / ↓</strong></td>
-                                        <td>Insert cursor above/below</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Shift + Alt + I</strong></td>
-                                        <td>Insert cursor at end of each line selected</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + L</strong></td>
-                                        <td>Select current line</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + F2</strong></td>
-                                        <td>Select all occurrences of current word</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Shift + Alt + (Drag mouse)</strong></td>
-                                        <td>Column (box) selection</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + Shift + Alt + ↑ / ↓</strong></td>
-                                        <td>Column (box) selection</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Ctrl + Shift + Alt + PgUp / PgDn</strong></td>
-                                        <td>Column (box) selection</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>(Mousewheel pressed + drag cursor)</strong></td>
-                                        <td>Column (box) selection</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="col-md-6">
+                            <img src="./assets/shortcuts.png" class="img-fluid rounded shadow-lg"
+                                style="cursor: zoom-in"
+                                data-bs-toggle="modal" data-bs-target="#imageModal" alt="MKEditor screenshot">
                         </div>
                     </div>
                 </div>
             </section>
 
             <section class="py-5 text-center">
-                <div class="container pb-3">
+                <div class="container pt-3 pb-4">
                     <h2 class="mb-5">
-                        <i class="fas fa-globe me-2"></i> Web Application
+                        <i class="fas fa-globe me-2"></i> Powered by Web
                     </h2>
                     <div class="row mt-5 text-left d-flex align-items-center">
                         <div class="col-md-6">
@@ -531,7 +392,8 @@
                                 Simply visit the MKEditor web page to start writing instantly - no downloads, no setup, just open and go.
                             </p>
                             <p>
-                                <a href="/mkeditor/web" target="_blank" rel="noopener noreferrer" class="d-flex align-items-center text-decoration-none mt-5">
+                                <a href="/mkeditor/web" target="_blank" rel="noopener noreferrer"
+                                    class="d-flex align-items-center text-decoration-none mt-5 btn-web">
                                     <i class="fa-solid fa-external-link me-2" aria-hidden="true"></i>
                                     <span class="mb-0 fw-bold">Launch MKEditor Web (v3.0.1)</span>
                                 </a>
@@ -548,9 +410,9 @@
 
             <section class="py-5 text-center">
                 <h2 class="mb-3">
-                    <i class="fas fa-download me-2"></i> Desktop Downloads
+                    <i class="fas fa-download me-2"></i> Available for Desktop
                 </h2>
-                <div class="pt-5 d-flex align-items-center gap-5 justify-content-center">
+                <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center">
                     <div class="d-flex flex-column gap-3">
                         <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.0.1/mkeditor-setup-v3.0.1-x86_64.zip"
                             class="btn btn-download shadow">
@@ -586,8 +448,8 @@
             </section>
 
             <footer class="pt-5 text-white small" style="background: linear-gradient(135deg, #404040 0%, #000000 100%);">
-                <div class="container pb-5 d-flex align-items-end justify-content-between">
-                    <div>
+                <div class="container pb-5 d-flex align-items-end justify-content-between flex-wrap">
+                    <div class="order-2 order-md-1 mt-5 mt-md-0">
                         <div id="display-cube" class="rounded-circle mb-3"></div>
                         <div>
                             Made with&nbsp; ❤️ &nbsp;by <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a> &middot; &copy;
@@ -596,7 +458,7 @@
                             </script>
                         </div>
                     </div>
-                    <div class="d-flex flex-column">
+                    <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0">
                         <span class="ls-2 fs-5">☕ Would you like to hire me?</span>
                         <hr>
                         <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white fw-bold">christopher.rowles@outlook.com</a></span>
