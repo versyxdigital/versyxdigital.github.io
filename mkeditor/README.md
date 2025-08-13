@@ -10,7 +10,7 @@ Use it through your [browser](https://versyxdigital.github.io/mkeditor/web/), or
 | MacOS       | v3.0.1  | [pkg](https://github.com/versyxdigital/mkeditor/releases/download/v3.0.1/mkeditor-setup-v3.0.1_x86_64.pkg) |
 | Linux       | v3.0.1  | [deb](https://github.com/versyxdigital/mkeditor/releases/download/v3.0.1/mkeditor-setup-v3.0.1_amd64.deb)  |
 
-![MKEditor](https://versyxdigital.github.io/mkeditor/demo.png)
+![MKEditor](https://versyxdigital.github.io/mkeditor/assets/demo.png)
 
 # Welcome
 
