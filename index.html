@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Chris Rowles" />
+    <meta
+      name="description"
+      content="Versyx Digital is an open source studio. We build fast, simple tools like MKEditor and PSMonitor."
+    />
+    <meta
+      name="keywords"
+      content="Versyx Digital, open source studio, MKEditor, PSMonitor, developer tools, markdown editor, system monitor"
+    />
+
+    <meta property="og:title" content="Versyx Digital — Open Source Studio" />
+    <meta
+      name="og:description"
+      content="We craft small, sharp, open source tools. Explore MKEditor and PSMonitor."
+    />
+    <meta property="og:image" content="https://versyxdigital.github.io/assets/versyx-card.png" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Versyx Digital — Open Source Studio" />
+    <meta
+      name="twitter:description"
+      content="We craft small, sharp, open source tools. Explore MKEditor and PSMonitor."
+    />
+    <meta name="twitter:image" content="https://versyxdigital.github.io/assets/versyx-card.png" />
+
+    <title>Versyx Digital — Open Source Studio</title>
+
+    <link rel="canonical" href="https://versyxdigital.github.io/" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=Noto+Sans&family=Oxygen&family=Manrope&family=Nunito&family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.1/regl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/3.4.2/gl-matrix-min.js"></script>
+    <script src="./assets/particles.min.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Versyx Digital",
+        "url": "https://versyxdigital.github.io/",
+        "logo": "https://versyxdigital.github.io/assets/logo.png",
+        "sameAs": [
+          "https://github.com/versyxdigital",
+          "https://www.linkedin.com/in/chris-rowles/"
+        ],
+        "founder": {
+          "@type": "Person",
+          "name": "Chris Rowles"
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: "Open Sans", sans-serif;
+        color: #444444;
+      }
+      a {
+        color: #383f5f;
+      }
+      a:hover {
+        color: #545c86;
+        font-weight: bold;
+        text-decoration: none;
+      }
+      .bg-black-grad {
+        background: linear-gradient(135deg, #45336d 0%, #191818 100%);
+      }
+      .github-fork-ribbon:before {
+        background-color: #212529;
+      }
+      .heading {
+        color: #545c86;
+        font-weight: 400;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: url(./assets/filter.png);
+        background-repeat: repeat;
+        opacity: 0.5;
+      }
+      #particles-js {
+        z-index: 1 !important;
+      }
+      .btn-download {
+        background: linear-gradient(135deg, #45336d 0%, #411f1f 100%);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        color: #fff;
+        letter-spacing: 1px;
+        padding: 12px 16px;
+        transition: all 0.2s ease-in-out;
+      }
+      .btn-download:hover {
+        transform: scale(1.025);
+        color: #fff;
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.15);
+      }
+      .project-card {
+        border: 1px solid #e7e7e7;
+        border-radius: 12px;
+        transition: transform 0.15s ease;
+      }
+      .project-card:hover {
+        transform: translateY(-2px);
+      }
+      .badge-row img {
+        height: 20px;
+      }
+      .version-info,
+      .release-info {
+        font-size: 0.75rem;
+        margin-bottom: 0;
+      }
+    </style>
+    <script src="https://kit.fontawesome.com/5475e8a6de.js" crossorigin="anonymous"></script>
+  </head>
+  <body class="h-100">
+    <div
+      id="particles-js"
+      style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none"
+    ></div>
+
+    <a
+      class="github-fork-ribbon d-none d-md-block"
+      href="https://github.com/versyxdigital"
+      data-ribbon="Visit us on GitHub"
+      title="Visit us on GitHub"
+      >Visit us on GitHub</a
+    >
+
+    <section class="pt-4 pt-md-5 bg-black-grad text-light position-relative" style="border-bottom: 1px solid #212529">
+      <div class="overlay z-2"></div>
+      <header
+        class="container position-relative z-3 d-flex align-items-center justify-content-between pb-3 mb-5 border-bottom border-dark"
+      >
+        <a href="/" class="d-flex align-items-center text-decoration-none">
+          <i class="fa-solid fa-code fa-2x me-2 text-light"></i>
+          <div class="text-white">
+            <h1 class="fs-4 mb-0">Versyx Digital</h1>
+          </div>
+        </a>
+      </header>
+
+      <div class="container position-relative z-3">
+        <div class="row align-items-center" style="z-index: 10">
+          <div class="col-lg-6 text-center text-lg-start">
+            <h1 class="text-white" style="font-size: 2rem">We build small, sharp tools.</h1>
+            <p class="lead mt-3 mb-4" style="font-size: 1rem">
+              Versyx Digital is an open source studio focused on practical, high-performance developer utilities. Clean design, predictable behavior, zero fuss.
+            </p>
+            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pb-4">
+              <a href="https://github.com/versyxdigital" class="d-inline-flex align-items-center gap-2 btn-download text-decoration-none rounded">
+                <i class="fa-brands fa-github"></i>
+                <span>Browse Repos</span>
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-6 text-center mt-4 mt-lg-0">
+            <img src="./assets/design.svg" class="img-fluid" alt="Versyx Digital hero" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5 bg-white text-center shadow-lg">
+      <div class="container">
+        <h2 class="mb-5 text-dark"><i class="fas fa-rocket me-2"></i> What we do</h2>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <i class="far fa-eye fa-3x mb-4"></i>
+            <h5 class="fw-bold mb-3" style="letter-spacing: 0.075rem">Clarity first</h5>
+            <p class="text-muted">Minimal UI, predictable behavior, and sensible defaults. Tools that disappear into your workflow.</p>
+          </div>
+          <div class="col-md-4">
+            <i class="far fa-clock fa-3x mb-4"></i>
+            <h5 class="fw-bold mb-3" style="letter-spacing: 0.075rem">Fast by default</h5>
+            <p class="text-muted">Startup times measured in milliseconds and features geared toward instant feedback.</p>
+          </div>
+          <div class="col-md-4">
+            <i class="far fa-window-restore fa-3x mb-4"></i>
+            <h5 class="fw-bold mb-3" style="letter-spacing: 0.075rem">Batteries included</h5>
+            <p class="text-muted">Thoughtful integrations, useful exports, and practical defaults—without plugins.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section clas="py-5">
+      <div class="d-flex flex-row align-items-center shadow-lg">
+      <img class="img-fluid w-50" src="./mkeditor/assets/demo-dark.png" alt="Demo (dark)"
+          style="cursor: zoom-in"
+          data-bs-toggle="modal" data-bs-target="#imageModal" data-full="./mkeditor/assets/demo-dark.png">
+      <img class="img-fluid w-50" src="./assets/edcts.png" alt="Demo"
+          style="cursor: zoom-in"
+          data-bs-toggle="modal" data-bs-target="#imageModal" data-full="./assets/edcts.png">
+      </div>
+    </section>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+        <div class="modal-content bg-transparent border-0">
+        <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
+        <img id="imageModalImg" class="img-fluid rounded shadow" alt="">
+        </div>
+      </div>
+    </div>
+
+    <section class="py-5 shadow-lg">
+      <div class="container">
+        <h2 class="mb-5 text-center heading text-dark">
+          <i class="fas fa-toolbox me-2"></i> Project Showcase
+        </h2>
+        <div class="row g-4">
+          <!-- MKEditor Card -->
+          <div class="col-md-6">
+            <a href="https://github.com/versyxdigital/mkeditor" class="text-decoration-none">
+              <div class="project-card p-4 h-100 bg-white">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="/mkeditor/logo.png" class="me-2" width="40" height="40" alt="MKEditor" />
+                  <div>
+                    <h3 class="h5 mb-0">MKEditor</h3>
+                    <small class="text-muted">Simple, fast markdown editor with live preview</small>
+                  </div>
+                </div>
+                <p class="text-muted">Write, preview, and export Markdown instantly. Desktop apps and a fully‑featured web version.</p>
+                <div class="d-flex flex-wrap gap-2 badge-row mb-3">
+                  <img src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg" alt="Tests" />
+                  <img alt="stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor" />
+                  <img alt="forks" src="https://img.shields.io/github/forks/versyxdigital/mkeditor" />
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- PSMonitor Card -->
+          <div class="col-md-6">
+            <a href="https://github.com/versyxdigital/psmonitor" class="text-decoration-none">
+              <div class="project-card p-4 h-100 bg-white">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="/psmonitor/logo.png" class="me-2" width="40" height="40" alt="PSMonitor" />
+                  <div>
+                    <h3 class="h5 mb-0">PSMonitor</h3>
+                    <small class="text-muted">Live system monitoring with a clean, Tkinter UI</small>
+                  </div>
+                </div>
+                <p class="text-muted">Real‑time CPU, memory, and process insights with a lightweight desktop UI and WebSocket backend.</p>
+                <div class="d-flex flex-wrap gap-2 badge-row mb-3">
+                  <img src="https://github.com/sentrychris/psmonitor/actions/workflows/github-code-scanning/codeql/badge.svg" alt="Tests" />
+                  <img alt="stars" src="https://img.shields.io/github/stars/versyxdigital/psmonitor" />
+                  <img alt="forks" src="https://img.shields.io/github/forks/versyxdigital/psmonitor" />
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="row mt-3 g-4">
+          <!-- EDCTS Card -->
+          <div class="col-md-6">
+            <a href="https://github.com/sentrychris/edcts" class="text-decoration-none">
+              <div class="project-card p-4 h-100 bg-white">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="/assets/rocket.png" class="me-2" width="40" height="40" alt="MKEditor" />
+                  <div>
+                    <h3 class="h5 mb-0">EDCTS</h3>
+                    <small class="text-muted">Information hub for players of Elite Dangerous</small>
+                  </div>
+                </div>
+                <p class="text-muted">Information hub for Elite Dangerous players, including live system data, galnet news, mappinge and more.</p>
+              </div>
+            </a>
+          </div>
+
+          <!-- System Monitor Card -->
+          <div class="col-md-6">
+            <a href="https://github.com/sentrychris/ssh-client" class="text-decoration-none">
+              <div class="project-card p-4 h-100 bg-white">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="/assets/ssh.png" class="me-2" width="40" height="40" alt="PSMonitor" />
+                  <div>
+                    <h3 class="h5 mb-0">SSH Client</h3>
+                    <small class="text-muted">A simple tornado-based portable SSH web client</small>
+                  </div>
+                </div>
+                <p class="text-muted">A web-based SSH client, built with tornado and paramiko, support password and private key authentication.</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <a href="https://github.com/versyxdigital" class="btn btn-download">
+            <i class="fa-brands fa-github me-2"></i> See all repositories
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5 bg-white text-center shadow-lg">
+      <div class="container">
+        <h2 class="mb-4 text-dark"><i class="far fa-handshake me-2"></i> Collaborate</h2>
+        <p class="text-muted mb-4">
+          We welcome issues, pull requests, and ideas. If you want help building a tool or integrating with ours, reach out.
+        </p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+          <a href="mailto:christopher.rowles@outlook.com" class="btn btn-download"><i class="fa-regular fa-envelope me-2"></i>Email</a>
+          <a href="https://github.com/versyxdigital" class="btn btn-download"><i class="fa-brands fa-github me-2"></i>GitHub</a>
+          <a href="https://www.linkedin.com/in/chris-rowles/" class="btn btn-download"><i class="fa-brands fa-linkedin me-2"></i>LinkedIn</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="position-relative pt-5 bg-black-grad text-white small">
+      <div class="overlay z-2"></div>
+      <div class="container position-relative z-3 pb-5 d-flex align-items-end justify-content-between flex-wrap">
+        <div class="order-2 order-md-1 mt-5 mt-md-0">
+          <div id="display-cube" class="rounded-circle mb-3"></div>
+          <div>
+            Made with&nbsp; ❤️ &nbsp;by
+            <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a>
+            &middot; &copy;
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+          </div>
+        </div>
+        <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0">
+          <em id="quote"></em>
+          <div class="d-flex align-items-center gap-3 mt-3">
+            <a href="https://github.com/sentrychris/"><i class="fa-brands fa-square-github fa-2x" style="color: #cdcdcd"></i></a>
+            <a href="https://www.linkedin.com/in/chris-rowles/"><i class="fa-brands fa-linkedin fa-2x" style="color: #cdcdcd"></i></a>
+            <a href="https://www.linkedin.com/in/chris-rowles/"><i class="fa-brands fa-y-combinator fa-2x" style="color: #cdcdcd"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <script>
+      particlesJS.load("particles-js", "assets/particles-2.json", function () {
+        console.log("particles.js config loaded");
+      });
+
+      const quotes = [
+        "Simplicity is the ultimate sophistication.",
+        "What you seek is seeking you.",
+        "Do what you can, with what you have, where you are.",
+        "In the middle of difficulty lies opportunity.",
+        "Act as if what you do makes a difference. It does.",
+        "Not all those who wander are lost.",
+        "Happiness depends upon ourselves."
+      ];
+
+      document.getElementById("quote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+      document.addEventListener('click', function (e) {
+        const img = e.target.closest('img[data-bs-target="#imageModal"]');
+        if (!img) return;
+
+        const modalImg = document.getElementById('imageModalImg');
+        modalImg.src = img.getAttribute('data-full') || img.src; // use full-size if provided
+        modalImg.alt = img.alt || '';
+      });
+    </script>
+  </body>
+</html>
