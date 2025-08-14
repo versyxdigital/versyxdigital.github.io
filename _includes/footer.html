@@ -1,0 +1,28 @@
+<div class="{{ include.container_class | default: 'container pb-5 d-flex align-items-end justify-content-between flex-wrap' }}">
+  <div class="order-2 order-md-1 mt-5 mt-md-0">
+    <div id="display-cube" class="rounded-circle mb-3"></div>
+    <div>
+      Made with&nbsp; ❤️ &nbsp;by
+      <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a>
+      &middot; &copy;
+      <script>
+        document.write(new Date().getFullYear());
+      </script>
+    </div>
+  </div>
+  <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0">
+    {% if include.quote %}
+    <em id="quote"></em>
+    {% else %}
+    <span class="ls-2 fs-5">☕ Would you like to hire me?</span>
+    <hr />
+    <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white fw-bold">christopher.rowles@outlook.com</a></span>
+    <span>Phone: <a href="tel:07522267722" class="text-white fw-bold">+44(0)7522 267 722</a></span>
+    {% endif %}
+    <div class="d-flex align-items-center gap-3 mt-3">
+      <a href="https://github.com/sentrychris/"><i class="fa-brands fa-square-github fa-2x" style="color: #cdcdcd"></i></a>
+      <a href="https://www.linkedin.com/in/chris-rowles/"><i class="fa-brands fa-linkedin fa-2x" style="color: #cdcdcd"></i></a>
+      <a href="https://www.linkedin.com/in/chris-rowles/"><i class="fa-brands fa-y-combinator fa-2x" style="color: #cdcdcd"></i></a>
+    </div>
+  </div>
+</div>
