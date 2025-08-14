@@ -21,130 +21,12 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=Noto+Sans&family=Oxygen&family=Manrope&family=Nunito&family=Poppins&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css">
+        <link rel="stylesheet" href="../assets/style.css">
+        <link rel="stylesheet" href="./assets/style.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.1/regl.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/3.4.2/gl-matrix-min.js"></script>
         <script src="./assets/particles.min.js"></script>
 
-        <style>
-            .bd-placeholder-img {
-                font-size: 1.125rem;
-                text-anchor: middle;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
-            }
-            @media (min-width: 768px) {
-                .bd-placeholder-img-lg {
-                    font-size: 3.5rem;
-                }
-            }
-            body {
-                font-family: "Montserrat", sans-serif;
-            }
-            a:hover {
-                color: white;
-                text-decoration: none;
-            }
-            .icon-list {
-                padding-left: 0;
-                list-style: none;
-            }
-            .icon-list li {
-                display: flex;
-                align-items: flex-start;
-                margin-bottom: 0.25rem;
-            }
-            .icon-list li::before {
-                display: block;
-                flex-shrink: 0;
-                width: 1.5em;
-                height: 1.5em;
-                margin-right: 0.5rem;
-                content: "";
-                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23435D4F' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z'/%3E%3C/svg%3E")
-                    no-repeat center center / 100% auto;
-            }
-            svg:not(:root).svg-inline--fa {
-                overflow: visible;
-            }
-            .svg-inline--fa.fa-w-16 {
-                width: 1em;
-            }
-            .love {
-                color: #212529;
-            }
-            .svg-inline--fa {
-                display: inline-block;
-                font-size: inherit;
-                height: 1em;
-                overflow: visible;
-                vertical-align: -0.125em;
-            }
-            .filename {
-                font-size: 0.6em;
-            }
-            .github-fork-ribbon:before {
-                background-color: #212529;
-            }
-            .version-info {
-                font-size: 0.65rem;
-                margin-bottom: 0;
-            }
-            .release-info {
-                font-size: 0.75rem;
-                margin-bottom: 0;
-            }
-            a {
-                color: #383f5f;
-            }
-            a:hover {
-                color: #545c86;
-                font-weight: bold;
-            }
-            .text-left {
-                text-align: left;
-            }
-            .heading {
-                color: #545c86;
-                font-weight: 400;
-            }
-            .heading__sub-heading {
-                color: #555555;
-            }
-            .btn-download {
-                /* background: #519088; */
-                background: linear-gradient(-70deg, #545c86, #6d7194);
-                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-                color: white;
-                text-decoration: none;
-                letter-spacing: 1px;
-                padding: 15px;
-                transition: all 0.2s ease-in-out;
-            }
-            .btn-download:hover {
-                transform: scale(1.025);
-                color: white;
-                font-weight: bold;
-                box-shadow: 0px 16px 30px rgba(0, 0, 0, 0.1);
-            }
-            .btn-edit {
-                background: transparent;
-                box-shadow: none;
-                color: #212529;
-                font-weight: bold;
-                text-decoration: none;
-                letter-spacing: 1px;
-                padding: 15px;
-                transition: all 0.2s ease-in-out;
-            }
-            .btn-edit:hover {
-                color: #545c86;
-            }
-            .settings-list li {
-                margin-bottom: 20px;
-                font-size: 0.9rem;
-            }
-        </style>
         <script src="https://kit.fontawesome.com/5475e8a6de.js" crossorigin="anonymous"></script>
     </head>
     <body class="h-100">
@@ -382,11 +264,7 @@
             </footer>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-        <script>
-            particlesJS.load("particles-js", "assets/particles-2.json", function () {
-                console.log("callback - particles.js config loaded");
-            });
-        </script>
+        <script src="../assets/script.js"></script>
+        <script src="./assets/script.js"></script>
     </body>
 </html>
