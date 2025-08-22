@@ -6,9 +6,9 @@ Use it through your [browser](https://versyxdigital.github.io/mkeditor/web/), or
 
 | Platform    | Stable  | Download  |
 | --------    | ------- | -------   |
-| Windows     | v3.2.0  | [exe](https://github.com/versyxdigital/mkeditor/releases/download/v3.2.0/mkeditor-setup-v3.2.0-x86_64.zip) |
-| MacOS       | v3.2.0  | [pkg](https://github.com/versyxdigital/mkeditor/releases/download/v3.2.0/mkeditor-setup-v3.2.0_x86_64.pkg) |
-| Linux       | v3.2.0  | [deb](https://github.com/versyxdigital/mkeditor/releases/download/v3.2.0/mkeditor-setup-v3.2.0_amd64.deb)  |
+| Windows     | v3.3.1  | [exe](https://github.com/versyxdigital/mkeditor/releases/download/v3.3.1/mkeditor-setup-3.3.1.exe) |
+| MacOS       | v3.3.1  | [pkg](https://github.com/versyxdigital/mkeditor/releases/download/v3.3.1/mkeditor-setup-3.3.1.pkg) |
+| Linux       | v3.3.1  | [deb](https://github.com/versyxdigital/mkeditor/releases/download/v3.3.1/mkeditor-setup-3.3.1.deb)  |
 
 ![MKEditor](https://versyxdigital.github.io/mkeditor/assets/demo.png)
 
@@ -47,7 +47,7 @@ Format some code:
 
 ```javascript
 document.addEventListener('DOMContentLoaded', () => {
-    document.body.write('Syntax-highlighted, copyable codeblock!')
+    document.body.write('Syntax-highlighted codeblock!')
 })
 ```
 
