@@ -6,9 +6,9 @@ Use it through your [browser](https://versyxdigital.github.io/mkeditor/web/), or
 
 | Platform    | Stable  | Download  |
 | --------    | ------- | -------   |
-| Windows     | v3.4.0  | [exe](https://github.com/versyxdigital/mkeditor/releases/download/v3.4.0/mkeditor-setup-3.4.0.exe) |
-| MacOS       | v3.4.0  | [pkg](https://github.com/versyxdigital/mkeditor/releases/download/v3.4.0/mkeditor-setup-3.4.0.pkg) |
-| Linux       | v3.4.0  | [deb](https://github.com/versyxdigital/mkeditor/releases/download/v3.4.0/mkeditor-setup-3.4.0.deb)  |
+| Windows     | v3.5.0  | [exe](https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe) |
+| MacOS       | v3.5.0  | [pkg](https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg) |
+| Linux       | v3.5.0  | [deb](https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb)  |
 
 ![MKEditor](https://versyxdigital.github.io/mkeditor/assets/demo.png)
 
