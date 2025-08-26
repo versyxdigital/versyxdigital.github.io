@@ -24,6 +24,17 @@ body {
     overflow-x: hidden;
 }
 
+code {
+    color: #82cdc4 !important;
+}
+
+.github-fork-ribbon:before {
+    background-color: #519088 !important;
+}
+.github-fork-ribbon {
+    background: transparent !important;
+}
+
 .bg-black {
     background-color: #111111 !important;
 }
