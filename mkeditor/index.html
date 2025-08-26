@@ -167,7 +167,7 @@
                 </div>
                 <!-- Hero Image -->
                 <div class="col-lg-8 text-center mt-4 mt-lg-0" tabindex="10">
-                    <img src="./assets/img/demo-dark.png" class="img-fluid rounded shadow" alt="A screenshot of MKEditor">
+                    <img src="./assets/img/demo-dark.png" class="img-fluid rounded shadow slide-in-right" alt="A screenshot of MKEditor">
                 </div>
             </div>
         </div>
@@ -221,17 +221,17 @@
     </section>
     
     <!-- Full-size Dual Images Section -->
-    <section class="position-relative">
+    <section class="bg-black position-relative">
         <h2 class="sr-only">Screenshots of MKEDitor</h2>
         <div class="d-flex flex-row align-items-center shadow-lg">
-            <img class="img-fluid w-50"
+            <img class="img-fluid w-50 slide-in-top"
                 src="./assets/img/demo-dark.png" alt="MKEditor screenshot in dark mode"
                 style="cursor: zoom-in"
-                data-bs-toggle="modal" 
+                data-bs-toggle="modal"
                 data-bs-target="#imageModal"
                 data-full="./assets/img/demo-dark.png"
             >
-            <img class="img-fluid w-50"
+            <img class="img-fluid w-50 slide-in-bottom"
                 src="./assets/img/demo.png" alt="MKEditor screenshot in light mode"
                 style="cursor: zoom-in"
                 data-bs-toggle="modal"
@@ -269,7 +269,7 @@
                         <i class="fas fa-cogs mx-1"></i> icon in the app toolbar.
                     </p>
                     <!-- Section Image -->
-                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg"
+                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg slide-in-left"
                         alt="Screenshot of MKEditor settings"
                     >
                 </div>
@@ -383,7 +383,7 @@
                         <i class="fas fa-sliders mx-1"></i> icon in the app toolbar.
                     </p>
                     <!-- Section Image -->
-                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg" 
+                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg slide-in-right"
                         alt="Screenshot of MKEditor export settings"
                     >
                 </div>
@@ -404,7 +404,7 @@
                 <i class="fas fa-question-circle mx-1"></i> icon in the app toolbar.
             </p>
             <!-- Section Image -->
-            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg"
+            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg slide-in-left"
                 style="cursor: zoom-in"
                 data-bs-toggle="modal"
                 data-bs-target="#imageModal"
@@ -451,7 +451,7 @@
                 <!-- Section Image -->
                 <div class="col-md-6 pt-3 pt-md-0">
                     <a href="./assets/img/demo-dark.png" target="_blank">
-                        <img class="img-fluid rounded mt-3 shadow-lg" src="./assets/img/demo-dark.png"
+                        <img class="img-fluid rounded mt-3 shadow-lg slide-in-right" src="./assets/img/demo-dark.png"
                             alt="A screenshot of MKEditor">
                     </a>
                 </div>
@@ -572,6 +572,62 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.utils.toArray(".slide-in-left").forEach(function (el) {
+                gsap.from(el, {
+                    x: -100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+
+            gsap.utils.toArray(".slide-in-right").forEach(function (el) {
+                gsap.from(el, {
+                    x: 100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+
+            gsap.utils.toArray(".slide-in-top").forEach(function (el) {
+                gsap.from(el, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+
+            gsap.utils.toArray(".slide-in-bottom").forEach(function (el) {
+                gsap.from(el, {
+                    y: -100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+            gsap.from(".leading-header", { y: -50, opacity: 0, duration: 1, ease: "power3.out" });
+        });
+    </script>
     <script>
         particlesJS.load("particles-js", "assets/js/particles-2.json", function () {
             console.log("callback - particles.js config loaded");
@@ -579,7 +635,7 @@
         document.addEventListener('click', function (e) {
             const img = e.target.closest('img[data-bs-target="#imageModal"]');
             if (!img) return;
-            
+
             const modalImg = document.getElementById('imageModalImg');
             modalImg.src = img.getAttribute('data-full') || img.src; // use full-size if provided
             modalImg.alt = img.alt || '';
