@@ -5,20 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Chris Rowles">
-    <meta name="description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
-    <meta name="keywords" content="markdown, markdown editor, simple markdown editor, online markdown editor, markdown writing, markdown preview, markdown formatting, markdown tool">
+    <meta name="description" content="PSMonitor is a simple system monitoring utility written in Python.">
+    <meta name="keywords" content="system monitoring">
     <!-- OpenGraph meta tags -->
-    <meta property="og:title" content="MKEditor - the simple markdown editor.">
-    <meta name="og:description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
-    <meta property="og:image" content="https://versyxdigital.github.io/mkeditor/assets/demo-dark.png">
+    <meta property="og:title" content="PSMonitor - Simple system monitoring utility.">
+    <meta name="og:description" content="PSMonitor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
+    <meta property="og:image" content="https://versyxdigital.github.io/psmonitor/assets/img/app.png">
     <!-- Twitter meta tags -->
-    <meta name="twitter:card" content="https://versyxdigital.github.io/mkeditor/assets/demo.png">
-    <meta name="twitter:title" content="MKEditor - Simple Online Markdown Editor">
-    <meta name="twitter:description" content="Write, preview, and export markdown instantly with MKEditor.">
-    <meta name="twitter:image" content="https://versyxdigital.github.io/mkeditor/assets/demo-dark.png">
+    <meta name="twitter:card" content="https://versyxdigital.github.io/psmonitor/assets/img/app.png">
+    <meta name="twitter:title" content="PSMonitor - Simple system monitoring utility">
+    <meta name="twitter:description" content="Write, preview, and export markdown instantly with PSMonitor.">
+    <meta name="twitter:image" content="https://versyxdigital.github.io/psmonitor/assets/img/app.png">
     <!-- Page title and canonical URL -->
     <title>PSMonitor - A simple system monitoring utility</title>    
-    <link rel="canonical" href="https://versyxdigital.github.io/mkeditor/">
+    <link rel="canonical" href="https://versyxdigital.github.io/psmonitor/">
     <!-- CSS dependencies -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -37,12 +37,12 @@
         {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "MKEditor",
+            "name": "PSMonitor",
             "operatingSystem": "Any",
             "applicationCategory": "DeveloperApplication",
             "description": "A simple, fast, and free online markdown editor with live preview.",
-            "url": "https://versyxdigital.github.io/mkeditor/",
-            "image": "https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png",
+            "url": "https://versyxdigital.github.io/psmonitor/",
+            "image": "https://versyxdigital.github.io/psmonitor/assets/img/demo-dark.png",
             "softwareVersion": "1.0.0",
             "author": {
                 "@type": "Person",
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Github Ribbon -->
-    <a href="https://github.com/versyxdigital/mkeditor/"
+    <a href="https://github.com/versyxdigital/psmonitor/"
         class="github-fork-ribbon d-none d-md-block"
         data-ribbon="Fork me on GitHub"
         tabindex="2"
@@ -71,7 +71,7 @@
     <section id="main-section" class="py-5 bg-black-grad text-light">
         <header class="container d-flex align-items-center justify-content-between pb-3 mb-5">
             <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-                <img src="logo.png" class="img-fluid rounded me-2" width="50" alt="MKEditor logo.">
+                <img src="logo.png" class="img-fluid rounded me-2" width="50" alt="PSMonitor logo.">
                 <div class="text-white">
                     <h1 class="fs-4 mb-0" tabindex="1">PSMonitor - A simple system monitoring utility.</h1>
                 </div>
@@ -128,33 +128,25 @@
                     <div class="mt-3 d-flex flex-column">
                         <small class="text-light">
                             <span>MIT Licensed ·</span>
-                            <a href="https://github.com/versyxdigital/mkeditor" class="text-light text-decoration-underline"
+                            <a href="https://github.com/versyxdigital/psmonitor" class="text-light text-decoration-underline"
                                 tabindex="9">
                                 Source on GitHub
                             </a>
                         </small>
                         <div class="mt-2 d-flex align-items-center justify-content-center justify-content-md-start gap-2">
-                            <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml">
-                                <img
-                                    src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
-                                    alt="Github tests badge"
-                                >
+                            <a href="https://github.com/sentrychris/psmonitor/actions/workflows/github-code-scanning/codeql">
+                                <img src="https://github.com/sentrychris/psmonitor/actions/workflows/github-code-scanning/codeql/badge.svg"
+                                    alt="CodeQL">
                             </a>
-                            <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql">
-                                <img
-                                    src="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql/badge.svg"
-                                    alt="Github CodeQL badge"
-                                >
-                            </a>
-                            <a href="https://github.com/versyxdigital/mkeditor">
-                                <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor">
+                            <a href="https://github.com/versyxdigital/psmonitor">
+                                <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/psmonitor">
                             </a>
                         </div>
                     </div>
                 </div>
                 <!-- Hero Image -->
                 <div class="col-lg-6 text-center mt-4 mt-lg-0" tabindex="10">
-                    <img src="./assets/img/app.png" class="img-fluid rounded shadow" alt="A screenshot of MKEditor">
+                    <img src="./assets/img/app.png" class="img-fluid rounded shadow" alt="A screenshot of PSMonitor">
                 </div>
             </div>
         </div>
@@ -229,11 +221,11 @@
                 <div class="col-md-5">
                     <!-- Section Image -->
                     <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg"
-                        alt="Screenshot of MKEditor settings"
+                        alt="Screenshot of PSMonitor settings"
                     >
                 </div>
                 <div class="col-md-7 text-left">
-                    <div class="mkeditor-settings-list">
+                    <div class="psmonitor-settings-list">
                         <h3 class="mb-4 fw-light text-muted" tabindex="21">
                             Configure your settings
                         </h3>
@@ -306,7 +298,7 @@
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center g-4 mt-4 text-left">
                 <div class="col-md-7">
-                    <div class="mkeditor-export-list">
+                    <div class="psmonitor-export-list">
                         <h3 class="mb-4 fw-light text-muted">
                             Visualize your metrics
                         </h3>
@@ -326,10 +318,10 @@
                 <div class="col-md-5">
                     <!-- Section Image -->
                     <img src="./assets/img/cpu-usage-graph.png" class="img-fluid rounded shadow-lg" 
-                        alt="Screenshot of MKEditor export settings"
+                        alt="Screenshot of PSMonitor export settings"
                     >
                     <img src="./assets/img/cpu-temp-graph.png" class="mt-3 img-fluid rounded shadow-lg" 
-                        alt="Screenshot of MKEditor export settings"
+                        alt="Screenshot of PSMonitor export settings"
                     >
                 </div>
             </div>
@@ -363,7 +355,7 @@
                 <div class="col-md-6 pt-3 pt-md-0">
                     <a href="./assets/img/demo-dark.png" target="_blank">
                         <img class="img-fluid rounded mt-3 shadow-lg" src="./assets/img/webui.png"
-                            alt="A screenshot of MKEditor">
+                            alt="A screenshot of PSMonitor's Web UI">
                     </a>
                 </div>
             </div>
@@ -382,9 +374,9 @@
             <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center">
                 <!-- Windows Download -->
                 <div class="d-flex flex-column gap-3">
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
+                    <a href="https://github.com/versyxdigital/psmonitor/releases/download/v2.0.0.1011/psmonitor.exe"
                         class="btn btn-download shadow">
-                        <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.5.0</small>
+                        <i class="fa-brands fa-windows me-2"></i> <small>Windows v2.0.0.1011</small>
                     </a>
                     <hr class="my-0">
                     <a class="small text-decoration-none"
@@ -397,9 +389,9 @@
                 </div>
                 <!-- Linux Download -->
                 <div class="d-flex flex-column gap-3">
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb"
+                    <a href="https://github.com/versyxdigital/psmonitor/releases/download/v1.2.2.1551/psmonitor"
                         class="btn btn-download shadow">
-                        <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.5.0</small>
+                        <i class="fa-brands fa-linux me-2"></i> <small>Linux v1.2.2.1551</small>
                     </a>
                     <hr class="my-0">
                     <a class="small text-decoration-none"
