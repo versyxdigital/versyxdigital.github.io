@@ -197,7 +197,7 @@
     </section>
     
     <!-- Feature Overview Section -->
-    <section class="py-5 bg-black-grad-reverse text-light text-center shadow-lg position-relative z-3">
+    <section class="pt-5 bg-black-grad-reverse text-light text-center shadow-lg position-relative z-3">
         <div class="overlay-mesh z-2"></div>
         <div class="overlay-flip z-2"></div>
         <div class="container position-relative pb-3 z-3">
@@ -206,7 +206,7 @@
                 <i class="fas fa-rocket me-2"></i> Feature Overview
             </h2>
             <!-- Section Row & Columns -->
-            <div class="row g-4 mt-5">
+            <div class="row g-4 mt-5 mb-5">
                 <!-- Full CommonMark Support Overview -->
                 <div class="col-md-4">
                     <i class="far fa-file-code fa-3x mb-4"></i>
@@ -241,28 +241,16 @@
                     </p>
                 </div>
             </div>
+            <h2 class="pt-5 text-center text-light" tabindex="11">
+                <i class="fas fa-pencil me-2"></i> Try it Out Now...
+            </h2>
         </div>
     </section>
     
     <!-- Full-size Dual Images Section -->
     <section class="bg-black position-relative z-3">
         <h2 class="sr-only">Screenshots of MKEDitor</h2>
-        <div class="d-flex flex-row align-items-center shadow-lg">
-            <img class="img-fluid w-50"
-                src="./assets/img/demo-dark.png" alt="MKEditor screenshot in dark mode"
-                style="cursor: zoom-in"
-                data-bs-toggle="modal"
-                data-bs-target="#imageModal"
-                data-full="./assets/img/demo-dark.png"
-            >
-            <img class="img-fluid w-50 connector-target z-3"
-                src="./assets/img/demo.png" alt="MKEditor screenshot in light mode"
-                style="cursor: zoom-in"
-                data-bs-toggle="modal"
-                data-bs-target="#imageModal"
-                data-full="./assets/img/demo.png"
-            >
-        </div>
+        <iframe class="d-none d-md-block w-100 connector-target" height="800" style="border-top: 5px solid #2b2b2b;border-bottom: 5px solid #2b2b2b" src="./mkeditor/web/index.html"></iframe>
     </section>
     
     <!-- Configure Settings Section -->
