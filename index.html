@@ -654,6 +654,14 @@
     
     </script>
     <script>
+        localStorage.setItem(JSON.stringify({
+            "autoindent": false,
+            "darkmode": true,
+            "wordwrap": true,
+            "whitespace": false,
+            "minimap": true,
+            "systemtheme": true
+        }));
         particlesJS.load("particles-js", "assets/js/particles-2.json", function () {
             console.log("callback - particles.js config loaded");
         });
