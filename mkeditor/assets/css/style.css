@@ -6,6 +6,10 @@
     user-select: none;
 }
 
+.bg-black {
+    background-color: #111111 !important;
+}
+
 @media (min-width: 768px) {
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
@@ -23,7 +27,7 @@ a:hover {
 }
 
 .bg-black-grad {
-    background: linear-gradient(135deg, #404040 0%, #000000 100%);
+    background: linear-gradient(135deg, #111111 0%, #000000 100%);
 }
 
 .leading-header {
@@ -124,8 +128,7 @@ a:hover {
 }
 
 .btn-download {
-    background: #519088;
-    background: linear-gradient(-70deg, #323534, #656565);
+    background: linear-gradient(9deg, #323534, #161616);
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     color: white;
     text-decoration: none;
@@ -177,7 +180,7 @@ a:hover {
     left: 0;
     background: url('../img/bg.png');
     background-repeat: repeat;
-    opacity: 0.4;
+    opacity: 0.1;
 }
 
 .overlay-flip {
@@ -188,5 +191,5 @@ a:hover {
     left: 0;
     background: url('../img/bg-flip.png');
     background-repeat: repeat;
-    opacity: 0.4;
+    opacity: 0.1;
 }
