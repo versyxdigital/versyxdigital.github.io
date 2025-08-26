@@ -2,14 +2,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const svg = document.getElementById('image-connectors');
     const targets = Array.from(document.querySelectorAll('.connector-target'));
     
-    // --- configuration ---
-    const elbowRadius = 60;      // max corner roundness
-    const pxPerSec    = 400;     // base speed for each dot
-    const randomColors = true;   // randomize each dot's color
+    // ---- config ----
+    const elbowRadius = 60;     // corner roundness cap
+    const pxPerSec    = 400;    // constant travel speed
+    const randomColors = true;  // random dot color per connector
     
     function randomColor() {
         const hue = Math.floor(Math.random() * 360);
         return `hsl(${hue}, 80%, 60%)`;
+    }
+    
+    // Wait until all connector-target <img> elements are fully loaded/decoded
+    async function waitForConnectorTargetsLoaded() {
+        const imgs = targets.filter(el => el.tagName === 'IMG');
+        if (imgs.length === 0) return Promise.resolve(); // nothing to wait for
+        
+        const promises = imgs.map(img => {
+            // Already complete and successfully loaded?
+            if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+            
+            // Prefer decode() when available (avoids layout jank)
+            if (typeof img.decode === 'function') {
+                return img.decode().catch(() => {
+                    // Fallback to load/error events if decode fails (e.g., cross-origin)
+                    return new Promise(res => {
+                        img.addEventListener('load', res, { once: true });
+                        img.addEventListener('error', res, { once: true });
+                    });
+                });
+            }
+            
+            // Fallback: wait on load/error
+            return new Promise(res => {
+                img.addEventListener('load', res, { once: true });
+                img.addEventListener('error', res, { once: true });
+            });
+        });
+        
+        await Promise.allSettled(promises);
     }
     
     function steppedRoundedPath(startX, startY, endX, endY, radius = 40) {
@@ -26,16 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const h2X  = goingRight ? endX - rX   : endX + rX;
         
         return `
-            M${startX},${startY}
-            L${startX},${v1Y}
-            Q${startX},${hY} ${h1X},${hY}
-            L${h2X},${hY}
-            Q${endX},${hY} ${endX},${hY + rY}
-            L${endX},${endY}
-        `;
+      M${startX},${startY}
+      L${startX},${v1Y}
+      Q${startX},${hY} ${h1X},${hY}
+      L${h2X},${hY}
+      Q${endX},${hY} ${endX},${hY + rY}
+      L${endX},${endY}
+    `;
     }
     
-    // Build once. Store references so we can update durations on resize without tearing down animations.
+    // Build once, store refs for efficient updates on resize
     const connectors = []; // { path, anim, pulseR, pulseA }
     
     function buildOnce() {
@@ -61,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const d = steppedRoundedPath(startX, startY, endX, endY, elbowRadius);
             
-            // Base path
+            // Base connector path
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             const pathId = `connector-${idx}`;
             path.setAttribute('id', pathId);
@@ -76,41 +106,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (randomColors) dot.setAttribute('fill', randomColor());
             svg.appendChild(dot);
             
-            // Motion with smoother snap: spline timing + keyPoints, no rotation
-            // Smooth zip-through-bends: linear mid, ease only at ends
+            // AnimateMotion: linear mid, ease only at ends (zips through bends)
             const anim = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
             anim.setAttribute('repeatCount', 'indefinite');
             anim.setAttribute('rotate', '0');          // avoid heading snaps at elbows
             anim.setAttribute('calcMode', 'spline');
-
-            // Keying only at the ends.
-            // 0–3%: ease-out from start
-            // 3–97%: linear (zip through bends)
-            // 97–100%: quick snap-in
+            
+            // 0–3% ease-out, 3–97% linear, 97–100% snap-in
             const keyTimes   = '0;0.03;0.97;1';
-            const keySplines = [
-            '0.2 0 0.6 1',  // start ease-out
-            '0 0 1 1',      // linear mid (zip)
-            '0.3 0 1 1'     // fast snap at end
-            ].join(';');
-
-            // Keep spatial progress aligned with temporal progress
+            const keySplines = ['0.2 0 0.6 1','0 0 1 1','0.3 0 1 1'].join(';');
             anim.setAttribute('keyTimes', keyTimes);
             anim.setAttribute('keySplines', keySplines);
             anim.setAttribute('keyPoints', '0;0.03;0.97;1');
-
+            
             const mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
             mpath.setAttribute('href', `#${pathId}`);
             mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
             anim.appendChild(mpath);
             dot.appendChild(anim);
-
-            // Constant px/s
+            
+            // Duration from path length (constant px/s)
             const len = path.getTotalLength();
             const duration = Math.max(0.8, len / pxPerSec);
             anim.setAttribute('dur', `${duration}s`);
-
-            // Subtle snap cue so it doesn’t read as a stutter
+            
+            // Subtle snap cue at the end
             const pulseR = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
             pulseR.setAttribute('attributeName', 'r');
             pulseR.setAttribute('dur', `${duration}s`);
@@ -118,9 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
             pulseR.setAttribute('calcMode', 'spline');
             pulseR.setAttribute('keyTimes', keyTimes);
             pulseR.setAttribute('keySplines', keySplines);
-            pulseR.setAttribute('values', '5;5;5;6'); // small pop at 100%
+            pulseR.setAttribute('values', '5;5;5;6');
             dot.appendChild(pulseR);
-
+            
             const pulseA = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
             pulseA.setAttribute('attributeName', 'fill-opacity');
             pulseA.setAttribute('dur', `${duration}s`);
@@ -130,12 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
             pulseA.setAttribute('keySplines', keySplines);
             pulseA.setAttribute('values', '0.7;0.7;0.7;0.9');
             dot.appendChild(pulseA);
-                        
+            
             connectors.push({ path, anim, pulseR, pulseA });
         });
     }
     
-    // Update geometry on resize without destroying nodes
+    // Resize: update only geometry/durations (keep animations intact)
     let rafPending = false;
     function updateOnResize() {
         if (rafPending) return;
@@ -170,13 +190,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 conn.anim.setAttribute('dur', `${duration}s`);
                 conn.pulseR.setAttribute('dur', `${duration}s`);
                 conn.pulseA.setAttribute('dur', `${duration}s`);
-                // No need to restart; updates take effect on the next cycle.
             });
         });
     }
     
-    // Build and wire
-    buildOnce();
-    window.addEventListener('resize', updateOnResize);
-    // No scroll handler: coordinates already include scroll offsets.
+    // Initialize after all connector-target images are ready
+    waitForConnectorTargetsLoaded().then(() => {
+        // Ensure SVG has a glow filter (once)
+        if (!svg.querySelector('#glow-dot')) {
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+            filter.id = 'glow-dot';
+            filter.setAttribute('x', '-50%');
+            filter.setAttribute('y', '-50%');
+            filter.setAttribute('width', '200%');
+            filter.setAttribute('height', '200%');
+            const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+            blur.setAttribute('in', 'SourceGraphic');
+            blur.setAttribute('stdDeviation', '3');
+            blur.setAttribute('result', 'blur');
+            const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+            const node  = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+            node.setAttribute('in', 'blur');
+            merge.appendChild(node);
+            filter.appendChild(blur);
+            filter.appendChild(merge);
+            defs.appendChild(filter);
+            svg.appendChild(defs);
+        }
+        
+        buildOnce();
+        window.addEventListener('resize', updateOnResize);
+        // No scroll handler: coordinates already include scroll offsets.
+    });
 });
