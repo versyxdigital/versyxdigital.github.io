@@ -86,46 +86,48 @@
                     <h1 class="leading-header" tabindex="3">
                         Download MKEditor
                     </h1>
-                    <p class="leading-text mt-3 mb-4" tabindex="4">
-                        Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
-                    </p>
-                    <!-- Download Buttons -->
-                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pb-4">
-                        <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
-                            class="d-flex flex-row align-items-center gap-2 btn-download rounded"
-                            download
-                            tabindex="5"
-                        >
-                            <i class="fa-brands fa-2xl fa-windows me-2"></i>
-                            <div>
-                                <p class="release-info">Windows</p>
-                                <p class="release-info">exe - v3.5.0</p>
-                            </div>
-                        </a>
-                        
-                        <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg" 
-                            class="d-flex flex-row align-items-center gap-2 btn-download rounded"
-                            download
-                            tabindex="6"
-                        >
-                            <i class="fa-brands fa-2xl fa-apple me-2"></i>
-                            <div>
-                                <p class="release-info">MacOS</p>
-                                <p class="release-info">pkg - v3.5.0</p>
-                            </div>
-                        </a>
-                        
-                        <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb" 
-                            class="d-flex flex-row align-items-center gap-2 btn-download rounded"
-                            download
-                            tabindex="7"
-                        >
-                            <i class="fa-brands fa-2xl fa-linux me-2"></i>
-                            <div>
-                                <p class="release-info">Linux</p>
-                                <p class="release-info">deb - v3.5.0</p>
-                            </div>
-                        </a>
+                    <div class="slide-in-left">
+                        <p class="leading-text mt-3 mb-4" tabindex="4">
+                            Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
+                        </p>
+                        <!-- Download Buttons -->
+                        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pb-4">
+                            <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
+                                class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                download
+                                tabindex="5"
+                            >
+                                <i class="fa-brands fa-2xl fa-windows me-2"></i>
+                                <div>
+                                    <p class="release-info">Windows</p>
+                                    <p class="release-info">exe - v3.5.0</p>
+                                </div>
+                            </a>
+                            
+                            <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg" 
+                                class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                download
+                                tabindex="6"
+                            >
+                                <i class="fa-brands fa-2xl fa-apple me-2"></i>
+                                <div>
+                                    <p class="release-info">MacOS</p>
+                                    <p class="release-info">pkg - v3.5.0</p>
+                                </div>
+                            </a>
+                            
+                            <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb" 
+                                class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                download
+                                tabindex="7"
+                            >
+                                <i class="fa-brands fa-2xl fa-linux me-2"></i>
+                                <div>
+                                    <p class="release-info">Linux</p>
+                                    <p class="release-info">deb - v3.5.0</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                     <div class="d-flex flex-column">
                         <a href="/mkeditor/web" target="_blank"
@@ -267,7 +269,7 @@
                     >
                 </div>
                 <div class="col-md-7 text-left">
-                    <div class="mkeditor-settings-list">
+                    <div class="mkeditor-settings-list slide-in-right">
                         <!-- Section Header -->
                         <h2 tabindex="18">
                             <i class="far fa-window-restore me-2"></i> 
@@ -339,7 +341,7 @@
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center g-4 mt-4 text-left">
                 <div class="col-md-7">
-                    <div class="mkeditor-export-list">
+                    <div class="mkeditor-export-list slide-in-left">
                         <!-- Section Header -->
                         <h2 tabindex="25">
                             <i class="fas fa-file-export me-2"></i> Export Documents
@@ -396,7 +398,7 @@
     <!-- Take Shortcuts Section -->
     <section class="py-5 bg-black text-light position-relative">
         <!-- <div class="overlay z-2"></div> -->
-        <div class="container position-relative pb-3 z-3">
+        <div class="container position-relative pb-3 z-3 slide-in-left">
             <!-- Section Header-->
             <h2 tabindex="29">
                 <i class="fas fa-line-chart me-2"></i> Take Shortcuts
@@ -406,7 +408,7 @@
                 <i class="fas fa-question-circle mx-1"></i> icon in the app toolbar.
             </p>
             <!-- Section Image -->
-            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg slide-in-left connector-target"
+            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg connector-target"
                 style="cursor: zoom-in"
                 data-bs-toggle="modal"
                 data-bs-target="#imageModal"
@@ -422,7 +424,7 @@
         <div class="container position-relative pb-3 z-3">
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center mt-5 text-left" tabindex="33">
-                <div class="col-md-6">
+                <div class="col-md-6 slide-in-left">
                     <!-- Section Header -->
                     <h2 class="mb-5" tabindex="32">
                         <i class="fas fa-globe me-2"></i> Powered by Web
@@ -466,7 +468,7 @@
         <!-- <div class="overlay z-2"></div> -->
         <div class="z-3 position-relative">
             <!-- Section Header -->
-            <h2 class="mb-3" tabindex="34">
+            <h2 class="mb-3 slide-in-bottom" tabindex="34">
                 <i class="fas fa-download me-2"></i> Available for Desktop
             </h2>
             <!-- Section Content -->
