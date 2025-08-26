@@ -548,6 +548,13 @@
         </div>
     </footer>
 
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" class="btn btn-light rounded-circle shadow"
+        style="position: fixed; bottom: 30px; right: 30px; display: none; z-index: 1050;"
+        aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <!-- Imagebox Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
@@ -576,6 +583,21 @@
             const modalImg = document.getElementById('imageModalImg');
             modalImg.src = img.getAttribute('data-full') || img.src; // use full-size if provided
             modalImg.alt = img.alt || '';
+        });
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        const heroSection = document.getElementById("main-section");
+
+        window.addEventListener("scroll", () => {
+            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+            if (window.scrollY > heroBottom) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        });
+
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
         });
     </script>
 </body>
