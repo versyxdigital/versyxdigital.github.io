@@ -66,7 +66,7 @@ a:hover {
 }
 
 .bg-black-grad {
-    background: linear-gradient(135deg, #111111 0%, #000000 100%);
+    background: linear-gradient(340deg, #222222 0%, #000000 100%);
 }
 
 .leading-header {
@@ -231,6 +231,17 @@ a:hover {
     background: url('../img/bg-flip.png');
     background-repeat: repeat;
     opacity: 0.1;
+}
+
+.overlay-mesh {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url('../img/filter.png');
+    background-repeat: repeat;
+    opacity: 0.5;
 }
 
 #image-connectors {

@@ -1,7 +1,7 @@
 {
   "particles": {
     "number": {
-      "value": 120,
+      "value": 240,
       "density": {
         "enable": true,
         "value_area": 800
@@ -17,7 +17,7 @@
         "color": "#000000"
       },
       "polygon": {
-        "nb_sides": 8
+        "nb_sides": 4
       },
       "image": {
         "src": "img/github.svg",
@@ -26,11 +26,11 @@
       }
     },
     "opacity": {
-      "value": 0.24852886943415603,
+      "value": 0.1,
       "random": false,
       "anim": {
         "enable": false,
-        "speed": 1,
+        "speed": 0,
         "opacity_min": 0.1,
         "sync": false
       }
@@ -59,9 +59,9 @@
       "random": true,
       "straight": false,
       "out_mode": "out",
-      "bounce": false,
+      "bounce": true,
       "attract": {
-        "enable": true,
+        "enable": false,
         "rotateX": 881.8766334760375,
         "rotateY": 1200
       }
