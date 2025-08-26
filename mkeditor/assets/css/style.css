@@ -229,13 +229,14 @@ a:hover {
 }
 
 .connector-dot {     /* will be overridden if random colors are enabled */
-  opacity: 1;
-  stroke-width: 0.1;
-  filter: url(#glow-dot);  /* soft glow */
-  pointer-events: none;
+    fill: #519088;
+    opacity: 1;
+    stroke-width: 0.1;
+    filter: url(#glow-dot);  /* soft glow */
+    pointer-events: none;
 }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .connector-dot { animation: none; }
+    .connector-dot { animation: none; }
 }
