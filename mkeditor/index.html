@@ -58,7 +58,16 @@
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none;">
     </div>
 
-    <svg class="d-none d-md-block" id="image-connectors"></svg>
+    <svg id="image-connectors" class="position-absolute top-0 start-0" style="pointer-events:none">
+    <defs>
+        <!-- soft glow for the dot -->
+        <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/></feMerge>
+        </filter>
+    </defs>
+    </svg>
+
 
     <!-- Github Ribbon -->
     <a href="https://github.com/versyxdigital/mkeditor/"
@@ -661,24 +670,135 @@
         });
     </script>
     <script>
+        function randomColor() {
+            const hue = Math.floor(Math.random() * 360);
+            return `hsl(${hue}, 80%, 60%)`;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const svg = document.getElementById('image-connectors');
             const targets = Array.from(document.querySelectorAll('.connector-target'));
 
-            function drawLines() {
-                const docWidth = document.documentElement.scrollWidth;
+            // Ensure <defs> with glow exists once
+            function ensureDefs() {
+                if (svg.querySelector('#glow-dot')) return;
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+                filter.id = 'glow-dot';
+                filter.setAttribute('x', '-50%'); filter.setAttribute('y', '-50%');
+                filter.setAttribute('width', '200%'); filter.setAttribute('height', '200%');
+                const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+                blur.setAttribute('in', 'SourceGraphic'); blur.setAttribute('stdDeviation', '3'); blur.setAttribute('result', 'blur');
+                const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+                const node = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode'); node.setAttribute('in','blur');
+                merge.appendChild(node); filter.appendChild(blur); filter.appendChild(merge); defs.appendChild(filter);
+                svg.appendChild(defs);
+            }
+
+            function steppedRoundedPath(startX, startY, endX, endY, radius = 40) {
+                const dx = Math.abs(endX - startX);
+                const dy = Math.abs(endY - startY);
+                const rX = Math.min(radius, dx / 2);
+                const rY = Math.min(radius, dy / 2);
+
+                const midY = startY + (endY - startY) / 2;
+                const v1Y  = midY - rY;
+                const hY   = midY;
+                const h1X  = endX > startX ? startX + rX : startX - rX;
+                const h2X  = endX > startX ? endX - rX   : endX + rX;
+
+                return `
+                M${startX},${startY}
+                L${startX},${v1Y}
+                Q${startX},${hY} ${h1X},${hY}
+                L${h2X},${hY}
+                Q${endX},${hY} ${endX},${hY + rY}
+                L${endX},${endY}
+                `;
+            }
+
+            function buildOnce() {
+                ensureDefs();
+
+                const docWidth  = document.documentElement.scrollWidth;
                 const docHeight = document.documentElement.scrollHeight;
-                svg.setAttribute('width', docWidth);
+                svg.setAttribute('width',  docWidth);
                 svg.setAttribute('height', docHeight);
                 svg.setAttribute('viewBox', `0 0 ${docWidth} ${docHeight}`);
-                svg.style.width = docWidth + 'px';
+                svg.style.width  = docWidth + 'px';
                 svg.style.height = docHeight + 'px';
-                svg.innerHTML = '';
 
                 targets.forEach((el, idx) => {
-                    if (idx === targets.length - 1) return;
+                if (idx === targets.length - 1) return;
 
-                    const rect1 = el.getBoundingClientRect();
+                const rect1 = el.getBoundingClientRect();
+                const rect2 = targets[idx + 1].getBoundingClientRect();
+
+                const startX = rect1.left + rect1.width / 2 + window.scrollX;
+                const startY = rect1.bottom + window.scrollY;
+                const endX   = rect2.left + rect2.width / 2 + window.scrollX;
+                const endY   = rect2.top + window.scrollY;
+
+                const d = steppedRoundedPath(startX, startY, endX, endY, 40);
+
+                // Group per connector so we can update `path` later without destroying the dot
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('data-connector-idx', String(idx));
+                svg.appendChild(g);
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const pathId = `connector-${idx}`;
+                path.id = pathId;
+                path.setAttribute('class', 'connector-line');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('d', d);
+                g.appendChild(path);
+
+                // Glow dot with SMIL motion (don’t recreate on scroll)
+                const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                dot.setAttribute('class', 'connector-dot');
+                dot.setAttribute('r', 5);
+                const color = randomColor();
+                dot.setAttribute('fill', color);
+                g.appendChild(dot);
+
+                const animateMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
+                // constant px/s speed
+                const len = path.getTotalLength();
+                const speed = 150;
+                const duration = Math.max(0.8, len / speed);
+                animateMotion.setAttribute('dur', `${duration}s`);
+                animateMotion.setAttribute('repeatCount', 'indefinite');
+                animateMotion.setAttribute('rotate', 'auto');
+
+                const mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
+                mpath.setAttribute('href', `#${pathId}`);
+                mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
+                animateMotion.appendChild(mpath);
+                dot.appendChild(animateMotion);
+                });
+            }
+
+            // If layout changes (resize), update only the path `d` and duration; do not remove/recreate nodes.
+            let rafPending = false;
+            function updateOnResize() {
+                if (rafPending) return;
+                rafPending = true;
+                requestAnimationFrame(() => {
+                rafPending = false;
+
+                const docWidth  = document.documentElement.scrollWidth;
+                const docHeight = document.documentElement.scrollHeight;
+                svg.setAttribute('width',  docWidth);
+                svg.setAttribute('height', docHeight);
+                svg.setAttribute('viewBox', `0 0 ${docWidth} ${docHeight}`);
+                svg.style.width  = docWidth + 'px';
+                svg.style.height = docHeight + 'px';
+
+                const groups = svg.querySelectorAll('g[data-connector-idx]');
+                groups.forEach(g => {
+                    const idx = Number(g.getAttribute('data-connector-idx'));
+                    const rect1 = targets[idx].getBoundingClientRect();
                     const rect2 = targets[idx + 1].getBoundingClientRect();
 
                     const startX = rect1.left + rect1.width / 2 + window.scrollX;
@@ -686,35 +806,24 @@
                     const endX   = rect2.left + rect2.width / 2 + window.scrollX;
                     const endY   = rect2.top + window.scrollY;
 
-                    // how round the corners should be
-                    const radius = 40;
+                    const d = steppedRoundedPath(startX, startY, endX, endY, 40);
 
-                    // vertical leg: stop radius above the corner
-                    const v1Y = (endY + startY) / 2 - radius;
-                    // horizontal leg: stop radius before turning down
-                    const hX  = endX > startX ? endX - radius : endX + radius;
-                    // after horizontal, we’ll curve down into endY
+                    const path = g.querySelector('path.connector-line');
+                    path.setAttribute('d', d);
 
-                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    path.setAttribute(
-                        'd',
-                        `
-                        M${startX},${startY}
-                        L${startX},${v1Y}
-                        Q${startX},${v1Y + radius} ${startX + (endX > startX ? radius : -radius)},${v1Y + radius}
-                        L${hX},${v1Y + radius}
-                        Q${endX},${v1Y + radius} ${endX},${v1Y + 2*radius}
-                        L${endX},${endY}
-                        `
-                    );
-                    path.setAttribute('class', 'connector-line');
-                    path.setAttribute('fill', 'none');
-                    svg.appendChild(path);
+                    const len = path.getTotalLength();
+                    const speed = 220;
+                    const duration = Math.max(0.8, len / speed);
+                    const anim = g.querySelector('animateMotion');
+                    if (anim) anim.setAttribute('dur', `${duration}s`);
+                    // Note: updating `d` does not destroy the animation; it follows the new geometry.
+                });
                 });
             }
 
-            drawLines();
-            window.addEventListener('resize', drawLines);
+            buildOnce();
+            window.addEventListener('resize', updateOnResize);
+            // Do NOT redraw on scroll; the connectors are in document coordinates already.
         });
     </script>
 </body>

@@ -213,3 +213,25 @@ a:hover {
     z-index: 1050;
     fill: none;
 }
+
+.connector-glow {
+    fill: none;
+    stroke: #ffffff;           /* faint light color */
+    stroke-opacity: 0.5;
+    stroke-width: 4;           /* slightly thicker for soft halo */
+    stroke-linecap: round;
+    filter: url(#connector-glow);
+    animation-name: connector-travel;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.connector-dot {
+  filter: url(#glow-dot); /* soft glow */
+  pointer-events: none;
+}
+
+@keyframes connector-travel {
+    from { stroke-dashoffset: var(--dash-start, 0); }
+    to   { stroke-dashoffset: 0; }
+}
