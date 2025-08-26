@@ -1,434 +1,677 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Chris Rowles" />
-    <meta
-      name="description"
-      content="Versyx Digital is an open source studio. We build fast, simple tools like MKEditor and PSMonitor."
-    />
-    <meta
-      name="keywords"
-      content="Versyx Digital, open source studio, MKEditor, PSMonitor, developer tools, markdown editor, system monitor"
-    />
-
-    <meta property="og:title" content="Versyx Digital — Open Source Studio" />
-    <meta
-      name="og:description"
-      content="We craft small, sharp, open source tools. Explore MKEditor and PSMonitor."
-    />
-    <meta property="og:image" content="https://versyxdigital.github.io/assets/versyx-card.png" />
-    <meta property="og:type" content="website" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Versyx Digital — Open Source Studio" />
-    <meta
-      name="twitter:description"
-      content="We craft small, sharp, open source tools. Explore MKEditor and PSMonitor."
-    />
-    <meta name="twitter:image" content="https://versyxdigital.github.io/assets/versyx-card.png" />
-
-    <title>Versyx Digital — Open Source Studio</title>
-
-    <link rel="canonical" href="https://versyxdigital.github.io/" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=Noto+Sans&family=Oxygen&family=Manrope&family=Nunito&family=Poppins&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css"
-    />
-
+<head>
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Chris Rowles">
+    <meta name="description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
+    <meta name="keywords" content="markdown, markdown editor, simple markdown editor, online markdown editor, markdown writing, markdown preview, markdown formatting, markdown tool">
+    <!-- OpenGraph meta tags -->
+    <meta property="og:title" content="MKEditor - the simple markdown editor.">
+    <meta name="og:description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
+    <meta property="og:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png">
+    <!-- Twitter meta tags -->
+    <meta name="twitter:card" content="https://versyxdigital.github.io/mkeditor/assets/img/demo.png">
+    <meta name="twitter:title" content="MKEditor - Simple Online Markdown Editor">
+    <meta name="twitter:description" content="Write, preview, and export markdown instantly with MKEditor.">
+    <meta name="twitter:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png">
+    <!-- Page title and canonical URL -->
+    <title>MKEditor - Simple & Fast Online Markdown Editor with Live Preview</title>    
+    <link rel="canonical" href="https://versyxdigital.github.io/mkeditor/">
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=Noto+Sans&family=Oxygen&family=Manrope&family=Nunito&family=Poppins&display=swap" rel="stylesheet">
+    <!-- JS dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.1/regl.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/3.4.2/gl-matrix-min.js"></script>
-    <script src="./assets/particles.min.js"></script>
-
+    <script src="./assets/js/particles.min.js"></script>
+    <!-- JS SEO -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Versyx Digital",
-        "url": "https://versyxdigital.github.io/",
-        "logo": "https://versyxdigital.github.io/assets/logo.png",
-        "sameAs": [
-          "https://github.com/versyxdigital",
-          "https://www.linkedin.com/in/chris-rowles/"
-        ],
-        "founder": {
-          "@type": "Person",
-          "name": "Chris Rowles"
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "MKEditor",
+            "operatingSystem": "Any",
+            "applicationCategory": "DeveloperApplication",
+            "description": "A simple, fast, and free online markdown editor with live preview.",
+            "url": "https://versyxdigital.github.io/mkeditor/",
+            "image": "https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png",
+            "softwareVersion": "1.0.0",
+            "author": {
+                "@type": "Person",
+                "name": "Chris Rowles"
+            }
         }
-      }
     </script>
-
-    <style>
-      body {
-        font-family: "Open Sans", sans-serif;
-        color: #444444;
-      }
-      a {
-        color: #383f5f;
-      }
-      a:hover {
-        color: #545c86;
-        font-weight: bold;
-        text-decoration: none;
-      }
-      .bg-black-grad {
-        background: linear-gradient(135deg, #45336d 0%, #191818 100%);
-      }
-      .github-fork-ribbon:before {
-        background-color: #212529;
-      }
-      .heading {
-        color: #545c86;
-        font-weight: 400;
-      }
-      .overlay {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background: url(./assets/filter.png);
-        background-repeat: repeat;
-        opacity: 0.5;
-      }
-      #particles-js {
-        z-index: 1 !important;
-      }
-      .btn-download {
-        background: linear-gradient(135deg, #45336d 0%, #411f1f 100%);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        color: #fff;
-        letter-spacing: 1px;
-        padding: 12px 16px;
-        transition: all 0.2s ease-in-out;
-      }
-      .btn-download:hover {
-        transform: scale(1.025);
-        color: #fff;
-        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.15);
-      }
-      .project-card {
-        border: 1px solid #e7e7e7;
-        border-radius: 12px;
-        transition: transform 0.15s ease;
-      }
-      .project-card:hover {
-        transform: translateY(-2px);
-      }
-      .chip-network {
-        pointer-events: none;
-      }
-      .badge-row img {
-        height: 20px;
-      }
-      .version-info,
-      .release-info {
-        font-size: 0.75rem;
-        margin-bottom: 0;
-      }
-    </style>
-    <script src="https://kit.fontawesome.com/5475e8a6de.js" crossorigin="anonymous"></script>
-  </head>
-  <body class="h-100">
-    <div
-      id="particles-js"
-      style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none"
-    ></div>
-
-    <a
-      class="github-fork-ribbon d-none d-md-block"
-      href="https://github.com/versyxdigital"
-      data-ribbon="Visit us on GitHub"
-      title="Visit us on GitHub"
-      >Visit us on GitHub</a
-    >
-
-    <section class="pt-4 pt-md-5 bg-black-grad text-light position-relative" style="border-bottom: 1px solid #212529">
-      <div class="overlay z-2"></div>
-      <header
-        class="container position-relative z-3 d-flex align-items-center justify-content-between pb-3 mb-5 border-bottom border-dark"
-      >
-        <a href="/" class="d-flex align-items-center text-decoration-none">
-          <i class="fa-solid fa-code fa-2x me-2 text-light"></i>
-          <div class="text-white">
-            <h1 class="fs-4 mb-0">Versyx Digital</h1>
-          </div>
-        </a>
-      </header>
-
-      <div class="container position-relative z-3">
-        <div class="row align-items-center" style="z-index: 10">
-          <div class="col-lg-6 text-center text-lg-start">
-            <h1 class="text-white" style="font-size: 2rem">We build small, sharp tools.</h1>
-            <p class="lead mt-3 mb-4" style="font-size: 1rem">
-              Versyx Digital is an open source studio focused on practical, high-performance developer utilities. Clean design, predictable behavior, zero fuss.
-            </p>
-            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pb-4">
-              <a href="https://github.com/versyxdigital" class="d-inline-flex align-items-center gap-2 btn-download text-decoration-none rounded">
-                <i class="fa-brands fa-github"></i>
-                <span>Browse Repos</span>
-              </a>
-            </div>
-          </div>
-          <div class="col-lg-6 text-center mt-4 mt-lg-0">
-            <img src="./assets/design.svg" class="img-fluid" alt="Versyx Digital hero" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-5 bg-white text-center shadow-lg">
-      <div class="container">
-        <h2 class="mb-5 text-dark"><i class="fas fa-rocket me-2"></i> What we do</h2>
-        <div class="row g-4">
-          <div class="col-md-4">
-            <i class="far fa-eye fa-3x mb-4"></i>
-            <h5 class="fw-bold mb-3" style="letter-spacing: 0.075rem">Clarity first</h5>
-            <p class="text-muted">Minimal UI, predictable behavior, and sensible defaults. Tools that disappear into your workflow.</p>
-          </div>
-          <div class="col-md-4">
-            <i class="far fa-clock fa-3x mb-4"></i>
-            <h5 class="fw-bold mb-3" style="letter-spacing: 0.075rem">Fast by default</h5>
-            <p class="text-muted">Startup times measured in milliseconds and features geared toward instant feedback.</p>
-          </div>
-          <div class="col-md-4">
-            <i class="far fa-window-restore fa-3x mb-4"></i>
-            <h5 class="fw-bold mb-3" style="letter-spacing: 0.075rem">Batteries included</h5>
-            <p class="text-muted">Thoughtful integrations, useful exports, and practical defaults—without plugins.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section clas="py-5">
-      <div class="d-flex flex-row align-items-center shadow-lg">
-      <img class="img-fluid w-50" src="./mkeditor/assets/img/demo-dark.png" alt="Demo (dark)"
-          style="cursor: zoom-in"
-          data-bs-toggle="modal" data-bs-target="#imageModal" data-full="./mkeditor/assets/img/demo-dark.png">
-      <img class="img-fluid w-50" src="./assets/edcts.png" alt="Demo"
-          style="cursor: zoom-in"
-          data-bs-toggle="modal" data-bs-target="#imageModal" data-full="./assets/edcts.png">
-      </div>
-    </section>
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
-        <div class="modal-content bg-transparent border-0">
-        <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
-        <img id="imageModalImg" class="img-fluid rounded shadow" alt="">
-        </div>
-      </div>
+</head>
+<body>
+    <!-- particles js -->
+    <div class="h-100"
+        id="particles-js"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none;">
     </div>
 
-    <section class="py-5 shadow-lg">
-      <div class="container">
-        <h2 class="mb-5 text-center heading text-dark">
-          <i class="fas fa-toolbox me-2"></i> Project Showcase
-        </h2>
-        <div class="row g-4">
-          <!-- MKEditor Card -->
-          <div class="col-md-6">
-            <a href="/mkeditor" class="text-decoration-none">
-              <div class="project-card p-4 h-100 bg-white position-relative overflow-hidden">
-                <div class="d-flex align-items-center mb-3">
-                  <img src="./mkeditor/logo.png" class="me-2" width="40" height="40" alt="MKEditor" />
-                  <div>
-                    <h3 class="h5 mb-0">MKEditor</h3>
-                    <small class="text-muted">Simple, fast markdown editor with live preview</small>
-                  </div>
-                </div>
-                <p class="text-muted">Write, preview, and export Markdown instantly. Desktop apps and a fully‑featured web version.</p>
-                <div class="d-flex flex-wrap gap-2 badge-row mb-3">
-                  <img src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg" alt="Tests" />
-                  <img alt="stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor" />
-                  <img alt="forks" src="https://img.shields.io/github/forks/versyxdigital/mkeditor" />
-                </div>
-                <svg class="chip-network position-absolute top-0 start-0 w-100 h-100" viewBox="0 0 300 200" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="grad-blue" x1="150" y1="100" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stop-color="#2EB9DF"/>
-                      <stop offset="1" stop-color="#2EB9DF" stop-opacity="0"/>
-                    </linearGradient>
-                    <linearGradient id="grad-pink" x1="150" y1="100" x2="150" y2="160" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stop-color="#FF4A81"/>
-                      <stop offset="1" stop-color="#FF4A81" stop-opacity="0"/>
-                    </linearGradient>
-                    <linearGradient id="grad-orange" x1="150" y1="100" x2="220" y2="160" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stop-color="#FF7432"/>
-                      <stop offset="1" stop-color="#F7CC4B" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="135" y="80" width="30" height="30" rx="4" fill="#212529" stroke="#545c86" stroke-width="2" />
-                  <path d="M150 95 L40 40" stroke="url(#grad-blue)" stroke-width="2"/>
-                  <path d="M150 95 L80 160" stroke="url(#grad-blue)" stroke-width="2"/>
-                  <path d="M150 95 L150 160" stroke="url(#grad-pink)" stroke-width="2"/>
-                  <path d="M150 95 L220 160" stroke="url(#grad-orange)" stroke-width="2"/>
-                  <circle r="3" fill="#fff">
-                    <animateMotion dur="4s" repeatCount="indefinite" path="M150 95 L40 40"/>
-                  </circle>
-                  <circle r="3" fill="#fff">
-                    <animateMotion dur="3.5s" repeatCount="indefinite" path="M150 95 L80 160"/>
-                  </circle>
-                  <circle r="3" fill="#fff">
-                    <animateMotion dur="3s" repeatCount="indefinite" path="M150 95 L150 160"/>
-                  </circle>
-                  <circle r="3" fill="#fff">
-                    <animateMotion dur="4.5s" repeatCount="indefinite" path="M150 95 L220 160"/>
-                  </circle>
-                </svg>
-              </div>
-            </a>
-          </div>
+    <!-- Image connectors SVG -->
+    <svg id="image-connectors" class="d-none d-md-block position-absolute top-0 start-0" style="pointer-events:none">
+        <defs>
+            <!-- soft glow for the dot -->
+            <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/></feMerge>
+            </filter>
+        </defs>
+    </svg>
 
-          <!-- PSMonitor Card -->
-          <div class="col-md-6">
-            <a href="/psmonitor" class="text-decoration-none">
-              <div class="project-card p-4 h-100 bg-white">
-                <div class="d-flex align-items-center mb-3">
-                  <img src="./psmonitor/logo.png" class="me-2" width="40" height="40" alt="PSMonitor" />
-                  <div>
-                    <h3 class="h5 mb-0">PSMonitor</h3>
-                    <small class="text-muted">Live system monitoring with a clean, Tkinter UI</small>
-                  </div>
+
+    <!-- Github Ribbon -->
+    <a href="https://github.com/versyxdigital/mkeditor/"
+        class="github-fork-ribbon d-none d-md-block"
+        data-ribbon="Fork me on GitHub"
+        tabindex="2"
+    >
+        Fork me on GitHub
+    </a>
+
+    <!-- Hero Section -->
+    <section id="main-section" class="py-5 bg-black-grad text-light">
+        <header class="container d-flex align-items-center justify-content-between pb-3 mb-5">
+            <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                <img src="logo.png" class="img-fluid rounded me-2" width="50" alt="MKEditor logo.">
+                <div class="text-white">
+                    <h1 class="fs-4 mb-0" tabindex="1">MKEditor - A simple markdown editor.</h1>
                 </div>
-                <p class="text-muted">Real‑time CPU, memory, and process insights with a lightweight desktop UI and WebSocket backend.</p>
-                <div class="d-flex flex-wrap gap-2 badge-row mb-3">
-                  <img src="https://github.com/sentrychris/psmonitor/actions/workflows/github-code-scanning/codeql/badge.svg" alt="Tests" />
-                  <img alt="stars" src="https://img.shields.io/github/stars/versyxdigital/psmonitor" />
-                  <img alt="forks" src="https://img.shields.io/github/forks/versyxdigital/psmonitor" />
-                </div>
-              </div>
             </a>
-          </div>
+        </header>
+        <div class="container pb-3">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-center text-lg-start">
+                    <!-- Hero Text -->
+                    <h1 class="leading-header slide-in-bottom" tabindex="3">
+                        Download MKEditor
+                    </h1>
+                    <div class="slide-in-left">
+                        <div>
+                            <p class="leading-text mt-3 mb-4" tabindex="4">
+                                Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
+                            </p>
+                            <!-- Download Buttons -->
+                            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pb-4">
+                                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
+                                    class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                    download
+                                    tabindex="5"
+                                >
+                                    <i class="fa-brands fa-2xl fa-windows me-2"></i>
+                                    <div>
+                                        <p class="release-info">Windows</p>
+                                        <p class="release-info">exe - v3.5.0</p>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg" 
+                                    class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                    download
+                                    tabindex="6"
+                                >
+                                    <i class="fa-brands fa-2xl fa-apple me-2"></i>
+                                    <div>
+                                        <p class="release-info">MacOS</p>
+                                        <p class="release-info">pkg - v3.5.0</p>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb" 
+                                    class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                    download
+                                    tabindex="7"
+                                >
+                                    <i class="fa-brands fa-2xl fa-linux me-2"></i>
+                                    <div>
+                                        <p class="release-info">Linux</p>
+                                        <p class="release-info">deb - v3.5.0</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <a href="/mkeditor/web" target="_blank"
+                                class="mx-auto mx-md-0 d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                tabindex="8"
+                            >
+                                <i class="fa-solid fa-2xl fa-external-link me-2"></i>
+                                <div>
+                                    <p class="release-info">Launch MKEditor Web</p>
+                                    <p class="release-info">Current release: v3.5.1</p>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- Hero Badges & License -->
+                        <div class="mt-3 d-flex flex-column">
+                            <small class="text-light">
+                                <span>MIT Licensed ·</span>
+                                <a href="https://github.com/versyxdigital/mkeditor" class="text-light text-decoration-underline"
+                                    tabindex="9">
+                                    Source on GitHub
+                                </a>
+                            </small>
+                            <div class="mt-2 d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                                <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml">
+                                    <img
+                                        src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
+                                        alt="Github tests badge"
+                                    >
+                                </a>
+                                <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql">
+                                    <img
+                                        src="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql/badge.svg"
+                                        alt="Github CodeQL badge"
+                                    >
+                                </a>
+                                <a href="https://github.com/versyxdigital/mkeditor">
+                                    <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hero Image -->
+                <div class="col-lg-8 text-center mt-4 mt-lg-0 slide-in-right" tabindex="10">
+                    <img src="./assets/img/demo-dark.png" class="img-fluid rounded shadow" alt="A screenshot of MKEditor">
+                </div>
+            </div>
         </div>
-
-        <div class="row mt-3 g-4">
-          <!-- EDCTS Card -->
-          <div class="col-md-6">
-            <a href="https://github.com/sentrychris/edcts" class="text-decoration-none">
-              <div class="project-card p-4 h-100 bg-white">
-                <div class="d-flex align-items-center mb-3">
-                  <img src="./assets/rocket.png" class="me-2" width="40" height="40" alt="MKEditor" />
-                  <div>
-                    <h3 class="h5 mb-0">EDCTS</h3>
-                    <small class="text-muted">Information hub for players of Elite Dangerous</small>
-                  </div>
+    </section>
+    
+    <!-- Feature Overview Section -->
+    <section class="py-5 bg-black text-light text-center shadow-lg position-relative">
+        <div class="overlay-flip z-2"></div>
+        <div class="container position-relative pb-3 z-3">
+            <!-- Section Header -->
+            <h2 class="mb-5" tabindex="11">
+                <i class="fas fa-rocket me-2"></i> Feature Overview
+            </h2>
+            <!-- Section Row & Columns -->
+            <div class="row g-4 mt-5">
+                <!-- Full CommonMark Support Overview -->
+                <div class="col-md-4">
+                    <i class="far fa-file-code fa-3x mb-4"></i>
+                    <h3 class="fw-bold mb-3 feature-overview-header" tabindex="12">
+                        Full CommonMark Support
+                    </h3>
+                    <p tabindex="13">Write with confidence using the full CommonMark 
+                        markdown specification, with extra features for alerts, syntax 
+                        highlighting, and custom styling.
+                    </p>
                 </div>
-                <p class="text-muted">Information hub for Elite Dangerous players, including live system data, galnet news, mappinge and more.</p>
-              </div>
-            </a>
-          </div>
-
-          <!-- System Monitor Card -->
-          <div class="col-md-6">
-            <a href="https://github.com/sentrychris/ssh-client" class="text-decoration-none">
-              <div class="project-card p-4 h-100 bg-white">
-                <div class="d-flex align-items-center mb-3">
-                  <img src="./assets/ssh.png" class="me-2" width="40" height="40" alt="PSMonitor" />
-                  <div>
-                    <h3 class="h5 mb-0">SSH Client</h3>
-                    <small class="text-muted">A simple tornado-based portable SSH web client</small>
-                  </div>
+                <!-- Live Preview Feature Overview -->
+                <div class="col-md-4">
+                    <i class="far fa-eye fa-3x mb-4"></i>
+                    <h3 class="fw-bold mb-3 feature-overview-header" tabindex="14">
+                        Live Preview Renderer
+                    </h3>
+                    <p tabindex="15">
+                        Built-in, resizable HTML preview powered by Bootstrap and Highlight.js, 
+                        letting you see styled or unstyled output in real time.
+                    </p>
                 </div>
-                <p class="text-muted">A web-based SSH client, built with tornado and paramiko, support password and private key authentication.</p>
-              </div>
-            </a>
-          </div>
+                <!-- Customizable & Export-Ready Feature Overview -->
+                <div class="col-md-4">
+                    <i class="far fa-pen-to-square fa-3x mb-4"></i>
+                    <h3 class="fw-bold mb-3 feature-overview-header" tabindex="16">
+                        Customizable & Export-Ready
+                    </h3>
+                    <p tabindex="17">
+                        Switch between light and dark mode, toggle word-wrap, and export your 
+                        markdown to clean HTML or Bootstrap-styled documents.
+                    </p>
+                </div>
+            </div>
         </div>
-
-        <div class="text-center mt-5">
-          <a href="https://github.com/versyxdigital" class="btn btn-download">
-            <i class="fa-brands fa-github me-2"></i> See all repositories
-          </a>
+    </section>
+    
+    <!-- Full-size Dual Images Section -->
+    <section class="bg-black position-relative">
+        <h2 class="sr-only">Screenshots of MKEDitor</h2>
+        <div class="d-flex flex-row align-items-center shadow-lg">
+            <img class="img-fluid w-50"
+                src="./assets/img/demo-dark.png" alt="MKEditor screenshot in dark mode"
+                style="cursor: zoom-in"
+                data-bs-toggle="modal"
+                data-bs-target="#imageModal"
+                data-full="./assets/img/demo-dark.png"
+            >
+            <img class="img-fluid w-50 connector-target z-3"
+                src="./assets/img/demo.png" alt="MKEditor screenshot in light mode"
+                style="cursor: zoom-in"
+                data-bs-toggle="modal"
+                data-bs-target="#imageModal"
+                data-full="./assets/img/demo.png"
+            >
         </div>
-      </div>
+    </section>
+    
+    <!-- Configure Settings Section -->
+    <section class="py-0 py-md-5 bg-black text-light text-center position-relative">
+        <!-- <div class="overlay z-2"></div> -->
+        <div class="container position-relative pb-3 z-3">
+            <div class="text-left sr-only" tabindex="19">
+                <p>MKEditor stores its configuration settings in a JSON file located at 
+                    <code>%USERPROFILE%/.mkeditor/settings.json</code>.
+                </p>
+                <p>
+                    If the file does not exist when the application starts, MKEditor 
+                    automatically creates it with a full set of default values. This ensures 
+                    the application is ready to run out of the box without requiring manual
+                    configuration.
+                </p>
+            </div>
+            <!-- Section Row & Columns -->
+            <div class="row d-flex align-items-center g-4 mt-0 mt-md-4">
+                <div class="col-md-5 order-2 order-md-1">
+                    <!-- Section Image -->
+                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg connector-target"
+                        alt="Screenshot of MKEditor settings"
+                    >
+                </div>
+                <div class="col-md-7 text-left order-1 order-md-2">
+                    <div class="mkeditor-settings-list text-center text-md-start slide-in-right">
+                        <!-- Section Header -->
+                        <h2 class="pt-4 pt-md-0" tabindex="18">
+                            <i class="far fa-window-restore me-2"></i> 
+                            Configure Settings
+                        </h2>
+                        <!-- Section Tip -->
+                        <p class="small mb-5" tabindex="20">Tip: Open settings via the 
+                            <i class="fas fa-cogs mx-1"></i> icon in the app toolbar.
+                        </p>
+                        <h3 class="mb-4 fw-light" tabindex="21">
+                            Customize to your style
+                        </h3>
+                        <div class="formatting-settings pb-4">
+                            <!-- Formatting Section -->
+                            <h4 class="fw-semibold leading-text">Formatting</h4>
+                            <ul class="settings-list" tabindex="22">
+                                <li>
+                                    <strong>Toggle Automatic Indentation</strong> - When enabled, MKEditor 
+                                    will automatically indent your text when you press <code>Enter</code>, 
+                                    following the indentation level of the previous line. This is especially 
+                                    useful for lists, code blocks, and nested content.
+                                </li>
+                                <li>
+                                    <strong>Toggle Word-Wrapping</strong> - Automatically wraps long lines of 
+                                    text so they fit within the visible editor window without requiring horizontal 
+                                    scrolling. Ideal for distraction-free writing and smaller screen sizes.
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="editing-settings pb-4">
+                            <!-- Editing Section -->
+                            <h4 class="fw-semibold leading-text">Editing</h4>
+                            <ul class="settings-list" tabindex="23">
+                                <li>
+                                    <strong>Render Whitespace</strong> - Visually display spaces, tabs, and other 
+                                    whitespace characters directly in the editor. Useful for aligning code, spotting 
+                                    formatting issues, or maintaining strict markdown layouts.
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="miscellaneous-settings pb-4">
+                            <!-- Miscellaneous Section -->
+                            <h4 class="fw-semibold leading-text">Miscellaneous</h4>
+                            <ul class="settings-list" tabindex="24">
+                                <li>
+                                    <strong>Display Minimap</strong> - Shows a miniature overview of your document along 
+                                    the side of the editor. Quickly navigate large files by clicking or dragging within 
+                                    the minimap view.
+                                </li>
+                                <li>
+                                    <strong>Use System Theme</strong> - Automatically adapts MKEditor’s appearance to 
+                                    match your operating system’s theme (light or dark), overriding the manual theme 
+                                    setting.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Export Documents Section -->
+    <section class="py-0 py-md-5 bg-black text-light position-relative">
+        <!-- <div class="overlay-flip z-2"></div> -->
+        <div class="container position-relative pb-3 z-3">
+            <!-- Section Rows & Columns -->
+            <div class="row d-flex align-items-center g-4 mt-0 mt-md-4 text-center text-md-start">
+                <div class="col-md-7">
+                    <div class="mkeditor-export-list slide-in-left">
+                        <!-- Section Header -->
+                        <h2 class="pt-3 pt-md-0" tabindex="25">
+                            <i class="fas fa-file-export me-2"></i> Export Documents
+                        </h2>
+                        <!-- Section Tip -->
+                        <p class="small mb-5" tabindex="28">Tip: Configure exports via the 
+                            <i class="fas fa-sliders mx-1"></i> icon in the app toolbar.
+                        </p>
+                        <h3 class="mb-4 fw-light">
+                            Export your work instantly
+                        </h3>
+                        <div class="export-settings pb-4 pe-0 pe-md-5">
+                            <!-- HTML Export Section -->
+                            <h4 class="fw-semibold leading-text">HTML Export</h4>
+                            <ul class="settings-list" tabindex="26">
+                                <li>
+                                    <strong>Clean HTML</strong> – Export your markdown into simple, 
+                                    unstyled HTML that’s ready for integration into any website or 
+                                    project.
+                                </li>
+                                <li>
+                                    <strong>Styled HTML</strong> – Export with Bootstrap, Highlight.js, 
+                                    and other provider styles embedded, ensuring your content looks 
+                                    exactly as previewed.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="export-settings pb-4 pe-0 pe-md-5">
+                            <!-- PDF Export Section -->
+                            <h4 class="fw-semibold leading-text">PDF Export</h4>
+                            <ul class="settings-list" tabindex="27">
+                                <li>
+                                    <strong>Print to PDF</strong> – Generate a polished PDF of your markdown 
+                                    directly from MKEditor, preserving fonts, colors, and spacing.
+                                </li>
+                                <li>
+                                    <strong>Custom Settings</strong> – Apply background color, font size, and 
+                                    line spacing preferences to tailor your exported PDF to your needs.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <!-- Section Image -->
+                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg connector-target"
+                        alt="Screenshot of MKEditor export settings"
+                    >
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Editor Shortcuts Section -->
+    <section class="py-0 py-md-5 bg-black text-light position-relative">
+        <!-- <div class="overlay z-2"></div> -->
+        <div class="container position-relative pb-3 z-3 text-center text-md-start">
+            <div class="slide-in-left">
+                <!-- Section Header-->
+                <h2 class="pt-4 pt-md-0" tabindex="29">
+                    <i class="fas fa-line-chart me-2"></i> Editor Shortcuts
+                </h2>
+                <!-- Section Tip -->
+                <p class="small mb-5" tabindex="30">Tip: View shortcuts via the 
+                    <i class="fas fa-question-circle mx-1"></i> icon in the app toolbar.
+                </p>
+            </div>
+            <!-- Section Image -->
+            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg connector-target"
+                style="cursor: zoom-in"
+                data-bs-toggle="modal"
+                data-bs-target="#imageModal"
+                alt="Screenshot of MKEditor"
+                tabindex="31"
+            >
+        </div>
     </section>
 
-    <section class="py-5 bg-white text-center shadow-lg">
-      <div class="container">
-        <h2 class="mb-4 text-dark"><i class="far fa-handshake me-2"></i> Collaborate</h2>
-        <p class="text-muted mb-4">
-          We welcome issues, pull requests, and ideas. If you want help building a tool or integrating with ours, reach out.
-        </p>
-        <div class="d-flex flex-wrap gap-3 justify-content-center">
-          <a href="mailto:christopher.rowles@outlook.com" class="btn btn-download"><i class="fa-regular fa-envelope me-2"></i>Email</a>
-          <a href="https://github.com/versyxdigital" class="btn btn-download"><i class="fa-brands fa-github me-2"></i>GitHub</a>
-          <a href="https://www.linkedin.com/in/chris-rowles/" class="btn btn-download"><i class="fa-brands fa-linkedin me-2"></i>LinkedIn</a>
+    <!-- Powered by Web Section -->
+    <section class="py-0 py-md-5 bg-black text-light text-center position-relative">
+        <!-- <div class="overlay-flip z-2"></div> -->
+        <div class="container position-relative pb-3 z-3">
+            <!-- Section Rows & Columns -->
+            <div class="row d-flex align-items-center pt-0 pt-md-5 text-center text-md-start" tabindex="33">
+                <div class="col-md-6 slide-in-left">
+                    <!-- Section Header -->
+                    <h2 class="pt-5 pt-md-0 mb-5" tabindex="32">
+                        <i class="fas fa-globe me-2"></i> Powered by Web
+                    </h2>
+                    <p class="pe-0 pe-md-5">
+                        MKEditor is also available as a fully-featured web application, allowing you to write, 
+                        preview, and export markdown directly in your browser without installing the desktop app. 
+                        The web version offers the same CommonMark support, live preview renderer, and export 
+                        options as the Electron-based application.
+                    </p>
+                    <p class="pe-0 pe-md-5">
+                        This makes it ideal for quick edits, collaborative sessions, or working on devices where 
+                        installing software isn’t possible. Simply visit the MKEditor web page to start writing 
+                        instantly - no downloads, no setup, just open and go.
+                    </p>
+                    <!-- Launch MKEditor Web Button -->
+                    <div class="d-flex flex-column pt-3 pe-0 pe-md-5">
+                        <a href="/mkeditor/web" target="_blank"
+                            class="mx-auto mx-md-0 d-flex flex-row align-items-center gap-2 btn-download rounded text-light">
+                            <i class="fa-solid fa-2xl fa-external-link me-2"></i>
+                            <div>
+                                <p class="release-info">Launch MKEditor Web</p>
+                                <p class="release-info">Current release: v3.5.1</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <!-- Section Image -->
+                <div class="col-md-6 pt-3 pt-md-0">
+                    <a href="./assets/img/demo-dark.png" target="_blank">
+                        <img class="img-fluid rounded mt-3 shadow-lg connector-target" src="./assets/img/demo-dark.png"
+                            alt="A screenshot of MKEditor">
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
-    <footer class="position-relative pt-5 bg-black-grad text-white small">
-      <div class="overlay z-2"></div>
-      <div class="container position-relative z-3 pb-5 d-flex align-items-end justify-content-between flex-wrap">
-        <div class="order-2 order-md-1 mt-5 mt-md-0">
-          <div id="display-cube" class="rounded-circle mb-3"></div>
-          <div>
-            Made with&nbsp; ❤️ &nbsp;by
-            <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a>
-            &middot; &copy;
-            <script>
-              document.write(new Date().getFullYear());
-            </script>
-          </div>
+    <!-- Available for Desktop Section -->
+    <section class="py-5 bg-black text-light text-center position-relative">
+        <!-- <div class="overlay z-2"></div> -->
+        <div class="z-3 position-relative">
+            <!-- Section Header -->
+            <h2 class="mb-3 slide-in-top" tabindex="34">
+                <i class="fas fa-download me-2"></i> Available for Desktop
+            </h2>
+            <!-- Section Content -->
+            <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center slide-in-top">
+                <!-- Windows Download -->
+                <div class="d-flex flex-column gap-3">
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
+                        class="btn btn-download shadow">
+                        <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.5.0</small>
+                    </a>
+                    <hr class="my-0">
+                    <p class="small text-decoration-none">
+                        <i class="fa-brands fa-windows me-2"></i>
+                        Last built: 25th August 2025
+                    </p>
+                </div>
+                <!-- MacOS Download -->
+                <div class="d-flex flex-column gap-3">
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg"
+                        class="btn btn-download shadow">
+                        <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.5.0</small>
+                    </a>
+                    <hr class="my-0">
+                    <p class="small text-decoration-none">
+                        <i class="fa-brands fa-apple me-2"></i>
+                        Last built: 25th August 2025
+                    </p>
+                </div>
+                <!-- Linux Download -->
+                <div class="d-flex flex-column gap-3">
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb"
+                        class="btn btn-download shadow">
+                        <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.5.0</small>
+                    </a>
+                    <hr class="my-0">
+                    <p class="small text-decoration-none">
+                        <i class="fa-brands fa-linux me-2"></i>
+                        Last built: 25th August 2025
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0">
-          <em id="quote"></em>
-          <div class="d-flex align-items-center gap-3 mt-3">
-            <a href="https://github.com/sentrychris/"><i class="fa-brands fa-square-github fa-2x" style="color: #cdcdcd"></i></a>
-            <a href="https://www.linkedin.com/in/chris-rowles/"><i class="fa-brands fa-linkedin fa-2x" style="color: #cdcdcd"></i></a>
-            <a href="https://www.linkedin.com/in/chris-rowles/"><i class="fa-brands fa-y-combinator fa-2x" style="color: #cdcdcd"></i></a>
-          </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-0 pt-md-5 bg-black text-light small position-relative">
+        <!-- <div class="overlay z-2"></div> -->
+        <div class="container z-3 pb-5 d-flex align-items-end justify-content-between flex-wrap">
+            <!-- Made with love -->
+            <div class="order-2 order-md-1 mt-5 mt-md-0">
+                <div id="display-cube" class="rounded-circle mb-3"></div>
+                <div tabindex="35">
+                    Made with&nbsp; ❤️ &nbsp;by
+                    <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a> &middot; &copy;
+                    <script>
+                        document.write(new Date().getFullYear());
+                    </script>
+                </div>
+            </div>
+            <!-- Would you like to hire me? -->
+            <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0" tabindex="36">
+                <span class="ls-2 fs-5">☕ Would you like to hire me?</span>
+                <hr>
+                <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white">
+                    christopher.rowles@outlook.com</a>
+                </span>
+                <span>Phone: <a href="tel:07522267722" class="text-white">
+                    +44(0)7522 267 722</a>
+                </span>
+                <div class="d-flex align-items-center gap-3 mt-3">
+                    <a href="https://github.com/sentrychris/">
+                        <i class="fa-brands fa-square-github fa-2x" style="color: #b3b3b3"></i>
+                        <span class="sr-only">Github</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/chris-rowles/">
+                        <i class="fa-brands fa-linkedin fa-2x" style="color: #b3b3b3"></i>
+                        <span class="sr-only">LinkedIn</span>
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
     </footer>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" class="btn btn-light rounded-circle shadow scroll-to-top"
+        aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
+    <!-- Imagebox Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content bg-transparent border-0">
+                <button type="button"
+                    class="btn-close ms-auto me-2 mt-2"
+                    data-bs-dismiss="modal"
+                    aria-label="Close image modal button">
+                    <span class="sr-only">Close the image modal</span>
+                </button>
+                <img id="imageModalImg" class="img-fluid rounded shadow" alt="Clicked image opened in modal">
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script>
-      particlesJS.load("particles-js", "assets/particles-2.json", function () {
-        console.log("particles.js config loaded");
-      });
+        document.addEventListener("DOMContentLoaded", function () {
+            gsap.registerPlugin(ScrollTrigger);
 
-      const quotes = [
-        "Simplicity is the ultimate sophistication.",
-        "What you seek is seeking you.",
-        "Do what you can, with what you have, where you are.",
-        "In the middle of difficulty lies opportunity.",
-        "Act as if what you do makes a difference. It does.",
-        "Not all those who wander are lost.",
-        "Happiness depends upon ourselves."
-      ];
+            gsap.utils.toArray(".slide-in-left").forEach(function (el) {
+                gsap.from(el, {
+                    x: -100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
 
-      document.getElementById("quote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
+            gsap.utils.toArray(".slide-in-right").forEach(function (el) {
+                gsap.from(el, {
+                    x: 100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
 
-      document.addEventListener('click', function (e) {
-        const img = e.target.closest('img[data-bs-target="#imageModal"]');
-        if (!img) return;
+            gsap.utils.toArray(".slide-in-top").forEach(function (el) {
+                gsap.from(el, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
 
-        const modalImg = document.getElementById('imageModalImg');
-        modalImg.src = img.getAttribute('data-full') || img.src; // use full-size if provided
-        modalImg.alt = img.alt || '';
-      });
+            gsap.utils.toArray(".slide-in-bottom").forEach(function (el) {
+                gsap.from(el, {
+                    y: -100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+        });
     </script>
-  </body>
+    <script>
+        particlesJS.load("particles-js", "assets/js/particles-2.json", function () {
+            console.log("callback - particles.js config loaded");
+        });
+        document.addEventListener('click', function (e) {
+            const img = e.target.closest('img[data-bs-target="#imageModal"]');
+            if (!img) return;
+
+            const modalImg = document.getElementById('imageModalImg');
+            modalImg.src = img.getAttribute('data-full') || img.src; // use full-size if provided
+            modalImg.alt = img.alt || '';
+        });
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        const heroSection = document.getElementById("main-section");
+
+        window.addEventListener("scroll", () => {
+            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+            if (window.scrollY > heroBottom) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        });
+
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+    <script src="./assets/js/animation.js"></script>
+</body>
 </html>
