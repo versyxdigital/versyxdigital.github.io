@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             anim.setAttribute('calcMode', 'spline');
             
             // 0–3% ease-out, 3–97% linear, 97–100% snap-in
-            const keyTimes   = '0;0.03;0.97;1';
+            let keyTimes   = '0;0.095;0.97;1';
             const keySplines = ['0.2 0 0.6 1','0 0 1 1','0.3 0 1 1'].join(';');
             anim.setAttribute('keyTimes', keyTimes);
             anim.setAttribute('keySplines', keySplines);
@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             anim.setAttribute('dur', `${duration}s`);
             
             // Subtle snap cue at the end
+            keyTimes   = '0;0.0;0.97;1';
             const pulseR = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
             pulseR.setAttribute('attributeName', 'r');
             pulseR.setAttribute('dur', `${duration}s`);
@@ -141,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pulseR.setAttribute('values', '5;5;5;6');
             dot.appendChild(pulseR);
             
+            // keyTimes   = '0;0.0;0.94;1';
             const pulseA = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
             pulseA.setAttribute('attributeName', 'fill-opacity');
             pulseA.setAttribute('dur', `${duration}s`);
