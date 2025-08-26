@@ -264,14 +264,11 @@
             <div class="row d-flex align-items-center g-4 mt-4 text-left">
                 <div class="col-md-5">
                     <!-- Section Tip -->
-                    <div tabindex="20">
-                        <p class="small">Tip: Open settings via the 
-                            <i class="fas fa-cogs text-muted mx-1"></i> icon in the app toolbar.
-                        </p>
-                    </div>
+                    <p class="small" tabindex="20">Tip: Open settings via the 
+                        <i class="fas fa-cogs text-muted mx-1"></i> icon in the app toolbar.
+                    </p>
                     <!-- Section Image -->
-                    <img src="./assets/img/settings.png" class="img-fluid shadow-lg"
-                        style="border-radius: 9px;"
+                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg"
                         alt="Screenshot of MKEditor settings"
                     >
                 </div>
@@ -281,6 +278,7 @@
                             Customize to your style
                         </h3>
                         <div class="formatting-settings pb-4">
+                            <!-- Formatting Section -->
                             <h4 class="fw-semibold text-muted leading-text">Formatting</h4>
                             <ul class="settings-list" tabindex="22">
                                 <li>
@@ -298,6 +296,7 @@
                         </div>
                         
                         <div class="editing-settings pb-4">
+                            <!-- Editing Section -->
                             <h4 class="fw-semibold text-muted leading-text">Editing</h4>
                             <ul class="settings-list" tabindex="23">
                                 <li>
@@ -309,6 +308,7 @@
                         </div>
                         
                         <div class="miscellaneous-settings pb-4">
+                            <!-- Miscellaneous Section -->
                             <h4 class="fw-semibold text-muted leading-text">Miscellaneous</h4>
                             <ul class="settings-list" tabindex="24">
                                 <li>
@@ -345,6 +345,7 @@
                             Export your work instantly
                         </h3>
                         <div class="export-settings pb-4 pe-0 pe-md-5">
+                            <!-- HTML Export Section -->
                             <h4 class="fw-semibold text-muted leading-text">HTML Export</h4>
                             <ul class="settings-list" tabindex="26">
                                 <li>
@@ -360,6 +361,7 @@
                             </ul>
                         </div>
                         <div class="export-settings pb-4 pe-0 pe-md-5">
+                            <!-- PDF Export Section -->
                             <h4 class="fw-semibold text-muted leading-text">PDF Export</h4>
                             <ul class="settings-list" tabindex="27">
                                 <li>
@@ -376,14 +378,11 @@
                 </div>
                 <div class="col-md-5">
                     <!-- Section Tip -->
-                    <div tabindex="28">
-                        <p class="small">Tip: Configure exports via the 
-                            <i class="fas fa-sliders text-muted mx-1"></i> icon in the app toolbar.
-                        </p>
-                    </div>
+                    <p class="small" tabindex="28">Tip: Configure exports via the 
+                        <i class="fas fa-sliders text-muted mx-1"></i> icon in the app toolbar.
+                    </p>
                     <!-- Section Image -->
-                    <img src="./assets/img/export-settings.png" class="img-fluid shadow-lg" 
-                        style="border-radius: 9px;"
+                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg" 
                         alt="Screenshot of MKEditor export settings"
                     >
                 </div>
@@ -400,23 +399,17 @@
                 <i class="fas fa-line-chart me-2"></i> Take Shortcuts
             </h2>
             <!-- Section Tip -->
-            <div>
-                <p class="small">Tip: View shortcuts via the 
-                    <i class="fas fa-question-circle text-muted mx-1"></i> icon in the app toolbar.
-                </p>
-            </div>
-            <!-- Section Rows & Columns -->
-            <div class="row d-flex align-items-center g-4 text-left">
-                <div class="col-md-12">
-                    <img src="./assets/img/shortcuts.png" class="img-fluid rounded shadow-lg"
-                        style="cursor: zoom-in"
-                        data-bs-toggle="modal"
-                        data-bs-target="#imageModal"
-                        alt="Screenshot of MKEditor"
-                        tabindex="30"
-                    >
-                </div>
-            </div>
+            <p class="small" tabindex="30">Tip: View shortcuts via the 
+                <i class="fas fa-question-circle text-muted mx-1"></i> icon in the app toolbar.
+            </p>
+            <!-- Section Image -->
+            <img src="./assets/img/shortcuts.png" class="img-fluid rounded shadow-lg"
+                style="cursor: zoom-in"
+                data-bs-toggle="modal"
+                data-bs-target="#imageModal"
+                alt="Screenshot of MKEditor"
+                tabindex="31"
+            >
         </div>
     </section>
 
@@ -425,11 +418,11 @@
         <div class="overlay-flip z-2"></div>
         <div class="container position-relative pb-3 z-3">
             <!-- Section Header -->
-            <h2 class="mb-5" tabindex="31">
+            <h2 class="mb-5" tabindex="32">
                 <i class="fas fa-globe me-2"></i> Powered by Web
             </h2>
             <!-- Section Rows & Columns -->
-            <div class="row d-flex align-items-center mt-5 text-left" tabindex="32">
+            <div class="row d-flex align-items-center mt-5 text-left" tabindex="33">
                 <div class="col-md-6">
                     <p class="pe-0 pe-md-5">
                         MKEditor is also available as a fully-featured web application, allowing you to write, 
@@ -442,6 +435,7 @@
                         installing software isn’t possible. Simply visit the MKEditor web page to start writing 
                         instantly - no downloads, no setup, just open and go.
                     </p>
+                    <!-- Launch MKEditor Web Button -->
                     <div class="d-flex flex-column pt-3 pe-0 pe-md-5">
                         <a href="/mkeditor/web" target="_blank"
                             class="mx-auto mx-md-0 d-flex flex-row align-items-center gap-2 btn-download rounded text-light">
@@ -453,6 +447,7 @@
                         </a>
                     </div>
                 </div>
+                <!-- Section Image -->
                 <div class="col-md-6 pt-3 pt-md-0">
                     <a href="./assets/img/demo-dark.png" target="_blank">
                         <img class="img-fluid rounded mt-3 shadow-lg" src="./assets/img/demo-dark.png"
@@ -468,42 +463,47 @@
         <div class="overlay z-2"></div>
         <div class="z-3 position-relative">
             <!-- Section Header -->
-            <h2 class="mb-3" tabindex="33">
+            <h2 class="mb-3" tabindex="34">
                 <i class="fas fa-download me-2"></i> Available for Desktop
             </h2>
             <!-- Section Content -->
             <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center">
+                <!-- Windows Download -->
                 <div class="d-flex flex-column gap-3">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
-                    class="btn btn-download shadow">
-                    <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.5.0</small>
-                </a>
-                <hr class="my-0">
-                <p class="small text-decoration-none text-muted">
-                    <i class="fa-brands fa-windows me-2"></i>
-                    Last built: 25th August 2025
-                </p>
-            </div>
-            <div class="d-flex flex-column gap-3">
-                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg"
-                class="btn btn-download shadow">
-                <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.5.0</small> </a>
-                <hr class="my-0">
-                <p class="small text-decoration-none text-muted">
-                    <i class="fa-brands fa-apple me-2"></i>
-                    Last built: 25th August 2025
-                </p>
-            </div>
-            <div class="d-flex flex-column gap-3">
-                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb"
-                class="btn btn-download shadow">
-                <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.5.0</small> </a>
-                <hr class="my-0">
-                <p class="small text-decoration-none text-muted">
-                    <i class="fa-brands fa-linux me-2"></i>
-                    Last built: 25th August 2025
-                </p>
-            </div>
+                        class="btn btn-download shadow">
+                        <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.5.0</small>
+                    </a>
+                    <hr class="my-0">
+                    <p class="small text-decoration-none text-muted">
+                        <i class="fa-brands fa-windows me-2"></i>
+                        Last built: 25th August 2025
+                    </p>
+                </div>
+                <!-- MacOS Download -->
+                <div class="d-flex flex-column gap-3">
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg"
+                        class="btn btn-download shadow">
+                        <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.5.0</small>
+                    </a>
+                    <hr class="my-0">
+                    <p class="small text-decoration-none text-muted">
+                        <i class="fa-brands fa-apple me-2"></i>
+                        Last built: 25th August 2025
+                    </p>
+                </div>
+                <!-- Linux Download -->
+                <div class="d-flex flex-column gap-3">
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb"
+                        class="btn btn-download shadow">
+                        <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.5.0</small>
+                    </a>
+                    <hr class="my-0">
+                    <p class="small text-decoration-none text-muted">
+                        <i class="fa-brands fa-linux me-2"></i>
+                        Last built: 25th August 2025
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -511,9 +511,10 @@
     <!-- Footer -->
     <footer class="pt-5 text-white small" style="background: linear-gradient(135deg, #404040 0%, #000000 100%);">
         <div class="container pb-5 d-flex align-items-end justify-content-between flex-wrap">
+            <!-- Made with love -->
             <div class="order-2 order-md-1 mt-5 mt-md-0">
                 <div id="display-cube" class="rounded-circle mb-3"></div>
-                <div tabindex="34">
+                <div tabindex="35">
                     Made with&nbsp; ❤️ &nbsp;by
                     <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a> &middot; &copy;
                     <script>
@@ -521,7 +522,8 @@
                     </script>
                 </div>
             </div>
-            <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0" tabindex="35">
+            <!-- Would you like to hire me? -->
+            <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0" tabindex="36">
                 <span class="ls-2 fs-5">☕ Would you like to hire me?</span>
                 <hr>
                 <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white fw-bold">
