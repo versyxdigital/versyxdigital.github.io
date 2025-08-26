@@ -6,10 +6,6 @@
     user-select: none;
 }
 
-.bg-black {
-    background-color: #111111 !important;
-}
-
 @media (min-width: 768px) {
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
@@ -20,11 +16,37 @@ html {
     background-color: #111111;
     overflow-x: hidden;
 }
+
 body {
     font-family: "Montserrat";
     background-color: #111111;
     color: #444444;
     overflow-x: hidden;
+}
+
+.bg-black {
+    background-color: #111111 !important;
+}
+
+.bg-green {
+    background: #519088 !important;
+}
+.text-green {
+    color: #519088 !important;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: none;
+    z-index: 1050;
+    background: #519088 !important;
+    border: 1px solid #519088 !important;
+    color: black;
+}
+.scroll-to-top:hover {
+    scale: 1.1;
 }
 
 a:hover {

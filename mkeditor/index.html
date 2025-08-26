@@ -93,94 +93,96 @@
             <div class="row align-items-center">
                 <div class="col-lg-4 text-center text-lg-start">
                     <!-- Hero Text -->
-                    <h1 class="leading-header" tabindex="3">
+                    <h1 class="leading-header slide-in-bottom" tabindex="3">
                         Download MKEditor
                     </h1>
-                    <div>
-                        <p class="leading-text mt-3 mb-4" tabindex="4">
-                            Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
-                        </p>
-                        <!-- Download Buttons -->
-                        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pb-4">
-                            <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
-                                class="d-flex flex-row align-items-center gap-2 btn-download rounded"
-                                download
-                                tabindex="5"
+                    <div class="slide-in-left">
+                        <div>
+                            <p class="leading-text mt-3 mb-4" tabindex="4">
+                                Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
+                            </p>
+                            <!-- Download Buttons -->
+                            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start pb-4">
+                                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
+                                    class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                    download
+                                    tabindex="5"
+                                >
+                                    <i class="fa-brands fa-2xl fa-windows me-2"></i>
+                                    <div>
+                                        <p class="release-info">Windows</p>
+                                        <p class="release-info">exe - v3.5.0</p>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg" 
+                                    class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                    download
+                                    tabindex="6"
+                                >
+                                    <i class="fa-brands fa-2xl fa-apple me-2"></i>
+                                    <div>
+                                        <p class="release-info">MacOS</p>
+                                        <p class="release-info">pkg - v3.5.0</p>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb" 
+                                    class="d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                    download
+                                    tabindex="7"
+                                >
+                                    <i class="fa-brands fa-2xl fa-linux me-2"></i>
+                                    <div>
+                                        <p class="release-info">Linux</p>
+                                        <p class="release-info">deb - v3.5.0</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <a href="/mkeditor/web" target="_blank"
+                                class="mx-auto mx-md-0 d-flex flex-row align-items-center gap-2 btn-download rounded"
+                                tabindex="8"
                             >
-                                <i class="fa-brands fa-2xl fa-windows me-2"></i>
+                                <i class="fa-solid fa-2xl fa-external-link me-2"></i>
                                 <div>
-                                    <p class="release-info">Windows</p>
-                                    <p class="release-info">exe - v3.5.0</p>
-                                </div>
-                            </a>
-                            
-                            <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg" 
-                                class="d-flex flex-row align-items-center gap-2 btn-download rounded"
-                                download
-                                tabindex="6"
-                            >
-                                <i class="fa-brands fa-2xl fa-apple me-2"></i>
-                                <div>
-                                    <p class="release-info">MacOS</p>
-                                    <p class="release-info">pkg - v3.5.0</p>
-                                </div>
-                            </a>
-                            
-                            <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb" 
-                                class="d-flex flex-row align-items-center gap-2 btn-download rounded"
-                                download
-                                tabindex="7"
-                            >
-                                <i class="fa-brands fa-2xl fa-linux me-2"></i>
-                                <div>
-                                    <p class="release-info">Linux</p>
-                                    <p class="release-info">deb - v3.5.0</p>
+                                    <p class="release-info">Launch MKEditor Web</p>
+                                    <p class="release-info">Current release: v3.5.1</p>
                                 </div>
                             </a>
                         </div>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <a href="/mkeditor/web" target="_blank"
-                            class="mx-auto mx-md-0 d-flex flex-row align-items-center gap-2 btn-download rounded"
-                            tabindex="8"
-                        >
-                            <i class="fa-solid fa-2xl fa-external-link me-2"></i>
-                            <div>
-                                <p class="release-info">Launch MKEditor Web</p>
-                                <p class="release-info">Current release: v3.5.1</p>
+                        <!-- Hero Badges & License -->
+                        <div class="mt-3 d-flex flex-column">
+                            <small class="text-light">
+                                <span>MIT Licensed ·</span>
+                                <a href="https://github.com/versyxdigital/mkeditor" class="text-light text-decoration-underline"
+                                    tabindex="9">
+                                    Source on GitHub
+                                </a>
+                            </small>
+                            <div class="mt-2 d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                                <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml">
+                                    <img
+                                        src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
+                                        alt="Github tests badge"
+                                    >
+                                </a>
+                                <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql">
+                                    <img
+                                        src="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql/badge.svg"
+                                        alt="Github CodeQL badge"
+                                    >
+                                </a>
+                                <a href="https://github.com/versyxdigital/mkeditor">
+                                    <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor">
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                    <!-- Hero Badges & License -->
-                    <div class="mt-3 d-flex flex-column">
-                        <small class="text-light">
-                            <span>MIT Licensed ·</span>
-                            <a href="https://github.com/versyxdigital/mkeditor" class="text-light text-decoration-underline"
-                                tabindex="9">
-                                Source on GitHub
-                            </a>
-                        </small>
-                        <div class="mt-2 d-flex align-items-center justify-content-center justify-content-md-start gap-2">
-                            <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml">
-                                <img
-                                    src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
-                                    alt="Github tests badge"
-                                >
-                            </a>
-                            <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql">
-                                <img
-                                    src="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql/badge.svg"
-                                    alt="Github CodeQL badge"
-                                >
-                            </a>
-                            <a href="https://github.com/versyxdigital/mkeditor">
-                                <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor">
-                            </a>
                         </div>
                     </div>
                 </div>
                 <!-- Hero Image -->
-                <div class="col-lg-8 text-center mt-4 mt-lg-0" tabindex="10">
+                <div class="col-lg-8 text-center mt-4 mt-lg-0 slide-in-right" tabindex="10">
                     <img src="./assets/img/demo-dark.png" class="img-fluid rounded shadow" alt="A screenshot of MKEditor">
                 </div>
             </div>
@@ -279,7 +281,7 @@
                     >
                 </div>
                 <div class="col-md-7 text-left order-1 order-md-2">
-                    <div class="mkeditor-settings-list text-center text-md-start">
+                    <div class="mkeditor-settings-list text-center text-md-start slide-in-right">
                         <!-- Section Header -->
                         <h2 class="pt-4 pt-md-0" tabindex="18">
                             <i class="far fa-window-restore me-2"></i> 
@@ -351,7 +353,7 @@
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center g-4 mt-0 mt-md-4 text-center text-md-start">
                 <div class="col-md-7">
-                    <div class="mkeditor-export-list">
+                    <div class="mkeditor-export-list slide-in-left">
                         <!-- Section Header -->
                         <h2 class="pt-3 pt-md-0" tabindex="25">
                             <i class="fas fa-file-export me-2"></i> Export Documents
@@ -409,14 +411,16 @@
     <section class="py-0 py-md-5 bg-black text-light position-relative">
         <!-- <div class="overlay z-2"></div> -->
         <div class="container position-relative pb-3 z-3 text-center text-md-start">
-            <!-- Section Header-->
-            <h2 class="pt-4 pt-md-0" tabindex="29">
-                <i class="fas fa-line-chart me-2"></i> Editor Shortcuts
-            </h2>
-            <!-- Section Tip -->
-            <p class="small mb-5" tabindex="30">Tip: View shortcuts via the 
-                <i class="fas fa-question-circle mx-1"></i> icon in the app toolbar.
-            </p>
+            <div class="slide-in-left">
+                <!-- Section Header-->
+                <h2 class="pt-4 pt-md-0" tabindex="29">
+                    <i class="fas fa-line-chart me-2"></i> Editor Shortcuts
+                </h2>
+                <!-- Section Tip -->
+                <p class="small mb-5" tabindex="30">Tip: View shortcuts via the 
+                    <i class="fas fa-question-circle mx-1"></i> icon in the app toolbar.
+                </p>
+            </div>
             <!-- Section Image -->
             <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg connector-target"
                 style="cursor: zoom-in"
@@ -434,7 +438,7 @@
         <div class="container position-relative pb-3 z-3">
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center pt-0 pt-md-5 text-center text-md-start" tabindex="33">
-                <div class="col-md-6">
+                <div class="col-md-6 slide-in-left">
                     <!-- Section Header -->
                     <h2 class="pt-5 pt-md-0 mb-5" tabindex="32">
                         <i class="fas fa-globe me-2"></i> Powered by Web
@@ -478,11 +482,11 @@
         <!-- <div class="overlay z-2"></div> -->
         <div class="z-3 position-relative">
             <!-- Section Header -->
-            <h2 class="mb-3" tabindex="34">
+            <h2 class="mb-3 slide-in-top" tabindex="34">
                 <i class="fas fa-download me-2"></i> Available for Desktop
             </h2>
             <!-- Section Content -->
-            <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center">
+            <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center slide-in-top">
                 <!-- Windows Download -->
                 <div class="d-flex flex-column gap-3">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
@@ -542,10 +546,10 @@
             <div class="d-flex flex-column order-1 order-md-2 mt-5 mt-md-0" tabindex="36">
                 <span class="ls-2 fs-5">☕ Would you like to hire me?</span>
                 <hr>
-                <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white fw-bold">
+                <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white">
                     christopher.rowles@outlook.com</a>
                 </span>
-                <span>Phone: <a href="tel:07522267722" class="text-white fw-bold">
+                <span>Phone: <a href="tel:07522267722" class="text-white">
                     +44(0)7522 267 722</a>
                 </span>
                 <div class="d-flex align-items-center gap-3 mt-3">
@@ -563,8 +567,7 @@
     </footer>
 
     <!-- Scroll to Top Button -->
-    <button id="scrollTopBtn" class="btn btn-light rounded-circle shadow"
-        style="position: fixed; bottom: 30px; right: 30px; display: none; z-index: 1050;"
+    <button id="scrollTopBtn" class="btn btn-light rounded-circle shadow scroll-to-top"
         aria-label="Scroll to top">
         <i class="fas fa-arrow-up"></i>
     </button>
