@@ -69,6 +69,10 @@ a:hover {
     background: linear-gradient(340deg, #222222 0%, #000000 100%);
 }
 
+.bg-black-grad-reverse {
+    background: linear-gradient(340deg, #000000 0%, #111111 100%);
+}
+
 .leading-header {
     font-size: 1.8rem;
     margin-bottom: 0;
