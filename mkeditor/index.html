@@ -58,6 +58,8 @@
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; pointer-events: none;">
     </div>
 
+    <svg class="d-none d-md-block" id="image-connectors"></svg>
+
     <!-- Github Ribbon -->
     <a href="https://github.com/versyxdigital/mkeditor/"
         class="github-fork-ribbon d-none d-md-block"
@@ -224,14 +226,14 @@
     <section class="bg-black position-relative">
         <h2 class="sr-only">Screenshots of MKEDitor</h2>
         <div class="d-flex flex-row align-items-center shadow-lg">
-            <img class="img-fluid w-50 slide-in-top"
+            <img class="img-fluid w-50"
                 src="./assets/img/demo-dark.png" alt="MKEditor screenshot in dark mode"
                 style="cursor: zoom-in"
                 data-bs-toggle="modal"
                 data-bs-target="#imageModal"
                 data-full="./assets/img/demo-dark.png"
             >
-            <img class="img-fluid w-50 slide-in-bottom"
+            <img class="img-fluid w-50 connector-target z-3"
                 src="./assets/img/demo.png" alt="MKEditor screenshot in light mode"
                 style="cursor: zoom-in"
                 data-bs-toggle="modal"
@@ -245,11 +247,6 @@
     <section class="py-5 bg-black text-light text-center position-relative">
         <!-- <div class="overlay z-2"></div> -->
         <div class="container position-relative pb-3 z-3">
-            <!-- Section Header -->
-            <h2 class="mb-5" tabindex="18">
-                <i class="far fa-window-restore me-2"></i> 
-                Configure Settings
-            </h2>
             <div class="text-left sr-only" tabindex="19">
                 <p>MKEditor stores its configuration settings in a JSON file located at 
                     <code>%USERPROFILE%/.mkeditor/settings.json</code>.
@@ -264,17 +261,22 @@
             <!-- Section Row & Columns -->
             <div class="row d-flex align-items-center g-4 mt-4 text-left">
                 <div class="col-md-5">
-                    <!-- Section Tip -->
-                    <p class="small" tabindex="20">Tip: Open settings via the 
-                        <i class="fas fa-cogs mx-1"></i> icon in the app toolbar.
-                    </p>
                     <!-- Section Image -->
-                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg slide-in-left"
+                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg slide-in-left connector-target"
                         alt="Screenshot of MKEditor settings"
                     >
                 </div>
                 <div class="col-md-7 text-left">
                     <div class="mkeditor-settings-list">
+                        <!-- Section Header -->
+                        <h2 tabindex="18">
+                            <i class="far fa-window-restore me-2"></i> 
+                            Configure Settings
+                        </h2>
+                        <!-- Section Tip -->
+                        <p class="small mb-5" tabindex="20">Tip: Open settings via the 
+                            <i class="fas fa-cogs mx-1"></i> icon in the app toolbar.
+                        </p>
                         <h3 class="mb-4 fw-light" tabindex="21">
                             Customize to your style
                         </h3>
@@ -331,17 +333,21 @@
     </section>
     
     <!-- Export Documents Section -->
-    <section class="py-5 bg-black text-light text-center position-relative">
-        <div class="overlay-flip z-2"></div>
+    <section class="py-5 bg-black text-light position-relative">
+        <!-- <div class="overlay-flip z-2"></div> -->
         <div class="container position-relative pb-3 z-3">
-            <!-- Section Header -->
-            <h2 class="mb-5" tabindex="25">
-                <i class="fas fa-file-export me-2"></i> Export Documents
-            </h2>
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center g-4 mt-4 text-left">
                 <div class="col-md-7">
                     <div class="mkeditor-export-list">
+                        <!-- Section Header -->
+                        <h2 tabindex="25">
+                            <i class="fas fa-file-export me-2"></i> Export Documents
+                        </h2>
+                        <!-- Section Tip -->
+                        <p class="small mb-5" tabindex="28">Tip: Configure exports via the 
+                            <i class="fas fa-sliders mx-1"></i> icon in the app toolbar.
+                        </p>
                         <h3 class="mb-4 fw-light">
                             Export your work instantly
                         </h3>
@@ -378,12 +384,8 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <!-- Section Tip -->
-                    <p class="small" tabindex="28">Tip: Configure exports via the 
-                        <i class="fas fa-sliders mx-1"></i> icon in the app toolbar.
-                    </p>
                     <!-- Section Image -->
-                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg slide-in-right"
+                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg slide-in-right connector-target"
                         alt="Screenshot of MKEditor export settings"
                     >
                 </div>
@@ -392,19 +394,19 @@
     </section>
     
     <!-- Take Shortcuts Section -->
-    <section class="py-5 bg-black text-light text-center position-relative">
+    <section class="py-5 bg-black text-light position-relative">
         <!-- <div class="overlay z-2"></div> -->
         <div class="container position-relative pb-3 z-3">
             <!-- Section Header-->
-            <h2 class="mb-5" tabindex="29">
+            <h2 tabindex="29">
                 <i class="fas fa-line-chart me-2"></i> Take Shortcuts
             </h2>
             <!-- Section Tip -->
-            <p class="small" tabindex="30">Tip: View shortcuts via the 
+            <p class="small mb-5" tabindex="30">Tip: View shortcuts via the 
                 <i class="fas fa-question-circle mx-1"></i> icon in the app toolbar.
             </p>
             <!-- Section Image -->
-            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg slide-in-left"
+            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg slide-in-left connector-target"
                 style="cursor: zoom-in"
                 data-bs-toggle="modal"
                 data-bs-target="#imageModal"
@@ -416,15 +418,15 @@
 
     <!-- Powered by Web Section -->
     <section class="py-5 bg-black text-light text-center position-relative">
-        <div class="overlay-flip z-2"></div>
+        <!-- <div class="overlay-flip z-2"></div> -->
         <div class="container position-relative pb-3 z-3">
-            <!-- Section Header -->
-            <h2 class="mb-5" tabindex="32">
-                <i class="fas fa-globe me-2"></i> Powered by Web
-            </h2>
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center mt-5 text-left" tabindex="33">
                 <div class="col-md-6">
+                    <!-- Section Header -->
+                    <h2 class="mb-5" tabindex="32">
+                        <i class="fas fa-globe me-2"></i> Powered by Web
+                    </h2>
                     <p class="pe-0 pe-md-5">
                         MKEditor is also available as a fully-featured web application, allowing you to write, 
                         preview, and export markdown directly in your browser without installing the desktop app. 
@@ -451,7 +453,7 @@
                 <!-- Section Image -->
                 <div class="col-md-6 pt-3 pt-md-0">
                     <a href="./assets/img/demo-dark.png" target="_blank">
-                        <img class="img-fluid rounded mt-3 shadow-lg slide-in-right" src="./assets/img/demo-dark.png"
+                        <img class="img-fluid rounded mt-3 shadow-lg slide-in-right connector-target" src="./assets/img/demo-dark.png"
                             alt="A screenshot of MKEditor">
                     </a>
                 </div>
@@ -470,7 +472,7 @@
             <!-- Section Content -->
             <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center">
                 <!-- Windows Download -->
-                <div class="d-flex flex-column gap-3">
+                <div class="d-flex flex-column gap-3 slide-in-top">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.5.0</small>
@@ -482,7 +484,7 @@
                     </p>
                 </div>
                 <!-- MacOS Download -->
-                <div class="d-flex flex-column gap-3">
+                <div class="d-flex flex-column gap-3 slide-in-top">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.5.0</small>
@@ -494,7 +496,7 @@
                     </p>
                 </div>
                 <!-- Linux Download -->
-                <div class="d-flex flex-column gap-3">
+                <div class="d-flex flex-column gap-3 slide-in-top">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.5.0</small>
@@ -654,6 +656,63 @@
 
         scrollTopBtn.addEventListener("click", () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const svg = document.getElementById('image-connectors');
+            const targets = Array.from(document.querySelectorAll('.connector-target'));
+
+            function drawLines() {
+                const docWidth = document.documentElement.scrollWidth;
+                const docHeight = document.documentElement.scrollHeight;
+                svg.setAttribute('width', docWidth);
+                svg.setAttribute('height', docHeight);
+                svg.setAttribute('viewBox', `0 0 ${docWidth} ${docHeight}`);
+                svg.style.width = docWidth + 'px';
+                svg.style.height = docHeight + 'px';
+                svg.innerHTML = '';
+
+                targets.forEach((el, idx) => {
+                    if (idx === targets.length - 1) return;
+
+                    const rect1 = el.getBoundingClientRect();
+                    const rect2 = targets[idx + 1].getBoundingClientRect();
+
+                    const startX = rect1.left + rect1.width / 2 + window.scrollX;
+                    const startY = rect1.bottom + window.scrollY;
+                    const endX   = rect2.left + rect2.width / 2 + window.scrollX;
+                    const endY   = rect2.top + window.scrollY;
+
+                    // how round the corners should be
+                    const radius = 40;
+
+                    // vertical leg: stop radius above the corner
+                    const v1Y = (endY + startY) / 2 - radius;
+                    // horizontal leg: stop radius before turning down
+                    const hX  = endX > startX ? endX - radius : endX + radius;
+                    // after horizontal, we’ll curve down into endY
+
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute(
+                        'd',
+                        `
+                        M${startX},${startY}
+                        L${startX},${v1Y}
+                        Q${startX},${v1Y + radius} ${startX + (endX > startX ? radius : -radius)},${v1Y + radius}
+                        L${hX},${v1Y + radius}
+                        Q${endX},${v1Y + radius} ${endX},${v1Y + 2*radius}
+                        L${endX},${endY}
+                        `
+                    );
+                    path.setAttribute('class', 'connector-line');
+                    path.setAttribute('fill', 'none');
+                    svg.appendChild(path);
+                });
+            }
+
+            drawLines();
+            window.addEventListener('resize', drawLines);
         });
     </script>
 </body>

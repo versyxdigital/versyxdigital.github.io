@@ -133,6 +133,9 @@
       .project-card:hover {
         transform: translateY(-2px);
       }
+      .chip-network {
+        pointer-events: none;
+      }
       .badge-row img {
         height: 20px;
       }
@@ -243,7 +246,7 @@
           <!-- MKEditor Card -->
           <div class="col-md-6">
             <a href="/mkeditor" class="text-decoration-none">
-              <div class="project-card p-4 h-100 bg-white">
+              <div class="project-card p-4 h-100 bg-white position-relative overflow-hidden">
                 <div class="d-flex align-items-center mb-3">
                   <img src="./mkeditor/logo.png" class="me-2" width="40" height="40" alt="MKEditor" />
                   <div>
@@ -257,6 +260,39 @@
                   <img alt="stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor" />
                   <img alt="forks" src="https://img.shields.io/github/forks/versyxdigital/mkeditor" />
                 </div>
+                <svg class="chip-network position-absolute top-0 start-0 w-100 h-100" viewBox="0 0 300 200" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="grad-blue" x1="150" y1="100" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stop-color="#2EB9DF"/>
+                      <stop offset="1" stop-color="#2EB9DF" stop-opacity="0"/>
+                    </linearGradient>
+                    <linearGradient id="grad-pink" x1="150" y1="100" x2="150" y2="160" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stop-color="#FF4A81"/>
+                      <stop offset="1" stop-color="#FF4A81" stop-opacity="0"/>
+                    </linearGradient>
+                    <linearGradient id="grad-orange" x1="150" y1="100" x2="220" y2="160" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stop-color="#FF7432"/>
+                      <stop offset="1" stop-color="#F7CC4B" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="135" y="80" width="30" height="30" rx="4" fill="#212529" stroke="#545c86" stroke-width="2" />
+                  <path d="M150 95 L40 40" stroke="url(#grad-blue)" stroke-width="2"/>
+                  <path d="M150 95 L80 160" stroke="url(#grad-blue)" stroke-width="2"/>
+                  <path d="M150 95 L150 160" stroke="url(#grad-pink)" stroke-width="2"/>
+                  <path d="M150 95 L220 160" stroke="url(#grad-orange)" stroke-width="2"/>
+                  <circle r="3" fill="#fff">
+                    <animateMotion dur="4s" repeatCount="indefinite" path="M150 95 L40 40"/>
+                  </circle>
+                  <circle r="3" fill="#fff">
+                    <animateMotion dur="3.5s" repeatCount="indefinite" path="M150 95 L80 160"/>
+                  </circle>
+                  <circle r="3" fill="#fff">
+                    <animateMotion dur="3s" repeatCount="indefinite" path="M150 95 L150 160"/>
+                  </circle>
+                  <circle r="3" fill="#fff">
+                    <animateMotion dur="4.5s" repeatCount="indefinite" path="M150 95 L220 160"/>
+                  </circle>
+                </svg>
               </div>
             </a>
           </div>

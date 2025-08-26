@@ -16,8 +16,12 @@
     }
 }
 
+html {
+    background-color: #111111;
+}
 body {
     font-family: "Montserrat";
+    background-color: #111111;
     color: #444444
 }
 
@@ -192,4 +196,20 @@ a:hover {
     background: url('../img/bg-flip.png');
     background-repeat: repeat;
     opacity: 0.1;
+}
+
+#image-connectors {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.connector-line {
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    z-index: 1050;
+    fill: none;
 }
