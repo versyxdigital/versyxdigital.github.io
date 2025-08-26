@@ -18,11 +18,13 @@
 
 html {
     background-color: #111111;
+    overflow-x: hidden;
 }
 body {
     font-family: "Montserrat";
     background-color: #111111;
-    color: #444444
+    color: #444444;
+    overflow-x: hidden;
 }
 
 a:hover {
@@ -226,12 +228,14 @@ a:hover {
     animation-iteration-count: infinite;
 }
 
-.connector-dot {
-  filter: url(#glow-dot); /* soft glow */
+.connector-dot {     /* will be overridden if random colors are enabled */
+  opacity: 1;
+  stroke-width: 0.1;
+  filter: url(#glow-dot);  /* soft glow */
   pointer-events: none;
 }
 
-@keyframes connector-travel {
-    from { stroke-dashoffset: var(--dash-start, 0); }
-    to   { stroke-dashoffset: 0; }
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .connector-dot { animation: none; }
 }

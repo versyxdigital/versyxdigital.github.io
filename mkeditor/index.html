@@ -59,13 +59,13 @@
     </div>
 
     <svg id="image-connectors" class="position-absolute top-0 start-0" style="pointer-events:none">
-    <defs>
-        <!-- soft glow for the dot -->
-        <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-        <feMerge><feMergeNode in="blur"/></feMerge>
-        </filter>
-    </defs>
+        <defs>
+            <!-- soft glow for the dot -->
+            <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/></feMerge>
+            </filter>
+        </defs>
     </svg>
 
 
@@ -95,7 +95,7 @@
                     <h1 class="leading-header" tabindex="3">
                         Download MKEditor
                     </h1>
-                    <div class="slide-in-left">
+                    <div>
                         <p class="leading-text mt-3 mb-4" tabindex="4">
                             Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
                         </p>
@@ -180,7 +180,7 @@
                 </div>
                 <!-- Hero Image -->
                 <div class="col-lg-8 text-center mt-4 mt-lg-0" tabindex="10">
-                    <img src="./assets/img/demo-dark.png" class="img-fluid rounded shadow slide-in-right" alt="A screenshot of MKEditor">
+                    <img src="./assets/img/demo-dark.png" class="img-fluid rounded shadow" alt="A screenshot of MKEditor">
                 </div>
             </div>
         </div>
@@ -273,12 +273,12 @@
             <div class="row d-flex align-items-center g-4 mt-4 text-left">
                 <div class="col-md-5">
                     <!-- Section Image -->
-                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg slide-in-left connector-target"
+                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg connector-target"
                         alt="Screenshot of MKEditor settings"
                     >
                 </div>
                 <div class="col-md-7 text-left">
-                    <div class="mkeditor-settings-list slide-in-right">
+                    <div class="mkeditor-settings-list">
                         <!-- Section Header -->
                         <h2 tabindex="18">
                             <i class="far fa-window-restore me-2"></i> 
@@ -350,7 +350,7 @@
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center g-4 mt-4 text-left">
                 <div class="col-md-7">
-                    <div class="mkeditor-export-list slide-in-left">
+                    <div class="mkeditor-export-list">
                         <!-- Section Header -->
                         <h2 tabindex="25">
                             <i class="fas fa-file-export me-2"></i> Export Documents
@@ -396,7 +396,7 @@
                 </div>
                 <div class="col-md-5">
                     <!-- Section Image -->
-                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg slide-in-right connector-target"
+                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg connector-target"
                         alt="Screenshot of MKEditor export settings"
                     >
                 </div>
@@ -407,7 +407,7 @@
     <!-- Take Shortcuts Section -->
     <section class="py-5 bg-black text-light position-relative">
         <!-- <div class="overlay z-2"></div> -->
-        <div class="container position-relative pb-3 z-3 slide-in-left">
+        <div class="container position-relative pb-3 z-3">
             <!-- Section Header-->
             <h2 tabindex="29">
                 <i class="fas fa-line-chart me-2"></i> Take Shortcuts
@@ -433,7 +433,7 @@
         <div class="container position-relative pb-3 z-3">
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center mt-5 text-left" tabindex="33">
-                <div class="col-md-6 slide-in-left">
+                <div class="col-md-6">
                     <!-- Section Header -->
                     <h2 class="mb-5" tabindex="32">
                         <i class="fas fa-globe me-2"></i> Powered by Web
@@ -464,7 +464,7 @@
                 <!-- Section Image -->
                 <div class="col-md-6 pt-3 pt-md-0">
                     <a href="./assets/img/demo-dark.png" target="_blank">
-                        <img class="img-fluid rounded mt-3 shadow-lg slide-in-right connector-target" src="./assets/img/demo-dark.png"
+                        <img class="img-fluid rounded mt-3 shadow-lg connector-target" src="./assets/img/demo-dark.png"
                             alt="A screenshot of MKEditor">
                     </a>
                 </div>
@@ -477,13 +477,13 @@
         <!-- <div class="overlay z-2"></div> -->
         <div class="z-3 position-relative">
             <!-- Section Header -->
-            <h2 class="mb-3 slide-in-bottom" tabindex="34">
+            <h2 class="mb-3" tabindex="34">
                 <i class="fas fa-download me-2"></i> Available for Desktop
             </h2>
             <!-- Section Content -->
             <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center">
                 <!-- Windows Download -->
-                <div class="d-flex flex-column gap-3 slide-in-top">
+                <div class="d-flex flex-column gap-3">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.5.0</small>
@@ -495,7 +495,7 @@
                     </p>
                 </div>
                 <!-- MacOS Download -->
-                <div class="d-flex flex-column gap-3 slide-in-top">
+                <div class="d-flex flex-column gap-3">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.5.0</small>
@@ -507,7 +507,7 @@
                     </p>
                 </div>
                 <!-- Linux Download -->
-                <div class="d-flex flex-column gap-3 slide-in-top">
+                <div class="d-flex flex-column gap-3">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.5.0</small>
@@ -638,7 +638,6 @@
                     }
                 });
             });
-            gsap.from(".leading-header", { y: -50, opacity: 0, duration: 1, ease: "power3.out" });
         });
     </script>
     <script>
@@ -669,162 +668,6 @@
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
     </script>
-    <script>
-        function randomColor() {
-            const hue = Math.floor(Math.random() * 360);
-            return `hsl(${hue}, 80%, 60%)`;
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const svg = document.getElementById('image-connectors');
-            const targets = Array.from(document.querySelectorAll('.connector-target'));
-
-            // Ensure <defs> with glow exists once
-            function ensureDefs() {
-                if (svg.querySelector('#glow-dot')) return;
-                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-                const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
-                filter.id = 'glow-dot';
-                filter.setAttribute('x', '-50%'); filter.setAttribute('y', '-50%');
-                filter.setAttribute('width', '200%'); filter.setAttribute('height', '200%');
-                const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
-                blur.setAttribute('in', 'SourceGraphic'); blur.setAttribute('stdDeviation', '3'); blur.setAttribute('result', 'blur');
-                const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
-                const node = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode'); node.setAttribute('in','blur');
-                merge.appendChild(node); filter.appendChild(blur); filter.appendChild(merge); defs.appendChild(filter);
-                svg.appendChild(defs);
-            }
-
-            function steppedRoundedPath(startX, startY, endX, endY, radius = 40) {
-                const dx = Math.abs(endX - startX);
-                const dy = Math.abs(endY - startY);
-                const rX = Math.min(radius, dx / 2);
-                const rY = Math.min(radius, dy / 2);
-
-                const midY = startY + (endY - startY) / 2;
-                const v1Y  = midY - rY;
-                const hY   = midY;
-                const h1X  = endX > startX ? startX + rX : startX - rX;
-                const h2X  = endX > startX ? endX - rX   : endX + rX;
-
-                return `
-                M${startX},${startY}
-                L${startX},${v1Y}
-                Q${startX},${hY} ${h1X},${hY}
-                L${h2X},${hY}
-                Q${endX},${hY} ${endX},${hY + rY}
-                L${endX},${endY}
-                `;
-            }
-
-            function buildOnce() {
-                ensureDefs();
-
-                const docWidth  = document.documentElement.scrollWidth;
-                const docHeight = document.documentElement.scrollHeight;
-                svg.setAttribute('width',  docWidth);
-                svg.setAttribute('height', docHeight);
-                svg.setAttribute('viewBox', `0 0 ${docWidth} ${docHeight}`);
-                svg.style.width  = docWidth + 'px';
-                svg.style.height = docHeight + 'px';
-
-                targets.forEach((el, idx) => {
-                if (idx === targets.length - 1) return;
-
-                const rect1 = el.getBoundingClientRect();
-                const rect2 = targets[idx + 1].getBoundingClientRect();
-
-                const startX = rect1.left + rect1.width / 2 + window.scrollX;
-                const startY = rect1.bottom + window.scrollY;
-                const endX   = rect2.left + rect2.width / 2 + window.scrollX;
-                const endY   = rect2.top + window.scrollY;
-
-                const d = steppedRoundedPath(startX, startY, endX, endY, 40);
-
-                // Group per connector so we can update `path` later without destroying the dot
-                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                g.setAttribute('data-connector-idx', String(idx));
-                svg.appendChild(g);
-
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const pathId = `connector-${idx}`;
-                path.id = pathId;
-                path.setAttribute('class', 'connector-line');
-                path.setAttribute('fill', 'none');
-                path.setAttribute('d', d);
-                g.appendChild(path);
-
-                // Glow dot with SMIL motion (don’t recreate on scroll)
-                const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                dot.setAttribute('class', 'connector-dot');
-                dot.setAttribute('r', 5);
-                const color = randomColor();
-                dot.setAttribute('fill', color);
-                g.appendChild(dot);
-
-                const animateMotion = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
-                // constant px/s speed
-                const len = path.getTotalLength();
-                const speed = 150;
-                const duration = Math.max(0.8, len / speed);
-                animateMotion.setAttribute('dur', `${duration}s`);
-                animateMotion.setAttribute('repeatCount', 'indefinite');
-                animateMotion.setAttribute('rotate', 'auto');
-
-                const mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
-                mpath.setAttribute('href', `#${pathId}`);
-                mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
-                animateMotion.appendChild(mpath);
-                dot.appendChild(animateMotion);
-                });
-            }
-
-            // If layout changes (resize), update only the path `d` and duration; do not remove/recreate nodes.
-            let rafPending = false;
-            function updateOnResize() {
-                if (rafPending) return;
-                rafPending = true;
-                requestAnimationFrame(() => {
-                rafPending = false;
-
-                const docWidth  = document.documentElement.scrollWidth;
-                const docHeight = document.documentElement.scrollHeight;
-                svg.setAttribute('width',  docWidth);
-                svg.setAttribute('height', docHeight);
-                svg.setAttribute('viewBox', `0 0 ${docWidth} ${docHeight}`);
-                svg.style.width  = docWidth + 'px';
-                svg.style.height = docHeight + 'px';
-
-                const groups = svg.querySelectorAll('g[data-connector-idx]');
-                groups.forEach(g => {
-                    const idx = Number(g.getAttribute('data-connector-idx'));
-                    const rect1 = targets[idx].getBoundingClientRect();
-                    const rect2 = targets[idx + 1].getBoundingClientRect();
-
-                    const startX = rect1.left + rect1.width / 2 + window.scrollX;
-                    const startY = rect1.bottom + window.scrollY;
-                    const endX   = rect2.left + rect2.width / 2 + window.scrollX;
-                    const endY   = rect2.top + window.scrollY;
-
-                    const d = steppedRoundedPath(startX, startY, endX, endY, 40);
-
-                    const path = g.querySelector('path.connector-line');
-                    path.setAttribute('d', d);
-
-                    const len = path.getTotalLength();
-                    const speed = 220;
-                    const duration = Math.max(0.8, len / speed);
-                    const anim = g.querySelector('animateMotion');
-                    if (anim) anim.setAttribute('dur', `${duration}s`);
-                    // Note: updating `d` does not destroy the animation; it follows the new geometry.
-                });
-                });
-            }
-
-            buildOnce();
-            window.addEventListener('resize', updateOnResize);
-            // Do NOT redraw on scroll; the connectors are in document coordinates already.
-        });
-    </script>
+    <script src="./assets/js/animation.js"></script>
 </body>
 </html>
