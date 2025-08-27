@@ -4,9 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // ---- config ----
     const elbowRadius = 60;     // corner roundness cap
-    const pxPerSec    = 400;    // constant travel speed
+    const pxPerSec    = 400;    // constant base duration
     const randomColors = true;  // random dot color per connector
-    
+
+    // NEW: speed profile knobs (adjust if desired)
+    const EDGE_PROGRESS  = 0.10;  // how much of the path to "zip" at each end
+    const EDGE_TIME_FRACTION = 0.05; // how much of the time to spend on each end zip
+
     function randomColor() {
         const hue = Math.floor(Math.random() * 360);
         return `hsl(${hue}, 80%, 60%)`;
@@ -18,21 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (imgs.length === 0) return Promise.resolve(); // nothing to wait for
         
         const promises = imgs.map(img => {
-            // Already complete and successfully loaded?
             if (img.complete && img.naturalWidth > 0) return Promise.resolve();
-            
-            // Prefer decode() when available (avoids layout jank)
             if (typeof img.decode === 'function') {
-                return img.decode().catch(() => {
-                    // Fallback to load/error events if decode fails (e.g., cross-origin)
-                    return new Promise(res => {
-                        img.addEventListener('load', res, { once: true });
-                        img.addEventListener('error', res, { once: true });
-                    });
-                });
+                return img.decode().catch(() => new Promise(res => {
+                    img.addEventListener('load', res, { once: true });
+                    img.addEventListener('error', res, { once: true });
+                }));
             }
-            
-            // Fallback: wait on load/error
             return new Promise(res => {
                 img.addEventListener('load', res, { once: true });
                 img.addEventListener('error', res, { once: true });
@@ -106,50 +102,69 @@ document.addEventListener('DOMContentLoaded', () => {
             if (randomColors) dot.setAttribute('fill', randomColor());
             svg.appendChild(dot);
             
-            // AnimateMotion: linear mid, ease only at ends (zips through bends)
+            // AnimateMotion: "zip–slow–zip"
             const anim = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
             anim.setAttribute('repeatCount', 'indefinite');
             anim.setAttribute('rotate', '0');          // avoid heading snaps at elbows
             anim.setAttribute('calcMode', 'spline');
-            
-            // 0–3% ease-out, 3–97% linear, 97–100% snap-in
-            let keyTimes   = '0;0.095;0.97;1';
-            const keySplines = ['0.2 0 0.6 1','0 0 1 1','0.3 0 1 1'].join(';');
-            anim.setAttribute('keyTimes', keyTimes);
+
+            // --- New timing profile ---
+            // Fast at start/end: spend small time to traverse large distance.
+            // Slow in middle: spend most of the time on the middle portion.
+            const kp0 = 0;
+            const kp1 = EDGE_PROGRESS;          // e.g. 0.25
+            const kp2 = 1 - EDGE_PROGRESS;      // e.g. 0.75
+            const kp3 = 1;
+
+            const kt0 = 0;
+            const kt1 = EDGE_TIME_FRACTION;     // e.g. 0.06
+            const kt2 = 1 - EDGE_TIME_FRACTION; // e.g. 0.94
+            const kt3 = 1;
+
+            // Map: time -> distance along path
+            anim.setAttribute('keyPoints', `${kp0};${kp1};${kp2};${kp3}`);
+            anim.setAttribute('keyTimes',  `${kt0};${kt1};${kt2};${kt3}`);
+
+            // Easing per segment (cubic-bezier x1 y1 x2 y2):
+            // 1) Snappy ease-out for launch, 2) gentle for middle cruise, 3) snappy ease-in for arrival.
+            const keySplines = [
+                '0.1 0 0.9 1',   // fast then settle
+                '0.25 0 0.75 1', // smooth/neutral in the slow middle
+                '0.1 0 0.9 1'    // settle into target quickly
+            ].join(';');
             anim.setAttribute('keySplines', keySplines);
-            anim.setAttribute('keyPoints', '0;0.03;0.97;1');
-            
+            // --------------------------
+
             const mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
             mpath.setAttribute('href', `#${pathId}`);
             mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
             anim.appendChild(mpath);
             dot.appendChild(anim);
             
-            // Duration from path length (constant px/s)
+            // Duration from path length (base speed); profile above redistributes that time
             const len = path.getTotalLength();
             const duration = Math.max(0.8, len / pxPerSec);
             anim.setAttribute('dur', `${duration}s`);
             
-            // Subtle snap cue at the end
-            keyTimes   = '0;0.0;0.97;1';
+            // Subtle snap cue at the end (unchanged)
+            let keyTimes   = '0;0.0;0.97;1';
             const pulseR = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
             pulseR.setAttribute('attributeName', 'r');
             pulseR.setAttribute('dur', `${duration}s`);
             pulseR.setAttribute('repeatCount', 'indefinite');
             pulseR.setAttribute('calcMode', 'spline');
             pulseR.setAttribute('keyTimes', keyTimes);
-            pulseR.setAttribute('keySplines', keySplines);
+            pulseR.setAttribute('keySplines', '0.2 0 0.6 1;0 0 1 1;0.3 0 1 1');
             pulseR.setAttribute('values', '5;5;5;6');
             dot.appendChild(pulseR);
             
-            // keyTimes   = '0;0.0;0.94;1';
             const pulseA = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
             pulseA.setAttribute('attributeName', 'fill-opacity');
             pulseA.setAttribute('dur', `${duration}s`);
             pulseA.setAttribute('repeatCount', 'indefinite');
             pulseA.setAttribute('calcMode', 'spline');
             pulseA.setAttribute('keyTimes', keyTimes);
-            pulseA.setAttribute('keySplines', keySplines);
+            pulseA.setAttribute('keySplines', '0.2 0 0.6 1;0 0 1 1;0.3 0 1 1');
             pulseA.setAttribute('values', '0.7;0.7;0.7;0.9');
             dot.appendChild(pulseA);
             
