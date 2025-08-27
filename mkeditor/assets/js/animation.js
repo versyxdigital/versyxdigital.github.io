@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let r = 0; r < rows; r++) {
             // Compute opacity factor for this row (sinusoidal wave)
             const wave = Math.sin((r / waveChunk) + time * waveSpeed);
-            const opacity = 0.3 + 0.35 * (wave + 1) / 2; // range ~0.3–0.65
+            const opacity = 0.05 + 1 * (wave + 1) / 2; // range ~0.3–0.65
             const rowStr = buf[r].join('');
             html += `<span style="opacity:${opacity.toFixed(2)}">${rowStr}</span>\n`;
         }
