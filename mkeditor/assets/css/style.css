@@ -353,10 +353,9 @@ a:hover {
     opacity: 1;
 }
 
-/* Hide the old static content */
+
 #static-binary-grid::before { content: none !important; }
 
-/* Dynamic layer (mirrors your ::before styles) */
 #static-binary-grid .binary-layer {
     position: absolute;
     inset: 0;
@@ -367,11 +366,11 @@ a:hover {
     color: var(--hero-background-binary-grid);
     opacity: var(--hero-background-binary-grid-opacity, 1);
     white-space: pre;
-    word-break: break-all; /* harmless with <pre>, keeps your intent */
+    word-break: break-all;
     overflow: hidden;
     pointer-events: none;
     letter-spacing: 0;
-    margin: 0 -8px; /* preserve your edge overhang */
+    margin: 0 -8px;
     user-select: none;
     will-change: contents;
 }
