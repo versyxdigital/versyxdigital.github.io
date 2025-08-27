@@ -28,9 +28,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&family=Rouge+Script&family=Noto+Sans&family=Oxygen&family=Manrope&family=Nunito&family=Poppins&display=swap" rel="stylesheet">
-    <!-- JS dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.1/regl.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/3.4.2/gl-matrix-min.js"></script>
     <!-- JS SEO -->
     <script type="application/ld+json">
         {
@@ -52,20 +49,19 @@
 </head>
 <body>
     <!-- Image connectors SVG -->
-    <!-- <svg id="image-connectors" class="d-none d-md-block position-absolute top-0 start-0" style="pointer-events:none"> -->
-        <!-- <defs> -->
+    <svg id="image-connectors" class="d-none d-md-block position-absolute top-0 start-0" style="pointer-events:none">
+        <defs>
             <!-- soft glow for the dot -->
-            <!-- <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-            <feMerge><feMergeNode in="blur"/></feMerge>
+            <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/></feMerge>
             </filter>
         </defs>
-    </svg> -->
-<!-- 
-    <div id="static-binary-grid">
-        <pre class="binary-layer" aria-hidden="true"></pre>
-    </div> -->
+    </svg>
 
+    <div id="static-binary-grid">
+        <canvas class="binary-canvas"></canvas>
+    </div>
 
     <!-- Github Ribbon -->
     <a href="https://github.com/versyxdigital/mkeditor/"
@@ -694,6 +690,6 @@
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
     </script>
-    <!-- <script src="./assets/js/animation.js"></script> -->
+    <script src="./assets/js/animation.js"></script>
 </body>
 </html>

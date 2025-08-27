@@ -340,6 +340,15 @@ a:hover {
     .connector-dot { animation: none; }
 }
 
+/* Make GSAP-targeted elements GPU-friendly without blanketing the site */
+.slide-in-left,
+.slide-in-right,
+.slide-in-top,
+.slide-in-bottom,
+.fade-in {
+    will-change: transform, opacity;
+}
+
 #static-binary-grid {
     z-index: 1;
     width: 100vw;

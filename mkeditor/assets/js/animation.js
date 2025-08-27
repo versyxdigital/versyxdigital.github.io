@@ -1,28 +1,59 @@
+/* -------------------------- helpers -------------------------- */
+const ric = window.requestIdleCallback || (fn => requestAnimationFrame(() => fn({ timeRemaining: () => 0 })));
+
+function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const svg = document.getElementById('image-connectors');
+    if (!svg) return;
+    
+    // endpoints
     const targets = Array.from(document.querySelectorAll('.connector-target'));
     
     // ---- config ----
-    const elbowRadius = 60;     // corner roundness cap
-    const pxPerSec    = 400;    // constant base duration
-    const randomColors = true;  // random dot color per connector
+    const elbowRadius   = 60;
+    const pxPerSec      = 400;
+    const randomColors  = true;
+    const EDGE_PROGRESS = 0.10;
+    const EDGE_TIME_FRACTION = 0.05;
     
-    // Speed profile knobs
-    const EDGE_PROGRESS  = 0.10;  // how much of the path to "zip" at each end
-    const EDGE_TIME_FRACTION = 0.05; // how much of the time to spend on each end zip
+    // Keep SVG in *document* space (absolute at 0,0)
+    svg.style.position = 'absolute';
+    svg.style.left = '0px';
+    svg.style.top  = '0px';
+    svg.style.pointerEvents = 'none';
+    svg.setAttribute('preserveAspectRatio', 'none');
+    
+    function sizeSvgToDocument() {
+        const w = Math.max(
+            document.documentElement.scrollWidth,
+            document.documentElement.clientWidth,
+            document.body?.scrollWidth || 0
+        );
+        const h = Math.max(
+            document.documentElement.scrollHeight,
+            document.documentElement.clientHeight,
+            document.body?.scrollHeight || 0
+        );
+        svg.setAttribute('width',  String(w));
+        svg.setAttribute('height', String(h));
+        svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        svg.style.width  = w + 'px';
+        svg.style.height = h + 'px';
+    }
     
     function randomColor() {
-        const hue = Math.floor(Math.random() * 360);
+        const hue = (Math.random() * 360) | 0;
         return `hsl(${hue}, 80%, 60%)`;
     }
     
-    // Wait until all connector-target <img> elements are fully loaded/decoded
     async function waitForConnectorTargetsLoaded() {
         const imgs = targets.filter(el => el.tagName === 'IMG');
-        if (imgs.length === 0) return Promise.resolve(); // nothing to wait for
-        
-        const promises = imgs.map(img => {
-            if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+        if (!imgs.length) return;
+        await Promise.allSettled(imgs.map(img => {
+            if (img.complete && img.naturalWidth > 0) return;
             if (typeof img.decode === 'function') {
                 return img.decode().catch(() => new Promise(res => {
                     img.addEventListener('load', res, { once: true });
@@ -33,9 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.addEventListener('load', res, { once: true });
                 img.addEventListener('error', res, { once: true });
             });
-        });
-        
-        await Promise.allSettled(promises);
+        }));
     }
     
     function steppedRoundedPath(startX, startY, endX, endY, radius = 40) {
@@ -51,320 +80,343 @@ document.addEventListener('DOMContentLoaded', () => {
         const h1X  = goingRight ? startX + rX : startX - rX;
         const h2X  = goingRight ? endX - rX   : endX + rX;
         
-        return `
-            M${startX},${startY}
-            L${startX},${v1Y}
-            Q${startX},${hY} ${h1X},${hY}
-            L${h2X},${hY}
-            Q${endX},${hY} ${endX},${hY + rY}
-            L${endX},${endY}
-        `;
+        return `M${startX},${startY}L${startX},${v1Y}Q${startX},${hY} ${h1X},${hY}L${h2X},${hY}Q${endX},${hY} ${endX},${hY + rY}L${endX},${endY}`;
     }
     
-    // Build once, store refs for efficient updates on resize
-    const connectors = []; // { path, anim, pulseR, pulseA }
+    // cache of built connector elements
+    const connectors = []; // { path, anim, pulseR, pulseA, from, to, lastD, lastLen }
+    
+    function ensureGlowFilter() {
+        if (svg.querySelector('#glow-dot')) return;
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+        filter.id = 'glow-dot';
+        filter.setAttribute('x', '-50%');
+        filter.setAttribute('y', '-50%');
+        filter.setAttribute('width', '200%');
+        filter.setAttribute('height', '200%');
+        
+        const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+        blur.setAttribute('in', 'SourceGraphic');
+        blur.setAttribute('stdDeviation', '3');
+        blur.setAttribute('result', 'blur');
+        
+        const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+        const node  = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+        node.setAttribute('in', 'blur');
+        merge.appendChild(node);
+        
+        filter.appendChild(blur);
+        filter.appendChild(merge);
+        defs.appendChild(filter);
+        svg.appendChild(defs);
+    }
     
     function buildOnce() {
-        // Size SVG to document
-        const docWidth  = document.documentElement.scrollWidth;
-        const docHeight = document.documentElement.scrollHeight;
-        svg.setAttribute('width',  docWidth);
-        svg.setAttribute('height', docHeight);
-        svg.setAttribute('viewBox', `0 0 ${docWidth} ${docHeight}`);
-        svg.style.width  = docWidth + 'px';
-        svg.style.height = docHeight + 'px';
+        sizeSvgToDocument();
+        ensureGlowFilter();
         
-        targets.forEach((el, idx) => {
-            if (idx === targets.length - 1) return;
+        for (let idx = 0; idx < targets.length - 1; idx++) {
+            const from = targets[idx];
+            const to   = targets[idx + 1];
             
-            const rect1 = el.getBoundingClientRect();
-            const rect2 = targets[idx + 1].getBoundingClientRect();
+            const r1 = from.getBoundingClientRect();
+            const r2 = to.getBoundingClientRect();
             
-            const startX = rect1.left + rect1.width / 2 + window.scrollX;
-            const startY = rect1.bottom + window.scrollY;
-            const endX   = rect2.left + rect2.width / 2 + window.scrollX;
-            const endY   = rect2.top + window.scrollY;
+            const startX = r1.left + r1.width / 2 + window.scrollX;
+            const startY = r1.bottom + window.scrollY;
+            const endX   = r2.left + r2.width / 2 + window.scrollX;
+            const endY   = r2.top + window.scrollY;
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const id   = `connector-${idx}`;
+            path.setAttribute('id', id);
+            path.setAttribute('class', 'connector-line');
             
             const d = steppedRoundedPath(startX, startY, endX, endY, elbowRadius);
-            
-            // Base connector path
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const pathId = `connector-${idx}`;
-            path.setAttribute('id', pathId);
-            path.setAttribute('class', 'connector-line');
             path.setAttribute('d', d);
             svg.appendChild(path);
             
-            // Glowing dot
             const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             dot.setAttribute('class', 'connector-dot');
             dot.setAttribute('r', '5');
             if (randomColors) dot.setAttribute('fill', randomColor());
+            dot.setAttribute('filter', 'url(#glow-dot)');
             svg.appendChild(dot);
             
-            // AnimateMotion: "zip–slow–zip"
             const anim = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
             anim.setAttribute('repeatCount', 'indefinite');
-            anim.setAttribute('rotate', '0');          // avoid heading snaps at elbows
+            anim.setAttribute('rotate', '0');
             anim.setAttribute('calcMode', 'spline');
             
-            // --- New timing profile ---
-            // Fast at start/end: spend small time to traverse large distance.
-            // Slow in middle: spend most of the time on the middle portion.
-            const kp0 = 0;
-            const kp1 = EDGE_PROGRESS;          // e.g. 0.25
-            const kp2 = 1 - EDGE_PROGRESS;      // e.g. 0.75
-            const kp3 = 1;
-            
-            const kt0 = 0;
-            const kt1 = EDGE_TIME_FRACTION;     // e.g. 0.06
-            const kt2 = 1 - EDGE_TIME_FRACTION; // e.g. 0.94
-            const kt3 = 1;
-            
-            // Map: time -> distance along path
+            const kp0 = 0, kp1 = EDGE_PROGRESS, kp2 = 1 - EDGE_PROGRESS, kp3 = 1;
+            const kt0 = 0, kt1 = EDGE_TIME_FRACTION, kt2 = 1 - EDGE_TIME_FRACTION, kt3 = 1;
             anim.setAttribute('keyPoints', `${kp0};${kp1};${kp2};${kp3}`);
             anim.setAttribute('keyTimes',  `${kt0};${kt1};${kt2};${kt3}`);
-            
-            // Easing per segment (cubic-bezier x1 y1 x2 y2):
-            // 1) Snappy ease-out for launch, 2) gentle for middle cruise, 3) snappy ease-in for arrival.
-            const keySplines = [
-                '0.1 0 0.9 1',   // fast then settle
-                '0.25 0 0.75 1', // smooth/neutral in the slow middle
-                '0.1 0 0.9 1'    // settle into target quickly
-            ].join(';');
-            anim.setAttribute('keySplines', keySplines);
-            // --------------------------
+            anim.setAttribute('keySplines', ['0.1 0 0.9 1','0.25 0 0.75 1','0.1 0 0.9 1'].join(';'));
             
             const mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
-            mpath.setAttribute('href', `#${pathId}`);
-            mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
+            mpath.setAttribute('href', `#${id}`);
+            mpath.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',`#${id}`);
             anim.appendChild(mpath);
             dot.appendChild(anim);
             
-            // Duration from path length (base speed); profile above redistributes that time
             const len = path.getTotalLength();
-            const duration = Math.max(0.8, len / pxPerSec);
-            anim.setAttribute('dur', `${duration}s`);
+            const duration = Math.max(0.8, len / pxPerSec) + 's';
+            anim.setAttribute('dur', duration);
             
-            // Subtle snap cue at the end (unchanged)
-            let keyTimes   = '0;0.0;0.97;1';
+            const keyTimes   = '0;0.0;0.97;1';
+            const keySplines = '0.2 0 0.6 1;0 0 1 1;0.3 0 1 1';
+            
             const pulseR = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
-            pulseR.setAttribute('attributeName', 'r');
-            pulseR.setAttribute('dur', `${duration}s`);
-            pulseR.setAttribute('repeatCount', 'indefinite');
-            pulseR.setAttribute('calcMode', 'spline');
+            pulseR.setAttribute('attributeName','r');
+            pulseR.setAttribute('dur', duration);
+            pulseR.setAttribute('repeatCount','indefinite');
+            pulseR.setAttribute('calcMode','spline');
             pulseR.setAttribute('keyTimes', keyTimes);
-            pulseR.setAttribute('keySplines', '0.2 0 0.6 1;0 0 1 1;0.3 0 1 1');
+            pulseR.setAttribute('keySplines', keySplines);
             pulseR.setAttribute('values', '5;5;5;6');
             dot.appendChild(pulseR);
             
             const pulseA = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
-            pulseA.setAttribute('attributeName', 'fill-opacity');
-            pulseA.setAttribute('dur', `${duration}s`);
-            pulseA.setAttribute('repeatCount', 'indefinite');
-            pulseA.setAttribute('calcMode', 'spline');
+            pulseA.setAttribute('attributeName','fill-opacity');
+            pulseA.setAttribute('dur', duration);
+            pulseA.setAttribute('repeatCount','indefinite');
+            pulseA.setAttribute('calcMode','spline');
             pulseA.setAttribute('keyTimes', keyTimes);
-            pulseA.setAttribute('keySplines', '0.2 0 0.6 1;0 0 1 1;0.3 0 1 1');
+            pulseA.setAttribute('keySplines', keySplines);
             pulseA.setAttribute('values', '0.7;0.7;0.7;0.9');
             dot.appendChild(pulseA);
             
-            connectors.push({ path, anim, pulseR, pulseA });
-        });
+            connectors.push({ path, anim, pulseR, pulseA, from, to, lastD: d, lastLen: len });
+        }
     }
     
-    // Resize: update only geometry/durations (keep animations intact)
+    // rAF-throttled update; recompute only when geometry actually changes
     let rafPending = false;
-    function updateOnResize() {
+    function updateAll() {
         if (rafPending) return;
         rafPending = true;
         requestAnimationFrame(() => {
             rafPending = false;
             
-            const docWidth  = document.documentElement.scrollWidth;
-            const docHeight = document.documentElement.scrollHeight;
-            svg.setAttribute('width',  docWidth);
-            svg.setAttribute('height', docHeight);
-            svg.setAttribute('viewBox', `0 0 ${docWidth} ${docHeight}`);
-            svg.style.width  = docWidth + 'px';
-            svg.style.height = docHeight + 'px';
+            sizeSvgToDocument();
             
-            connectors.forEach((conn, idx) => {
-                if (idx >= targets.length - 1) return;
+            for (let i = 0; i < connectors.length; i++) {
+                const conn = connectors[i];
+                const { path, anim, pulseR, pulseA, from, to } = conn;
                 
-                const rect1 = targets[idx].getBoundingClientRect();
-                const rect2 = targets[idx + 1].getBoundingClientRect();
-                
-                const startX = rect1.left + rect1.width / 2 + window.scrollX;
-                const startY = rect1.bottom + window.scrollY;
-                const endX   = rect2.left + rect2.width / 2 + window.scrollX;
-                const endY   = rect2.top + window.scrollY;
+                const r1 = from.getBoundingClientRect();
+                const r2 = to.getBoundingClientRect();
+                const startX = r1.left + r1.width / 2 + window.scrollX;
+                const startY = r1.bottom + window.scrollY;
+                const endX   = r2.left + r2.width / 2 + window.scrollX;
+                const endY   = r2.top + window.scrollY;
                 
                 const d = steppedRoundedPath(startX, startY, endX, endY, elbowRadius);
-                conn.path.setAttribute('d', d);
+                if (d === conn.lastD) continue; // no geometry change
                 
-                const len = conn.path.getTotalLength();
-                const duration = Math.max(0.8, len / pxPerSec);
-                conn.anim.setAttribute('dur', `${duration}s`);
-                conn.pulseR.setAttribute('dur', `${duration}s`);
-                conn.pulseA.setAttribute('dur', `${duration}s`);
-            });
+                path.setAttribute('d', d);
+                conn.lastD = d;
+                
+                // Only pay the cost of getTotalLength() when d changed
+                const len = path.getTotalLength();
+                if (!conn.lastLen || Math.abs(len - conn.lastLen) > 0.5) { // px threshold
+                    conn.lastLen = len;
+                    const dur = Math.max(0.8, len / pxPerSec) + 's';
+                    if (anim.getAttribute('dur') !== dur) {
+                        anim.setAttribute('dur', dur);
+                        pulseR.setAttribute('dur', dur);
+                        pulseA.setAttribute('dur', dur);
+                    }
+                }
+            }
         });
     }
     
-    // Initialize after all connector-target images are ready
+    // Resize observers
+    const roTargets = new ResizeObserver(updateAll);
+    targets.forEach(t => roTargets.observe(t));
+    
+    // Observe document/body size growth instead of a broad MutationObserver
+    const roDoc = new ResizeObserver(updateAll);
+    roDoc.observe(document.documentElement);
+    roDoc.observe(document.body);
+    
+    window.addEventListener('resize', updateAll, { passive: true });
+    window.addEventListener('orientationchange', updateAll, { passive: true });
+    
+    // Pause SVG SMIL animations when hidden or reduced-motion prefers
+    function handleVisibilityOrMotion() {
+        if (!svg.pauseAnimations || !svg.unpauseAnimations) return;
+        if (document.hidden || prefersReducedMotion()) svg.pauseAnimations();
+        else svg.unpauseAnimations();
+    }
+    document.addEventListener('visibilitychange', handleVisibilityOrMotion, { passive: true });
+    if (window.matchMedia) {
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        mq.addEventListener('change', handleVisibilityOrMotion);
+    }
+    
     waitForConnectorTargetsLoaded().then(() => {
-        // Ensure SVG has a glow filter (once)
-        if (!svg.querySelector('#glow-dot')) {
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
-            filter.id = 'glow-dot';
-            filter.setAttribute('x', '-50%');
-            filter.setAttribute('y', '-50%');
-            filter.setAttribute('width', '200%');
-            filter.setAttribute('height', '200%');
-            const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
-            blur.setAttribute('in', 'SourceGraphic');
-            blur.setAttribute('stdDeviation', '3');
-            blur.setAttribute('result', 'blur');
-            const merge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
-            const node  = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
-            node.setAttribute('in', 'blur');
-            merge.appendChild(node);
-            filter.appendChild(blur);
-            filter.appendChild(merge);
-            defs.appendChild(filter);
-            svg.appendChild(defs);
-        }
-        
-        buildOnce();
-        window.addEventListener('resize', updateOnResize);
-        // No scroll handler: coordinates already include scroll offsets.
+        requestAnimationFrame(() => {
+            buildOnce();
+            updateAll();
+            // run one more update when the browser is idle, after layout settles
+            ric(() => { updateAll(); handleVisibilityOrMotion(); });
+        });
     });
 });
 
+
+
+// -------------------- BINARY CANVAS --------------------
 (() => {
-    const el = document.querySelector('#static-binary-grid .binary-layer');
     const root = document.getElementById('static-binary-grid');
+    if (!root) return; // <— guard
+    const canvas = root.querySelector('.binary-canvas');
+    if (!canvas) return; // <— guard
+    const ctx = canvas.getContext('2d', { alpha: true });
     
-    function measureCell() {
-        const probe = document.createElement('span');
-        probe.textContent = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-        probe.style.visibility = 'hidden';
-        probe.style.position = 'absolute';
-        probe.style.font = getComputedStyle(el).font;
-        document.body.appendChild(probe);
-        const rect = probe.getBoundingClientRect();
-        probe.remove();
-        return { cw: rect.width, ch: parseFloat(getComputedStyle(el).lineHeight) || rect.height };
+    // tunables unchanged...
+    const targetFPS = 30;
+    const frameInterval = 1000 / targetFPS;
+    
+    let cols = 0, rows = 0;
+    let cellW = 0, cellH = 0, ascent = 0;
+    let buf;
+    let rafId = 0;
+    let lastMs = 0;
+    let lastCanvasW = 0, lastCanvasH = 0; // <— track actual size to skip redundant work
+    
+    function measureFont() {
+        const style = getComputedStyle(root);
+        // keep your fixed 12px choice; if you want it responsive, swap 12px for style.fontSize
+        const font = `${style.fontWeight} 12px / ${style.lineHeight} ${style.fontFamily}`;
+        ctx.font = font;
+        ctx.textBaseline = 'alphabetic';
+        ctx.textAlign = 'left';
+        const m = ctx.measureText('M');
+        const metrics = ctx.measureText('Hg');
+        const emH = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
+        || parseFloat(style.lineHeight) || m.actualBoundingBoxAscent * 2 || 16;
+        cellW = Math.ceil(m.width);
+        cellH = Math.ceil(emH);
+        ascent = metrics.actualBoundingBoxAscent || Math.ceil(emH * 0.8);
     }
     
-    let cols = 0, rows = 0, buf = [];
     function resize() {
-        const { cw, ch } = measureCell();
-        const pad = 16;
-        const width = root.clientWidth + pad;
-        const height = root.clientHeight;
+        const rect = root.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const cw = Math.max(1, Math.floor(rect.width  * dpr));
+        const ch = Math.max(1, Math.floor(rect.height * dpr));
         
-        const digitCols = Math.max(1, Math.floor(width / cw / 2));
-        const digitRows = Math.max(1, Math.floor(height / ch) + 1);
+        // skip if no effective change
+        if (cw === lastCanvasW && ch === lastCanvasH) return; // <— early exit
+        lastCanvasW = cw; lastCanvasH = ch;
         
-        if (digitCols === cols && digitRows === rows) return;
-        cols = digitCols; rows = digitRows;
+        canvas.width  = cw;
+        canvas.height = ch;
+        canvas.style.width  = `${Math.floor(rect.width)}px`;
+        canvas.style.height = `${Math.floor(rect.height)}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         
-        buf = new Array(rows);
-        for (let r = 0; r < rows; r++) {
-            const line = new Array(cols * 2 - 1);
-            for (let c = 0; c < cols; c++) {
-                line[c * 2] = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-                if (c < cols - 1) line[c * 2 + 1] = ' ';
-            }
-            buf[r] = line;
-        }
-        render(0);
+        measureFont();
+        
+        cols = Math.max(1, Math.floor(rect.width / (cellW * 2)));
+        rows = Math.max(1, Math.floor(rect.height / cellH) + 1);
+        
+        buf = new Uint16Array(cols * rows);
+        for (let i = 0; i < buf.length; i++) buf[i] = 65 + ((Math.random() * 26) | 0);
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     
     function tick() {
-        if (!buf.length) return;
-        const flipsPerFrame = Math.max(100, Math.floor(cols * rows * 0.02));
-        for (let i = 0; i < flipsPerFrame; i++) {
-            const r = (Math.random() * rows) | 0;
-            const c = (Math.random() * cols) | 0;
-            const idx = c * 2;
-            buf[r][idx] = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+        if (!buf) return;
+        const flips = Math.max(100, Math.floor(cols * rows * 0.02));
+        for (let i = 0; i < flips; i++) {
+            const idx = (Math.random() * buf.length) | 0;
+            buf[idx] = 65 + ((Math.random() * 26) | 0);
         }
-    }
-    
-    // ---- Wave rendering (diagonal, higher contrast) ----
-    // Tunables
-    const chunkX = 8;        // digits per chunk horizontally
-    const chunkY = 2;        // rows per chunk vertically
-    const kx = 0.55;         // spatial frequency along columns (bigger = more waves)
-    const ky = 0.55;         // spatial frequency along rows
-    const speed = 0.003;     // temporal speed
-    const base = 0.15;       // minimum opacity
-    const range = 0.80;      // added opacity (so max ~0.95)
-    const gamma = 1.6;       // >1 = higher contrast
-    
-    function easeContrast(x, g) {
-        // x in [0,1]
-        return Math.pow(x, g);
     }
     
     function render(ms) {
-        const t = ms * speed; // time factor
-        let html = "";
+        const t = ms * 0.003; // speed
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
+        const chunkX = 8, chunkY = 2;
+        ctx.fillStyle = getComputedStyle(root).color || 'rgba(255,255,255,1)';
+        
+        const base = 0.15, range = 0.80, gamma = 1.6;
         for (let r0 = 0; r0 < rows; r0 += chunkY) {
             const maxR = Math.min(rows, r0 + chunkY);
-            // Precompute the row strings for this block once
-            const rowStrs = [];
-            for (let r = r0; r < maxR; r++) rowStrs.push(buf[r].join(''));
-            
-            // Emit each row in the block fully (left-to-right), then newline
-            for (let i = 0; i < rowStrs.length; i++) {
-                const rowStr = rowStrs[i];
+            for (let c0 = 0; c0 < cols; c0 += chunkX) {
+                const digitCount = Math.min(chunkX, cols - c0);
+                const phase = (c0 * 0.55 / chunkX) + (r0 * 0.55 / chunkY) + t;
+                const u = (Math.sin(phase) + 1) * 0.5;
+                const v = Math.pow(u, gamma);
+                ctx.globalAlpha = base + range * v;
                 
-                for (let c0 = 0; c0 < cols; c0 += chunkX) {
-                    // Diagonal phase sampled at chunk origin
-                    const phase = (c0 * kx / chunkX) + (r0 * ky / chunkY) + t;
-                    const s = Math.sin(phase);                 // [-1, 1]
-                    const u = (s + 1) * 0.5;                   // [0, 1]
-                    const v = Math.pow(u, gamma);              // gamma contrast
-                    const op = base + range * v;               // final opacity
-                    
-                    // Character bounds (end exclusive!)
-                    const startChar = c0 * 2;                                      // account for spaces
-                    const digitCount = Math.min(chunkX, cols - c0);
-                    const endCharExclusive = startChar + digitCount * 2 - 1 + 1;   // fix: exclusive end
-                    
-                    const slice = rowStr.slice(startChar, endCharExclusive);
-                    html += `<span style="opacity:${op.toFixed(3)}">${slice}</span>`;
+                for (let rr = r0; rr < maxR; rr++) {
+                    const y = rr * cellH + ascent;
+                    for (let cc = 0; cc < digitCount; cc++) {
+                        const col = c0 + cc;
+                        const idx = rr * cols + col;
+                        const px = col * (cellW * 2);
+                        ctx.fillText(String.fromCharCode(buf[idx]), px, y);
+                    }
                 }
-                html += '\n'; // terminate this row
             }
         }
-        
-        el.innerHTML = html;
+        ctx.globalAlpha = 1;
     }
     
-    let last = 0;
     function loop(ts) {
-        if (ts - last > 22) {
+        // reduced-motion: render once, then idle
+        if (prefersReducedMotion()) {
+            if (!lastMs) render(ts);
+            rafId = requestAnimationFrame(loop);
+            return;
+        }
+        // tab hidden: skip work (visibility handler cancels anyway)
+        if (document.hidden) {
+            rafId = requestAnimationFrame(loop);
+            return;
+        }
+        if (ts - lastMs >= frameInterval) {
+            lastMs = ts;
             tick();
             render(ts);
-            last = ts;
         }
-        raf = requestAnimationFrame(loop);
+        rafId = requestAnimationFrame(loop);
     }
-    let raf = requestAnimationFrame(loop);
     
     let resizeTO;
-    const onResize = () => {
+    function onResize() {
         clearTimeout(resizeTO);
-        resizeTO = setTimeout(resize, 50);
-    };
-    addEventListener('resize', onResize);
-    addEventListener('orientationchange', onResize);
+        resizeTO = setTimeout(() => {
+            cancelAnimationFrame(rafId);
+            resize();
+            lastMs = 0;
+            rafId = requestAnimationFrame(loop);
+        }, 100);
+    }
     
+    addEventListener('resize', onResize, { passive: true });
+    addEventListener('orientationchange', onResize, { passive: true });
+    
+    // pause/resume on tab visibility changes
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            cancelAnimationFrame(rafId);
+        } else {
+            lastMs = 0;
+            rafId = requestAnimationFrame(loop);
+        }
+    }, { passive: true });
+    
+    // initial
     resize();
+    rafId = requestAnimationFrame(loop);
 })();
