@@ -153,7 +153,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const kt0 = 0, kt1 = EDGE_TIME_FRACTION, kt2 = 1 - EDGE_TIME_FRACTION, kt3 = 1;
             anim.setAttribute('keyPoints', `${kp0};${kp1};${kp2};${kp3}`);
             anim.setAttribute('keyTimes',  `${kt0};${kt1};${kt2};${kt3}`);
-            anim.setAttribute('keySplines', ['0.1 0 0.9 1','0.25 0 0.75 1','0.1 0 0.9 1'].join(';'));
+            anim.setAttribute('keySplines', [
+                '0.1 0 0.9 1',
+                '0.25 0 0.75 1',
+                '0.1 0 0.9 1'
+            ].join(';'));
             
             const mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
             mpath.setAttribute('href', `#${id}`);
@@ -291,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function measureFont() {
         const style = getComputedStyle(root);
-        // keep your fixed 12px choice; if you want it responsive, swap 12px for style.fontSize
         const font = `${style.fontWeight} 12px / ${style.lineHeight} ${style.fontFamily}`;
         ctx.font = font;
         ctx.textBaseline = 'alphabetic';
