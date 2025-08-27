@@ -1,0 +1,396 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+html {
+    background-color: #111111;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: "Montserrat";
+    background-color: #111111;
+    color: #444444;
+    overflow-x: hidden;
+}
+
+code {
+    color: #82cdc4 !important;
+}
+
+.github-fork-ribbon:before {
+    background-color: #519088 !important;
+}
+.github-fork-ribbon {
+    background: transparent !important;
+}
+
+.bg-black {
+    background-color: #111111 !important;
+}
+
+.bg-green {
+    background: #519088 !important;
+}
+.text-green {
+    color: #519088 !important;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: none;
+    z-index: 1050;
+    background: #519088 !important;
+    border: 1px solid #519088 !important;
+    color: black;
+}
+.scroll-to-top:hover {
+    scale: 1.1;
+}
+
+a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.bg-black-grad {
+    background: linear-gradient(340deg, #222222 0%, #000000 100%);
+}
+
+.bg-black-grad-reverse {
+    background: linear-gradient(340deg, #000000 0%, #111111 100%);
+}
+
+.leading-header {
+    font-size: 1.8rem;
+    margin-bottom: 0;
+}
+.leading-text {
+    font-size: 1rem;
+}
+
+.feature-overview-header {
+    font-size: 1.25rem;
+    letter-spacing: 0.075rem;
+}
+
+/** ---------------------- **/
+
+.icon-list {
+    padding-left: 0;
+    list-style: none;
+}
+
+.icon-list li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.25rem;
+}
+
+.icon-list li::before {
+    display: block;
+    flex-shrink: 0;
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 0.5rem;
+    content: "";
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23435D4F' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z'/%3E%3C/svg%3E")
+    no-repeat center center / 100% auto;
+}
+
+svg:not(:root).svg-inline--fa {
+    overflow: visible;
+}
+
+.svg-inline--fa.fa-w-16 {
+    width: 1em;
+}
+
+.love {
+    color: #212529;
+}
+
+.svg-inline--fa {
+    display: inline-block;
+    font-size: inherit;
+    height: 1em;
+    overflow: visible;
+    vertical-align: -0.125em;
+}
+
+.filename {
+    font-size: 0.6em;
+}
+
+.github-fork-ribbon:before {
+    background-color: #212529;
+}
+
+.version-info {
+    font-size: 0.65rem;
+    margin-bottom: 0;
+}
+
+.release-info {
+    font-size: 0.75rem;
+    margin-bottom: 0;
+}
+
+a {
+    color: #383f5f;
+}
+
+a:hover {
+    color: #545c86;
+    font-weight: bold;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.heading {
+    color: #545c86;
+    font-weight: 400;
+}
+
+.heading__sub-heading {
+    color: #555555;
+}
+
+.btn-download {
+    background: linear-gradient(9deg, #323534, #161616);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    color: white;
+    text-decoration: none;
+    letter-spacing: 1px;
+    padding: 15px;
+    transition: all .2s ease-in-out;
+}
+
+.btn-download:hover {
+    transform: scale(1.025);
+    color: white;
+    font-weight: bold;
+    box-shadow: 0px 16px 30px rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit {
+    background: transparent;
+    box-shadow: none;
+    color: #212529;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+    padding: 15px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-edit:hover {
+    color: #545c86;
+}
+
+.btn-web {
+    color: #316d65;
+}
+
+.btn-web:hover {
+    color: #118374;
+}
+
+.settings-list li {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url('../img/bg.png');
+    background-repeat: repeat;
+    opacity: 0.1;
+}
+
+.overlay-flip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url('../img/bg-flip.png');
+    background-repeat: repeat;
+    opacity: 0.1;
+}
+
+.overlay-mesh {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url('../img/filter.png');
+    background-repeat: repeat;
+    opacity: 0.5;
+}
+
+#image-connectors {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.connector-line {
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    z-index: 1050;
+    fill: none;
+}
+
+.connector-glow {
+    fill: none;
+    stroke: #ffffff;           /* faint light color */
+    stroke-opacity: 0.5;
+    stroke-width: 4;           /* slightly thicker for soft halo */
+    stroke-linecap: round;
+    filter: url(#connector-glow);
+    animation-name: connector-travel;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.connector-dot {     /* will be overridden if random colors are enabled */
+    fill: #519088;
+    opacity: 1;
+    stroke-width: 0.1;
+    filter: url(#glow-dot);  /* soft glow */
+    pointer-events: none;
+}
+
+.style-script {
+    font-family: "Rouge Script", "Montserrat";
+    font-size: 1.6em !important;
+    letter-spacing: 1.2px;
+    font-weight: bold;
+    color: #519088;
+    margin-left: 3px;
+}
+
+.cool-blur {
+  position: relative;   /* establish positioning context */
+  display: inline-block; /* shrink-wrap to image size */
+}
+
+.cool-blur img {
+  position: relative;   /* keep the img above ::before */
+  display: block;
+  z-index: 1;
+}
+
+.cool-blur::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    background: radial-gradient(circle at 49% 50%, #5388e688, transparent 70%), radial-gradient(circle at 80% 70%, #1c1a1acc, transparent 70%);
+    filter: blur(80px);
+}
+
+.blur-lg::before {
+    inset: -35px;
+    background: radial-gradient(circle at 49% 50%, #99f1fb, transparent 100%), radial-gradient(circle at 50% 50%, #1c1a1acc, transparent 50%);
+    filter: blur(100px);
+    bottom: 50%;
+}
+.blur-lgg::before {
+    inset: 0px;
+    background: radial-gradient(circle at 49% 50%, #5388e6, transparent 100%), radial-gradient(circle at 50% 50%, #1c1a1acc, transparent 50%);
+    filter: blur(100px);
+    bottom: 50%;
+}
+
+.blur-md::before {
+    inset: 60px;
+    background: radial-gradient(circle at 50% 50%, #99f1fb88, transparent 50%), radial-gradient(circle at 180% 70%, #1c1a1acc, transparent);
+    filter: blur(100px);
+}
+
+.z-10 {
+    z-index: 10 !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .connector-dot { animation: none; }
+}
+
+/* Make GSAP-targeted elements GPU-friendly without blanketing the site */
+.slide-in-left,
+.slide-in-right,
+.slide-in-top,
+.slide-in-bottom,
+.fade-in {
+    will-change: transform, opacity;
+}
+
+#static-alpha-grid {
+    z-index: 1;
+    width: 100vw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    max-height: 100%;
+    opacity: 0.2;
+}
+
+
+#static-alpha-grid::before { content: none !important; }
+
+#static-alpha-grid .binary-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 15.75px;
+    color: var(--hero-background-binary-grid);
+    opacity: var(--hero-background-binary-grid-opacity, 1);
+    white-space: pre;
+    word-break: break-all;
+    overflow: hidden;
+    pointer-events: none;
+    letter-spacing: 0;
+    margin: 0 -8px;
+    user-select: none;
+    will-change: contents;
+}
+
+#static-alpha-grid::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 30%;
+    background: linear-gradient(to bottom, transparent 0%, var(--background) 100%);
+    pointer-events: none;
+    z-index: 3;
+}
