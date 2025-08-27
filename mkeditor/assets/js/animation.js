@@ -6,11 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const elbowRadius = 60;     // corner roundness cap
     const pxPerSec    = 400;    // constant base duration
     const randomColors = true;  // random dot color per connector
-
-    // NEW: speed profile knobs (adjust if desired)
+    
+    // Speed profile knobs
     const EDGE_PROGRESS  = 0.10;  // how much of the path to "zip" at each end
     const EDGE_TIME_FRACTION = 0.05; // how much of the time to spend on each end zip
-
+    
     function randomColor() {
         const hue = Math.floor(Math.random() * 360);
         return `hsl(${hue}, 80%, 60%)`;
@@ -52,13 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const h2X  = goingRight ? endX - rX   : endX + rX;
         
         return `
-      M${startX},${startY}
-      L${startX},${v1Y}
-      Q${startX},${hY} ${h1X},${hY}
-      L${h2X},${hY}
-      Q${endX},${hY} ${endX},${hY + rY}
-      L${endX},${endY}
-    `;
+            M${startX},${startY}
+            L${startX},${v1Y}
+            Q${startX},${hY} ${h1X},${hY}
+            L${h2X},${hY}
+            Q${endX},${hY} ${endX},${hY + rY}
+            L${endX},${endY}
+        `;
     }
     
     // Build once, store refs for efficient updates on resize
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             anim.setAttribute('repeatCount', 'indefinite');
             anim.setAttribute('rotate', '0');          // avoid heading snaps at elbows
             anim.setAttribute('calcMode', 'spline');
-
+            
             // --- New timing profile ---
             // Fast at start/end: spend small time to traverse large distance.
             // Slow in middle: spend most of the time on the middle portion.
@@ -115,16 +115,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const kp1 = EDGE_PROGRESS;          // e.g. 0.25
             const kp2 = 1 - EDGE_PROGRESS;      // e.g. 0.75
             const kp3 = 1;
-
+            
             const kt0 = 0;
             const kt1 = EDGE_TIME_FRACTION;     // e.g. 0.06
             const kt2 = 1 - EDGE_TIME_FRACTION; // e.g. 0.94
             const kt3 = 1;
-
+            
             // Map: time -> distance along path
             anim.setAttribute('keyPoints', `${kp0};${kp1};${kp2};${kp3}`);
             anim.setAttribute('keyTimes',  `${kt0};${kt1};${kt2};${kt3}`);
-
+            
             // Easing per segment (cubic-bezier x1 y1 x2 y2):
             // 1) Snappy ease-out for launch, 2) gentle for middle cruise, 3) snappy ease-in for arrival.
             const keySplines = [
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ].join(';');
             anim.setAttribute('keySplines', keySplines);
             // --------------------------
-
+            
             const mpath = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
             mpath.setAttribute('href', `#${pathId}`);
             mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${pathId}`);
@@ -241,3 +241,90 @@ document.addEventListener('DOMContentLoaded', () => {
         // No scroll handler: coordinates already include scroll offsets.
     });
 });
+
+(() => {
+    const el = document.querySelector('#static-binary-grid .binary-layer');
+    const root = document.getElementById('static-binary-grid');
+    
+    // Measure monospace cell metrics at runtime
+    function measureCell() {
+        const probe = document.createElement('span');
+        probe.textContent = '0';
+        probe.style.visibility = 'hidden';
+        probe.style.position = 'absolute';
+        probe.style.font = getComputedStyle(el).font;
+        document.body.appendChild(probe);
+        const rect = probe.getBoundingClientRect();
+        probe.remove();
+        return { cw: rect.width, ch: parseFloat(getComputedStyle(el).lineHeight) || rect.height };
+    }
+    
+    // Build an initial buffer sized to the viewport (with spaces between bits)
+    let cols = 0, rows = 0, buf = [];
+    function resize() {
+        const { cw, ch } = measureCell();
+        const pad = 16; // accounts for margin: 0 -8px overflow
+        const width = root.clientWidth + pad;
+        const height = root.clientHeight;
+        
+        // Each “cell” on screen is "digit + space" => 2 characters wide
+        const digitCols = Math.max(1, Math.floor(width / cw / 2));
+        const digitRows = Math.max(1, Math.floor(height / ch) + 1);
+        
+        if (digitCols === cols && digitRows === rows) return;
+        cols = digitCols; rows = digitRows;
+        
+        // Create a linear buffer of characters including spaces and newlines
+        buf = new Array(rows);
+        for (let r = 0; r < rows; r++) {
+            const line = new Array(cols * 2 - 1); // digits + spaces between
+            for (let c = 0; c < cols; c++) {
+                line[c * 2] = Math.random() < 0.5 ? '0' : '1';
+                if (c < cols - 1) line[c * 2 + 1] = ' ';
+            }
+            buf[r] = line;
+        }
+        el.textContent = buf.map(line => line.join('')).join('\n');
+    }
+    
+    // Flip a small random subset of digits per tick for a “static” feel
+    function tick() {
+        if (!buf.length) return;
+        const flipsPerFrame = Math.max(100, Math.floor(cols * rows * 0.02)); // ~2% of grid
+        for (let i = 0; i < flipsPerFrame; i++) {
+            const r = (Math.random() * rows) | 0;
+            const c = (Math.random() * cols) | 0;
+            const idx = c * 2; // account for spaces
+            const cur = buf[r][idx];
+            buf[r][idx] = cur === '0' ? '1' : '0';
+        }
+        // Single string write is much cheaper than many DOM ops
+        el.textContent = buf.map(line => line.join('')).join('\n');
+    }
+    
+    // Drive the animation at ~30–45 fps without thrashing the main thread
+    let last = 0;
+    function loop(ts) {
+        if (ts - last > 22) { // ~45 fps cap
+            tick();
+            last = ts;
+        }
+        raf = requestAnimationFrame(loop);
+    }
+    let raf = requestAnimationFrame(loop);
+    
+    // Handle resizes (debounced)
+    let resizeTO;
+    const onResize = () => {
+        clearTimeout(resizeTO);
+        resizeTO = setTimeout(resize, 50);
+    };
+    addEventListener('resize', onResize);
+    addEventListener('orientationchange', onResize);
+    
+    // Init
+    resize();
+    
+    // Optional: API to control intensity externally (e.g., on hover/focus)
+    root.addEventListener('mouseenter', () => { last = 0; });
+})();
