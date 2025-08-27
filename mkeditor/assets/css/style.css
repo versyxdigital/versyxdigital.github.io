@@ -277,7 +277,6 @@ a:hover {
 }
 
 .connector-dot {     /* will be overridden if random colors are enabled */
-    fill: #519088;
     opacity: 1;
     stroke-width: 0.1;
     filter: url(#glow-dot);  /* soft glow */

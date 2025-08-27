@@ -45,10 +45,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function randomColor() {
-        const hue = (Math.random() * 360) | 0;
-        return `hsl(${hue}, 80%, 60%)`;
+        const bases = [
+            { h: 220, s: 72, l: 60 },
+            { h: 172, s: 28, l: 44 }
+        ];
+        const base = bases[Math.floor(Math.random() * bases.length)];
+        const s = Math.min(100, Math.max(0, base.s + (Math.random() * 10)));
+        const l = Math.min(100, Math.max(0, base.l + (Math.random() * 10)));
+        return `hsl(${base.h}, ${s}%, ${l}%)`;
     }
-    
+        
     async function waitForConnectorTargetsLoaded() {
         const imgs = targets.filter(el => el.tagName === 'IMG');
         if (!imgs.length) return;
@@ -179,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pulseR.setAttribute('calcMode','spline');
             pulseR.setAttribute('keyTimes', keyTimes);
             pulseR.setAttribute('keySplines', keySplines);
-            pulseR.setAttribute('values', '5;5;5;6');
+            pulseR.setAttribute('values', '3;3;3;6');
             dot.appendChild(pulseR);
             
             const pulseA = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
