@@ -243,91 +243,129 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 (() => {
-    const el = document.querySelector('#static-binary-grid .binary-layer');
-    const root = document.getElementById('static-binary-grid');
+  const el = document.querySelector('#static-binary-grid .binary-layer');
+  const root = document.getElementById('static-binary-grid');
 
-    function measureCell() {
-        const probe = document.createElement('span');
-        probe.textContent = '0';
-        probe.style.visibility = 'hidden';
-        probe.style.position = 'absolute';
-        probe.style.font = getComputedStyle(el).font;
-        document.body.appendChild(probe);
-        const rect = probe.getBoundingClientRect();
-        probe.remove();
-        return { cw: rect.width, ch: parseFloat(getComputedStyle(el).lineHeight) || rect.height };
+  function measureCell() {
+    const probe = document.createElement('span');
+    probe.textContent = '0';
+    probe.style.visibility = 'hidden';
+    probe.style.position = 'absolute';
+    probe.style.font = getComputedStyle(el).font;
+    document.body.appendChild(probe);
+    const rect = probe.getBoundingClientRect();
+    probe.remove();
+    return { cw: rect.width, ch: parseFloat(getComputedStyle(el).lineHeight) || rect.height };
+  }
+
+  let cols = 0, rows = 0, buf = [];
+  function resize() {
+    const { cw, ch } = measureCell();
+    const pad = 16;
+    const width = root.clientWidth + pad;
+    const height = root.clientHeight;
+
+    const digitCols = Math.max(1, Math.floor(width / cw / 2));
+    const digitRows = Math.max(1, Math.floor(height / ch) + 1);
+
+    if (digitCols === cols && digitRows === rows) return;
+    cols = digitCols; rows = digitRows;
+
+    buf = new Array(rows);
+    for (let r = 0; r < rows; r++) {
+      const line = new Array(cols * 2 - 1);
+      for (let c = 0; c < cols; c++) {
+        line[c * 2] = Math.random() < 0.5 ? '0' : '1';
+        if (c < cols - 1) line[c * 2 + 1] = ' ';
+      }
+      buf[r] = line;
     }
+    render(0);
+  }
 
-    let cols = 0, rows = 0, buf = [];
-    function resize() {
-        const { cw, ch } = measureCell();
-        const pad = 16;
-        const width = root.clientWidth + pad;
-        const height = root.clientHeight;
-
-        const digitCols = Math.max(1, Math.floor(width / cw / 2));
-        const digitRows = Math.max(1, Math.floor(height / ch) + 1);
-
-        if (digitCols === cols && digitRows === rows) return;
-        cols = digitCols; rows = digitRows;
-
-        buf = new Array(rows);
-        for (let r = 0; r < rows; r++) {
-            const line = new Array(cols * 2 - 1);
-            for (let c = 0; c < cols; c++) {
-                line[c * 2] = Math.random() < 0.5 ? '0' : '1';
-                if (c < cols - 1) line[c * 2 + 1] = ' ';
-            }
-            buf[r] = line;
-        }
-        render(0);
+  function tick() {
+    if (!buf.length) return;
+    const flipsPerFrame = Math.max(100, Math.floor(cols * rows * 0.02));
+    for (let i = 0; i < flipsPerFrame; i++) {
+      const r = (Math.random() * rows) | 0;
+      const c = (Math.random() * cols) | 0;
+      const idx = c * 2;
+      const cur = buf[r][idx];
+      buf[r][idx] = cur === '0' ? '1' : '0';
     }
+  }
 
-    // Sinusoidal wave modifier
-    function render(time) {
-        const waveSpeed = 0.002; // smaller = slower waves
-        const waveChunk = 6;     // chunk size (rows per phase step)
-        let html = "";
-        for (let r = 0; r < rows; r++) {
-            // Compute opacity factor for this row (sinusoidal wave)
-            const wave = Math.sin((r / waveChunk) + time * waveSpeed);
-            const opacity = 0.05 + 1 * (wave + 1) / 2; // range ~0.3–0.65
-            const rowStr = buf[r].join('');
-            html += `<span style="opacity:${opacity.toFixed(2)}">${rowStr}</span>\n`;
-        }
-        el.innerHTML = html;
+  // ---- Wave rendering (diagonal, higher contrast) ----
+  // Tunables
+  const chunkX = 8;        // digits per chunk horizontally
+  const chunkY = 2;        // rows per chunk vertically
+  const kx = 0.55;         // spatial frequency along columns (bigger = more waves)
+  const ky = 0.55;         // spatial frequency along rows
+  const speed = 0.003;     // temporal speed
+  const base = 0.15;       // minimum opacity
+  const range = 0.80;      // added opacity (so max ~0.95)
+  const gamma = 1.6;       // >1 = higher contrast
+
+  function easeContrast(x, g) {
+    // x in [0,1]
+    return Math.pow(x, g);
+  }
+
+function render(ms) {
+  const t = ms * speed; // time factor
+  let html = "";
+
+  for (let r0 = 0; r0 < rows; r0 += chunkY) {
+    const maxR = Math.min(rows, r0 + chunkY);
+    // Precompute the row strings for this block once
+    const rowStrs = [];
+    for (let r = r0; r < maxR; r++) rowStrs.push(buf[r].join(''));
+
+    // Emit each row in the block fully (left-to-right), then newline
+    for (let i = 0; i < rowStrs.length; i++) {
+      const rowStr = rowStrs[i];
+
+      for (let c0 = 0; c0 < cols; c0 += chunkX) {
+        // Diagonal phase sampled at chunk origin
+        const phase = (c0 * kx / chunkX) + (r0 * ky / chunkY) + t;
+        const s = Math.sin(phase);                 // [-1, 1]
+        const u = (s + 1) * 0.5;                   // [0, 1]
+        const v = Math.pow(u, gamma);              // gamma contrast
+        const op = base + range * v;               // final opacity
+
+        // Character bounds (end exclusive!)
+        const startChar = c0 * 2;                                      // account for spaces
+        const digitCount = Math.min(chunkX, cols - c0);
+        const endCharExclusive = startChar + digitCount * 2 - 1 + 1;   // fix: exclusive end
+
+        const slice = rowStr.slice(startChar, endCharExclusive);
+        html += `<span style="opacity:${op.toFixed(3)}">${slice}</span>`;
+      }
+      html += '\n'; // terminate this row
     }
+  }
 
-    function tick() {
-        if (!buf.length) return;
-        const flipsPerFrame = Math.max(100, Math.floor(cols * rows * 0.02));
-        for (let i = 0; i < flipsPerFrame; i++) {
-            const r = (Math.random() * rows) | 0;
-            const c = (Math.random() * cols) | 0;
-            const idx = c * 2;
-            const cur = buf[r][idx];
-            buf[r][idx] = cur === '0' ? '1' : '0';
-        }
+  el.innerHTML = html;
+}
+
+  let last = 0;
+  function loop(ts) {
+    if (ts - last > 22) {
+      tick();
+      render(ts);
+      last = ts;
     }
+    raf = requestAnimationFrame(loop);
+  }
+  let raf = requestAnimationFrame(loop);
 
-    let last = 0;
-    function loop(ts) {
-        if (ts - last > 22) { // ~45 fps cap
-            tick();
-            render(ts);
-            last = ts;
-        }
-        raf = requestAnimationFrame(loop);
-    }
-    let raf = requestAnimationFrame(loop);
+  let resizeTO;
+  const onResize = () => {
+    clearTimeout(resizeTO);
+    resizeTO = setTimeout(resize, 50);
+  };
+  addEventListener('resize', onResize);
+  addEventListener('orientationchange', onResize);
 
-    let resizeTO;
-    const onResize = () => {
-        clearTimeout(resizeTO);
-        resizeTO = setTimeout(resize, 50);
-    };
-    addEventListener('resize', onResize);
-    addEventListener('orientationchange', onResize);
-
-    resize();
+  resize();
 })();
