@@ -365,7 +365,7 @@ a:hover {
     font-size: 13px;
     line-height: 15.75px;
     color: var(--hero-background-binary-grid);
-    opacity: var(--hero-background-binary-grid-opacity, 0.50);
+    opacity: var(--hero-background-binary-grid-opacity, 1);
     white-space: pre;
     word-break: break-all; /* harmless with <pre>, keeps your intent */
     overflow: hidden;

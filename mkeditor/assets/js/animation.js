@@ -245,8 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 (() => {
     const el = document.querySelector('#static-binary-grid .binary-layer');
     const root = document.getElementById('static-binary-grid');
-    
-    // Measure monospace cell metrics at runtime
+
     function measureCell() {
         const probe = document.createElement('span');
         probe.textContent = '0';
@@ -258,62 +257,70 @@ document.addEventListener('DOMContentLoaded', () => {
         probe.remove();
         return { cw: rect.width, ch: parseFloat(getComputedStyle(el).lineHeight) || rect.height };
     }
-    
-    // Build an initial buffer sized to the viewport (with spaces between bits)
+
     let cols = 0, rows = 0, buf = [];
     function resize() {
         const { cw, ch } = measureCell();
-        const pad = 16; // accounts for margin: 0 -8px overflow
+        const pad = 16;
         const width = root.clientWidth + pad;
         const height = root.clientHeight;
-        
-        // Each “cell” on screen is "digit + space" => 2 characters wide
+
         const digitCols = Math.max(1, Math.floor(width / cw / 2));
         const digitRows = Math.max(1, Math.floor(height / ch) + 1);
-        
+
         if (digitCols === cols && digitRows === rows) return;
         cols = digitCols; rows = digitRows;
-        
-        // Create a linear buffer of characters including spaces and newlines
+
         buf = new Array(rows);
         for (let r = 0; r < rows; r++) {
-            const line = new Array(cols * 2 - 1); // digits + spaces between
+            const line = new Array(cols * 2 - 1);
             for (let c = 0; c < cols; c++) {
                 line[c * 2] = Math.random() < 0.5 ? '0' : '1';
                 if (c < cols - 1) line[c * 2 + 1] = ' ';
             }
             buf[r] = line;
         }
-        el.textContent = buf.map(line => line.join('')).join('\n');
+        render(0);
     }
-    
-    // Flip a small random subset of digits per tick for a “static” feel
+
+    // Sinusoidal wave modifier
+    function render(time) {
+        const waveSpeed = 0.002; // smaller = slower waves
+        const waveChunk = 6;     // chunk size (rows per phase step)
+        let html = "";
+        for (let r = 0; r < rows; r++) {
+            // Compute opacity factor for this row (sinusoidal wave)
+            const wave = Math.sin((r / waveChunk) + time * waveSpeed);
+            const opacity = 0.3 + 0.35 * (wave + 1) / 2; // range ~0.3–0.65
+            const rowStr = buf[r].join('');
+            html += `<span style="opacity:${opacity.toFixed(2)}">${rowStr}</span>\n`;
+        }
+        el.innerHTML = html;
+    }
+
     function tick() {
         if (!buf.length) return;
-        const flipsPerFrame = Math.max(100, Math.floor(cols * rows * 0.02)); // ~2% of grid
+        const flipsPerFrame = Math.max(100, Math.floor(cols * rows * 0.02));
         for (let i = 0; i < flipsPerFrame; i++) {
             const r = (Math.random() * rows) | 0;
             const c = (Math.random() * cols) | 0;
-            const idx = c * 2; // account for spaces
+            const idx = c * 2;
             const cur = buf[r][idx];
             buf[r][idx] = cur === '0' ? '1' : '0';
         }
-        // Single string write is much cheaper than many DOM ops
-        el.textContent = buf.map(line => line.join('')).join('\n');
     }
-    
-    // Drive the animation at ~30–45 fps without thrashing the main thread
+
     let last = 0;
     function loop(ts) {
         if (ts - last > 22) { // ~45 fps cap
             tick();
+            render(ts);
             last = ts;
         }
         raf = requestAnimationFrame(loop);
     }
     let raf = requestAnimationFrame(loop);
-    
-    // Handle resizes (debounced)
+
     let resizeTO;
     const onResize = () => {
         clearTimeout(resizeTO);
@@ -321,10 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     addEventListener('resize', onResize);
     addEventListener('orientationchange', onResize);
-    
-    // Init
+
     resize();
-    
-    // Optional: API to control intensity externally (e.g., on hover/focus)
-    root.addEventListener('mouseenter', () => { last = 0; });
 })();
