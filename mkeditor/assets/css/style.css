@@ -384,7 +384,6 @@ a:hover {
     will-change: contents;
 }
 
-
 #static-alpha-grid::after {
     content: "";
     position: absolute;
