@@ -358,7 +358,7 @@ a:hover {
     left: 50%;
     transform: translateX(-50%);
     overflow: hidden;
-    max-height: 100vh;
+    max-height: 100%;
     opacity: 0.2;
 }
 
