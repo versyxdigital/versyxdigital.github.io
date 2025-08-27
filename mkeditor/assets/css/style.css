@@ -349,7 +349,7 @@ a:hover {
     will-change: transform, opacity;
 }
 
-#static-binary-grid {
+#static-alpha-grid {
     z-index: 1;
     width: 100vw;
     height: 100%;
@@ -359,13 +359,13 @@ a:hover {
     transform: translateX(-50%);
     overflow: hidden;
     max-height: 100vh;
-    opacity: 1;
+    opacity: 0.2;
 }
 
 
-#static-binary-grid::before { content: none !important; }
+#static-alpha-grid::before { content: none !important; }
 
-#static-binary-grid .binary-layer {
+#static-alpha-grid .binary-layer {
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -384,7 +384,7 @@ a:hover {
     will-change: contents;
 }
 
-#static-binary-grid::after {
+#static-alpha-grid::after {
     content: "";
     position: absolute;
     bottom: 0;

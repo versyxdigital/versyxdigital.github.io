@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // -------------------- BINARY CANVAS --------------------
 (() => {
-    const root = document.getElementById('static-binary-grid');
+    const root = document.getElementById('static-alpha-grid');
     if (!root) return; // <— guard
     const canvas = root.querySelector('.binary-canvas');
     if (!canvas) return; // <— guard
