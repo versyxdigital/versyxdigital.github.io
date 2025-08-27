@@ -31,7 +31,6 @@
     <!-- JS dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.1/regl.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/3.4.2/gl-matrix-min.js"></script>
-    <script src="./assets/js/particles.min.js"></script>
     <!-- JS SEO -->
     <script type="application/ld+json">
         {
@@ -52,12 +51,6 @@
     </script>
 </head>
 <body>
-    <!-- particles js -->
-    <div class="h-100"
-        id="particles-js"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none;">
-    </div>
-
     <!-- Image connectors SVG -->
     <svg id="image-connectors" class="d-none d-md-block position-absolute top-0 start-0" style="pointer-events:none">
         <defs>
@@ -82,7 +75,7 @@
     <!-- Hero Section -->
     <section id="main-section" class="py-5 bg-black-grad text-light position-relative">
         <div class="overlay-mesh z-3"></div>
-        <header class="pt-5 container d-flex align-items-center justify-content-between pb-3 mb-5 position-relative z-3">
+        <header class="pt-0 pt-md-5 container d-flex align-items-center justify-content-between pb-3 mb-5 position-relative z-3">
             <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                 <img src="logo.png" class="img-fluid rounded me-2" width="50" alt="MKEditor logo.">
                 <div class="text-white">
@@ -184,27 +177,24 @@
                 </div>
                 <!-- Hero Image -->
                 <div class="col-lg-7 text-center mt-4 mt-lg-0 slide-in-right" tabindex="10">
-                    <img src="./assets/img/mkeditor2.png"
-                        class="img-fluid rounded connector-target" alt="A screenshot of MKEditor"
-                        style="cursor: zoom-in"
-                        data-bs-toggle="modal"
-                        data-bs-target="#imageModal"
-                        data-full="./assets/img/demo-dark.png"
-                    >
+                    <div class="cool-blur blur-lg">
+                        <img src="./assets/img/mkeditor2.png"
+                            class="img-fluid rounded connector-target" alt="A screenshot of MKEditor"
+                            style="cursor: zoom-in"
+                            data-bs-toggle="modal"
+                            data-bs-target="#imageModal"
+                            data-full="./assets/img/demo-dark.png"
+                        >
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Full-size Dual Images Section -->
-    <!-- <section class="bg-black position-relative z-3">
+    <section class="position-relative z-10">
         <h2 class="sr-only">Screenshots of MKEDitor</h2>
-        <iframe class="d-none d-md-block w-100 connector-target" height="800" style="border-top: 5px solid #2b2b2b;border-bottom: 5px solid #2b2b2b" src="./mkeditor/web/index.html"></iframe>
-    </section> -->
-    <!-- Full-size Dual Images Section -->
-    <section class="bg-black position-relative z-3">
-        <h2 class="sr-only">Screenshots of MKEDitor</h2>
-        <div class="d-flex flex-row align-items-center shadow-lg">
+        <div class="d-flex flex-row align-items-center shadow-lg cool-blur">
             <img class="img-fluid w-50"
                 src="./assets/img/demo-dark.png" alt="MKEditor screenshot in dark mode"
                 style="cursor: zoom-in"
@@ -221,9 +211,57 @@
             >
         </div>
     </section>
+
+    <!-- Feature Overview Section -->
+    <section class="py-5 bg-black text-light text-center shadow-lg position-relative z-10">
+        <div class="overlay-flip z-2"></div>
+        <div class="overlay-mesh z-2"></div>
+        <div class="container position-relative pb-3 z-3">
+            <!-- Section Header -->
+            <h2 class="mb-5" tabindex="11">
+                <i class="fas fa-rocket me-2"></i> Feature Overview
+            </h2>
+            <!-- Section Row & Columns -->
+            <div class="row g-4 mt-5">
+                <!-- Full CommonMark Support Overview -->
+                <div class="col-md-4">
+                    <i class="far fa-file-code fa-3x mb-4"></i>
+                    <h3 class="fw-bold mb-3 feature-overview-header" tabindex="12">
+                        Full CommonMark Support
+                    </h3>
+                    <p tabindex="13">Write with confidence using the full CommonMark 
+                        markdown specification, with extra features for alerts, syntax 
+                        highlighting, and custom styling.
+                    </p>
+                </div>
+                <!-- Live Preview Feature Overview -->
+                <div class="col-md-4">
+                    <i class="far fa-eye fa-3x mb-4"></i>
+                    <h3 class="fw-bold mb-3 feature-overview-header" tabindex="14">
+                        Live Preview Renderer
+                    </h3>
+                    <p tabindex="15">
+                        Built-in, resizable HTML preview powered by Bootstrap and Highlight.js, 
+                        letting you see styled or unstyled output in real time.
+                    </p>
+                </div>
+                <!-- Customizable & Export-Ready Feature Overview -->
+                <div class="col-md-4">
+                    <i class="far fa-pen-to-square fa-3x mb-4"></i>
+                    <h3 class="fw-bold mb-3 feature-overview-header" tabindex="16">
+                        Customizable & Export-Ready
+                    </h3>
+                    <p tabindex="17">
+                        Switch between light and dark mode, toggle word-wrap, and export your 
+                        markdown to clean HTML or Bootstrap-styled documents.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
     
     <!-- Configure Settings Section -->
-    <section class="py-0 py-md-5 bg-black text-light text-center position-relative z-3">
+    <section class="py-0 py-md-5 text-light text-center position-relative z-3">
         <!-- <div class="overlay z-2"></div> -->
         <div class="container position-relative pb-3 z-3">
             <div class="text-left sr-only" tabindex="19">
@@ -241,9 +279,10 @@
             <div class="row d-flex align-items-center g-4 mt-0 mt-md-4">
                 <div class="col-md-5 order-2 order-md-1">
                     <!-- Section Image -->
-                    <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg connector-target"
-                        alt="Screenshot of MKEditor settings"
-                    >
+                    <div class="cool-blur blur-lgg">
+                        <img src="./assets/img/settings.png" class="img-fluid rounded shadow-lg connector-target"
+                            alt="Screenshot of MKEditor settings">
+                    </div>
                 </div>
                 <div class="col-md-7 text-left order-1 order-md-2">
                     <div class="mkeditor-settings-list text-center text-md-start slide-in-right">
@@ -312,7 +351,7 @@
     </section>
     
     <!-- Export Documents Section -->
-    <section class="py-0 py-md-5 bg-black text-light position-relative z-3">
+    <section class="py-0 py-md-5 text-light position-relative z-3">
         <!-- <div class="overlay-flip z-2"></div> -->
         <div class="container position-relative pb-3 z-3">
             <!-- Section Rows & Columns -->
@@ -363,17 +402,18 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <!-- Section Image -->
-                    <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg connector-target"
-                        alt="Screenshot of MKEditor export settings"
-                    >
+                    <div class="cool-blur blur-lg">
+                        <!-- Section Image -->
+                        <img src="./assets/img/export-settings.png" class="img-fluid rounded shadow-lg connector-target"
+                            alt="Screenshot of MKEditor export settings">
+                    </div>
                 </div>
             </div>
         </div>
     </section>
     
     <!-- Editor Shortcuts Section -->
-    <section class="py-0 py-md-5 bg-black text-light position-relative z-3">
+    <section class="py-0 py-md-5 text-light position-relative z-3">
         <!-- <div class="overlay z-2"></div> -->
         <div class="container position-relative pb-3 z-3 text-center text-md-start">
             <div class="slide-in-left">
@@ -387,18 +427,19 @@
                 </p>
             </div>
             <!-- Section Image -->
-            <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg connector-target"
-                style="cursor: zoom-in"
-                data-bs-toggle="modal"
-                data-bs-target="#imageModal"
-                alt="Screenshot of MKEditor"
-                tabindex="31"
-            >
+            <div class="cool-blur blur-lgg">
+                <img src="./assets/img/shortcuts-dark.png" class="img-fluid rounded shadow-lg connector-target z-10"
+                    style="cursor: zoom-in"
+                    data-bs-toggle="modal"
+                    data-bs-target="#imageModal"
+                    alt="Screenshot of MKEditor"
+                    tabindex="31">
+            </div>
         </div>
     </section>
 
     <!-- Powered by Web Section -->
-    <section class="py-0 py-md-5 bg-black text-light text-center position-relative z-3">
+    <section class="py-0 py-md-5 text-light text-center position-relative z-3">
         <!-- <div class="overlay-flip z-2"></div> -->
         <div class="container position-relative pb-3 z-3">
             <!-- Section Rows & Columns -->
@@ -433,27 +474,29 @@
                 </div>
                 <!-- Section Image -->
                 <div class="col-md-6 pt-3 pt-md-0">
-                    <a href="./assets/img/demo-dark.png" target="_blank">
-                        <img class="img-fluid rounded mt-3 shadow-lg connector-target" src="./assets/img/demo-dark.png"
-                            alt="A screenshot of MKEditor">
-                    </a>
+                    <div class="cool-blur blur-lg">
+                        <a href="./assets/img/demo-dark.png" target="_blank">
+                            <img class="img-fluid rounded mt-3 shadow-lg connector-target" src="./assets/img/demo-dark.png"
+                                alt="A screenshot of MKEditor">
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Available for Desktop Section -->
-    <section class="py-5 bg-black text-light text-center position-relative z-3">
+    <section class="py-5 text-light text-center position-relative z-3">
         <!-- <div class="overlay z-2"></div> -->
         <div class="z-3 position-relative">
             <!-- Section Header -->
-            <h2 class="mb-3 slide-in-top" tabindex="34">
+            <h2 class="mb-3" tabindex="34">
                 <i class="fas fa-download me-2"></i> Available for Desktop
             </h2>
             <!-- Section Content -->
-            <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center slide-in-top">
+            <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center cool-blur">
                 <!-- Windows Download -->
-                <div class="d-flex flex-column gap-3">
+                <div class="d-flex flex-column gap-3 z-10 slide-in-top">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.exe"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.5.0</small>
@@ -465,7 +508,7 @@
                     </p>
                 </div>
                 <!-- MacOS Download -->
-                <div class="d-flex flex-column gap-3">
+                <div class="d-flex flex-column gap-3 z-10 slide-in-top">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.pkg"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.5.0</small>
@@ -477,9 +520,9 @@
                     </p>
                 </div>
                 <!-- Linux Download -->
-                <div class="d-flex flex-column gap-3">
+                <div class="d-flex flex-column gap-3 z-10 slide-in-top">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.5.0/mkeditor-setup-3.5.0.deb"
-                        class="btn btn-download shadow">
+                        class="btn btn-download shadow connec">
                         <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.5.0</small>
                     </a>
                     <hr class="my-0">
@@ -493,7 +536,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="pt-0 pt-md-5 bg-black text-light small position-relative z-3">
+    <footer class="pt-0 pt-md-5 text-light small position-relative z-3">
         <!-- <div class="overlay z-2"></div> -->
         <div class="container z-3 pb-5 d-flex align-items-end justify-content-between flex-wrap fade-in">
             <!-- Made with love -->
@@ -623,17 +666,6 @@
     
     </script>
     <script>
-        localStorage.setItem('mkeditor-settings', JSON.stringify({
-            "autoindent": false,
-            "darkmode": true,
-            "wordwrap": true,
-            "whitespace": false,
-            "minimap": true,
-            "systemtheme": true
-        }));
-        particlesJS.load("particles-js", "assets/js/particles-2.json", function () {
-            console.log("callback - particles.js config loaded");
-        });
         document.addEventListener('click', function (e) {
             const img = e.target.closest('img[data-bs-target="#imageModal"]');
             if (!img) return;
