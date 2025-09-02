@@ -2,8 +2,7 @@
   "app": {
     "document_title": "MKEditor",
     "app_name": "mkeditor",
-    "brand_name": "MKEditor",
-    "tagline": "Markdown reso semplice"
+    "brand_name": "MKEditor"
   },
   "menus-alerts": {
     "primary": "Primario",
@@ -225,7 +224,9 @@
     "codeblock_menu_tooltip": "Ctrl + K, <_>",
     "alert_menu_tooltip": "Ctrl + L, <_>",
     "save_markdown_file": "Salva file Markdown",
+    "delete_markdown_file": "Elimina Markdown",
     "save_button": "Salva",
+    "delete_button": "Elimina",
     "configure_export_settings": "Configura impostazioni di esportazione",
     "export_html_tooltip": "Esporta in file HTML",
     "export_pdf_tooltip": "Esporta in file PDF",
