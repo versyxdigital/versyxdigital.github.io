@@ -18,7 +18,7 @@
     <meta name="twitter:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png">
     <!-- Page title and canonical URL -->
     <title>MKEditor - Simple & Fast Online Markdown Editor with Live Preview</title>    
-    <link rel="canonical" href="https://versyxdigital.github.io/mkeditor/">
+    <link rel="canonical" href="https://versyxdigital.github.io">
     <!-- CSS dependencies -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -86,10 +86,10 @@
             <div class="row pb-0 pb-md-5 g-4 align-items-center">
                 <div class="col-lg-5 text-center text-lg-start">
                     <!-- Hero Text -->
-                    <h1 class="leading-header slide-in-bottom" tabindex="3">
+                    <h1 class="leading-header" tabindex="3">
                         Download MKEditor
                     </h1>
-                    <div class="slide-in-left">
+                    <div>
                         <div>
                             <p class="leading-text mt-3 mb-4" tabindex="4">
                                 Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
@@ -175,7 +175,7 @@
                     </div>
                 </div>
                 <!-- Hero Image -->
-                <div class="col-lg-7 text-center mt-4 mt-lg-0 slide-in-right" tabindex="10">
+                <div class="col-lg-7 text-center mt-4 mt-lg-0" tabindex="10">
                     <div class="cool-blur blur-lg">
                         <img src="./assets/img/mkeditor2.png"
                             class="img-fluid rounded connector-target" alt="A screenshot of MKEditor"
@@ -215,7 +215,7 @@
     <section class="py-5 bg-black text-light text-center shadow-lg position-relative z-10">
         <div class="overlay-flip z-2"></div>
         <div class="overlay-mesh z-2"></div>
-        <div class="container position-relative pb-3 z-3">
+        <div class="container position-relative py-5 z-3">
             <!-- Section Header -->
             <h2 class="mb-5" tabindex="11">
                 <i class="fas fa-rocket me-2"></i> Feature Overview
@@ -262,7 +262,7 @@
     <!-- Configure Settings Section -->
     <section class="py-0 py-md-5 text-light text-center position-relative z-3">
         <!-- <div class="overlay z-2"></div> -->
-        <div class="container position-relative pb-3 z-3">
+        <div class="container position-relative py-5 z-3">
             <div class="text-left sr-only" tabindex="19">
                 <p>MKEditor stores its configuration settings in a JSON file located at 
                     <code>%USERPROFILE%/.mkeditor/settings.json</code>.
@@ -284,7 +284,7 @@
                     </div>
                 </div>
                 <div class="col-md-7 text-left order-1 order-md-2">
-                    <div class="mkeditor-settings-list text-center text-md-start slide-in-right">
+                    <div class="mkeditor-settings-list text-center text-md-start">
                         <!-- Section Header -->
                         <h2 class="pt-4 pt-md-0" tabindex="18">
                             <i class="far fa-window-restore me-2"></i> 
@@ -352,11 +352,11 @@
     <!-- Export Documents Section -->
     <section class="py-0 py-md-5 text-light position-relative z-3">
         <!-- <div class="overlay-flip z-2"></div> -->
-        <div class="container position-relative pb-3 z-3">
+        <div class="container position-relative py-5 z-3">
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center g-4 mt-0 mt-md-4 text-center text-md-start">
                 <div class="col-md-7">
-                    <div class="mkeditor-export-list slide-in-left">
+                    <div class="mkeditor-export-list">
                         <!-- Section Header -->
                         <h2 class="pt-3 pt-md-0" tabindex="25">
                             <i class="fas fa-file-export me-2"></i> Export Documents
@@ -414,8 +414,8 @@
     <!-- Editor Shortcuts Section -->
     <section class="py-0 py-md-5 text-light position-relative z-3">
         <!-- <div class="overlay z-2"></div> -->
-        <div class="container position-relative pb-3 z-3 text-center text-md-start">
-            <div class="slide-in-left">
+        <div class="container position-relative py-5 z-3 text-center text-md-start">
+            <div>
                 <!-- Section Header-->
                 <h2 class="pt-4 pt-md-0" tabindex="29">
                     <i class="fas fa-line-chart me-2"></i> Editor Shortcuts
@@ -440,10 +440,10 @@
     <!-- Powered by Web Section -->
     <section class="py-0 py-md-5 text-light text-center position-relative z-3">
         <!-- <div class="overlay-flip z-2"></div> -->
-        <div class="container position-relative pb-3 z-3">
+        <div class="container position-relative py-5 z-3">
             <!-- Section Rows & Columns -->
             <div class="row d-flex align-items-center pt-0 pt-md-5 text-center text-md-start" tabindex="33">
-                <div class="col-md-6 slide-in-left">
+                <div class="col-md-6">
                     <!-- Section Header -->
                     <h2 class="pt-5 pt-md-0 mb-5" tabindex="32">
                         <i class="fas fa-globe me-2"></i> Powered by Web
@@ -495,7 +495,7 @@
             <!-- Section Content -->
             <div class="pt-5 d-flex flex-wrap align-items-center gap-3 gap-md-5 justify-content-center cool-blur">
                 <!-- Windows Download -->
-                <div class="d-flex flex-column gap-3 z-10 slide-in-top">
+                <div class="d-flex flex-column gap-3 z-10">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.exe"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.6.0</small>
@@ -507,7 +507,7 @@
                     </p>
                 </div>
                 <!-- MacOS Download -->
-                <div class="d-flex flex-column gap-3 z-10 slide-in-top">
+                <div class="d-flex flex-column gap-3 z-10">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg"
                         class="btn btn-download shadow">
                         <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.6.0</small>
@@ -519,7 +519,7 @@
                     </p>
                 </div>
                 <!-- Linux Download -->
-                <div class="d-flex flex-column gap-3 z-10 slide-in-top">
+                <div class="d-flex flex-column gap-3 z-10">
                     <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
                         class="btn btn-download shadow connec">
                         <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.6.0</small>
