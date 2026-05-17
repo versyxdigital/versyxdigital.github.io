@@ -1171,12 +1171,12 @@ h2.section__title {
 .site-footer__brand a:hover { color: var(--accent); }
 
 #display-cube {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    background: linear-gradient(135deg, var(--accent), #2faf99);
-    box-shadow: 0 0 0 1px var(--border-2), 0 4px 12px rgba(77, 212, 191, 0.2);
+    width: 32px;
+    height: 32px;
+    display: block;
     margin-bottom: 18px;
+    border-radius: 8px;
+    object-fit: contain;
 }
 
 .site-footer__hire {
