@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Chris Rowles">
+    <meta name="description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
+    <meta name="keywords" content="markdown, markdown editor, simple markdown editor, online markdown editor, markdown writing, markdown preview, markdown formatting, markdown tool">
+    <!-- OpenGraph meta tags -->
+    <meta property="og:title" content="MKEditor - the simple markdown editor.">
+    <meta name="og:description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
+    <meta property="og:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png">
+    <!-- Twitter meta tags -->
+    <meta name="twitter:card" content="https://versyxdigital.github.io/mkeditor/assets/img/demo.png">
+    <meta name="twitter:title" content="MKEditor - Simple Online Markdown Editor">
+    <meta name="twitter:description" content="Write, preview, and export markdown instantly with MKEditor.">
+    <meta name="twitter:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png">
+    <!-- Page title and canonical URL -->
+    <title>MKEditor - Simple & Fast Online Markdown Editor with Live Preview</title>
+    <link rel="canonical" href="https://versyxdigital.github.io/mkeditor/">
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <!-- JS SEO -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "MKEditor",
+            "operatingSystem": "Any",
+            "applicationCategory": "DeveloperApplication",
+            "description": "A simple, fast, and free online markdown editor with live preview.",
+            "url": "https://versyxdigital.github.io/mkeditor/",
+            "image": "https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.png",
+            "softwareVersion": "1.0.0",
+            "author": {
+                "@type": "Person",
+                "name": "Chris Rowles"
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Ambient backdrop gradients -->
+    <div class="ambient-bg" aria-hidden="true">
+        <div class="ambient-orb ambient-orb--teal"></div>
+        <div class="ambient-orb ambient-orb--blue"></div>
+        <div class="ambient-orb ambient-orb--violet"></div>
+    </div>
+
+    <!-- Image connectors SVG -->
+    <!-- <svg id="image-connectors" class="d-none d-md-block position-absolute top-0 start-0" style="pointer-events:none">
+        <defs>
+            <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/></feMerge>
+            </filter>
+        </defs>
+    </svg> -->
+
+    <!-- Sticky Navigation -->
+    <nav class="site-nav">
+        <div class="container site-nav__inner">
+            <a href="/" class="site-nav__brand">
+                <img src="logo.png" class="site-nav__logo" width="36" height="36" alt="MKEditor logo.">
+                <span class="site-nav__brand-text">MKEditor</span>
+            </a>
+            <ul class="site-nav__links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="#export">Export</a></li>
+                <li><a href="#shortcuts">Shortcuts</a></li>
+                <li><a href="#web">Web</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Github Ribbon -->
+    <a href="https://github.com/versyxdigital/mkeditor/"
+        class="github-fork-ribbon d-none d-md-block"
+        data-ribbon="Fork me on GitHub"
+        tabindex="2"
+    >
+        Fork me on GitHub
+    </a>
+
+    <!-- Hero Section -->
+    <section id="main-section" class="hero position-relative">
+        <div class="container position-relative hero__container">
+            <div class="hero__content">
+                <h1 class="hero__title d-flex align-items-center justify-content-center" tabindex="1">
+                    <img src="./assets/img/icon.png" style="width: 100px" alt="MKEditor logo" class="hero__title-icon">
+                </h1>
+                <span class="hero__eyebrow">
+                    <span class="hero__eyebrow-dot"></span>
+                    v3.6.0 - stable
+                </span>
+                <p class="hero__lede" tabindex="4">
+                    Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
+                </p>
+
+                <!-- Download Buttons -->
+                <div class="hero__downloads">
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.exe"
+                        class="download-pill"
+                        download
+                        tabindex="5"
+                    >
+                        <i class="fa-brands fa-windows download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">Windows</p>
+                            <p class="release-info download-pill__sub">exe - v3.6.0</p>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg"
+                        class="download-pill"
+                        download
+                        tabindex="6"
+                    >
+                        <i class="fa-brands fa-apple download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">MacOS</p>
+                            <p class="release-info download-pill__sub">pkg - v3.6.0</p>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
+                        class="download-pill"
+                        download
+                        tabindex="7"
+                    >
+                        <i class="fa-brands fa-linux download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">Linux</p>
+                            <p class="release-info download-pill__sub">deb - v3.6.0</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="hero__web">
+                    <a href="/mkeditor/web" target="_blank"
+                        class="download-pill download-pill--ghost"
+                        tabindex="8"
+                    >
+                        <i class="fa-solid fa-external-link download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">Launch MKEditor Web</p>
+                            <p class="release-info download-pill__sub">v3.7.0-beta</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Hero Badges & License -->
+                <div class="hero__meta">
+                    <small class="hero__meta-license">
+                        <span>MIT Licensed ·</span>
+                        <a href="https://github.com/versyxdigital/mkeditor"
+                            tabindex="9">
+                            Source on GitHub
+                        </a>
+                    </small>
+                    <div class="hero__badges">
+                        <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml">
+                            <img
+                                src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
+                                alt="Github tests badge"
+                            >
+                        </a>
+                        <a href="https://github.com/versyxdigital/mkeditor">
+                            <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Showcase -->
+            <div class="hero__showcase" tabindex="10">
+                <div class="hero__showcase-frame">
+                    <img src="./assets/img/demo-dark.webp"
+                        class="connector-target" alt="A screenshot of MKEditor"
+                        style="cursor: zoom-in"
+                        data-bs-toggle="modal"
+                        data-bs-target="#imageModal"
+                        data-full="./assets/img/demo-dark.webp"
+                    >
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full-size Dual Images Section -->
+    <section class="dual-screens position-relative z-10">
+        <h2 class="sr-only">Screenshots of MKEDitor</h2>
+        <div class="dual-screens__wrap cool-blur">
+            <img class="dual-screens__img"
+                src="./assets/img/demo-dark.webp" alt="MKEditor screenshot in dark mode"
+                style="cursor: zoom-in"
+                data-bs-toggle="modal"
+                data-bs-target="#imageModal"
+                data-full="./assets/img/demo-dark.webp"
+            >
+            <img class="dual-screens__img connector-target z-3"
+                src="./assets/img/demo-light.webp" alt="MKEditor screenshot in light mode"
+                style="cursor: zoom-in"
+                data-bs-toggle="modal"
+                data-bs-target="#imageModal"
+                data-full="./assets/img/demo-light.webp"
+            >
+        </div>
+    </section>
+
+    <!-- Feature Overview Section -->
+    <section id="features" class="section section--features text-light text-center position-relative z-10">
+        <div class="overlay-flip z-2"></div>
+        <div class="overlay-mesh z-2"></div>
+        <div class="container position-relative z-3">
+            <!-- Section Header -->
+            <span class="section__eyebrow">Why MKEditor</span>
+            <h2 class="section__title" tabindex="11">
+                <i class="fas fa-rocket me-2"></i> Feature Overview
+            </h2>
+            <div class="section__divider"></div>
+
+            <!-- Section Row & Columns -->
+            <div class="row g-4 feature-grid">
+                <!-- Full CommonMark Support Overview -->
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <i class="far fa-file-code"></i>
+                        </div>
+                        <h3 class="feature-card__title" tabindex="12">
+                            Full CommonMark Support
+                        </h3>
+                        <p class="feature-card__body" tabindex="13">Write markdown with confidence, with extra features for alerts, syntax
+                            highlighting, codeblock copying, and custom styling.
+                        </p>
+                    </div>
+                </div>
+                <!-- Live Preview Feature Overview -->
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <i class="far fa-eye"></i>
+                        </div>
+                        <h3 class="feature-card__title" tabindex="14">
+                            Live Preview Renderer
+                        </h3>
+                        <p class="feature-card__body" tabindex="15">
+                            Built-in, resizable HTML preview enhanced with beautiful custom CSS,
+                            letting you see styled or unstyled output in real time.
+                        </p>
+                    </div>
+                </div>
+                <!-- Customizable & Export-Ready Feature Overview -->
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <i class="far fa-pen-to-square"></i>
+                        </div>
+                        <h3 class="feature-card__title" tabindex="16">
+                            Customizable & Export-Ready
+                        </h3>
+                        <p class="feature-card__body" tabindex="17">
+                            Switch between light and dark mode, toggle word-wrap, and export your
+                            markdown to clean styled or unstyled HTML or PDF.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configure Settings Section -->
+    <section id="settings" class="section text-light position-relative z-3">
+        <div class="container position-relative z-3">
+            <div class="text-left sr-only" tabindex="19">
+                <p>MKEditor stores its configuration settings in a JSON file located at
+                    <code>%USERPROFILE%/.mkeditor/settings.json</code>.
+                </p>
+                <p>
+                    If the file does not exist when the application starts, MKEditor
+                    automatically creates it with a full set of default values. This ensures
+                    the application is ready to run out of the box without requiring manual
+                    configuration.
+                </p>
+            </div>
+            <!-- Section Row & Columns -->
+            <div class="row d-flex align-items-center g-5">
+                <div class="col-md-6 order-2 order-md-1">
+                    <!-- Section Image -->
+                    <div class="media-frame cool-blur blur-lgg">
+                        <img src="./assets/img/settings.png" class="media-frame__img connector-target"
+                            alt="Screenshot of MKEditor settings">
+                    </div>
+                </div>
+                <div class="col-md-6 order-1 order-md-2">
+                    <div class="mkeditor-settings-list text-center text-md-start">
+                        <span class="section__eyebrow">Personalize</span>
+                        <!-- Section Header -->
+                        <h2 class="section__title section__title--inline" tabindex="18">
+                            <i class="far fa-window-restore me-2"></i>
+                            Configure Settings
+                        </h2>
+                        <!-- Section Tip -->
+                        <p class="section__tip" tabindex="20">Tip: Open settings via the
+                            <i class="fas fa-cogs mx-1"></i> icon in the app toolbar.
+                        </p>
+                        <h3 class="section__subtitle" tabindex="21">
+                            Customize to your style
+                        </h3>
+                        <div class="settings-group">
+                            <!-- Formatting Section -->
+                            <h4 class="settings-group__title">Formatting</h4>
+                            <ul class="settings-list" tabindex="22">
+                                <li>
+                                    <strong>Toggle Automatic Indentation</strong> - When enabled, MKEditor
+                                    will automatically indent your text when you press <code>Enter</code>,
+                                    following the indentation level of the previous line. This is especially
+                                    useful for lists, code blocks, and nested content.
+                                </li>
+                                <li>
+                                    <strong>Toggle Word-Wrapping</strong> - Automatically wraps long lines of
+                                    text so they fit within the visible editor window without requiring horizontal
+                                    scrolling. Ideal for distraction-free writing and smaller screen sizes.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="settings-group">
+                            <!-- Editing Section -->
+                            <h4 class="settings-group__title">Editing</h4>
+                            <ul class="settings-list" tabindex="23">
+                                <li>
+                                    <strong>Render Whitespace</strong> - Visually display spaces, tabs, and other
+                                    whitespace characters directly in the editor. Useful for aligning code, spotting
+                                    formatting issues, or maintaining strict markdown layouts.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="settings-group">
+                            <!-- Miscellaneous Section -->
+                            <h4 class="settings-group__title">Miscellaneous</h4>
+                            <ul class="settings-list" tabindex="24">
+                                <li>
+                                    <strong>Display Minimap</strong> - Shows a miniature overview of your document along
+                                    the side of the editor. Quickly navigate large files by clicking or dragging within
+                                    the minimap view.
+                                </li>
+                                <li>
+                                    <strong>Use System Theme</strong> - Automatically adapts MKEditor's appearance to
+                                    match your operating system's theme (light or dark), overriding the manual theme
+                                    setting.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Export Documents Section -->
+    <section id="export" class="section text-light position-relative z-3">
+        <div class="container position-relative z-3">
+            <!-- Section Rows & Columns -->
+            <div class="row d-flex align-items-center g-5 text-center text-md-start">
+                <div class="col-md-6">
+                    <div class="mkeditor-export-list">
+                        <span class="section__eyebrow">Share Anywhere</span>
+                        <!-- Section Header -->
+                        <h2 class="section__title section__title--inline" tabindex="25">
+                            <i class="fas fa-file-export me-2"></i> Export Documents
+                        </h2>
+                        <!-- Section Tip -->
+                        <p class="section__tip" tabindex="28">Tip: Configure exports via the
+                            <i class="fas fa-sliders mx-1"></i> icon in the app toolbar.
+                        </p>
+                        <h3 class="section__subtitle">
+                            Export your work instantly
+                        </h3>
+                        <div class="settings-group">
+                            <!-- HTML Export Section -->
+                            <h4 class="settings-group__title">HTML Export</h4>
+                            <ul class="settings-list" tabindex="26">
+                                <li>
+                                    <strong>Clean HTML</strong> – Export your markdown into simple,
+                                    unstyled HTML that's ready for integration into any website or
+                                    project.
+                                </li>
+                                <li>
+                                    <strong>Styled HTML</strong> – Export with the preview CSS
+                                    and other provider styles embedded, ensuring your content is exported
+                                    exactly as it looks.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="settings-group">
+                            <!-- PDF Export Section -->
+                            <h4 class="settings-group__title">PDF Export</h4>
+                            <ul class="settings-list" tabindex="27">
+                                <li>
+                                    <strong>Print to PDF</strong> – Generate a polished PDF of your markdown
+                                    directly from MKEditor, preserving fonts, colors, and spacing.
+                                </li>
+                                <li>
+                                    <strong>Custom Settings</strong> – Apply background color, font size, and
+                                    line spacing preferences to tailor your exported PDF to your needs.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="media-frame cool-blur blur-lg">
+                        <!-- Section Image -->
+                        <img src="./assets/img/export-settings.png" class="media-frame__img connector-target"
+                            alt="Screenshot of MKEditor export settings">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Editor Shortcuts Section -->
+    <section id="shortcuts" class="section text-light position-relative z-3">
+        <div class="container position-relative z-3 text-center text-md-start">
+            <div class="shortcuts-head">
+                <span class="section__eyebrow">Move Faster</span>
+                <!-- Section Header-->
+                <h2 class="section__title section__title--inline" tabindex="29">
+                    <i class="fas fa-line-chart me-2"></i> Editor Shortcuts
+                </h2>
+                <!-- Section Tip -->
+                <p class="section__tip" tabindex="30">Tip: View shortcuts via the
+                    <i class="fas fa-question-circle mx-1"></i> icon in the app toolbar.
+                </p>
+            </div>
+            <!-- Section Image -->
+            <div class="media-frame media-frame--wide cool-blur blur-lgg">
+                <img src="./assets/img/shortcuts.png" class="media-frame__img connector-target z-10"
+                    style="cursor: zoom-in"
+                    data-bs-toggle="modal"
+                    data-bs-target="#imageModal"
+                    alt="Screenshot of MKEditor"
+                    tabindex="31">
+            </div>
+        </div>
+    </section>
+
+    <!-- Powered by Web Section -->
+    <section id="web" class="section text-light position-relative z-3">
+        <div class="container position-relative z-3">
+            <!-- Section Rows & Columns -->
+            <div class="row d-flex align-items-center g-5 text-center text-md-start" tabindex="33">
+                <div class="col-md-6">
+                    <span class="section__eyebrow">No Install Needed</span>
+                    <!-- Section Header -->
+                    <h2 class="section__title section__title--inline" tabindex="32">
+                        <i class="fas fa-globe me-2"></i> Powered by Web
+                    </h2>
+                    <p class="section__body">
+                        MKEditor is also available as a fully-featured web application, allowing you to write,
+                        preview, and export markdown directly in your browser without installing the desktop app.
+                        The web version offers the same CommonMark support, live preview renderer, and export
+                        options as the Electron-based application.
+                    </p>
+                    <p class="section__body">
+                        This makes it ideal for quick edits, collaborative sessions, or working on devices where
+                        installing software isn't possible. Simply visit the MKEditor web page to start writing
+                        instantly - no downloads, no setup, just open and go.
+                    </p>
+                    <!-- Launch MKEditor Web Button -->
+                    <div class="web-cta">
+                        <a href="/mkeditor/web" target="_blank"
+                            class="download-pill download-pill--accent">
+                            <i class="fa-solid fa-external-link download-pill__icon"></i>
+                            <div class="download-pill__meta">
+                                <p class="release-info download-pill__label">Launch MKEditor Web</p>
+                                <p class="release-info download-pill__sub">v3.7.0-beta</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <!-- Section Image -->
+                <div class="col-md-6 pt-3 pt-md-0">
+                    <div class="media-frame cool-blur">
+                        <img src="./assets/img/demo-dark.webp"
+                            class="media-frame__img connector-target" alt="A screenshot of MKEditor"
+                            style="cursor: zoom-in"
+                            data-bs-toggle="modal"
+                            data-bs-target="#imageModal"
+                            data-full="./assets/img/demo-dark.webp"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Available for Desktop Section -->
+    <section id="download" class="section section--download text-light text-center position-relative z-3">
+        <div class="container position-relative z-3">
+            <span class="section__eyebrow">Native Apps</span>
+            <!-- Section Header -->
+            <h2 class="section__title" tabindex="34">
+                <i class="fas fa-download me-2"></i> Available for Desktop
+            </h2>
+            <div class="section__divider"></div>
+
+            <!-- Section Content -->
+            <div class="download-grid">
+                <!-- Windows Download -->
+                <div class="download-card download-card--windows">
+                    <div class="download-card__head">
+                        <span class="download-card__tile">
+                            <i class="fa-brands fa-windows"></i>
+                        </span>
+                        <div class="download-card__head-text">
+                            <h3 class="download-card__title">Windows</h3>
+                            <span class="download-card__format">.exe</span>
+                        </div>
+                    </div>
+                    <p class="download-card__meta">
+                        <i class="fa-regular fa-clock"></i>
+                        Last built: 28th August 2025
+                    </p>
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.exe"
+                        class="download-card__btn"
+                        download>
+                        <span>Windows v3.6.0</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+                <!-- MacOS Download -->
+                <div class="download-card download-card--macos">
+                    <div class="download-card__head">
+                        <span class="download-card__tile">
+                            <i class="fa-brands fa-apple"></i>
+                        </span>
+                        <div class="download-card__head-text">
+                            <h3 class="download-card__title">MacOS</h3>
+                            <span class="download-card__format">.pkg</span>
+                        </div>
+                    </div>
+                    <p class="download-card__meta">
+                        <i class="fa-regular fa-clock"></i>
+                        Last built: 28th August 2025
+                    </p>
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg"
+                        class="download-card__btn"
+                        download>
+                        <span>MacOS v3.6.0</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+                <!-- Linux Download -->
+                <div class="download-card download-card--linux">
+                    <div class="download-card__head">
+                        <span class="download-card__tile">
+                            <i class="fa-brands fa-linux"></i>
+                        </span>
+                        <div class="download-card__head-text">
+                            <h3 class="download-card__title">Linux</h3>
+                            <span class="download-card__format">.deb</span>
+                        </div>
+                    </div>
+                    <p class="download-card__meta">
+                        <i class="fa-regular fa-clock"></i>
+                        Last built: 28th August 2025
+                    </p>
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
+                        class="download-card__btn"
+                        download>
+                        <span>Linux v3.6.0</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer text-light small position-relative z-3">
+        <div class="container site-footer__inner">
+            <!-- Made with love -->
+            <div class="site-footer__brand">
+                <img id="display-cube" src="./assets/img/icon.png" alt="MKEditor logo" width="32" height="32">
+                <div tabindex="35">
+                    Made with&nbsp; ❤️ &nbsp;by
+                    <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a> &middot; &copy;
+                    <script>
+                        document.write(new Date().getFullYear());
+                    </script>
+                </div>
+            </div>
+            <!-- Would you like to hire me? -->
+            <div class="site-footer__hire" tabindex="36">
+                <span class="site-footer__hire-title">☕ Would you like to hire me?</span>
+                <hr>
+                <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white">
+                    christopher.rowles@outlook.com</a>
+                </span>
+                <span>Phone: <a href="tel:07522267722" class="text-white">
+                    +44(0)7522 267 722</a>
+                </span>
+                <div class="site-footer__socials">
+                    <a href="https://github.com/sentrychris/">
+                        <i class="fa-brands fa-square-github fa-2x"></i>
+                        <span class="sr-only">Github</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/chris-rowles/">
+                        <i class="fa-brands fa-linkedin fa-2x"></i>
+                        <span class="sr-only">LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" class="btn btn-light rounded-circle shadow scroll-to-top"
+        aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Imagebox Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-sm-down">
+            <div class="modal-content bg-transparent border-0">
+                <button type="button"
+                    class="btn-close ms-auto me-2 mt-2"
+                    data-bs-dismiss="modal"
+                    aria-label="Close image modal button">
+                    <span class="sr-only">Close the image modal</span>
+                </button>
+                <img id="imageModalImg" class="img-fluid rounded shadow" alt="Clicked image opened in modal">
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.utils.toArray(".slide-in-left").forEach(function (el) {
+                gsap.from(el, {
+                    x: -100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+
+            gsap.utils.toArray(".slide-in-right").forEach(function (el) {
+                gsap.from(el, {
+                    x: 100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+
+            gsap.utils.toArray(".slide-in-top").forEach(function (el) {
+                gsap.from(el, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+
+            gsap.utils.toArray(".slide-in-bottom").forEach(function (el) {
+                gsap.from(el, {
+                    y: -100,
+                    opacity: 0,
+                    duration: 0.5,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+
+            gsap.utils.toArray(".fade-in").forEach(function (el) {
+                gsap.from(el, {
+                    opacity: 0,
+                    duration: 1.5,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    }
+                });
+            });
+        });
+
+    </script>
+    <script>
+        document.addEventListener('click', function (e) {
+            const img = e.target.closest('img[data-bs-target="#imageModal"]');
+            if (!img) return;
+
+            const modalImg = document.getElementById('imageModalImg');
+            modalImg.src = img.getAttribute('data-full') || img.src; // use full-size if provided
+            modalImg.alt = img.alt || '';
+        });
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+        const heroSection = document.getElementById("main-section");
+
+        window.addEventListener("scroll", () => {
+            const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+            scrollTopBtn.classList.toggle("is-visible", window.scrollY > heroBottom);
+
+            const nav = document.querySelector('.site-nav');
+            if (nav) {
+                if (window.scrollY > 20) nav.classList.add('site-nav--scrolled');
+                else nav.classList.remove('site-nav--scrolled');
+            }
+        });
+
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    </script>
+    <script src="./assets/js/animation.js"></script>
+</body>
+</html>
