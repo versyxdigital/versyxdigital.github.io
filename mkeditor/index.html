@@ -27,7 +27,7 @@
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Rouge+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <!-- JS SEO -->
     <script type="application/ld+json">
         {
@@ -56,15 +56,14 @@
     </div>
 
     <!-- Image connectors SVG -->
-    <svg id="image-connectors" class="d-none d-md-block position-absolute top-0 start-0" style="pointer-events:none">
+    <!-- <svg id="image-connectors" class="d-none d-md-block position-absolute top-0 start-0" style="pointer-events:none">
         <defs>
-            <!-- soft glow for the dot -->
             <filter id="glow-dot" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
                 <feMerge><feMergeNode in="blur"/></feMerge>
             </filter>
         </defs>
-    </svg>
+    </svg> -->
 
     <!-- Sticky Navigation -->
     <nav class="site-nav">
@@ -93,119 +92,108 @@
     </a>
 
     <!-- Hero Section -->
-    <section id="main-section" class="hero text-light position-relative">
-        <div id="static-alpha-grid">
-            <canvas class="binary-canvas"></canvas>
-        </div>
-        <div class="overlay-mesh z-3"></div>
-        <div class="container position-relative z-3 hero__container">
-            <div class="row g-5 align-items-center">
-                <div class="col-lg-6 text-center text-lg-start">
-                    <h1 class="hero__title" tabindex="1">MKEditor - Markdown with <span class="style-script">style</span>.</h1>
-                    <p class="hero__lede" tabindex="4">
-                        Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
-                    </p>
-                    <span class="hero__eyebrow">
-                        <span class="hero__eyebrow-dot"></span>
-                        v3.6.0 - stable
-                    </span>
+    <section id="main-section" class="hero position-relative">
+        <div class="container position-relative hero__container">
+            <div class="hero__content">
+                <h1 class="hero__title d-flex align-items-center justify-content-center" tabindex="1">
+                    <img src="./assets/img/icon.png" style="width: 100px" alt="MKEditor logo" class="hero__title-icon">
+                </h1>
+                <span class="hero__eyebrow">
+                    <span class="hero__eyebrow-dot"></span>
+                    v3.6.0 - stable
+                </span>
+                <p class="hero__lede" tabindex="4">
+                    Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
+                </p>
 
-                    <!-- Download Buttons -->
-                    <div class="hero__downloads">
-                        <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.exe"
-                            class="download-pill"
-                            download
-                            tabindex="5"
-                        >
-                            <i class="fa-brands fa-windows download-pill__icon"></i>
-                            <div class="download-pill__meta">
-                                <p class="release-info download-pill__label">Windows</p>
-                                <p class="release-info download-pill__sub">exe - v3.6.0</p>
-                            </div>
-                        </a>
-
-                        <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg"
-                            class="download-pill"
-                            download
-                            tabindex="6"
-                        >
-                            <i class="fa-brands fa-apple download-pill__icon"></i>
-                            <div class="download-pill__meta">
-                                <p class="release-info download-pill__label">MacOS</p>
-                                <p class="release-info download-pill__sub">pkg - v3.6.0</p>
-                            </div>
-                        </a>
-
-                        <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
-                            class="download-pill"
-                            download
-                            tabindex="7"
-                        >
-                            <i class="fa-brands fa-linux download-pill__icon"></i>
-                            <div class="download-pill__meta">
-                                <p class="release-info download-pill__label">Linux</p>
-                                <p class="release-info download-pill__sub">deb - v3.6.0</p>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="hero__web">
-                        <a href="/mkeditor/web" target="_blank"
-                            class="download-pill download-pill--ghost"
-                            tabindex="8"
-                        >
-                            <i class="fa-solid fa-external-link download-pill__icon"></i>
-                            <div class="download-pill__meta">
-                                <p class="release-info download-pill__label">Launch MKEditor Web</p>
-                                <p class="release-info download-pill__sub">v3.7.1-beta</p>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- Hero Badges & License -->
-                    <div class="hero__meta">
-                        <small class="hero__meta-license">
-                            <span>MIT Licensed ·</span>
-                            <a href="https://github.com/versyxdigital/mkeditor" class="text-light text-decoration-underline"
-                                tabindex="9">
-                                Source on GitHub
-                            </a>
-                        </small>
-                        <div class="hero__badges">
-                            <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml">
-                                <img
-                                    src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
-                                    alt="Github tests badge"
-                                >
-                            </a>
-                            <a href="https://github.com/versyxdigital/mkeditor">
-                                <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor">
-                            </a>
+                <!-- Download Buttons -->
+                <div class="hero__downloads">
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.exe"
+                        class="download-pill"
+                        download
+                        tabindex="5"
+                    >
+                        <i class="fa-brands fa-windows download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">Windows</p>
+                            <p class="release-info download-pill__sub">exe - v3.6.0</p>
                         </div>
-                    </div>
+                    </a>
+
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg"
+                        class="download-pill"
+                        download
+                        tabindex="6"
+                    >
+                        <i class="fa-brands fa-apple download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">MacOS</p>
+                            <p class="release-info download-pill__sub">pkg - v3.6.0</p>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
+                        class="download-pill"
+                        download
+                        tabindex="7"
+                    >
+                        <i class="fa-brands fa-linux download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">Linux</p>
+                            <p class="release-info download-pill__sub">deb - v3.6.0</p>
+                        </div>
+                    </a>
                 </div>
-                <!-- Hero Image -->
-                <div class="col-lg-6 text-center mt-4 mt-lg-0 hero__image-col" tabindex="10">
-                    <div class="hero__image-wrap cool-blur blur-lg">
-                        <div class="hero__window">
-                            <div class="hero__window-bar">
-                                <span class="hero__window-dot hero__window-dot--red"></span>
-                                <span class="hero__window-dot hero__window-dot--yellow"></span>
-                                <span class="hero__window-dot hero__window-dot--green"></span>
-                            </div>
-                            <img src="./assets/img/demo-dark.webp"
-                                class="img-fluid connector-target hero__image" alt="A screenshot of MKEditor"
-                                style="cursor: zoom-in"
-                                data-bs-toggle="modal"
-                                data-bs-target="#imageModal"
-                                data-full="./assets/img/demo-dark.webp"
-                            >
+
+                <div class="hero__web">
+                    <a href="/mkeditor/web" target="_blank"
+                        class="download-pill download-pill--ghost"
+                        tabindex="8"
+                    >
+                        <i class="fa-solid fa-external-link download-pill__icon"></i>
+                        <div class="download-pill__meta">
+                            <p class="release-info download-pill__label">Launch MKEditor Web</p>
+                            <p class="release-info download-pill__sub">v3.7.1-beta</p>
                         </div>
+                    </a>
+                </div>
+
+                <!-- Hero Badges & License -->
+                <div class="hero__meta">
+                    <small class="hero__meta-license">
+                        <span>MIT Licensed ·</span>
+                        <a href="https://github.com/versyxdigital/mkeditor"
+                            tabindex="9">
+                            Source on GitHub
+                        </a>
+                    </small>
+                    <div class="hero__badges">
+                        <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml">
+                            <img
+                                src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
+                                alt="Github tests badge"
+                            >
+                        </a>
+                        <a href="https://github.com/versyxdigital/mkeditor">
+                            <img alt="GitHub repository stars" src="https://img.shields.io/github/stars/versyxdigital/mkeditor">
+                        </a>
                     </div>
                 </div>
             </div>
+
+            <!-- Hero Showcase -->
+            <div class="hero__showcase" tabindex="10">
+                <div class="hero__showcase-frame">
+                    <img src="./assets/img/demo-dark.webp"
+                        class="connector-target" alt="A screenshot of MKEditor"
+                        style="cursor: zoom-in"
+                        data-bs-toggle="modal"
+                        data-bs-target="#imageModal"
+                        data-full="./assets/img/demo-dark.webp"
+                    >
+                </div>
+            </div>
         </div>
-        <div class="hero__fade"></div>
     </section>
 
     <!-- Full-size Dual Images Section -->
@@ -459,7 +447,7 @@
             </div>
             <!-- Section Image -->
             <div class="media-frame media-frame--wide cool-blur blur-lgg">
-                <img src="./assets/img/shortcuts-dark.png" class="media-frame__img connector-target z-10"
+                <img src="./assets/img/shortcuts.png" class="media-frame__img connector-target z-10"
                     style="cursor: zoom-in"
                     data-bs-toggle="modal"
                     data-bs-target="#imageModal"
@@ -505,21 +493,14 @@
                 </div>
                 <!-- Section Image -->
                 <div class="col-md-6 pt-3 pt-md-0">
-                    <div class="hero__image-wrap cool-blur blur-lg">
-                        <div class="hero__window">
-                            <div class="hero__window-bar">
-                                <span class="hero__window-dot hero__window-dot--red"></span>
-                                <span class="hero__window-dot hero__window-dot--yellow"></span>
-                                <span class="hero__window-dot hero__window-dot--green"></span>
-                            </div>
-                            <img src="./assets/img/demo-dark.webp"
-                                class="img-fluid connector-target hero__image" alt="A screenshot of MKEditor"
-                                style="cursor: zoom-in"
-                                data-bs-toggle="modal"
-                                data-bs-target="#imageModal"
-                                data-full="./assets/img/demo-dark.webp"
-                            >
-                        </div>
+                    <div class="media-frame cool-blur">
+                        <img src="./assets/img/demo-dark.webp"
+                            class="media-frame__img connector-target" alt="A screenshot of MKEditor"
+                            style="cursor: zoom-in"
+                            data-bs-toggle="modal"
+                            data-bs-target="#imageModal"
+                            data-full="./assets/img/demo-dark.webp"
+                        >
                     </div>
                 </div>
             </div>
@@ -539,49 +520,70 @@
             <!-- Section Content -->
             <div class="download-grid">
                 <!-- Windows Download -->
-                <div class="download-card">
-                    <div class="download-card__icon">
-                        <i class="fa-brands fa-windows"></i>
+                <div class="download-card download-card--windows">
+                    <div class="download-card__head">
+                        <span class="download-card__tile">
+                            <i class="fa-brands fa-windows"></i>
+                        </span>
+                        <div class="download-card__head-text">
+                            <h3 class="download-card__title">Windows</h3>
+                            <span class="download-card__format">.exe</span>
+                        </div>
                     </div>
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.exe"
-                        class="btn btn-download download-card__btn">
-                        <i class="fa-brands fa-windows me-2"></i> <small>Windows v3.6.0</small>
-                    </a>
-                    <hr class="download-card__sep">
                     <p class="download-card__meta">
-                        <i class="fa-brands fa-windows me-2"></i>
+                        <i class="fa-regular fa-clock"></i>
                         Last built: 28th August 2025
                     </p>
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.exe"
+                        class="download-card__btn"
+                        download>
+                        <span>Windows v3.6.0</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
                 </div>
                 <!-- MacOS Download -->
-                <div class="download-card">
-                    <div class="download-card__icon">
-                        <i class="fa-brands fa-apple"></i>
+                <div class="download-card download-card--macos">
+                    <div class="download-card__head">
+                        <span class="download-card__tile">
+                            <i class="fa-brands fa-apple"></i>
+                        </span>
+                        <div class="download-card__head-text">
+                            <h3 class="download-card__title">MacOS</h3>
+                            <span class="download-card__format">.pkg</span>
+                        </div>
                     </div>
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg"
-                        class="btn btn-download download-card__btn">
-                        <i class="fa-brands fa-apple me-2"></i> <small>MacOS v3.6.0</small>
-                    </a>
-                    <hr class="download-card__sep">
                     <p class="download-card__meta">
-                        <i class="fa-brands fa-apple me-2"></i>
+                        <i class="fa-regular fa-clock"></i>
                         Last built: 28th August 2025
                     </p>
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg"
+                        class="download-card__btn"
+                        download>
+                        <span>MacOS v3.6.0</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
                 </div>
                 <!-- Linux Download -->
-                <div class="download-card">
-                    <div class="download-card__icon">
-                        <i class="fa-brands fa-linux"></i>
+                <div class="download-card download-card--linux">
+                    <div class="download-card__head">
+                        <span class="download-card__tile">
+                            <i class="fa-brands fa-linux"></i>
+                        </span>
+                        <div class="download-card__head-text">
+                            <h3 class="download-card__title">Linux</h3>
+                            <span class="download-card__format">.deb</span>
+                        </div>
                     </div>
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
-                        class="btn btn-download download-card__btn connec">
-                        <i class="fa-brands fa-linux me-2"></i> <small>Linux v3.6.0</small>
-                    </a>
-                    <hr class="download-card__sep">
                     <p class="download-card__meta">
-                        <i class="fa-brands fa-linux me-2"></i>
+                        <i class="fa-regular fa-clock"></i>
                         Last built: 28th August 2025
                     </p>
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
+                        class="download-card__btn"
+                        download>
+                        <span>Linux v3.6.0</span>
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -589,7 +591,7 @@
 
     <!-- Footer -->
     <footer class="site-footer text-light small position-relative z-3">
-        <div class="container site-footer__inner fade-in">
+        <div class="container site-footer__inner">
             <!-- Made with love -->
             <div class="site-footer__brand">
                 <div id="display-cube" class="rounded-circle mb-3"></div>
@@ -730,11 +732,7 @@
 
         window.addEventListener("scroll", () => {
             const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-            if (window.scrollY > heroBottom) {
-                scrollTopBtn.style.display = "block";
-            } else {
-                scrollTopBtn.style.display = "none";
-            }
+            scrollTopBtn.classList.toggle("is-visible", window.scrollY > heroBottom);
 
             const nav = document.querySelector('.site-nav');
             if (nav) {
