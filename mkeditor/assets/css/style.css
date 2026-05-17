@@ -1248,6 +1248,22 @@ h2.section__title {
 /* =========================================================================
    Scroll to top
    ========================================================================= */
+/* =========================================================================
+   Screenshot desaturation — color on hover
+   ========================================================================= */
+.hero__showcase-frame img,
+.dual-screens__img,
+.media-frame__img {
+    filter: grayscale(1);
+    transition: filter 400ms ease, transform 250ms ease, border-color 250ms ease;
+}
+
+.hero__showcase-frame:hover img,
+.dual-screens__img:hover,
+.media-frame__img:hover {
+    filter: grayscale(0);
+}
+
 .scroll-to-top {
     position: fixed;
     bottom: 28px;
