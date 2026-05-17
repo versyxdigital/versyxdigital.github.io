@@ -589,6 +589,60 @@
         </div>
     </section>
 
+    <!-- Build from source -->
+    <section id="build" class="section section--build text-light position-relative z-3">
+        <div class="container position-relative z-3 text-center">
+            <span class="section__eyebrow">Developer Path</span>
+            <h2 class="section__title" tabindex="37">
+                <i class="fas fa-code-branch me-2"></i> If you'd rather build from source
+            </h2>
+            <div class="section__divider"></div>
+
+            <div class="build-grid">
+                <!-- Setup terminal -->
+                <figure class="terminal">
+                    <figcaption class="terminal__chrome">
+                        <span class="terminal__dots" aria-hidden="true">
+                            <span class="terminal__dot terminal__dot--red"></span>
+                            <span class="terminal__dot terminal__dot--yellow"></span>
+                            <span class="terminal__dot terminal__dot--green"></span>
+                        </span>
+                        <span class="terminal__title">~/mkeditor — setup</span>
+                    </figcaption>
+                    <pre class="terminal__body"><span class="t-comment"># Clone the repository</span>
+<span class="t-prompt">$</span> <span class="t-cmd">git clone https://github.com/versyxdigital/mkeditor.git</span>
+<span class="t-out">Cloning into 'mkeditor'...</span>
+
+<span class="t-comment"># Move in and install dependencies</span>
+<span class="t-prompt">$</span> <span class="t-cmd">cd mkeditor</span>
+<span class="t-prompt">$</span> <span class="t-cmd">npm install</span>
+<span class="t-out">added 1247 packages in 38s</span></pre>
+                </figure>
+
+                <!-- Build & package terminal -->
+                <figure class="terminal">
+                    <figcaption class="terminal__chrome">
+                        <span class="terminal__dots" aria-hidden="true">
+                            <span class="terminal__dot terminal__dot--red"></span>
+                            <span class="terminal__dot terminal__dot--yellow"></span>
+                            <span class="terminal__dot terminal__dot--green"></span>
+                        </span>
+                        <span class="terminal__title">~/mkeditor — build</span>
+                    </figcaption>
+                    <pre class="terminal__body"><span class="t-comment"># Build the editor bundle and Electron app</span>
+<span class="t-prompt">$</span> <span class="t-cmd">npm run build-editor</span>
+<span class="t-prompt">$</span> <span class="t-cmd">npm run build-app</span>
+
+<span class="t-comment"># Package an installer for your platform</span>
+<span class="t-prompt">$</span> <span class="t-cmd">npm run make-installer</span>
+
+<span class="t-comment"># Or run it locally with Electron</span>
+<span class="t-prompt">$</span> <span class="t-cmd">npm run serve-app</span></pre>
+                </figure>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="site-footer text-light small position-relative z-3">
         <div class="container site-footer__inner">

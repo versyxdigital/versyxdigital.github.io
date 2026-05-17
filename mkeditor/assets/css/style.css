@@ -1249,6 +1249,127 @@ h2.section__title {
    Scroll to top
    ========================================================================= */
 /* =========================================================================
+   Build from source — terminals
+   ========================================================================= */
+.section--build {
+    border-top: 1px solid var(--border);
+}
+
+.build-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 8px;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 900px) {
+    .build-grid { grid-template-columns: 1fr; max-width: 560px; }
+}
+
+.terminal {
+    position: relative;
+    margin: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: rgba(15, 17, 21, 0.55);
+    border: 1px solid var(--border-2);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow:
+        0 30px 80px -30px rgba(0, 0, 0, 0.6),
+        0 10px 30px -10px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    text-align: left;
+    transition: transform 220ms ease, border-color 220ms ease;
+}
+
+.terminal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(circle at 100% 0%, rgba(77, 212, 191, 0.08), transparent 55%),
+                radial-gradient(circle at 0% 100%, rgba(83, 136, 230, 0.06), transparent 55%);
+    opacity: 0.9;
+}
+
+.terminal:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-3);
+}
+
+.terminal__chrome {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative;
+    z-index: 1;
+}
+
+.terminal__dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.terminal__dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+    opacity: 0.9;
+}
+
+.terminal__dot--red    { background: #ff5f57; }
+.terminal__dot--yellow { background: #febc2e; }
+.terminal__dot--green  { background: #28c840; }
+
+.terminal__title {
+    flex: 1;
+    text-align: center;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    letter-spacing: -0.005em;
+    /* offset so it visually centers against the dots on the left */
+    margin-right: 48px;
+}
+
+.terminal__body {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 22px 24px 24px;
+    font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: var(--text);
+    background: transparent;
+    overflow-x: auto;
+    white-space: pre;
+    tab-size: 2;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.terminal__body .t-comment { color: var(--text-dim); }
+.terminal__body .t-prompt  {
+    color: var(--accent);
+    font-weight: 600;
+    user-select: none;
+    margin-right: 2px;
+}
+.terminal__body .t-cmd     { color: var(--text); }
+.terminal__body .t-out     { color: var(--text-muted); }
+
+/* =========================================================================
    Screenshot desaturation — color on hover
    ========================================================================= */
 .hero__showcase-frame img,
