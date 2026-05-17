@@ -640,6 +640,33 @@
 <span class="t-prompt">$</span> <span class="t-cmd">npm run serve-app</span></pre>
                 </figure>
             </div>
+
+            <!-- Sub-section header -->
+            <div class="build-subhead">
+                <span class="section__eyebrow">Live State</span>
+                <h3 class="build-subhead__title">
+                    <i class="fa-solid fa-code-commit"></i>
+                    What's on origin right now
+                </h3>
+                <p class="build-subhead__note">Fetched live from the GitHub API when this section scrolls into view.</p>
+            </div>
+
+            <!-- Live git log / graph terminal -->
+            <figure class="terminal terminal--wide terminal--scrollable">
+                <figcaption class="terminal__chrome">
+                    <span class="terminal__dots" aria-hidden="true">
+                        <span class="terminal__dot terminal__dot--red"></span>
+                        <span class="terminal__dot terminal__dot--yellow"></span>
+                        <span class="terminal__dot terminal__dot--green"></span>
+                    </span>
+                    <span class="terminal__title">~/mkeditor — git log --graph --all</span>
+                    <span class="terminal__status" id="git-graph-status">
+                        <span class="terminal__status-dot"></span>
+                        live
+                    </span>
+                </figcaption>
+                <pre class="terminal__body terminal__body--scroll" id="git-graph"><span class="t-comment"># Fetching git history from versyxdigital/mkeditor…</span></pre>
+            </figure>
         </div>
     </section>
 
@@ -651,7 +678,7 @@
                 <img id="display-cube" src="./assets/img/icon.png" alt="MKEditor logo" width="32" height="32">
                 <div tabindex="35">
                     Made with&nbsp; ❤️ &nbsp;by
-                    <a class="text-white" href="https://github.com/sentrychris">Chris Rowles</a> &middot; &copy;
+                    <a class="text-white" href="https://chris.rowles.info">Chris</a> &middot; &copy;
                     <script>
                         document.write(new Date().getFullYear());
                     </script>
@@ -663,6 +690,9 @@
                 <hr>
                 <span>Email: <a href="mailto:christopher.rowles@outlook.com" class="text-white">
                     christopher.rowles@outlook.com</a>
+                </span>
+                <span>Web: <a href="https://chris.rowles.info" class="text-white">
+                    https://chris.rowles.info</a>
                 </span>
                 <span>Phone: <a href="tel:07522267722" class="text-white">
                     +44(0)7522 267 722</a>
@@ -798,6 +828,118 @@
         scrollTopBtn.addEventListener("click", () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
+    </script>
+    <script>
+        // Live git log / graph fetcher
+        (function () {
+            const target = document.getElementById('git-graph');
+            const status = document.getElementById('git-graph-status');
+            if (!target) return;
+
+            const repo  = 'versyxdigital/mkeditor';
+            const trunk = 'main';
+            const api   = (path) => fetch(`https://api.github.com/repos/${repo}${path}`).then(r => {
+                if (!r.ok) throw new Error(`GitHub API ${r.status}`);
+                return r.json();
+            });
+
+            const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const subj = (m) => esc((m || '').split('\n')[0].slice(0, 92));
+
+            async function load() {
+                try {
+                    const [branches, mainCommits] = await Promise.all([
+                        api(`/branches?per_page=50`),
+                        api(`/commits?sha=${trunk}&per_page=30`)
+                    ]);
+
+                    const others = branches.filter(b => b.name !== trunk);
+                    const branchData = await Promise.all(others.map(async (b) => {
+                        try {
+                            const cmp = await api(`/compare/${trunk}...${encodeURIComponent(b.name)}`);
+                            return {
+                                name: b.name,
+                                head: b.commit.sha,
+                                mergeBase: cmp.merge_base_commit ? cmp.merge_base_commit.sha : null,
+                                ahead: cmp.ahead_by || 0,
+                                behind: cmp.behind_by || 0,
+                                commits: (cmp.commits || []).slice(-15)
+                            };
+                        } catch (e) {
+                            return { name: b.name, head: b.commit.sha, commits: [], ahead: 0, behind: 0 };
+                        }
+                    }));
+
+                    const lines = [];
+                    lines.push(`<span class="t-prompt">$</span> <span class="t-cmd">git log --graph --all --oneline --decorate</span>`);
+                    lines.push('');
+
+                    for (let i = 0; i < mainCommits.length; i++) {
+                        const c = mainCommits[i];
+                        const short = c.sha.substring(0, 7);
+                        const heads = branches
+                            .filter(b => b.commit.sha === c.sha)
+                            .map(b => b.name === trunk
+                                ? `HEAD -> ${trunk}, origin/${trunk}`
+                                : `${b.name}, origin/${b.name}`);
+                        const dec = heads.length ? ` <span class="t-deco">(${heads.join(', ')})</span>` : '';
+                        lines.push(`<span class="t-glyph-main">*</span> <span class="t-sha">${short}</span>${dec} <span class="t-msg">${subj(c.commit.message)}</span>`);
+
+                        for (const b of branchData) {
+                            if (b.mergeBase === c.sha && b.commits.length > 0) {
+                                const reversed = b.commits.slice().reverse();
+                                for (let j = 0; j < reversed.length; j++) {
+                                    const bc = reversed[j];
+                                    const bShort = bc.sha.substring(0, 7);
+                                    const bDec = j === 0
+                                        ? ` <span class="t-deco">(${b.name}, origin/${b.name})</span>`
+                                        : '';
+                                    lines.push(`<span class="t-glyph-branch">| *</span> <span class="t-sha">${bShort}</span>${bDec} <span class="t-msg">${subj(bc.commit.message)}</span>`);
+                                }
+                                lines.push(`<span class="t-glyph-branch">|/</span>`);
+                            }
+                        }
+                    }
+
+                    lines.push('');
+                    lines.push(`<span class="t-prompt">$</span> <span class="t-cmd">git branch -avv</span>`);
+                    const all = branches.slice().sort((a, b) => a.name === trunk ? -1 : b.name === trunk ? 1 : a.name.localeCompare(b.name));
+                    for (const b of all) {
+                        const marker = b.name === trunk ? '<span class="t-glyph-main">*</span>' : ' ';
+                        const short  = b.commit.sha.substring(0, 7);
+                        const info   = b.name === trunk
+                            ? ''
+                            : (function () {
+                                const d = branchData.find(x => x.name === b.name);
+                                return d ? ` <span class="t-comment">[ahead ${d.ahead}, behind ${d.behind}]</span>` : '';
+                            })();
+                        lines.push(`${marker} <span class="t-branch">${b.name.padEnd(46, ' ')}</span> <span class="t-sha">${short}</span>${info}`);
+                    }
+
+                    target.innerHTML = lines.join('\n');
+                    if (status) status.classList.add('terminal__status--ok');
+                } catch (err) {
+                    target.innerHTML = `<span class="t-comment"># Could not load git history (${esc(err.message)})</span>
+<span class="t-comment"># Browse the project on GitHub instead:</span>
+<span class="t-prompt">$</span> <span class="t-cmd">open https://github.com/${repo}</span>`;
+                    if (status) status.classList.add('terminal__status--err');
+                }
+            }
+
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            load();
+                            io.disconnect();
+                        }
+                    });
+                }, { rootMargin: '200px' });
+                io.observe(target);
+            } else {
+                load();
+            }
+        })();
     </script>
     <script src="./assets/js/animation.js"></script>
 </body>
