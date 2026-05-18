@@ -93,6 +93,9 @@
 
     <!-- Hero Section -->
     <section id="main-section" class="hero position-relative">
+        <!-- Ambient SVG typing snippets (background) — content populated by JS -->
+        <div class="hero__typing" aria-hidden="true"></div>
+
         <div class="container position-relative hero__container">
             <div class="hero__content">
                 <h1 class="hero__title d-flex align-items-center justify-content-center" tabindex="1">
@@ -939,6 +942,207 @@
             } else {
                 load();
             }
+        })();
+    </script>
+    <script>
+        // Hero ambient typing snippets — type in, hold, fade left-to-right, respawn elsewhere
+        (function () {
+            const container = document.querySelector('.hero__typing');
+            if (!container) return;
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+
+            const SNIPPETS = [
+                { pre: '# ',    body: 'Hello, world' },
+                { pre: '## ',   body: 'こんにちは' },
+                { pre: '**',    body: 'Bonjour le monde', post: '**' },
+                { pre: '- [x] ',body: 'tarea hecha' },
+                { pre: '> ',    body: 'Zitat des Tages' },
+                { pre: '[',     body: 'ссылка', post: '](url)' },
+                { pre: '`',     body: 'código fuente', post: '`' },
+                { pre: '### ',  body: '标题' },
+                { pre: '# ',    body: 'Überschrift' },
+                { pre: '*',     body: 'en italique', post: '*' },
+                { pre: '## ',   body: 'Заголовок' },
+                { pre: '> ',    body: 'A quote from the heart' },
+                { pre: '- ',    body: 'first item' },
+                { pre: '1. ',   body: 'numbered list' },
+                { pre: '![',    body: 'alt text', post: '](image.png)' },
+                { pre: '~~',    body: 'strikethrough', post: '~~' },
+                { pre: '# ',    body: 'Markdown ist toll' },
+                { pre: '> ',    body: '"Le mot juste"' },
+                { pre: '## ',   body: 'مرحبا' },
+                { pre: '`',     body: 'npm run build', post: '`' },
+                { pre: '**',    body: '太字テキスト', post: '**' },
+                { pre: '#### ', body: 'kleiner Titel' },
+                { pre: '> ',    body: 'cogito ergo sum' },
+                { pre: '- [ ] ',body: 'tâche à faire' },
+                { pre: '',      body: '---' },
+                { pre: '*',     body: 'em phasis', post: '*' },
+                { pre: '## ',   body: 'Glossário' },
+                { pre: '`',     body: 'const md = "easy"', post: '`' }
+            ];
+
+            const REGIONS = [
+                { top: 7,  side: 'left',  off: 4 },
+                { top: 11, side: 'right', off: 5 },
+                { top: 20, side: 'left',  off: 9 },
+                { top: 25, side: 'right', off: 7 },
+                { top: 36, side: 'left',  off: 4 },
+                { top: 42, side: 'right', off: 11 },
+                { top: 54, side: 'left',  off: 14 },
+                { top: 58, side: 'right', off: 4 },
+                { top: 68, side: 'left',  off: 6 },
+                { top: 72, side: 'right', off: 14 },
+                { top: 82, side: 'left',  off: 12 },
+                { top: 87, side: 'right', off: 6 },
+                { top: 92, side: 'left',  off: 22 }
+            ];
+
+            const N_SLOTS = window.innerWidth < 700 ? 3 : (window.innerWidth < 1100 ? 5 : 7);
+            const usedRegions = new Set();
+            let snippetCursor = Math.floor(Math.random() * SNIPPETS.length);
+
+            function pickFreeRegion() {
+                const free = [];
+                for (let i = 0; i < REGIONS.length; i++) if (!usedRegions.has(i)) free.push(i);
+                if (!free.length) return -1;
+                return free[Math.floor(Math.random() * free.length)];
+            }
+
+            function nextSnippet() {
+                // Walk the list with a random stride so adjacent slots don't repeat content.
+                snippetCursor = (snippetCursor + 1 + Math.floor(Math.random() * (SNIPPETS.length - 1))) % SNIPPETS.length;
+                return SNIPPETS[snippetCursor];
+            }
+
+            function easeOut(t) { return 1 - Math.pow(1 - t, 2.2); }
+
+            function animate(duration, onStep, onDone) {
+                const start = performance.now();
+                function frame(now) {
+                    const t = Math.min(1, (now - start) / duration);
+                    onStep(t);
+                    if (t < 1) requestAnimationFrame(frame);
+                    else if (onDone) onDone();
+                }
+                requestAnimationFrame(frame);
+            }
+
+            function createSlot(i) {
+                const svg = document.createElementNS(SVG_NS, 'svg');
+                svg.classList.add('hero__type');
+                svg.setAttribute('preserveAspectRatio', 'xMinYMid meet');
+                svg.setAttribute('viewBox', '0 0 400 26');
+                svg.innerHTML =
+                    '<defs><clipPath id="mdtype-' + i + '">' +
+                        '<rect class="hero__type-clip" x="0" y="0" width="0" height="26"></rect>' +
+                    '</clipPath></defs>' +
+                    '<g clip-path="url(#mdtype-' + i + ')">' +
+                        '<text x="0" y="19" class="hero__type-text">' +
+                            '<tspan class="md-syn md-pre"></tspan>' +
+                            '<tspan class="md-body"></tspan>' +
+                            '<tspan class="md-syn md-post"></tspan>' +
+                        '</text>' +
+                    '</g>' +
+                    '<rect class="hero__type-caret" x="0" y="6" width="1.6" height="16"></rect>';
+                container.appendChild(svg);
+                return {
+                    svg: svg,
+                    clip: svg.querySelector('.hero__type-clip'),
+                    pre: svg.querySelector('.md-pre'),
+                    body: svg.querySelector('.md-body'),
+                    post: svg.querySelector('.md-post'),
+                    text: svg.querySelector('text'),
+                    caret: svg.querySelector('.hero__type-caret'),
+                    region: -1
+                };
+            }
+
+            function placeSlot(slot) {
+                if (slot.region >= 0) usedRegions.delete(slot.region);
+                const idx = pickFreeRegion();
+                if (idx < 0) return false;
+                usedRegions.add(idx);
+                slot.region = idx;
+                const r = REGIONS[idx];
+                slot.svg.style.top = r.top + '%';
+                if (r.side === 'left') {
+                    slot.svg.style.left  = r.off + '%';
+                    slot.svg.style.right = '';
+                } else {
+                    slot.svg.style.right = r.off + '%';
+                    slot.svg.style.left  = '';
+                }
+                return true;
+            }
+
+            function fillSnippet(slot) {
+                const s = nextSnippet();
+                slot.pre.textContent  = s.pre  || '';
+                slot.body.textContent = s.body || '';
+                slot.post.textContent = s.post || '';
+            }
+
+            function measureWidth(slot) {
+                try {
+                    const w = slot.text.getBBox().width;
+                    return Math.max(40, Math.ceil(w + 3));
+                } catch (e) {
+                    return 220;
+                }
+            }
+
+            function runCycle(slot) {
+                fillSnippet(slot);
+                if (!placeSlot(slot)) {
+                    setTimeout(function () { runCycle(slot); }, 1200);
+                    return;
+                }
+                // Reset visual state.
+                slot.svg.classList.remove('is-erasing');
+                slot.clip.setAttribute('x', '0');
+                slot.clip.setAttribute('width', '0');
+                slot.caret.setAttribute('x', '0');
+
+                // Force a fresh viewBox so getBBox returns the new text's width.
+                slot.svg.setAttribute('viewBox', '0 0 600 26');
+
+                requestAnimationFrame(function () {
+                    const w = measureWidth(slot);
+                    slot.svg.setAttribute('viewBox', '0 0 ' + w + ' 26');
+                    slot.svg.style.width = w + 'px';
+
+                    const typeDur = 900 + w * 9;
+                    animate(typeDur, function (t) {
+                        const cur = w * easeOut(t);
+                        slot.clip.setAttribute('width', String(cur));
+                        slot.caret.setAttribute('x', String(cur));
+                    }, function () {
+                        const hold = 1700 + Math.random() * 1400;
+                        setTimeout(function () {
+                            slot.svg.classList.add('is-erasing');
+                            const eraseDur = 900 + w * 3;
+                            animate(eraseDur, function (t) {
+                                const e = easeOut(t);
+                                const x  = w * e;
+                                const cw = Math.max(0, w - x);
+                                slot.clip.setAttribute('x', String(x));
+                                slot.clip.setAttribute('width', String(cw));
+                            }, function () {
+                                setTimeout(function () { runCycle(slot); }, 400 + Math.random() * 900);
+                            });
+                        }, hold);
+                    });
+                });
+            }
+
+            const slots = [];
+            for (let i = 0; i < N_SLOTS; i++) slots.push(createSlot(i));
+            slots.forEach(function (s, i) {
+                setTimeout(function () { runCycle(s); }, i * 650 + Math.random() * 400);
+            });
         })();
     </script>
     <script src="./assets/js/animation.js"></script>

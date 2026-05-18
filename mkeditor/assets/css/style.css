@@ -388,6 +388,64 @@ h2.section__title {
 .hero .hero__fade,
 .hero__header { display: none !important; }
 
+/* =========================================================================
+   Hero — ambient SVG typing snippets (JS-driven cycle)
+   ========================================================================= */
+.hero__typing {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.hero__type {
+    position: absolute;
+    height: 26px;
+    width: auto;
+    opacity: 0.18;
+    filter: blur(0.2px);
+    transition: opacity 600ms ease;
+    font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+}
+
+.hero__type-text {
+    font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+    font-size: 14px;
+    font-weight: 500;
+    fill: var(--text-muted);
+    letter-spacing: -0.005em;
+}
+
+.hero__type-text .md-syn {
+    fill: var(--accent);
+    opacity: 0.85;
+}
+
+.hero__type-caret {
+    fill: var(--accent);
+    opacity: 0.85;
+    animation: hero-caret-blink 1.05s linear infinite;
+}
+
+.hero__type.is-erasing .hero__type-caret {
+    opacity: 0;
+    animation: none;
+}
+
+@keyframes hero-caret-blink {
+    0%, 49.9%  { opacity: 0.85; }
+    50%, 100%  { opacity: 0; }
+}
+
+@media (max-width: 768px) {
+    .hero__type { opacity: 0.12; height: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero__typing { display: none; }
+}
+
 .hero__container {
     position: relative;
     z-index: 2;
@@ -1514,7 +1572,7 @@ h2.section__title {
 .hero__showcase-frame img,
 .dual-screens__img,
 .media-frame__img {
-    filter: grayscale(1);
+    filter: grayscale(0);
     transition: filter 400ms ease, transform 250ms ease, border-color 250ms ease;
 }
 
