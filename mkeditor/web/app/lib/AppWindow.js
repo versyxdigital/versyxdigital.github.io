@@ -1,0 +1,94 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppWindow = void 0;
+const electron_1 = require("electron");
+/**
+ * AppWindow
+ *
+ * Owns the window-control IPC surface used by the renderer's in-window
+ * title bar (added in P2). Three inbound channels drive the BrowserWindow
+ * directly (`minimize`, `maximize` toggle, `close`); one outbound channel
+ * (`from:window:state`) keeps the renderer's max/restore icon in sync
+ * with the actual window state — fires on initial load and on every
+ * `maximize` / `unmaximize` event.
+ *
+ * On macOS the native traffic lights handle these actions themselves
+ * (we keep `titleBarStyle: 'hiddenInset'` so they stay visible); the
+ * channels are still registered, harmlessly, since the renderer never
+ * sends to them on darwin.
+ */
+class AppWindow {
+    context;
+    constructor(context, register = false) {
+        this.context = context;
+        if (register)
+            this.register();
+    }
+    register() {
+        electron_1.ipcMain.on('to:window:minimize', () => {
+            if (this.context.isDestroyed())
+                return;
+            this.context.minimize();
+        });
+        electron_1.ipcMain.on('to:window:maximize', () => {
+            if (this.context.isDestroyed())
+                return;
+            if (this.context.isMaximized()) {
+                this.context.unmaximize();
+            }
+            else {
+                this.context.maximize();
+            }
+        });
+        electron_1.ipcMain.on('to:window:close', () => {
+            if (this.context.isDestroyed())
+                return;
+            this.context.close();
+        });
+        // Native `role: 'togglefullscreen'` accelerators only fire when the
+        // application menu is mounted — Windows/Linux clear the menu in P1,
+        // so the renderer's in-window menu drives this IPC instead.
+        electron_1.ipcMain.on('to:window:fullscreen', () => {
+            if (this.context.isDestroyed())
+                return;
+            this.context.setFullScreen(!this.context.isFullScreen());
+        });
+        // Edit-menu clipboard actions. Native `role: 'cut'` etc. accelerators
+        // are also dead without the application menu mounted. Going through
+        // `document.execCommand` from the renderer fails because Radix's
+        // deferred close + setTimeout consumes the "transient user activation"
+        // gesture Chromium requires for clipboard ops. `webContents.cut()`
+        // etc. dispatch the events natively without that constraint —
+        // Monaco's textarea receives them and acts accordingly.
+        electron_1.ipcMain.on('to:edit:cut', () => {
+            if (this.context.isDestroyed())
+                return;
+            this.context.webContents.cut();
+        });
+        electron_1.ipcMain.on('to:edit:copy', () => {
+            if (this.context.isDestroyed())
+                return;
+            this.context.webContents.copy();
+        });
+        electron_1.ipcMain.on('to:edit:paste', () => {
+            if (this.context.isDestroyed())
+                return;
+            this.context.webContents.paste();
+        });
+        this.context.on('maximize', () => this.emitState(true));
+        this.context.on('unmaximize', () => this.emitState(false));
+        // Hydrate the renderer with the current state once the renderer is
+        // ready to receive (mirrors the other `did-finish-load` sends in
+        // `main.ts`). Without this the maximize icon would render in the
+        // wrong state on reload.
+        this.context.webContents.once('did-finish-load', () => {
+            this.emitState(this.context.isMaximized());
+        });
+    }
+    emitState(isMaximized) {
+        if (this.context.isDestroyed())
+            return;
+        this.context.webContents.send('from:window:state', { isMaximized });
+    }
+}
+exports.AppWindow = AppWindow;

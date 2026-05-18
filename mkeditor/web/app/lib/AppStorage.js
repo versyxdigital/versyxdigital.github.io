@@ -1,0 +1,453 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppStorage = void 0;
+const electron_1 = require("electron");
+const fs_1 = require("fs");
+const path_1 = require("path");
+/**
+ * AppStorage
+ */
+class AppStorage {
+    /** The active file path */
+    static activeFilePath = null;
+    /**
+     * Get the path to the active file
+     * @returns - the active file path or null
+     */
+    static getActiveFilePath() {
+        return AppStorage.activeFilePath;
+    }
+    /**
+     * Set the active file.
+     *
+     * @param context
+     * @param file
+     * @returns
+     */
+    static setActiveFile(context, file = null) {
+        // Split on both separators so this works on Linux/macOS (`/`) and
+        // Windows (`\`). The pre-existing version split only on `\` and
+        // shipped the full path as `filename` on POSIX systems.
+        const filename = file ? (file.split(/[\\/]/).pop() ?? '') : '';
+        const content = file ? (0, fs_1.readFileSync)(file, { encoding: 'utf-8' }) : '';
+        AppStorage.activeFilePath = file;
+        if (file)
+            electron_1.app.addRecentDocument(file);
+        context.webContents.send('from:file:opened', {
+            file,
+            filename,
+            content,
+        });
+        return {
+            filename,
+            content,
+        };
+    }
+    /**
+     * Open the active file.
+     *
+     * @param context - the browser window
+     * @param file - the file to open
+     * @returns
+     */
+    static openActiveFile(context, file) {
+        if (context &&
+            file &&
+            file !== '.' &&
+            !file.startsWith('-') &&
+            file.indexOf('MKEditor.lnk') === -1) {
+            AppStorage.setActiveFile(context, file);
+        }
+    }
+    /**
+     * Create a new file.
+     *
+     * @param context - the browser window
+     */
+    static async createNewFile(context) {
+        AppStorage.setActiveFile(context, null);
+    }
+    /**
+     * Save a file.
+     *
+     * @param context - the browser window
+     * @param options - save file options
+     * @returns
+     */
+    static async saveFile(context, options) {
+        const config = {
+            title: 'Save file',
+            defaultPath: 'Untitled',
+            buttonLabel: 'Save',
+            filters: [
+                { name: 'md', extensions: ['md'] },
+                { name: 'All Files', extensions: ['*'] },
+            ],
+        };
+        const isHTMLExport = options.data && options.data.startsWith('<!DOCTYPE html>');
+        const errorAction = isHTMLExport
+            ? 'notifications:unable_export_preview'
+            : 'notifications:unable_save_markdown';
+        const successAction = isHTMLExport
+            ? 'notifications:exported_html_success'
+            : 'notifications:saved_markdown_success';
+        if (isHTMLExport) {
+            config.filters.unshift({
+                name: 'html',
+                extensions: ['html'],
+            });
+            config.defaultPath = `export-0${options.id}`;
+        }
+        if (options.filePath) {
+            let check;
+            try {
+                check = (0, fs_1.statSync)(options.filePath);
+            }
+            catch (err) {
+                const details = err;
+                check = details.code || err;
+            }
+            if (check !== 'ENOENT') {
+                try {
+                    (0, fs_1.writeFileSync)(options.filePath, options.data, {
+                        encoding: options.encoding ?? 'utf-8',
+                    });
+                    context.webContents.send('from:notification:display', {
+                        status: 'success',
+                        key: successAction,
+                    });
+                    if (!isHTMLExport && options.openFile !== false) {
+                        AppStorage.setActiveFile(context, options.filePath);
+                    }
+                }
+                catch (err) {
+                    context.webContents.send('from:notification:display', {
+                        status: 'error',
+                        key: errorAction,
+                    });
+                }
+            }
+            else {
+                context.webContents.send('from:notification:display', {
+                    status: 'error',
+                    key: errorAction,
+                });
+            }
+        }
+        else {
+            electron_1.dialog
+                .showSaveDialog(context, config)
+                .then(({ filePath }) => {
+                try {
+                    (0, fs_1.writeFileSync)(filePath, options.data, {
+                        encoding: options.encoding ?? 'utf-8',
+                    });
+                    context.webContents.send('from:notification:display', {
+                        status: 'success',
+                        key: successAction,
+                    });
+                    if (!isHTMLExport && options.openFile !== false) {
+                        AppStorage.setActiveFile(context, filePath);
+                    }
+                }
+                catch (err) {
+                    const details = err;
+                    if (details.code !== 'ENOENT') {
+                        context.webContents.send('from:notification:display', {
+                            status: 'error',
+                            key: 'notifications:generic_error_try_again',
+                        });
+                    }
+                }
+            })
+                .catch(() => {
+                context.webContents.send('from:notification:display', {
+                    status: 'error',
+                    key: 'notifications:generic_error_try_again',
+                });
+            });
+        }
+    }
+    /**
+     * Save a file to PDF.
+     *
+     * @param context - the browser window
+     * @param offscreen - the offscreen render window for the PDF
+     * @param options - save file options
+     * @returns
+     */
+    static async saveFileToPDF(context, offscreen, options) {
+        const defaultPath = `pdf-export-${options.id}`;
+        offscreen.setTitle(defaultPath);
+        await offscreen.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(options.data)}`);
+        await offscreen.webContents.executeJavaScript(`
+      (async () => {
+        await document.fonts?.ready;
+        const images = Array.from(document.images).map(img =>
+          img.complete ? Promise.resolve() :
+          new Promise(res => { img.onload = img.onerror = () => res(); })
+        );
+        await Promise.all(images);
+      })();
+    `);
+        const pdf = await offscreen.webContents.printToPDF({
+            pageSize: 'A4',
+            printBackground: true,
+            preferCSSPageSize: true,
+        });
+        const { filePath } = await electron_1.dialog.showSaveDialog(context, {
+            filters: [{ name: defaultPath, extensions: ['pdf'] }],
+            defaultPath: `${defaultPath}.pdf`,
+        });
+        if (!filePath)
+            return;
+        (0, fs_1.writeFileSync)(filePath, pdf, {
+            encoding: options.encoding ?? 'utf-8',
+        });
+        offscreen.destroy();
+    }
+    /**
+     * Show the open file dialog.
+     *
+     * @param context - the browser window
+     * @returns
+     */
+    static async showOpenDialog(context) {
+        return new Promise((resolve) => {
+            electron_1.dialog
+                .showOpenDialog({
+                filters: [
+                    { name: 'Text Files', extensions: ['html', 'md', 'txt'] },
+                    { name: 'All Files', extensions: ['*'] },
+                ],
+                properties: ['openFile'],
+            })
+                .then(({ filePaths }) => {
+                if (filePaths.length === 0) {
+                    throw new Error('noselection');
+                }
+                const file = AppStorage.setActiveFile(context, filePaths[0]);
+                return resolve({
+                    file: filePaths[0],
+                    filename: file.filename,
+                    content: file.content,
+                });
+            })
+                .catch((err) => {
+                if (err.message !== 'noselection') {
+                    context.webContents.send('from:notification:display', {
+                        status: 'error',
+                        key: 'notifications:unable_open_file',
+                    });
+                }
+            });
+        });
+    }
+    /**
+     * Open a folder/directory path.
+     *
+     * @param context - the browser window
+     * @param filePath - the filepath
+     * @returns
+     */
+    static async openPath(context, filePath) {
+        try {
+            if (!filePath || typeof filePath !== 'string') {
+                throw new Error('invalidpath');
+            }
+            const stats = await fs_1.promises.stat(filePath);
+            if (stats.isDirectory()) {
+                const tree = await AppStorage.readDirectory(filePath);
+                context.webContents.send('from:folder:opened', {
+                    path: filePath,
+                    tree,
+                });
+            }
+            else if (stats.isFile()) {
+                AppStorage.setActiveFile(context, filePath);
+            }
+            else {
+                throw new Error('unsupported');
+            }
+        }
+        catch (err) {
+            const code = err?.code || err.message;
+            const key = code == 'EOENT' || code == 'invalidpath'
+                ? 'notifications:path_not_exist'
+                : code == 'EACCESS'
+                    ? 'notifications:permission_denied_open_path'
+                    : 'notifications:unable_open_path';
+            context.webContents.send('from:notification:display', {
+                status: 'error',
+                key,
+            });
+        }
+    }
+    /**
+     * Open a directory.
+     *
+     * @param context - the browser window
+     * @returns
+     */
+    static async openDirectory(context) {
+        try {
+            const { filePaths } = await electron_1.dialog.showOpenDialog({
+                properties: ['openDirectory'],
+            });
+            if (filePaths.length === 0) {
+                throw new Error('noselection');
+            }
+            const tree = await AppStorage.readDirectory(filePaths[0]);
+            context.webContents.send('from:folder:opened', {
+                path: filePaths[0],
+                tree,
+            });
+            return tree;
+        }
+        catch (err) {
+            if (err.message !== 'noselection') {
+                context.webContents.send('from:notification:display', {
+                    status: 'error',
+                    key: 'notifications:unable_open_folder',
+                });
+            }
+        }
+    }
+    /**
+     * Create a new empty file in the given directory.
+     *
+     * @param context - the browser window
+     * @param parent - parent directory path
+     * @param name - name of the new file
+     */
+    static async createFile(context, parent, name) {
+        try {
+            const file = (0, path_1.join)(parent, name);
+            await fs_1.promises.writeFile(file, '', 'utf-8');
+            const tree = await AppStorage.readDirectory(parent);
+            context.webContents.send('from:folder:opened', { path: parent, tree });
+            context.webContents.send('from:notification:display', {
+                status: 'success',
+                key: 'notifications:file_created',
+            });
+        }
+        catch {
+            context.webContents.send('from:notification:display', {
+                status: 'error',
+                key: 'notifications:unable_create_file',
+            });
+        }
+    }
+    /**
+     * Create a new folder in the given directory.
+     */
+    static async createFolder(context, parent, name) {
+        try {
+            const dir = (0, path_1.join)(parent, name);
+            await fs_1.promises.mkdir(dir);
+            const tree = await AppStorage.readDirectory(parent);
+            context.webContents.send('from:folder:opened', { path: parent, tree });
+            context.webContents.send('from:notification:display', {
+                status: 'success',
+                key: 'notifications:folder_created',
+            });
+        }
+        catch {
+            context.webContents.send('from:notification:display', {
+                status: 'error',
+                key: 'notifications:unable_create_folder',
+            });
+        }
+    }
+    /**
+     * Rename a file or folder.
+     */
+    static async renamePath(context, path, name) {
+        const parent = (0, path_1.dirname)(path);
+        try {
+            const newPath = (0, path_1.join)(parent, name);
+            await fs_1.promises.rename(path, newPath);
+            const tree = await AppStorage.readDirectory(parent);
+            context.webContents.send('from:folder:opened', { path: parent, tree });
+            context.webContents.send('from:path:renamed', {
+                oldPath: path,
+                newPath,
+                name,
+            });
+            context.webContents.send('from:notification:display', {
+                status: 'success',
+                key: 'notifications:renamed_success',
+            });
+        }
+        catch {
+            context.webContents.send('from:notification:display', {
+                status: 'error',
+                key: 'notifications:unable_rename',
+            });
+        }
+    }
+    /**
+     * Delete a file or folder.
+     */
+    static async deletePath(context, path) {
+        const parent = (0, path_1.dirname)(path);
+        try {
+            await fs_1.promises.rm(path, { recursive: true, force: true });
+            const tree = await AppStorage.readDirectory(parent);
+            context.webContents.send('from:folder:opened', { path: parent, tree });
+            context.webContents.send('from:notification:display', {
+                status: 'success',
+                key: 'notifications:deleted_success',
+            });
+        }
+        catch {
+            context.webContents.send('from:notification:display', {
+                status: 'error',
+                key: 'notifications:unable_delete',
+            });
+        }
+    }
+    /**
+     * Get properties of a file or folder.
+     */
+    static async getPathProperties(path) {
+        const stats = await fs_1.promises.stat(path);
+        let size;
+        if (stats.size >= 1024 * 1024) {
+            size = `${(stats.size / (1024 * 1024)).toFixed(2)} MB`;
+        }
+        else {
+            size = `${(stats.size / 1024).toFixed(2)} KB`;
+        }
+        return {
+            path,
+            isDirectory: stats.isDirectory(),
+            size,
+            created: stats.birthtime.toISOString(),
+            modified: stats.mtime.toISOString(),
+        };
+    }
+    /**
+     * Read directory contents.
+     *
+     * @param dir - the directory to read
+     * @returns - the directory contents
+     */
+    static async readDirectory(dir) {
+        const entries = await fs_1.promises.readdir(dir, { withFileTypes: true });
+        const filtered = entries.filter((d) => d.isDirectory() || d.name.endsWith('.md'));
+        return Promise.all(filtered.map(async (entry) => {
+            const full = (0, path_1.join)(dir, entry.name);
+            if (entry.isDirectory()) {
+                return {
+                    type: 'directory',
+                    name: entry.name,
+                    path: full,
+                    hasChildren: true,
+                };
+            }
+            return { type: 'file', name: entry.name, path: full };
+        }));
+    }
+}
+exports.AppStorage = AppStorage;
