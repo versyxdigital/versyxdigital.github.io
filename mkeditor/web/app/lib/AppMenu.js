@@ -9,10 +9,14 @@ const menuModel_1 = require("./menuModel");
  *
  * Builds the Electron application menu from the shared `menuModel`.
  *
- * On macOS the menu lives on the system menu bar and stays in use; on
- * Windows and Linux we set `Menu.setApplicationMenu(null)` so the OS
- * strip disappears — the in-window `<TitleBar>` (added in P2) renders
- * the same model in the renderer.
+ * On macOS the menu lives on the system menu bar and is visible there.
+ * On Windows and Linux the in-window `<TitleBar>` (added in P2) renders
+ * the same model — but we still install the Electron application menu
+ * so global accelerators (Ctrl+S, Ctrl+O, etc.) keep working. The menu
+ * bar itself is suppressed by the BrowserWindow being frameless plus
+ * `autoHideMenuBar: true` / `setMenuBarVisibility(false)` in `main.ts`,
+ * so the menu is functional-but-invisible and the user only ever sees
+ * the renderer-drawn `<TitleBar>` strip.
  */
 class AppMenu {
     /** The browser window */
@@ -46,16 +50,18 @@ class AppMenu {
         this.providers[provider] = instance;
     }
     /**
-     * Build the Electron menu template from `menuModel` and install it.
+     * Build the Electron menu template from `menuModel` and install it
+     * on all platforms.
      *
-     * On Windows + Linux we explicitly clear the application menu — the
-     * in-window `<TitleBar>` (P2) is the new home for those entries.
+     * On macOS this populates the system menu bar (the visible UI).
+     * On Windows / Linux the menu bar is suppressed (frameless window +
+     * `setMenuBarVisibility(false)` in `main.ts`), but the menu itself
+     * is still registered so Electron's accelerator dispatcher fires
+     * the click handlers when the user presses Ctrl+S / Ctrl+O / etc.
+     * Without this the in-window `<TitleBar>` would show keybindings
+     * that don't actually do anything.
      */
     register() {
-        if (process.platform !== 'darwin') {
-            electron_1.Menu.setApplicationMenu(null);
-            return;
-        }
         const template = menuModel_1.menuModel.map((group) => this.buildGroup(group));
         electron_1.app.applicationMenu = electron_1.Menu.buildFromTemplate(template);
     }
@@ -113,13 +119,19 @@ class AppMenu {
     }
     /**
      * Dispatch table for `{ kind: 'command' }` menu actions. Public so the
-     * renderer-side in-window menu (P2) can reach the same handlers via
+     * renderer-side in-window TitleBar menu can reach the same handlers via
      * `to:command:run` — see `wireRendererCommandBridge()` below.
      *
      * Adding a new command means adding an entry here; both the native
      * macOS menu and the in-window menu pick it up for free.
      */
     runCommand(commandId) {
+        // Bail if the window we'd dispatch onto has been destroyed (the
+        // listener cleanup in `wireRendererCommandBridge` covers the
+        // ordinary path, but late-firing events between `closed` and
+        // `removeListener` can still arrive here).
+        if (this.context.isDestroyed())
+            return;
         switch (commandId) {
             case 'open-log': {
                 const logpath = this.providers.logger?.logpath;
@@ -137,15 +149,33 @@ class AppMenu {
                 return;
         }
     }
+    /** Track the `to:command:run` handler so we can detach it on close. */
+    commandBridgeHandler = null;
     /**
      * Register the `to:command:run` IPC listener so the renderer's
-     * in-window menu (P2) can fire main-process commands through the
+     * in-window TitleBar menu can fire main-process commands through the
      * same dispatch table the native macOS menu uses. Called from
      * `main.ts` once per BrowserWindow.
+     *
+     * The handler is sender-scoped (ignores IPC from any other
+     * BrowserWindow's webContents) and torn down when this window
+     * closes — both guards matter on macOS where the window can be
+     * recreated via `app.on('activate')` and a stale handler would
+     * otherwise dispatch commands onto the wrong / destroyed context.
      */
     wireRendererCommandBridge() {
-        electron_1.ipcMain.on('to:command:run', (_event, commandId) => {
+        const handler = (event, commandId) => {
+            if (event.sender.id !== this.context.webContents.id)
+                return;
             this.runCommand(commandId);
+        };
+        electron_1.ipcMain.on('to:command:run', handler);
+        this.commandBridgeHandler = handler;
+        this.context.once('closed', () => {
+            if (this.commandBridgeHandler) {
+                electron_1.ipcMain.removeListener('to:command:run', this.commandBridgeHandler);
+                this.commandBridgeHandler = null;
+            }
         });
     }
     /**
@@ -161,6 +191,18 @@ class AppMenu {
                 click: () => {
                     electron_1.app.focus();
                     context.maximize();
+                },
+            },
+            {
+                // Fires the same `from:assistant:toggle` channel the
+                // application menu's View → Toggle Assistant Sidebar uses,
+                // which routes through BridgeListeners → UIStateContext
+                // `toggleRightSidebarExternal`.
+                label: 'Toggle Assistant',
+                click: () => {
+                    if (!context.isDestroyed()) {
+                        context.webContents.send('from:assistant:toggle');
+                    }
                 },
             },
             {

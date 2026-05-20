@@ -9,12 +9,14 @@ const main_1 = __importDefault(require("electron-log/main"));
 const fs_1 = require("fs");
 const os_1 = require("os");
 const path_1 = require("path");
+const AppAssistant_1 = require("./lib/AppAssistant");
 const AppBridge_1 = require("./lib/AppBridge");
 const AppMenu_1 = require("./lib/AppMenu");
 const AppSession_1 = require("./lib/AppSession");
 const AppSettings_1 = require("./lib/AppSettings");
 const AppStorage_1 = require("./lib/AppStorage");
 const AppWindow_1 = require("./lib/AppWindow");
+const quitFlush_1 = require("./lib/quitFlush");
 const icon_1 = require("./assets/icon");
 /** --------------------App Logging------------------------------- */
 // Set the log path
@@ -59,11 +61,11 @@ let context;
  */
 function main(file = null) {
     // Pick the window chrome per platform. Windows + Linux become frameless
-    // so the renderer's `<TitleBar>` (added in P2) can draw the logo, menu
-    // bar, and window-control buttons. macOS keeps the native traffic lights
-    // via `titleBarStyle: 'hiddenInset'` and continues to use the system
-    // menu bar — `trafficLightPosition` nudges the buttons down so they
-    // align with the title row P3 will tune.
+    // so the renderer's `<TitleBar>` can draw the logo, menu bar, and
+    // window-control buttons. macOS keeps the native traffic lights via
+    // `titleBarStyle: 'hiddenInset'` and continues to use the system menu
+    // bar — `trafficLightPosition` nudges the buttons down so they align
+    // with the title row P3 will tune.
     const isMac = process.platform === 'darwin';
     let chrome;
     if (isMac) {
@@ -73,7 +75,15 @@ function main(file = null) {
         };
     }
     else {
-        chrome = { frame: false };
+        // Windows + Linux: frameless so the renderer-drawn `<TitleBar>`
+        // owns the chrome; `autoHideMenuBar` is belt-and-braces (some
+        // window managers — and certain Electron versions on Linux —
+        // can still try to render a menu strip inside the client area
+        // even when `frame: false` should suppress it). The Electron
+        // application menu IS still installed (see AppMenu.register())
+        // so global accelerators like Ctrl+S keep working; only the
+        // menu bar UI is suppressed.
+        chrome = { frame: false, autoHideMenuBar: true };
     }
     context = new electron_1.BrowserWindow({
         show: false,
@@ -85,6 +95,15 @@ function main(file = null) {
             preload: (0, path_1.join)(__dirname, 'preload.js'),
         },
     });
+    // Hard-suppress the menu bar on Windows + Linux. With
+    // `autoHideMenuBar` alone, pressing Alt can momentarily reveal the
+    // menu (a default Electron UX) which would conflict with the
+    // TitleBar's own Alt-to-focus-first-menu handling. Explicitly
+    // setting visibility to false keeps the menu purely functional
+    // (accelerators) without any UI presence.
+    if (!isMac) {
+        context.setMenuBarVisibility(false);
+    }
     // Load the editor frontend
     context.loadFile((0, path_1.join)(__dirname, '../index.html'));
     // Prevent navigation to links within the BrowserWindow. This is usually
@@ -100,19 +119,28 @@ function main(file = null) {
     const bridge = new AppBridge_1.AppBridge(context);
     bridge.provide('settings', settings);
     bridge.provide('logger', logconfig);
+    // AI Assistant — service the bridge delegates `to:ai:*` to. The SDK
+    // clients and `safeStorage`-encrypted keys live entirely inside this
+    // instance; the renderer reaches it only through the IPC surface
+    // AppBridge whitelists.
+    const assistant = new AppAssistant_1.AppAssistant(context);
+    bridge.provide('assistant', assistant);
     bridge.register(); // Register all IPC event listeners
-    // Load the electron application menu. On Windows + Linux this calls
-    // `Menu.setApplicationMenu(null)` so the native strip disappears; on
-    // macOS it installs the model-driven application menu.
+    // Load the electron application menu. macOS uses it for the system
+    // menu bar; Windows + Linux install the same template too — even
+    // though the menu bar is hidden (see chrome opts above), Electron
+    // still dispatches accelerators (Ctrl+S, Ctrl+O, etc.) from it, so
+    // the keybindings the in-window `<TitleBar>` advertises actually
+    // work.
     const menu = new AppMenu_1.AppMenu(context);
     menu.provide('logger', logconfig);
     menu.register(); // Register all menu items
-    // Renderer's in-window menu (P2) reaches main-process commands
+    // Renderer's in-window TitleBar menu reaches main-process commands
     // (open-log, toggle-devtools) through this IPC channel — same
     // dispatch table the native macOS menu uses.
     menu.wireRendererCommandBridge();
-    // Window-control IPC + maximize-state emitter. The renderer's title bar
-    // (P2) sends `to:window:minimize/maximize/close` here; `from:window:state`
+    // Window-control IPC + maximize-state emitter. The renderer's title
+    // bar sends `to:window:minimize/maximize/close` here; `from:window:state`
     // hydrates the renderer with the initial maximize state on did-finish-load
     // and replays on every maximize/unmaximize.
     const window = new AppWindow_1.AppWindow(context, true);
@@ -137,24 +165,37 @@ function main(file = null) {
     // and set the active file (untitled new file if no file open).
     context.webContents.on('did-finish-load', () => {
         if (context) {
-            if (settings.applied && settings.applied.systemtheme) {
-                context.webContents.send('from:theme:set', electron_1.nativeTheme.shouldUseDarkColors);
-            }
-            else {
-                context.webContents.send('from:theme:set', settings.applied?.darkmode);
-            }
+            context.webContents.send('from:theme:set', electron_1.nativeTheme.shouldUseDarkColors);
             context.webContents.send('from:settings:set', settings.loadFile());
             const sessionEnabled = settings.applied?.sessionRestore ?? true;
             context.webContents.send('from:session:restore', sessionEnabled
                 ? AppSession_1.AppSession.buildRestoreEnvelope(AppSession_1.AppSession.load())
                 : { session: null, missing: [], contents: {} });
+            // Hydrate the renderer with the sanitized AI Assistant config.
+            // The payload exposes per-provider `hasKey: boolean` only —
+            // never the key value. AssistantManager uses this to decide
+            // which provider tabs to show.
+            bridge.pushAssistantConfig();
+            // Hydrate the renderer with persisted conversation history.
+            // Goes second (after config) so AssistantManager exists and is
+            // wired before `restore()` is called from the channel handler.
+            bridge.pushPersistedConversations();
             AppStorage_1.AppStorage.openActiveFile(context, file);
         }
     });
+    const handleNativeThemeUpdated = () => {
+        if (!context || context.isDestroyed())
+            return;
+        if (!settings.applied?.systemtheme)
+            return;
+        context.webContents.send('from:theme:set', electron_1.nativeTheme.shouldUseDarkColors);
+    };
+    electron_1.nativeTheme.on('updated', handleNativeThemeUpdated);
     context.on('close', (event) => {
         bridge.promptUserBeforeQuit(event);
     });
     context.on('closed', () => {
+        electron_1.nativeTheme.off('updated', handleNativeThemeUpdated);
         context = null;
     });
     context.maximize();
@@ -235,18 +276,28 @@ electron_1.app.on('before-quit', (event) => {
         return;
     event.preventDefault();
     isFlushingSession = true;
-    let done = false;
-    const finish = () => {
-        if (done)
-            return;
-        done = true;
-        electron_1.ipcMain.removeListener('to:session:save', onAck);
-        electron_1.app.quit();
-    };
-    const onAck = () => finish();
-    electron_1.ipcMain.on('to:session:save', onAck);
-    context.webContents.send('from:session:flush-request');
-    setTimeout(finish, 250);
+    // Two flush requests fan out in parallel — session (FileManager
+    // tabs + cursor) and AI conversations. We resolve when BOTH ack
+    // OR the 250ms safety timeout fires. Missing one ack just costs
+    // a few hundred ms of unpersisted activity, not data loss; the
+    // renderer's debounced saves cover everything else. Logic lives
+    // in `quitFlush.ts` so it can be unit-tested without spinning up
+    // Electron's app lifecycle.
+    (0, quitFlush_1.runQuitFlush)({
+        on: (channel, listener) => electron_1.ipcMain.on(channel, listener),
+        off: (channel, listener) => electron_1.ipcMain.removeListener(channel, listener),
+        send: (channel, payload) => {
+            if (!context || context.isDestroyed())
+                return;
+            // `from:session:flush-request` historically went without a
+            // payload; preserve that signature for the renderer.
+            if (payload === undefined)
+                context.webContents.send(channel);
+            else
+                context.webContents.send(channel, payload);
+        },
+        onDone: () => electron_1.app.quit(),
+    });
 });
 electron_1.app.on('window-all-closed', () => {
     electron_1.app.clearRecentDocuments(); // TODO get recent documents working or remove

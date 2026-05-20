@@ -27,8 +27,22 @@ class AppSession {
     static filePath = AppSession.appPath + 'session.json';
     /** Tmp path used by the atomic write. */
     static tmpPath = AppSession.filePath + '.tmp';
-    /** Current schema version we know how to load. */
-    static SCHEMA_VERSION = 1;
+    /**
+     * Current canonical schema version. Writes always stamp this.
+     * The loader additionally accepts older versions in
+     * `SUPPORTED_VERSIONS` so a freshly-bumped app can read a session
+     * file written by the previous version without nuking the user's
+     * tabs.
+     *
+     * v1 → v2: added the optional `assistant` right-sidebar
+     * view-state block.
+     */
+    static SCHEMA_VERSION = 2;
+    /**
+     * Versions the loader is willing to read. Anything outside this set
+     * falls back to "no session" (the safer half of forward-compat).
+     */
+    static SUPPORTED_VERSIONS = [1, 2];
     /**
      * Read and validate the persisted session. Returns null if:
      *   - the file is absent
@@ -161,6 +175,10 @@ class AppSession {
                 tabs: kept,
                 activeFile: activeStillPresent ? payload.activeFile : null,
                 workspaceRoot: keptRoot,
+                // Assistant right-sidebar view state passes through verbatim
+                // (optional). Filtering wouldn't make sense — it's a pure UI
+                // snapshot with no main-side validation to perform.
+                assistant: payload.assistant,
             },
             missing,
             contents,
@@ -175,8 +193,10 @@ class AppSession {
         if (typeof value !== 'object' || value === null)
             return false;
         const candidate = value;
-        if (candidate.version !== AppSession.SCHEMA_VERSION)
+        if (typeof candidate.version !== 'number' ||
+            !AppSession.SUPPORTED_VERSIONS.includes(candidate.version)) {
             return false;
+        }
         if (!Array.isArray(candidate.tabs))
             return false;
         if (candidate.activeFile !== null &&
@@ -191,10 +211,27 @@ class AppSession {
             typeof candidate.workspaceRoot !== 'string') {
             return false;
         }
+        // `assistant` arrived in v2. Optional in both v1 and v2 payloads —
+        // UIStateContext supplies defaults when absent. When present it
+        // must shape-match `AssistantViewState`.
+        if ('assistant' in candidate && candidate.assistant !== undefined) {
+            if (!AppSession.isValidAssistantState(candidate.assistant))
+                return false;
+        }
         for (const tab of candidate.tabs) {
             if (!AppSession.isValidTab(tab))
                 return false;
         }
+        return true;
+    }
+    static isValidAssistantState(value) {
+        if (typeof value !== 'object' || value === null)
+            return false;
+        const a = value;
+        if (typeof a.sidebarOpen !== 'boolean')
+            return false;
+        if (typeof a.size !== 'number' || !Number.isFinite(a.size))
+            return false;
         return true;
     }
     static isValidTab(value) {
