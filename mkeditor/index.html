@@ -5,19 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Chris Rowles">
-    <meta name="description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
-    <meta name="keywords" content="markdown, markdown editor, simple markdown editor, online markdown editor, markdown writing, markdown preview, markdown formatting, markdown tool">
+    <meta name="description" content="MKEditor is a simple, fast, and free markdown editor with live preview — now with an in-editor AI assistant (Anthropic, OpenAI, Ollama) on the desktop app. Write, format, and export your markdown instantly.">
+    <meta name="keywords" content="markdown, markdown editor, ai markdown editor, markdown ai assistant, simple markdown editor, online markdown editor, markdown writing, markdown preview, markdown formatting, markdown tool, anthropic, openai, ollama">
     <!-- OpenGraph meta tags -->
-    <meta property="og:title" content="MKEditor - the simple markdown editor.">
-    <meta name="og:description" content="MKEditor is a simple, fast, and free online markdown editor with live preview. Write, format, and export your markdown documents instantly.">
+    <meta property="og:title" content="MKEditor - markdown with an AI assistant.">
+    <meta name="og:description" content="A simple, fast, free markdown editor with live preview — now with an in-editor AI assistant (Anthropic, OpenAI, Ollama) on the desktop app.">
     <meta property="og:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.webp">
     <!-- Twitter meta tags -->
     <meta name="twitter:card" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.webp">
-    <meta name="twitter:title" content="MKEditor - Simple Online Markdown Editor">
-    <meta name="twitter:description" content="Write, preview, and export markdown instantly with MKEditor.">
+    <meta name="twitter:title" content="MKEditor - Markdown Editor with AI Assistant">
+    <meta name="twitter:description" content="Write, preview, and export markdown — now with a built-in AI assistant on the desktop app.">
     <meta name="twitter:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.webp">
     <!-- Page title and canonical URL -->
-    <title>MKEditor - Simple & Fast Online Markdown Editor with Live Preview</title>
+    <title>MKEditor - Markdown Editor with Live Preview & AI Assistant</title>
     <link rel="canonical" href="https://versyxdigital.github.io/mkeditor/">
     <!-- CSS dependencies -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
@@ -34,12 +34,20 @@
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             "name": "MKEditor",
-            "operatingSystem": "Any",
+            "operatingSystem": "Windows, macOS, Linux",
             "applicationCategory": "DeveloperApplication",
-            "description": "A simple, fast, and free online markdown editor with live preview.",
+            "description": "A simple, fast, and free markdown editor with live preview and an in-editor AI assistant (Anthropic, OpenAI, Ollama) on the desktop app.",
             "url": "https://versyxdigital.github.io/mkeditor/",
             "image": "https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.webp",
-            "softwareVersion": "1.0.0",
+            "softwareVersion": "4.0.0",
+            "featureList": [
+                "CommonMark markdown support",
+                "Live HTML preview",
+                "HTML and PDF export",
+                "AI assistant with Anthropic, OpenAI and Ollama providers (desktop)",
+                "Workspace-scoped read/write tools with confirmation",
+                "13 supported languages"
+            ],
             "author": {
                 "@type": "Person",
                 "name": "Chris Rowles"
@@ -74,6 +82,7 @@
             </a>
             <ul class="site-nav__links">
                 <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI</a></li>
                 <li><a href="#settings">Settings</a></li>
                 <li><a href="#export">Export</a></li>
                 <li><a href="#shortcuts">Shortcuts</a></li>
@@ -103,7 +112,7 @@
                 </h1>
                 <span class="hero__eyebrow">
                     <span class="hero__eyebrow-dot"></span>
-                    v3.8.1 - stable
+                    v4 now with AI
                 </span>
                 <p class="hero__lede" tabindex="4">
                     Quickly and easily get started writing your markdown documents with MKEditor's rich set of features.
@@ -111,7 +120,7 @@
 
                 <!-- Download Buttons -->
                 <div class="hero__downloads">
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.8.1/mkeditor-setup-3.8.1.exe"
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v4.0.0/mkeditor-setup-4.0.0.exe"
                         class="download-pill"
                         download
                         tabindex="5"
@@ -119,7 +128,7 @@
                         <i class="fa-brands fa-windows download-pill__icon"></i>
                         <div class="download-pill__meta">
                             <p class="release-info download-pill__label">Windows</p>
-                            <p class="release-info download-pill__sub">exe - v3.8.1</p>
+                            <p class="release-info download-pill__sub">exe - v4.0.0</p>
                         </div>
                     </a>
 
@@ -135,7 +144,7 @@
                         </div>
                     </a>
 
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.8.1/mkeditor-setup-3.8.1.deb"
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v4.0.0/mkeditor-setup-4.0.0.deb"
                         class="download-pill"
                         download
                         tabindex="7"
@@ -143,7 +152,7 @@
                         <i class="fa-brands fa-linux download-pill__icon"></i>
                         <div class="download-pill__meta">
                             <p class="release-info download-pill__label">Linux</p>
-                            <p class="release-info download-pill__sub">deb - v3.8.1</p>
+                            <p class="release-info download-pill__sub">deb - v4.0.0</p>
                         </div>
                     </a>
                 </div>
@@ -156,7 +165,7 @@
                         <i class="fa-solid fa-external-link download-pill__icon"></i>
                         <div class="download-pill__meta">
                             <p class="release-info download-pill__label">Launch MKEditor Web</p>
-                            <p class="release-info download-pill__sub">v3.8.1</p>
+                            <p class="release-info download-pill__sub">v4.0.0</p>
                         </div>
                     </a>
                 </div>
@@ -226,7 +235,7 @@
         <div class="overlay-mesh z-2"></div>
         <div class="container position-relative z-3">
             <!-- Section Header -->
-            <span class="section__eyebrow">Why MKEditor</span>
+            <span class="section__eyebrow">MKEditor</span>
             <h2 class="section__title" tabindex="11">
                 <i class="fas fa-rocket me-2"></i> Feature Overview
             </h2>
@@ -235,47 +244,145 @@
             <!-- Section Row & Columns -->
             <div class="row g-4 feature-grid">
                 <!-- Full CommonMark Support Overview -->
-                <div class="col-md-4">
+                <div class="col-md-6 col-lg-3">
                     <div class="feature-card">
                         <div class="feature-card__icon">
                             <i class="far fa-file-code"></i>
                         </div>
                         <h3 class="feature-card__title" tabindex="12">
-                            Full CommonMark Support
+                            CommonMark Support
                         </h3>
                         <p class="feature-card__body" tabindex="13">Write markdown with confidence, with extra features for alerts, syntax
-                            highlighting, codeblock copying, and custom styling.
+                            highlighting, codeblock copying, and more.
                         </p>
                     </div>
                 </div>
                 <!-- Live Preview Feature Overview -->
-                <div class="col-md-4">
+                <div class="col-md-6 col-lg-3">
                     <div class="feature-card">
                         <div class="feature-card__icon">
                             <i class="far fa-eye"></i>
                         </div>
                         <h3 class="feature-card__title" tabindex="14">
-                            Live Preview Renderer
+                            Live Preview
                         </h3>
                         <p class="feature-card__body" tabindex="15">
                             Built-in, resizable HTML preview enhanced with beautiful custom CSS,
-                            letting you see styled or unstyled output in real time.
+                            letting you see output in real time.
                         </p>
                     </div>
                 </div>
                 <!-- Customizable & Export-Ready Feature Overview -->
-                <div class="col-md-4">
+                <div class="col-md-6 col-lg-3">
                     <div class="feature-card">
                         <div class="feature-card__icon">
                             <i class="far fa-pen-to-square"></i>
                         </div>
                         <h3 class="feature-card__title" tabindex="16">
-                            Customizable & Export-Ready
+                            Fully Configurable
                         </h3>
                         <p class="feature-card__body" tabindex="17">
                             Switch between light and dark mode, toggle word-wrap, and export your
-                            markdown to clean styled or unstyled HTML or PDF.
+                            markdown to clean HTML or PDF.
                         </p>
+                    </div>
+                </div>
+                <!-- AI Assistant Overview -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3 class="feature-card__title">
+                            AI Assistance
+                        </h3>
+                        <p class="feature-card__body">
+                            Bring Claude, GPT, or a local Ollama model into the editor.
+                            Workspace-aware, with read/write tools and your keys kept secure.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Assistant Section -->
+    <section id="ai" class="section text-light position-relative z-3">
+        <div class="container position-relative z-3">
+            <!-- Section Row & Columns -->
+            <div class="row d-flex align-items-center g-5 text-center text-md-start">
+                <div class="col-md-6">
+                    <div class="mkeditor-ai-list">
+                        <span class="section__eyebrow">New in v4</span>
+                        <!-- Section Header -->
+                        <h2 class="section__title section__title--inline">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
+                            AI Assistance
+                        </h2>
+                        <!-- Section Tip -->
+                        <p class="section__tip">Tip: Open the assistant via the
+                            <i class="fa-solid fa-comments mx-1"></i> icon in the app sidebar.
+                        </p>
+                        <h3 class="section__subtitle">
+                            Work with agents in your editor
+                        </h3>
+                        <div class="settings-group">
+                            <!-- Providers Section -->
+                            <h4 class="settings-group__title">Configurable Providers</h4>
+                            <ul class="settings-list">
+                                <li>
+                                    <strong>Anthropic, OpenAI &amp; Ollama</strong> - chat with Claude
+                                    or GPT using your own API key, or stay fully offline against a local
+                                    Ollama model.
+                                </li>
+                                <li>
+                                    <strong>Persisted chats</strong> - every conversation is saved per-provider so you
+                                    can pick up where you left off.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="settings-group">
+                            <!-- Workspace Context Section -->
+                            <h4 class="settings-group__title">Context-Aware & Capable</h4>
+                            <ul class="settings-list">
+                                <li>
+                                    <strong>Active-file &amp; selection aware</strong> - the assistant
+                                    sees the file you're editing and any text you've highlighted, so
+                                    answers stay on-topic.
+                                </li>
+                                <li>
+                                    <strong>Read &amp; write tools</strong> - the agent can read, list,
+                                    and search across your workspace, and (with explicit approval)
+                                    write or edit files for you.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="settings-group">
+                            <!-- Privacy Section -->
+                            <h4 class="settings-group__title">Secure by design</h4>
+                            <ul class="settings-list">
+                                <li>
+                                    <strong>Encrypted key transport</strong> - provider API keys are
+                                    encrypted and persisted on-disk with <code>safeStorage</code>.
+                                </li>
+                                <li>
+                                    <strong>Workspace-scoped access</strong> - every file operation
+                                    resolves against the open workspace root; symlinks that try to
+                                    escape are rejected.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!-- Section Image -->
+                    <div class="media-frame cool-blur blur-lgg">
+                        <img src="./assets/img/ai-assistant.webp" class="media-frame__img connector-target"
+                            style="cursor: zoom-in"
+                            data-bs-toggle="modal"
+                            data-bs-target="#imageModal"
+                            data-full="./assets/img/ai-assistant.webp"
+                            alt="Screenshot of the MKEditor AI assistant sidebar">
                     </div>
                 </div>
             </div>
@@ -284,90 +391,30 @@
 
     <!-- Configure Settings Section -->
     <section id="settings" class="section text-light position-relative z-3">
-        <div class="container position-relative z-3">
-            <div class="text-left sr-only" tabindex="19">
-                <p>MKEditor stores its configuration settings in a JSON file located at
-                    <code>%USERPROFILE%/.mkeditor/settings.json</code>.
+        <div class="container position-relative z-3 text-center text-md-start">
+            <!-- Centered Section Head -->
+            <div class="settings-head">
+                <span class="section__eyebrow">Personalize</span>
+                <h2 class="section__title section__title--inline" tabindex="18">
+                    <i class="far fa-window-restore me-2"></i>
+                    Configure Settings
+                </h2>
+                <p class="section__tip" tabindex="20">Tip: Open settings via the
+                    <i class="fas fa-cogs mx-1"></i> icon in the app toolbar.
                 </p>
-                <p>
-                    If the file does not exist when the application starts, MKEditor
-                    automatically creates it with a full set of default values. This ensures
-                    the application is ready to run out of the box without requiring manual
-                    configuration.
-                </p>
+                <h3 class="section__subtitle" tabindex="21">
+                    Customize to your style
+                </h3>
             </div>
-            <!-- Section Row & Columns -->
-            <div class="row d-flex align-items-center g-5">
-                <div class="col-md-6 order-2 order-md-1">
-                    <!-- Section Image -->
-                    <div class="media-frame cool-blur blur-lgg">
-                        <img src="./assets/img/settings.png" class="media-frame__img connector-target"
-                            alt="Screenshot of MKEditor settings">
-                    </div>
-                </div>
-                <div class="col-md-6 order-1 order-md-2">
-                    <div class="mkeditor-settings-list text-center text-md-start">
-                        <span class="section__eyebrow">Personalize</span>
-                        <!-- Section Header -->
-                        <h2 class="section__title section__title--inline" tabindex="18">
-                            <i class="far fa-window-restore me-2"></i>
-                            Configure Settings
-                        </h2>
-                        <!-- Section Tip -->
-                        <p class="section__tip" tabindex="20">Tip: Open settings via the
-                            <i class="fas fa-cogs mx-1"></i> icon in the app toolbar.
-                        </p>
-                        <h3 class="section__subtitle" tabindex="21">
-                            Customize to your style
-                        </h3>
-                        <div class="settings-group">
-                            <!-- Formatting Section -->
-                            <h4 class="settings-group__title">Formatting</h4>
-                            <ul class="settings-list" tabindex="22">
-                                <li>
-                                    <strong>Toggle Automatic Indentation</strong> - When enabled, MKEditor
-                                    will automatically indent your text when you press <code>Enter</code>,
-                                    following the indentation level of the previous line. This is especially
-                                    useful for lists, code blocks, and nested content.
-                                </li>
-                                <li>
-                                    <strong>Toggle Word-Wrapping</strong> - Automatically wraps long lines of
-                                    text so they fit within the visible editor window without requiring horizontal
-                                    scrolling. Ideal for distraction-free writing and smaller screen sizes.
-                                </li>
-                            </ul>
-                        </div>
 
-                        <div class="settings-group">
-                            <!-- Editing Section -->
-                            <h4 class="settings-group__title">Editing</h4>
-                            <ul class="settings-list" tabindex="23">
-                                <li>
-                                    <strong>Render Whitespace</strong> - Visually display spaces, tabs, and other
-                                    whitespace characters directly in the editor. Useful for aligning code, spotting
-                                    formatting issues, or maintaining strict markdown layouts.
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="settings-group">
-                            <!-- Miscellaneous Section -->
-                            <h4 class="settings-group__title">Miscellaneous</h4>
-                            <ul class="settings-list" tabindex="24">
-                                <li>
-                                    <strong>Display Minimap</strong> - Shows a miniature overview of your document along
-                                    the side of the editor. Quickly navigate large files by clicking or dragging within
-                                    the minimap view.
-                                </li>
-                                <li>
-                                    <strong>Use System Theme</strong> - Automatically adapts MKEditor's appearance to
-                                    match your operating system's theme (light or dark), overriding the manual theme
-                                    setting.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <!-- Hero Image -->
+            <div class="media-frame media-frame--wide cool-blur blur-lgg">
+                <img src="./assets/img/settings.webp" class="media-frame__img connector-target"
+                    style="cursor: zoom-in"
+                    data-bs-toggle="modal"
+                    data-bs-target="#imageModal"
+                    data-full="./assets/img/settings.webp"
+                    alt="Screenshot of MKEditor settings">
             </div>
         </div>
     </section>
@@ -482,6 +529,12 @@
                         installing software isn't possible. Simply visit the MKEditor web page to start writing
                         instantly - no downloads, no setup, just open and go.
                     </p>
+                    <p class="section__body">
+                        <small class="text-muted">
+                            <i class="fa-solid fa-circle-info me-1"></i>
+                            The AI assistant is currently available on the desktop app only.
+                        </small>
+                    </p>
                     <!-- Launch MKEditor Web Button -->
                     <div class="web-cta">
                         <a href="/mkeditor/web" target="_blank"
@@ -489,7 +542,7 @@
                             <i class="fa-solid fa-external-link download-pill__icon"></i>
                             <div class="download-pill__meta">
                                 <p class="release-info download-pill__label">Launch MKEditor Web</p>
-                                <p class="release-info download-pill__sub">v3.8.1</p>
+                                <p class="release-info download-pill__sub">v4.0.0</p>
                             </div>
                         </a>
                     </div>
@@ -535,12 +588,12 @@
                     </div>
                     <p class="download-card__meta">
                         <i class="fa-regular fa-clock"></i>
-                        Last built: 28th August 2025
+                        Last built: 19th May 2026
                     </p>
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.8.1/mkeditor-setup-3.8.1.exe"
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v4.0.0/mkeditor-setup-4.0.0.exe"
                         class="download-card__btn"
                         download>
-                        <span>Windows v3.8.1</span>
+                        <span>Windows v4.0.0</span>
                         <i class="fa-solid fa-arrow-down"></i>
                     </a>
                 </div>
@@ -579,12 +632,12 @@
                     </div>
                     <p class="download-card__meta">
                         <i class="fa-regular fa-clock"></i>
-                        Last built: 28th August 2025
+                        Last built: 19th May 2026
                     </p>
-                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.deb"
+                    <a href="https://github.com/versyxdigital/mkeditor/releases/download/v4.0.0/mkeditor-setup-4.0.0.deb"
                         class="download-card__btn"
                         download>
-                        <span>Linux v3.6.0</span>
+                        <span>Linux v4.0.0</span>
                         <i class="fa-solid fa-arrow-down"></i>
                     </a>
                 </div>
