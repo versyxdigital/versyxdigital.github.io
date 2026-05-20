@@ -356,7 +356,7 @@ h2.section__title {
     font-family: "Inter", sans-serif;
     font-size: 1.2rem;
     font-weight: 500;
-    color: var(--text);
+    color: var(--text-muted);
     margin-bottom: 28px;
     letter-spacing: -0.015em;
 }
@@ -1182,16 +1182,23 @@ h2.section__title {
 /* =========================================================================
    Shortcuts
    ========================================================================= */
-.shortcuts-head {
+.shortcuts-head,
+.settings-head {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.shortcuts-head .section__title { margin-left: auto; margin-right: auto; }
+.shortcuts-head .section__title,
+.settings-head .section__title { margin-left: auto; margin-right: auto; }
 
 .media-frame--wide {
     max-width: 1080px;
     margin: 0 auto;
+}
+
+.media-frame--wide .media-frame__img {
+    margin-inline: auto;
+    max-width: 100%;
 }
 
 /* =========================================================================
