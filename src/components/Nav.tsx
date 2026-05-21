@@ -1,3 +1,4 @@
+import { useActiveSection } from '../hooks/useActiveSection';
 import { useScrollState } from '../hooks/useScrollState';
 import { Container } from './Container';
 import { SUPPORT_URL } from '../data/site';
@@ -11,8 +12,11 @@ const LINKS = [
   { href: '#web', label: 'Web' },
 ];
 
+const SECTION_IDS = LINKS.map((l) => l.href.slice(1));
+
 export function Nav() {
   const { scrolled } = useScrollState();
+  const active = useActiveSection(SECTION_IDS);
 
   return (
     <nav
@@ -29,16 +33,25 @@ export function Nav() {
         </a>
 
         <ul className="m-0 flex list-none items-center gap-1.5 p-0">
-          {LINKS.map(({ href, label }) => (
-            <li key={href} className="max-[880px]:hidden">
-              <a
-                href={href}
-                className="inline-flex items-center rounded-lg px-3 py-1.5 text-sm font-medium text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]"
-              >
-                {label}
-              </a>
-            </li>
-          ))}
+          {LINKS.map(({ href, label }) => {
+            const isActive = active === href.slice(1);
+            return (
+              <li key={href} className="max-[880px]:hidden">
+                <a
+                  href={href}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={[
+                    'inline-flex items-center rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+                    isActive
+                      ? 'bg-[rgba(77,212,191,0.10)] text-[var(--color-accent)] hover:bg-[rgba(77,212,191,0.16)]'
+                      : 'text-[var(--color-text-muted)] hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]',
+                  ].join(' ')}
+                >
+                  {label}
+                </a>
+              </li>
+            );
+          })}
           <li className="ml-1.5 max-[880px]:ml-0">
             <a
               href={SUPPORT_URL}
