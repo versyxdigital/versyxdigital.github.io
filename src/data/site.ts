@@ -1,4 +1,4 @@
-export const VERSION = '4.0.0';
+export const VERSION = '4.1.0';
 export const MAC_VERSION = '3.6.0';
 
 export const REPO = 'versyxdigital/mkeditor';
