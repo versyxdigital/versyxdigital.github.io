@@ -5,7 +5,7 @@
   gap: 0.5rem;
   padding: 0.38rem 0.7rem 0.38rem 0.6rem;
   border: 1px solid var(--line);
-  background: rgba(11, 15, 20, 0.72);
+  background: rgba(15, 15, 16, 0.72);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.02em;
@@ -39,7 +39,7 @@
 .chip[data-lit='true'] {
   color: var(--text);
   border-color: var(--tone);
-  background: rgba(18, 24, 32, 0.9);
+  background: rgba(24, 24, 25, 0.9);
 }
 
 .chip:hover .pip,

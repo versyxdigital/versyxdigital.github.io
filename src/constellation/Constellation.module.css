@@ -12,7 +12,7 @@
 
 /* ── Edges ──────────────────────────────────────────────────── */
 .edge {
-  stroke: var(--tone, #7d93a8);
+  stroke: var(--tone, #939393);
   stroke-width: 1;
   stroke-opacity: 0.26;
   vector-effect: non-scaling-stroke;

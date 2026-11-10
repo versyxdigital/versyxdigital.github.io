@@ -192,7 +192,7 @@
   min-height: 2.75rem;
   padding: 0.5rem 0.85rem 0.5rem 0.7rem;
   border: 1px solid var(--line);
-  background: rgba(11, 15, 20, 0.82);
+  background: rgba(15, 15, 16, 0.82);
   font-size: 0.9375rem;
   color: var(--text);
   transition:
@@ -246,7 +246,7 @@
   margin-top: 0.9rem;
   padding: 1.2rem 1.1rem 1rem;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(10, 13, 18, 0.97), rgba(10, 13, 18, 0.93));
+  background: linear-gradient(180deg, rgba(13, 13, 14, 0.97), rgba(13, 13, 14, 0.93));
   animation: open var(--t-med) var(--ease-out);
 }
 
@@ -283,5 +283,5 @@
 
 .chip {
   border-radius: 999px;
-  background: rgba(12, 15, 22, 0.5);
+  background: rgba(15, 15, 16, 0.5);
 }

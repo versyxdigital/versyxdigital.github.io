@@ -3,7 +3,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 52% 68% at 16% 52%, rgba(5, 6, 8, 0.88), rgba(5, 6, 8, 0) 74%);
+  background: radial-gradient(ellipse 52% 68% at 16% 52%, rgba(6, 6, 6, 0.88), rgba(6, 6, 6, 0) 74%);
   pointer-events: none;
 }
 
@@ -51,7 +51,7 @@
   letter-spacing: -0.055em;
   margin-left: -0.04em;
   /* Keep the type legible where it crosses the lit part of the field. */
-  text-shadow: 0 0 40px rgba(5, 6, 8, 0.55);
+  text-shadow: 0 0 40px rgba(6, 6, 6, 0.55);
 }
 
 /* Each line rises out of its own clip: a short, single reveal. */
@@ -108,7 +108,7 @@
   line-height: 1.5;
   color: var(--text-2);
   text-wrap: pretty;
-  text-shadow: 0 0 18px rgba(5, 6, 8, 0.9);
+  text-shadow: 0 0 18px rgba(6, 6, 6, 0.9);
   animation: rise 900ms var(--ease-out) 320ms both;
 }
 
@@ -258,7 +258,7 @@
 @media (max-width: 900px) {
   /* Single column: the type spans the screen, so the scrim does too. */
   .hero::before {
-    background: linear-gradient(to bottom, rgba(5, 6, 8, 0.45), rgba(5, 6, 8, 0.7) 45%, rgba(5, 6, 8, 0.25));
+    background: linear-gradient(to bottom, rgba(6, 6, 6, 0.45), rgba(6, 6, 6, 0.7) 45%, rgba(6, 6, 6, 0.25));
   }
   .telemetry {
     display: none;

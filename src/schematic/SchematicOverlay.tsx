@@ -163,7 +163,7 @@ export function SchematicOverlay() {
       const nodeRgb = energy > 0.2 ? rgb : REST_RGB;
       ctx.lineWidth = 1;
       ctx.strokeStyle = `rgba(${nodeRgb}, ${(0.9 * nodeAlpha).toFixed(3)})`;
-      ctx.fillStyle = '#050608';
+      ctx.fillStyle = '#060606';
       ctx.beginPath();
       ctx.arc(Math.round(a.x) + 0.5, Math.round(a.y) + 0.5, 3, 0, Math.PI * 2);
       ctx.fill();

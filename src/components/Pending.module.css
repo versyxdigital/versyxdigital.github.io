@@ -1,7 +1,7 @@
 .pending {
   padding: 0.8rem 0.95rem;
   border: 1px dashed var(--line);
-  background: repeating-linear-gradient(-45deg, transparent 0 7px, rgba(38, 49, 61, 0.22) 7px 8px);
+  background: repeating-linear-gradient(-45deg, transparent 0 7px, rgba(49, 49, 49, 0.22) 7px 8px);
 }
 
 .tag {

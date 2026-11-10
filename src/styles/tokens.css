@@ -35,7 +35,7 @@
 
   /* Panels: frosted glass with rounded corners, so the background shows through softly. */
   --panel-radius: 16px;
-  --panel-bg: rgba(12, 15, 22, 0.46);
+  --panel-bg: rgba(15, 15, 16, 0.46);
   --panel-blur: blur(8px);
   --panel-line: rgba(255, 255, 255, 0.09);
 
@@ -71,25 +71,36 @@
    ones marked "Greyscale theme" in global.css, Diagram.module.css and
    field.module.css, to bring the colours back. */
 :root {
-  --cyan: #f1f3f5;
-  --cyan-rgb: 241, 243, 245;
-  --blue: #b9c0c8;
-  --blue-rgb: 185, 192, 200;
-  --violet: #8a929c;
-  --violet-rgb: 138, 146, 156;
+  --cyan: #f2f2f2;
+  --cyan-rgb: 242, 242, 242;
+  --blue: #c0c0c0;
+  --blue-rgb: 192, 192, 192;
+  --violet: #929292;
+  --violet-rgb: 146, 146, 146;
 
-  --cat-language: #f4f6f8;
-  --cat-language-rgb: 244, 246, 248;
-  --cat-frontend: #d9dde2;
-  --cat-frontend-rgb: 217, 221, 226;
-  --cat-tooling: #bfc5cc;
-  --cat-tooling-rgb: 191, 197, 204;
-  --cat-backend: #a5acb5;
-  --cat-backend-rgb: 165, 172, 181;
-  --cat-data: #8b939d;
-  --cat-data-rgb: 139, 147, 157;
-  --cat-infra: #747c86;
-  --cat-infra-rgb: 116, 124, 134;
+  --cat-language: #f5f5f5;
+  --cat-language-rgb: 245, 245, 245;
+  --cat-frontend: #dddddd;
+  --cat-frontend-rgb: 221, 221, 221;
+  --cat-tooling: #c5c5c5;
+  --cat-tooling-rgb: 197, 197, 197;
+  --cat-backend: #acacac;
+  --cat-backend-rgb: 172, 172, 172;
+  --cat-data: #939393;
+  --cat-data-rgb: 147, 147, 147;
+  --cat-infra: #7c7c7c;
+  --cat-infra-rgb: 124, 124, 124;
 
-  --grad: linear-gradient(100deg, #ffffff 0%, #c5cad1 48%, #868e98 100%);
+  --grad: linear-gradient(100deg, #ffffff 0%, #c9c9c9 48%, #8c8c8c 100%);
+
+  /* Neutral blacks and greys: no blue cast in the surfaces, lines or text. */
+  --bg: #060606;
+  --bg-2: #0e0e0e;
+  --surface: #171717;
+  --line: #2f2f2f;
+  --line-soft: #1b1b1b;
+  --text: #ececec;
+  --text-2: #bdbdbd;
+  --text-3: #9a9a9a;
+  --panel-bg: rgba(15, 15, 15, 0.5);
 }

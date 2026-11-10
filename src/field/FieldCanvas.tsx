@@ -75,7 +75,7 @@ export default function FieldCanvas() {
         camera={{ fov: 36, near: 0.5, far: 260, position: [-13, 12.5, 38] }}
         gl={{ antialias: true, alpha: false, stencil: false, powerPreference: 'high-performance' }}
         onCreated={({ gl }) => {
-          gl.setClearColor('#050608', 1);
+          gl.setClearColor('#060606', 1);
           const canvas = gl.domElement;
           canvas.addEventListener('webglcontextlost', (event) => {
             event.preventDefault();

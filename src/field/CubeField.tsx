@@ -9,7 +9,7 @@ import { emitRipple, field, systemClock } from './fieldState';
 import { fragmentShader, vertexShader } from './shaders';
 import { FIELD_SIZE, MAX_RIPPLES, cellSeed } from './waveMath';
 
-const BACKGROUND = new THREE.Color('#050608');
+const BACKGROUND = new THREE.Color('#060606');
 const BASE = new THREE.Color(0.125, 0.155, 0.198);
 
 /** Last known pointer position in viewport pixels, shared with the rig. */

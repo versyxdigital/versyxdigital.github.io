@@ -38,7 +38,7 @@
 }
 
 .box {
-  fill: rgba(10, 13, 18, 0.92);
+  fill: rgba(13, 13, 14, 0.92);
   stroke: var(--line);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
@@ -111,7 +111,7 @@
 
 /* Hub in the middle of a drawing, with a ring that breathes out from it. */
 .hub {
-  fill: rgba(10, 13, 18, 0.95);
+  fill: rgba(13, 13, 14, 0.95);
   stroke: var(--cyan);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
@@ -299,5 +299,5 @@
 rect.box {
   rx: 5px;
   ry: 5px;
-  fill: rgba(14, 18, 26, 0.6);
+  fill: rgba(18, 18, 19, 0.6);
 }

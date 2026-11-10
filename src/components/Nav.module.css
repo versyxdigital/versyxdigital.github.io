@@ -16,7 +16,7 @@
   position: absolute;
   inset: 0 0 -1.5rem 0;
   z-index: -1;
-  background: linear-gradient(to bottom, rgba(5, 6, 8, 0.97) 58%, rgba(5, 6, 8, 0.7) 80%, rgba(5, 6, 8, 0));
+  background: linear-gradient(to bottom, rgba(6, 6, 6, 0.97) 58%, rgba(6, 6, 6, 0.7) 80%, rgba(6, 6, 6, 0));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   mask-image: linear-gradient(to bottom, #000 70%, transparent);
@@ -112,7 +112,7 @@
   padding: 0.7rem 0.9rem;
   border: 1px solid var(--line);
   color: var(--text);
-  background: rgba(11, 15, 20, 0.7);
+  background: rgba(15, 15, 16, 0.7);
 }
 
 /* ── Full-screen menu (small screens) ───────────────────────── */
@@ -121,7 +121,7 @@
   inset: 0;
   z-index: 45;
   padding: calc(var(--nav-h) + 2rem) var(--gutter) 2rem;
-  background: rgba(5, 6, 8, 0.94);
+  background: rgba(6, 6, 6, 0.94);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   animation: menuIn var(--t-med) var(--ease-out);
@@ -179,7 +179,7 @@
   top: 0;
   bottom: 0;
   width: 1px;
-  background: #33414f;
+  background: #414141;
 }
 
 .railProgress {
