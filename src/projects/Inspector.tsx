@@ -9,13 +9,16 @@ import styles from './Inspector.module.css';
 
 type Tab = 'architecture' | 'overview' | 'engineering' | 'stack';
 const tabs: { id: Tab; label: string }[] = [
-  { id: 'architecture', label: 'How it works' },
   { id: 'overview', label: 'Overview' },
+  { id: 'architecture', label: 'How it works' },
   { id: 'engineering', label: 'How it was built' },
   { id: 'stack', label: 'Technology & links' },
 ];
 
 const linkGlyph = { live: '↗', source: '</>', docs: '§' } as const;
+
+/** A project with a screenshot opens on it; one without opens on its diagram. */
+const firstTab = (project: Project): Tab => (project.image ? 'overview' : 'architecture');
 
 /** True when a field has content to show: written, or a placeholder that is switched on. */
 const shown = (value: Maybe<unknown>): boolean => !isPending(value) || contentConfig.showPendingFields;
@@ -36,11 +39,12 @@ function ListOrPending({ value, label }: { value: Maybe<string[]>; label: string
  *
  * It is one panel sized to the space it is given, so on desktop a project
  * never runs off the screen. The header says what the project is; the tabs
- * hold everything else, starting with the architecture diagram. Only the tab
- * body scrolls, and only when a tab has more to say than fits.
+ * hold everything else. A project with a screenshot opens on its overview,
+ * image first; one without opens on its diagram. Only the tab body scrolls,
+ * and only when a tab has more to say than fits.
  */
 export function Inspector({ project, onClose }: { project: Project; onClose: () => void }) {
-  const [tab, setTab] = useState<Tab>('architecture');
+  const [tab, setTab] = useState<Tab>(() => firstTab(project));
   const [stage, setStage] = useState<string | null>(null);
   const transition = useSystem((s) => s.transition);
   const anchor = useAnchor<HTMLElement>('inspector');
@@ -48,10 +52,12 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
-    setTab('architecture');
+    setTab(firstTab(project));
     setStage(null);
     // Move focus into the inspector so keyboard and screen-reader users land on it.
     headingRef.current?.focus({ preventScroll: true });
+    // Keyed on the id: the project object itself is stable content.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.id]);
 
   const activeStage = project.diagram.nodes.find((n) => n.id === stage);
@@ -200,7 +206,31 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
         )}
 
         {tab === 'overview' && (
-          <div className={styles.columns}>
+          <div
+            className={styles.overview}
+            data-image={project.image !== undefined}
+            style={project.image ? ({ '--ratio': project.image.width / project.image.height } as React.CSSProperties) : undefined}
+          >
+            {project.image && (
+              <figure className={styles.shot}>
+                <a href={project.image.src} target="_blank" rel="noreferrer noopener">
+                  <img
+                    src={project.image.src}
+                    alt={project.image.alt}
+                    width={project.image.width}
+                    height={project.image.height}
+                    decoding="async"
+                  />
+                  <span className="visually-hidden"> (opens full size in a new tab)</span>
+                </a>
+                <figcaption className={styles.shotCaption}>
+                  <span>{project.image.caption}</span>
+                  <span className="mono" aria-hidden="true">
+                    Select to view full size ↗
+                  </span>
+                </figcaption>
+              </figure>
+            )}
             <div className={styles.prose}>
               <p>{project.description}</p>
               {shown(project.purpose) && (

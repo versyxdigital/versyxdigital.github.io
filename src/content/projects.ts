@@ -1,3 +1,4 @@
+import edcsImage from '../assets/projects/edcs.webp';
 import { pending, type Project } from './types';
 
 /**
@@ -474,6 +475,13 @@ export const projects: Project[] = [
     services: ['webapps', 'apis'],
     // The hosted site and API are no longer running, so only the source is linked.
     links: [{ label: 'Source', href: 'https://github.com/sentrychris/edcs-app/', kind: 'source' }],
+    image: {
+      src: edcsImage,
+      alt: 'Screenshot of the ED:CS home screen: a ship profile panel, a count of systems logged, search filters and a table of star systems.',
+      width: 1920,
+      height: 1080,
+      caption: 'The ED:CS home screen.',
+    },
     diagram: {
       caption: 'Ingest path into the catalogue, and the read path out of it.',
       cols: 5,

@@ -51,7 +51,7 @@ function IndexItem({ project }: { project: Project }) {
   );
 }
 
-/** Idle state of the bay: a quiet wireframe of whichever system is under the cursor. */
+/** Before a project is chosen: its screenshot, or a quiet wireframe of its diagram, for whichever one is under the cursor. */
 function Standby({ project }: { project: Project }) {
   return (
     <div className={styles.standby} data-standby>
@@ -61,8 +61,19 @@ function Standby({ project }: { project: Project }) {
           {project.ref} · {project.name}
         </span>
       </p>
-      <div className={styles.standbyCanvas} key={project.id}>
-        <Diagram diagram={project.diagram} tone={project.tone} id={`p-${project.id}`} preview />
+      <div className={styles.standbyCanvas} key={project.id} data-image={project.image !== undefined}>
+        {project.image ? (
+          <img
+            className={styles.standbyImage}
+            src={project.image.src}
+            alt={project.image.alt}
+            width={project.image.width}
+            height={project.image.height}
+            decoding="async"
+          />
+        ) : (
+          <Diagram diagram={project.diagram} tone={project.tone} id={`p-${project.id}`} preview />
+        )}
       </div>
       <p className={styles.standbyText}>
         <strong>{project.tagline}</strong> Select a project from the list to see how it works and how it was built.
@@ -157,7 +168,7 @@ export function Projects() {
       meta={`${projects.length} projects`}
       title={
         <>
-          Projects <em>we have built.</em>
+          Projects <em>we've built.</em>
         </>
       }
       lede={profile.catalogueNote}

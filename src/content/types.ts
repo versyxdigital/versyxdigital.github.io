@@ -86,7 +86,7 @@ export interface Service {
   /** What the service covers. Pending where no source describes it. */
   summary: Maybe<string>;
   /** Statements about this kind of work found in published material. */
-  record: string[];
+  record?: string[];
 }
 
 export interface ProjectLink {
@@ -141,9 +141,22 @@ export interface Diagram {
 /** Mathematical behaviour the cube field adopts while the project is inspected. */
 export type FieldSignature = 'rings' | 'scan' | 'stars' | 'blocks' | 'island' | 'steps';
 
+/** A screenshot that showcases a project. Convert new ones with scripts/webp.mjs. */
+export interface ProjectImage {
+  /** Imported asset URL. */
+  src: string;
+  /** What the screenshot shows, for people who cannot see it. */
+  alt: string;
+  /** Intrinsic size in pixels, so the page does not jump while it loads. */
+  width: number;
+  height: number;
+  /** One short line shown under the image. */
+  caption?: string;
+}
+
 export interface Project {
   id: ProjectId;
-  /** Catalogue reference, e.g. SYS-01. */
+  /** Number shown in the project list, e.g. 01. */
   ref: string;
   name: string;
   /** Short classification, e.g. "Markdown editor". */
@@ -160,6 +173,8 @@ export interface Project {
   /** Services this project is a clear example of. */
   services: ServiceId[];
   links: ProjectLink[];
+  /** Showcase screenshot. Projects without one open on their diagram instead. */
+  image?: ProjectImage;
   diagram: Diagram;
   signature: FieldSignature;
   /** Why the field behaves this way for this project. A note for maintainers; not shown. */

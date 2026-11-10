@@ -21,8 +21,7 @@ export const profile: Profile = {
     { label: 'Established', value: '2019' },
     { label: 'Based', value: 'United Kingdom' },
     { label: 'Size', value: 'Small and focused' },
-    { label: 'Founder', value: 'Chris Rowles' },
-    { label: 'Open to', value: 'Projects · Consulting' },
+    { label: 'Offering', value: 'Projects · Consulting' },
   ],
   founder: {
     name: 'Chris Rowles',
@@ -41,5 +40,5 @@ export const profile: Profile = {
       { label: 'Telephone', display: '+44 7522 267 722', href: 'tel:+447522267722' },
     ],
   },
-  catalogueNote: 'Projects we have built ourselves. Select one to see what it is and how it works. Client work is not shown here.',
+  catalogueNote: 'Projects we\'ve built ourselves. Select one to see what it is and how it works. Client work is not shown here.',
 };

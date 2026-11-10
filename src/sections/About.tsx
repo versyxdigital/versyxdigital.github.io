@@ -1,15 +1,12 @@
 import { Fragment, useEffect, useRef } from 'react';
 import { Pending } from '../components/Pending';
 import { Section } from '../components/Section';
-import { isPending, profile, projectById, projectsOfService, serviceById, services, type Service } from '../content';
+import { isPending, profile, serviceById, services, type Service } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { useSystem } from '../state/store';
-import { scrollToSection } from '../system/scroll';
 import { useMediaQuery } from '../system/useMediaQuery';
 import { widerThan } from '../system/viewport';
 import styles from './About.module.css';
-
-const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 
 function ServiceNode({ service, last }: { service: Service; last: boolean }) {
   const selected = useSystem((s) => s.selectedService === service.id);
@@ -43,11 +40,9 @@ function ServiceNode({ service, last }: { service: Service; last: boolean }) {
 
 function ServiceRecord() {
   const selectedId = useSystem((s) => s.selectedService);
-  const selectProject = useSystem((s) => s.selectProject);
   const service = serviceById.get(selectedId) ?? services[0];
   const anchor = useAnchor<HTMLDivElement>('service-record');
   if (!service) return null;
-  const examples = projectsOfService(service.id);
 
   return (
     <div className={styles.detail} aria-live="polite">
@@ -61,56 +56,6 @@ function ServiceRecord() {
         ) : (
           <p className={styles.detailSummary}>{service.summary}</p>
         )}
-
-        {/* Evidence and examples sit side by side, so the record stays short. */}
-        <div className={styles.recordCols} data-single={service.record.length === 0}>
-          {service.record.length > 0 && (
-            <div>
-              <h4 className={`mono ${styles.blockLabel}`}>Experience</h4>
-              <ol className={styles.exhibits}>
-                {service.record.map((line, i) => (
-                  <li key={line}>
-                    <span className={`mono ${styles.numeral}`} aria-hidden="true">
-                      {NUMERALS[i] ?? i + 1}
-                    </span>
-                    {line}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-
-          <div>
-            <h4 className={`mono ${styles.blockLabel}`}>Related projects</h4>
-            {examples.length > 0 ? (
-              <ul className={styles.examples}>
-                {examples.map((id) => {
-                  const project = projectById.get(id);
-                  if (!project) return null;
-                  return (
-                    <li key={id}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          selectProject(id);
-                          scrollToSection('projects');
-                        }}
-                      >
-                        <span className="mono">{project.ref}</span>
-                        <span className={styles.exampleName}>{project.name}</span>
-                        <span className={styles.arrow} aria-hidden="true">
-                          →
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className={styles.muted}>No public projects to show for this service yet.</p>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

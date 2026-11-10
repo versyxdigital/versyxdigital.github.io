@@ -591,3 +591,87 @@
     padding-block: 0.8rem;
   }
 }
+
+/* ── Overview ───────────────────────────────────────────────── */
+/* Without a screenshot: description beside the facts, as before. */
+.overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+/* With one: the screenshot leads, the description sits beside it and the
+   facts run underneath as a strip. */
+.overview[data-image='true'] {
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: clamp(1.1rem, 2.4vh, 1.75rem) clamp(1.5rem, 2.6vw, 2.5rem);
+}
+
+.shot {
+  margin: 0;
+  min-width: 0;
+}
+
+.shot a {
+  display: block;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  transition: border-color var(--t-fast) ease;
+}
+
+.shot a:hover,
+.shot a:focus-visible {
+  border-color: var(--tone, var(--cyan));
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.shotCaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+.shotCaption .mono {
+  color: var(--text-3);
+}
+
+.overview[data-image='true'] .facts {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0 clamp(1rem, 2vw, 2rem);
+}
+
+.overview[data-image='true'] .facts div {
+  grid-template-columns: 1fr;
+  gap: 0.2rem;
+  padding: 0.6rem 0;
+}
+
+@media (max-width: 860px) {
+  .overview,
+  .overview[data-image='true'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Fit mode: size the screenshot from the height that is free, so the overview
+   (image, description and facts) sits on one screen without scrolling. */
+@media (min-width: 1081px) and (min-height: 760px) {
+  .overview[data-image='true'] {
+    grid-template-columns: clamp(16rem, calc((100svh - 35.5rem) * var(--ratio, 1.778)), 58%) minmax(0, 1fr);
+  }
+  .overview[data-image='true'] .facts {
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  }
+}

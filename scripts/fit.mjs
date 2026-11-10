@@ -90,7 +90,8 @@ for (const [width, height] of sizes) {
   await page.keyboard.press('Escape');
   await go('projects');
   await report('projects', 'projects');
-  for (const name of ['The Home Counties', 'OMG', 'ED:CS']) {
+  // ED:CS opens on its screenshot; the loop ends on a project that opens on its diagram.
+  for (const name of ['ED:CS', 'The Home Counties', 'OMG']) {
     await page.locator('[data-project-index] button', { hasText: name }).click();
     await page.waitForTimeout(2200);
     await report(`project ${name}`, 'projects');

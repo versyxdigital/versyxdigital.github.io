@@ -218,6 +218,13 @@
   }
 }
 
+.standbyImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+}
+
 .standbyText {
   margin-top: 1.25rem;
   max-width: 40rem;
@@ -305,5 +312,17 @@
   }
   .standbyCanvas svg {
     height: 100%;
+  }
+  /* The screenshot keeps its shape and takes whatever height is free. */
+  .standbyCanvas[data-image='true'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .standbyImage {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
   }
 }

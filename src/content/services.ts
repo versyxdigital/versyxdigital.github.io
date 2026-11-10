@@ -1,4 +1,4 @@
-import { pending, type Service } from './types';
+import type { Service } from './types';
 
 /**
  * The five services are the founder's own list. `record` holds statements
@@ -11,12 +11,12 @@ import { pending, type Service } from './types';
 export const services: Service[] = [
   {
     id: 'webapps',
-    name: 'Web application design and development',
+    name: 'Web app design and development',
     short: 'Web apps',
     tag: '01',
-    summary: 'Designing and building web applications, from interface to infrastructure.',
+    summary: 'From interface to infrastructure.',
     record: [
-      'Assisted clients in modernising their web applications, improving performance and scalability.',
+      'Assisting clients in modernising their web applications, improving performance and scalability.',
       'Hands-on across the full stack: frontend, backend and infrastructure.',
     ],
   },
@@ -25,7 +25,7 @@ export const services: Service[] = [
     name: 'APIs',
     short: 'APIs',
     tag: '02',
-    summary: pending('Describe the API work the studio takes on: design, integration, documentation, scale.'),
+    summary: 'Connecting systems, powering applications.',
     record: [],
   },
   {
@@ -49,7 +49,7 @@ export const services: Service[] = [
     name: 'AI-integrated workflows',
     short: 'AI workflows',
     tag: '05',
-    summary: pending('Describe the AI integration work the studio offers to clients.'),
+    summary: 'Making AI practical, purposeful and productive.',
     record: [],
   },
 ];

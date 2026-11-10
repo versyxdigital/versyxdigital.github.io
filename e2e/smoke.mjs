@@ -191,7 +191,7 @@ async function desktop(browser) {
   await page.locator('#about button[aria-pressed]', { hasText: 'APIs' }).click();
   await page.waitForTimeout(500);
   const record = await page.locator('#about [aria-live="polite"]').innerText();
-  check('studio: selecting a service shows its record and the projects that exemplify it', record.includes('APIs') && record.includes('ED:CS'));
+  check('studio: selecting a service shows its name and description', record.includes('APIs') && record.replace(/\s+/g, ' ').trim().length > 'Service 02 APIs'.length + 10, record.replace(/\s+/g, ' ').slice(0, 80));
   check('studio: an undescribed service shows no placeholder to visitors', !record.toLowerCase().includes('pending'));
   await page.locator('header nav a', { hasText: 'Technologies' }).click();
   await page.waitForTimeout(2600);
@@ -289,9 +289,20 @@ async function desktop(browser) {
     await page.locator('[data-project-index] button', { hasText: name }).click();
     await page.waitForTimeout(1900);
     const title = await page.locator('#inspection-bay h3').first().innerText();
-    const stages = await page.locator('#inspection-bay svg [role="button"]').count();
     behaviours.add(await mode());
-    check(`explorer: ${name} opens with an architecture diagram`, title === name && stages >= 6, `${stages} stages`);
+    // A project with a screenshot opens on its overview, image first; the rest open on their diagram.
+    const shot = page.locator('#inspection-bay [role="tabpanel"] figure img');
+    if ((await shot.count()) > 0) {
+      const loaded = await shot.evaluate((img) => img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 200 && img.alt.length > 20);
+      const fits = await page.locator('#inspection-bay [role="tabpanel"]').evaluate((panel) => panel.scrollHeight <= panel.clientHeight + 2);
+      check(`explorer: ${name} opens on its screenshot`, title === name && loaded);
+      check(`explorer: ${name} overview fits without scrolling`, fits);
+      await page.screenshot({ path: 'qa-screens/e2e-desktop-project-image.png' });
+      await page.locator('[role="tab"]', { hasText: 'How it works' }).click();
+      await page.waitForTimeout(500);
+    }
+    const stages = await page.locator('#inspection-bay svg [role="button"]').count();
+    check(`explorer: ${name} has an architecture diagram`, title === name && stages >= 6, `${stages} stages`);
   }
   check('explorer: each project gives the field a distinct behaviour', behaviours.size === 6, [...behaviours].join(', '));
   await page.screenshot({ path: 'qa-screens/e2e-desktop-project-last.png' });
@@ -401,6 +412,7 @@ async function mobile(browser) {
   await page.locator('[data-project-index] button', { hasText: 'ED:CS' }).tap();
   await page.waitForTimeout(2600);
   check('explorer: inspector opens on mobile', (await page.locator('#inspection-bay h3').first().innerText()) === 'ED:CS');
+  check('explorer: the project screenshot shows on mobile', await page.locator('#inspection-bay [role="tabpanel"] figure img').evaluate((img) => img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 200));
   check('layout: no horizontal overflow with the inspector open', await noOverflow(page));
   await page.screenshot({ path: 'qa-screens/e2e-mobile-project.png' });
   check('console: no errors', errors.length === 0, errors.slice(0, 3).join(' | '));
