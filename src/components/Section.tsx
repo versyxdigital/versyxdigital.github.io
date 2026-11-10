@@ -10,7 +10,8 @@ interface SectionProps {
   index: string;
   /** Short mono label, e.g. "About". */
   label: string;
-  title: ReactNode;
+  /** Omit when the section places its own heading (it must then render an element with id `<id>-title`). */
+  title?: ReactNode;
   lede?: ReactNode;
   /** Right-hand annotation in the rule. */
   meta?: string;
@@ -29,7 +30,7 @@ export function Section({ id, index, label, title, lede, meta, children, classNa
   return (
     <section id={id} ref={ref} className={`${styles.section} ${className ?? ''}`} aria-labelledby={`${id}-title`}>
       <div className={styles.inner}>
-        <header className={styles.header}>
+        <header className={styles.header} data-bare={title === undefined}>
           <div className={styles.rule} data-reveal>
             <span className={`mono ${styles.index}`}>
               <span ref={anchor} className={styles.node} aria-hidden="true" />
@@ -39,16 +40,18 @@ export function Section({ id, index, label, title, lede, meta, children, classNa
             <span className={styles.ticks} aria-hidden="true" />
             {meta && <span className={`mono ${styles.meta}`}>{meta}</span>}
           </div>
-          <div className={styles.heading}>
-            <h2 id={`${id}-title`} className={styles.title} data-reveal style={{ '--i': 1 } as React.CSSProperties}>
-              {title}
-            </h2>
-            {lede && (
-              <p className={styles.lede} data-reveal style={{ '--i': 2 } as React.CSSProperties}>
-                {lede}
-              </p>
-            )}
-          </div>
+          {title !== undefined && (
+            <div className={styles.heading}>
+              <h2 id={`${id}-title`} className={styles.title} data-reveal style={{ '--i': 1 } as React.CSSProperties}>
+                {title}
+              </h2>
+              {lede && (
+                <p className={styles.lede} data-reveal style={{ '--i': 2 } as React.CSSProperties}>
+                  {lede}
+                </p>
+              )}
+            </div>
+          )}
         </header>
         {children}
       </div>

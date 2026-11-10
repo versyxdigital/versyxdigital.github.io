@@ -326,3 +326,19 @@
     max-height: 100%;
   }
 }
+
+/* The section heading, placed above the project list. */
+.title {
+  /* Sized to the list column, so it always sets in two lines. */
+  font-size: min(var(--fs-h2), calc(clamp(14.5rem, 21vw, 22rem) / 5.9));
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  margin-bottom: clamp(1.25rem, 3vh, 2rem);
+}
+
+.title em {
+  font-style: normal;
+  color: var(--text-2);
+}

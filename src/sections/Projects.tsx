@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Section } from '../components/Section';
-import { profile, projectById, projects, type Project } from '../content';
+import { projectById, projects, type Project } from '../content';
 import { Diagram } from '../projects/Diagram';
 import { Inspector } from '../projects/Inspector';
 import { pulse, registry, useAnchor, useConnections } from '../schematic/registry';
@@ -160,15 +160,13 @@ export function Projects() {
       index="03"
       label="Projects"
       meta={`${projects.length} projects`}
-      title={
-        <>
-          Projects <em>we've built.</em>
-        </>
-      }
-      lede={profile.catalogueNote}
     >
       <div className={styles.explorer} data-inspecting={selected !== undefined}>
         <div className={styles.index} data-reveal>
+          {/* The heading sits above the list, so the project panel starts right under the rule. */}
+          <h2 id="projects-title" className={styles.title}>
+            Projects <em>we've built.</em>
+          </h2>
           <p className={`mono ${styles.indexHead}`}>
             <span>Select a project</span>
           </p>

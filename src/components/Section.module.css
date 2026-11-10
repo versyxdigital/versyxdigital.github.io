@@ -158,3 +158,8 @@
     padding-bottom: 0.15rem;
   }
 }
+
+/* A section that places its own heading: the rule alone, with its usual gap below. */
+.header[data-bare='true'] {
+  margin-bottom: 0;
+}
