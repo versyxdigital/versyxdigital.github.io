@@ -70,13 +70,11 @@ describe('highlight', () => {
     expect(resolveHighlight({ ...intent, selectedTech: 'python', hoveredTech: 'php' }).primaryTech).toBe('php');
   });
 
-  it('lights a project’s technologies', () => {
-    const h = resolveHighlight({ ...intent, selectedProject: 'mkeditor' });
-    expect(h.primaryTech).toBeNull();
-    expect(h.techs.has('monaco')).toBe(true);
-    expect(h.techs.has('electron')).toBe(true);
-    expect(h.techs.has('python')).toBe(false);
-    expect([...h.projects]).toEqual(['mkeditor']);
+  it('leaves the technology graph alone when a project is chosen', () => {
+    const h = resolveHighlight({ ...intent, selectedProject: 'mkeditor', hoveredProject: 'wssh' });
+    expect(h.active).toBe(false);
+    expect(h.techs.size).toBe(0);
+    expect(h.projects.size).toBe(0);
   });
 
   it('lights the projects that exemplify a hovered service, and their technologies', () => {
@@ -113,10 +111,10 @@ describe('store', () => {
   });
 
   it('shares one memoised highlight per intent', () => {
-    useSystem.getState().hoverProject('wssh');
+    useSystem.getState().hoverTech('python');
     const first = selectHighlight(useSystem.getState());
     expect(selectHighlight(useSystem.getState())).toBe(first);
-    useSystem.getState().hoverProject('edcs');
+    useSystem.getState().hoverTech('php');
     expect(selectHighlight(useSystem.getState())).not.toBe(first);
   });
 });

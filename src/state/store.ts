@@ -140,11 +140,8 @@ export function resolveHighlight(state: Intent): Highlight {
       active: true,
     };
   }
-  const projectId = focusedProject(state);
-  if (projectId) {
-    const project = projectById.get(projectId);
-    if (project) return { techs: new Set(project.technologies), primaryTech: null, projects: new Set([projectId]), active: true };
-  }
+  // Choosing or hovering a project deliberately lights nothing: a project is
+  // always open in the Projects section, and it should not dim the technology graph.
   if (state.hoveredService) {
     const related = projectsOfService(state.hoveredService);
     if (related.length > 0) {
