@@ -90,7 +90,7 @@ export function StackLayers({ record }: { record: (id: TechId) => ReactNode }) {
               else layerEls.current.delete(category.id);
             }}
             className={styles.layer}
-            data-tone={category.tone}
+            data-cat={category.id}
             data-lit={litCount > 0}
             data-through={through}
             data-origin={isOrigin}

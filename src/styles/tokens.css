@@ -19,6 +19,20 @@
   --blue-rgb: 50, 123, 255;
   --violet-rgb: 140, 115, 232;
 
+  /* Technology groups. A run from cyan through purple to rose, one per group. */
+  --cat-language: #3fe0ee;
+  --cat-language-rgb: 63, 224, 238;
+  --cat-frontend: #4f8bff;
+  --cat-frontend-rgb: 79, 139, 255;
+  --cat-tooling: #7d7fff;
+  --cat-tooling-rgb: 125, 127, 255;
+  --cat-backend: #a97bff;
+  --cat-backend-rgb: 169, 123, 255;
+  --cat-data: #dd6fe8;
+  --cat-data-rgb: 221, 111, 232;
+  --cat-infra: #ff7fa9;
+  --cat-infra-rgb: 255, 127, 169;
+
   --font-sans: 'Geist Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
 

@@ -324,3 +324,8 @@
     max-height: 100%;
   }
 }
+
+/* The record's tag takes its group's colour. */
+.panelTag[data-cat] {
+  color: var(--tone);
+}

@@ -39,7 +39,7 @@ function Filters() {
           key={category.id}
           type="button"
           className={`mono ${styles.filter}`}
-          data-tone={category.tone}
+          data-cat={category.id}
           aria-pressed={filter === category.id}
           onClick={choose(filter === category.id ? null : category.id)}
         >
@@ -106,7 +106,7 @@ function TechDetail({ id, compact = false }: { id: string; compact?: boolean }) 
 
   return (
     <div className={styles.panelBody} key={id}>
-      <p className={`mono ${styles.panelTag}`} data-tone={category?.tone}>
+      <p className={`mono ${styles.panelTag}`} data-cat={category?.id}>
         {category?.label} · {tech.role}
       </p>
       <h3 className={styles.panelTitle}>{tech.name}</h3>

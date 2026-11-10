@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  categories,
   categoryById,
   degreeOf,
   projectById,
+  techById,
   techEdges,
   technologies,
   type TechCategory,
@@ -28,6 +30,13 @@ const triangle = (r: number): string =>
   [-90, 30, 150].map((deg) => `${(Math.cos((deg * Math.PI) / 180) * r).toFixed(2)},${(Math.sin((deg * Math.PI) / 180) * r).toFixed(2)}`).join(' ');
 
 /** Each category has its own glyph, so groups stay readable without colour. */
+/** A link takes the colour of the group it reaches into: the end that is not a language. */
+const edgeCategory = (a: TechId, b: TechId): TechCategory | undefined => {
+  const ca = techById.get(a)?.category;
+  const cb = techById.get(b)?.category;
+  return ca === 'language' ? (cb ?? ca) : ca;
+};
+
 export function Glyph({ category, r }: { category: TechCategory; r: number }) {
   switch (category) {
     case 'language':
@@ -82,6 +91,32 @@ export function Constellation() {
 
   const layout = useMemo(() => computeLayout(view, { filter, focus: selected }), [view, filter, selected]);
   const layoutRef = useRef(layout);
+
+  // A soft patch of colour and a name behind each group, drawn where the group
+  // sits when nothing is filtered or selected.
+  const clusters = useMemo(() => {
+    const rest = computeLayout(view, { filter: null, focus: null });
+    return categories.map((category) => {
+      const points = technologies.filter((t) => t.category === category.id).flatMap((t) => rest.get(t.id) ?? []);
+      const xs = points.map((p) => p.x);
+      const ys = points.map((p) => p.y);
+      const left = Math.min(...xs);
+      const right = Math.max(...xs);
+      const top = Math.min(...ys);
+      const bottom = Math.max(...ys);
+      const pad = compact ? 44 : 78;
+      return {
+        id: category.id,
+        label: category.label,
+        cx: (left + right) / 2,
+        cy: (top + bottom) / 2,
+        rx: (right - left) / 2 + pad * 1.15,
+        ry: (bottom - top) / 2 + pad,
+        top,
+      };
+    });
+  }, [view, compact]);
+  const atRest = filter === null && selected === null;
   layoutRef.current = layout;
 
   // Roving tabindex: the graph is a single tab stop, arrows walk it.
@@ -333,6 +368,26 @@ export function Constellation() {
           if (event.key === 'Escape') selectTech(null);
         }}
       >
+        <defs>
+          {clusters.map((cluster) => (
+            <radialGradient key={cluster.id} id={`tech-glow-${cluster.id}`}>
+              <stop offset="0" className={styles.glowStop} data-cat={cluster.id} stopOpacity="0.3" />
+              <stop offset="0.55" className={styles.glowStop} data-cat={cluster.id} stopOpacity="0.1" />
+              <stop offset="1" className={styles.glowStop} data-cat={cluster.id} stopOpacity="0" />
+            </radialGradient>
+          ))}
+        </defs>
+        <g className={styles.clusters} data-on={atRest} aria-hidden="true">
+          {clusters.map((cluster) => (
+            <g key={cluster.id} data-cat={cluster.id}>
+              <ellipse className={styles.glow} cx={cluster.cx} cy={cluster.cy} rx={cluster.rx} ry={cluster.ry} fill={`url(#tech-glow-${cluster.id})`} />
+              <text className={styles.clusterLabel} x={cluster.cx} y={cluster.top - (compact ? 20 : 30)} textAnchor="middle">
+                {cluster.label}
+              </text>
+            </g>
+          ))}
+        </g>
+
         <g className={styles.edges} aria-hidden="true">
           {techEdges.map((edge) => (
             <line
@@ -342,6 +397,7 @@ export function Constellation() {
                 else edgeEls.current.delete(edge.id);
               }}
               className={styles.edge}
+              data-cat={edgeCategory(edge.a, edge.b)}
               data-state={edgeStates.get(edge.id)}
               data-weight={Math.min(3, edge.weight)}
             />
@@ -372,7 +428,7 @@ export function Constellation() {
               className={styles.node}
               data-state={state}
               data-emphasis={placement?.emphasis}
-              data-tone={category?.tone}
+              data-cat={tech.category}
               data-selected={isSelected}
               role="button"
               tabIndex={roving === tech.id ? 0 : -1}

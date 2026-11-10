@@ -181,3 +181,29 @@ html[data-motion='reduced'] [data-reveal] {
     scroll-snap-type: y proximity;
   }
 }
+
+/* Anything tagged with a technology group takes that group's colour. */
+:root:root [data-cat='language'] {
+  --tone: var(--cat-language);
+  --tone-rgb: var(--cat-language-rgb);
+}
+:root:root [data-cat='frontend'] {
+  --tone: var(--cat-frontend);
+  --tone-rgb: var(--cat-frontend-rgb);
+}
+:root:root [data-cat='tooling'] {
+  --tone: var(--cat-tooling);
+  --tone-rgb: var(--cat-tooling-rgb);
+}
+:root:root [data-cat='backend'] {
+  --tone: var(--cat-backend);
+  --tone-rgb: var(--cat-backend-rgb);
+}
+:root:root [data-cat='data'] {
+  --tone: var(--cat-data);
+  --tone-rgb: var(--cat-data-rgb);
+}
+:root:root [data-cat='infra'] {
+  --tone: var(--cat-infra);
+  --tone-rgb: var(--cat-infra-rgb);
+}
