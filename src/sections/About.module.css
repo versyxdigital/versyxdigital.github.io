@@ -462,7 +462,7 @@
   .detail {
     flex: 1;
     min-height: 0;
-    max-height: 25rem;
+    max-height: 29rem;
   }
   .detailInner {
     height: 100%;
@@ -473,4 +473,17 @@
     max-height: none;
     min-height: 0;
   }
+}
+
+/* The section heading, placed at the top of the left column. */
+.title {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.title em {
+  font-style: normal;
+  color: var(--text-2);
 }

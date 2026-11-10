@@ -123,15 +123,13 @@ export function About() {
       index="01"
       label="About"
       meta={`Est. ${profile.established} · ${profile.location}`}
-      title={
-        <>
-          What we <em>do.</em>
-        </>
-      }
-      lede={profile.about[0]}
     >
       <div className={styles.grid}>
         <div className={styles.side}>
+          {/* The heading sits in the left column, so the services start right under the rule. */}
+          <h2 id="about-title" className={styles.title} data-reveal>
+            What we <em>do.</em>
+          </h2>
           <div className={styles.copy} data-reveal>
             {profile.about.slice(1).map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
