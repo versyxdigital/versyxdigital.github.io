@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useState, type ReactNode } from 'react';
 import { Nav } from './components/Nav';
+import { contentConfig } from './content';
 import { FieldFallback } from './field/FieldFallback';
 import { SchematicOverlay } from './schematic/SchematicOverlay';
 import { Spine } from './schematic/Spine';
@@ -109,9 +110,11 @@ export function App() {
         <Later id="projects" ready={below}>
           <Projects />
         </Later>
-        <Later id="tech" ready={below}>
-          <Technologies />
-        </Later>
+        {contentConfig.showTechnologies && (
+          <Later id="tech" ready={below}>
+            <Technologies />
+          </Later>
+        )}
         <Later id="contact" ready={below}>
           <Contact />
         </Later>

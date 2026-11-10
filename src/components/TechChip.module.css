@@ -48,3 +48,8 @@
   opacity: 1;
   box-shadow: 0 0 8px var(--tone);
 }
+
+/* A label rather than a button, while the Technologies section is hidden. */
+.chip[data-static='true'] {
+  cursor: default;
+}

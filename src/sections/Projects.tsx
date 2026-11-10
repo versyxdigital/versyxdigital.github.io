@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { sectionMeta } from '../components/Nav';
 import { Section } from '../components/Section';
 import { projectById, projects, type Project } from '../content';
 import { Inspector } from '../projects/Inspector';
@@ -132,7 +133,7 @@ export function Projects() {
   return (
     <Section
       id="projects"
-      index="02"
+      index={sectionMeta.projects.index}
       label="Projects"
       meta={`${projects.length} projects`}
     >

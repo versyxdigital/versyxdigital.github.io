@@ -1,3 +1,4 @@
+import { sectionMeta } from '../components/Nav';
 import { Section } from '../components/Section';
 import { TechChip } from '../components/TechChip';
 import { Constellation, Glyph } from '../constellation/Constellation';
@@ -197,7 +198,7 @@ export function Technologies() {
   return (
     <Section
       id="tech"
-      index="03"
+      index={sectionMeta.tech.index}
       label="Technologies"
       meta={`${technologies.length} technologies`}
       title={

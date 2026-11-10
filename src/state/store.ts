@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import {
+  contentConfig,
   projectById,
   projectsUsing,
   projectsOfService,
@@ -23,7 +24,9 @@ import {
  */
 
 export type SectionId = 'hero' | 'about' | 'tech' | 'projects' | 'contact';
-export const sectionOrder: readonly SectionId[] = ['hero', 'about', 'projects', 'tech', 'contact'];
+const allSections: readonly SectionId[] = ['hero', 'about', 'projects', 'tech', 'contact'];
+/** The sections on the page, in order. Technologies can be switched off in content/config.ts. */
+export const sectionOrder: readonly SectionId[] = allSections.filter((id) => id !== 'tech' || contentConfig.showTechnologies);
 
 export type Quality = 'high' | 'medium' | 'low';
 export type WebglStatus = 'pending' | 'ok' | 'unavailable';

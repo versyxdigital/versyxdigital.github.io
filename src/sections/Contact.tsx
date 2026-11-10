@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useReveal } from '../components/useReveal';
+import { sectionMeta } from '../components/Nav';
 import { profile } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { isWide } from '../system/viewport';
@@ -83,7 +84,7 @@ export function Contact() {
         <div className={styles.rule} data-reveal>
           <span className={`mono ${styles.index}`}>
             <span ref={head} className={styles.headNode} aria-hidden="true" />
-            04
+            {sectionMeta.contact.index}
           </span>
           <span className="mono">Contact</span>
           <span className={styles.ticks} aria-hidden="true" />

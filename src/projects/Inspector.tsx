@@ -336,7 +336,7 @@ export function Inspector({ project, onClose, focusOnOpen = true }: { project: P
                   <TechChip key={id} id={id} anchor />
                 ))}
               </div>
-              <p className={styles.fine}>Select a technology to see it in the Technologies section.</p>
+              {contentConfig.showTechnologies && <p className={styles.fine}>Select a technology to see it in the Technologies section.</p>}
             </div>
             <div className={styles.prose}>
               <h4 className="mono">Links</h4>

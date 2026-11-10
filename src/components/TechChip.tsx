@@ -1,4 +1,4 @@
-import { categoryById, techById, type TechId } from '../content';
+import { categoryById, contentConfig, techById, type TechId } from '../content';
 import { useAnchor } from '../schematic/registry';
 import { selectHighlight, useSystem } from '../state/store';
 import { scrollToSection } from '../system/scroll';
@@ -20,6 +20,16 @@ export function TechChip({ id, anchor = false }: { id: TechId; anchor?: boolean 
   const ref = useAnchor<HTMLButtonElement>(`chip:${id}`);
   if (!tech) return null;
   const tone = categoryById.get(tech.category)?.tone ?? 'cyan';
+
+  // With the Technologies section hidden there is nowhere to open: a plain label.
+  if (!contentConfig.showTechnologies) {
+    return (
+      <span className={styles.chip} data-tone={tone} data-static="true">
+        <span className={styles.pip} aria-hidden="true" />
+        {tech.name}
+      </span>
+    );
+  }
 
   return (
     <button

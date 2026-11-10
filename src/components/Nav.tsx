@@ -4,13 +4,18 @@ import { sectionOrder, useSystem, type SectionId } from '../state/store';
 import { scroll, scrollToSection } from '../system/scroll';
 import styles from './Nav.module.css';
 
-export const sectionMeta: Record<SectionId, { index: string; label: string }> = {
-  hero: { index: '00', label: 'Home' },
-  about: { index: '01', label: 'About' },
-  projects: { index: '02', label: 'Projects' },
-  tech: { index: '03', label: 'Technologies' },
-  contact: { index: '04', label: 'Contact' },
+const labels: Record<SectionId, string> = {
+  hero: 'Home',
+  about: 'About',
+  projects: 'Projects',
+  tech: 'Technologies',
+  contact: 'Contact',
 };
+
+/** Numbered by position on the page, so the numbers stay in step when a section is hidden. */
+export const sectionMeta = Object.fromEntries(
+  (Object.keys(labels) as SectionId[]).map((id) => [id, { index: String(Math.max(0, sectionOrder.indexOf(id))).padStart(2, '0'), label: labels[id] }]),
+) as Record<SectionId, { index: string; label: string }>;
 
 const links = sectionOrder.filter((id) => id !== 'hero');
 
