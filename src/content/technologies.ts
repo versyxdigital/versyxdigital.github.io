@@ -286,7 +286,7 @@ export const technologies: Technology[] = [
     category: 'backend',
     role: 'protocol',
     summary: 'Resource-oriented HTTP API style.',
-    usage: 'The ED:CS API is a public, OpenAPI-documented REST interface.',
+    usage: 'The ED:CS API is an OpenAPI-documented REST interface.',
     origin: 'skills',
   },
   {

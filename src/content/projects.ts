@@ -37,7 +37,7 @@ export const projects: Project[] = [
     technologies: ['typescript', 'monaco', 'bootstrap', 'electron', 'webpack', 'eslint', 'prettier', 'github-actions'],
     services: ['webapps', 'ai'],
     links: [
-      { label: 'Project site', href: 'https://versyxdigital.github.io/mkeditor/', kind: 'live' },
+      { label: 'Project site', href: 'https://versyx.digital/mkeditor/', kind: 'live' },
       { label: 'Source', href: 'https://github.com/versyxdigital/mkeditor', kind: 'source' },
     ],
     diagram: {
@@ -417,7 +417,7 @@ export const projects: Project[] = [
     kind: 'Game-data app and API',
     tagline: 'A unified read interface over a galaxy of star systems.',
     description:
-      'A companion site for Elite Dangerous, powered by its own API. Data on star systems, bodies, stations, markets and Galnet news, sourced from community projects.',
+      'A companion site for Elite Dangerous, powered by its own API. Data on star systems, bodies, stations, markets and Galnet news, sourced from community projects. The hosted site is no longer running; the source is open.',
     purpose: 'Provide one read interface over a large catalogue of community-sourced game data, open and documented for public use.',
     challenges: [
       'Scale of the source data. The populated-systems dump alone is over 1 GB, so the import command splits the file into parts and dispatches them to a worker queue.',
@@ -428,7 +428,7 @@ export const projects: Project[] = [
       'Laravel API with filtered system, body and station lookups, and cached statistics.',
       'Frontier OAuth and the Companion API let authenticated commanders fetch their in-game profile, with Frontier acting as the upstream identity provider.',
       'First-party clients authenticate through Laravel Sanctum.',
-      'The API is public and documented with OpenAPI; the web app is its intended consumer.',
+      'The API was public and documented with OpenAPI; the web app was its intended consumer.',
     ],
     achievements: pending('No published metrics. Add traffic or usage figures if they can be shared.'),
     facts: [
@@ -436,15 +436,12 @@ export const projects: Project[] = [
       { label: 'Identity', value: 'Frontier OAuth · Sanctum' },
       { label: 'Data', value: 'EDSM · Spansh · community tools' },
       { label: 'Licence', value: 'ISC (app) · MIT (API)' },
+      { label: 'Status', value: 'No longer hosted · source available' },
     ],
     technologies: ['typescript', 'nextjs', 'tailwind', 'php', 'laravel', 'rest', 'redis', 'mysql', 'docker', 'github-actions'],
     services: ['webapps', 'apis'],
-    links: [
-      { label: 'Live site', href: 'https://edcs.app', kind: 'live' },
-      { label: 'App source', href: 'https://github.com/sentrychris/edcs-app/', kind: 'source' },
-      { label: 'API source', href: 'https://github.com/sentrychris/edcs-api', kind: 'source' },
-      { label: 'API documentation', href: 'https://api.edcs.app/api/documentation', kind: 'docs' },
-    ],
+    // The hosted site and API are no longer running, so only the source is linked.
+    links: [{ label: 'Source', href: 'https://github.com/sentrychris/edcs-app/', kind: 'source' }],
     diagram: {
       caption: 'Ingest path into the catalogue, and the read path out of it.',
       cols: 5,

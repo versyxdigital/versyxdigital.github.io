@@ -211,6 +211,15 @@ It shares the interaction store with the graph, registers the same `tech:`
 anchors, and uses the same highlight derivation, so nothing else in the
 system needs to know which drawing is on screen.
 
+## 20. The MKEditor site is carried as prebuilt output
+
+The MKEditor product site lived in the repository this site replaced. It is
+restored verbatim from the old repository's `docs/mkeditor` into
+`public/mkeditor/`, which Vite copies into the build untouched, so it is served
+at `/mkeditor/` by the same deployment. Only root-absolute asset paths in its
+`index.html` and landing bundle were repointed to `/mkeditor/…`. It is excluded
+from linting and is not part of the application's source.
+
 ## 14. Email address is assembled at runtime
 
 The existing site stores the address split to avoid harvesting. The new site
