@@ -7,6 +7,10 @@ import { pending, type Project } from './types';
 const mkFiles = import.meta.glob<string>('../assets/projects/mkeditor-*.webp', { eager: true, query: '?url', import: 'default' });
 const mkShot = (name: string): string => mkFiles[`../assets/projects/mkeditor-${name}.webp`] ?? '';
 
+/** Aldervast screenshots, aldervast-01 to aldervast-09, each with a small -thumb version. */
+const alFiles = import.meta.glob<string>('../assets/projects/aldervast-*.webp', { eager: true, query: '?url', import: 'default' });
+const alShot = (name: string): string => alFiles[`../assets/projects/aldervast-${name}.webp`] ?? '';
+
 /** The Home Counties screenshots, thc-01 to thc-12, each with a small -thumb version. */
 const thcFiles = import.meta.glob<string>('../assets/projects/thc-*.webp', { eager: true, query: '?url', import: 'default' });
 const thcShot = (name: string): string => thcFiles[`../assets/projects/thc-${name}.webp`] ?? '';
@@ -385,6 +389,17 @@ export const projects: Project[] = [
     technologies: ['godot', 'gdscript'],
     services: [],
     links: [{ label: 'Game site', href: 'https://versyxdigital.github.io/aldervast/', kind: 'live' }],
+    images: [
+      { src: alShot('02'), thumb: alShot('02-thumb'), alt: 'The Aldervast main menu over a misty village of red-roofed houses, with options for single player, hosting a game and joining a server.', width: 1919, height: 1079, caption: 'The main menu.' },
+      { src: alShot('03'), thumb: alShot('03-thumb'), alt: 'In-game view of a rainy town square with named characters standing around: a village elder, an innkeeper, an outfitter, a merchant and others.', width: 1919, height: 1079, caption: 'The town square and its characters.' },
+      { src: alShot('04'), thumb: alShot('04-thumb'), alt: 'A merchant window listing potions and gems with prices, beside the player inventory with equipped gear.', width: 1919, height: 1079, caption: 'Trading with a merchant.' },
+      { src: alShot('05'), thumb: alShot('05-thumb'), alt: 'In-game view of the player standing between timber-framed houses in the rain, with a list of active quests on the right.', width: 1919, height: 1079, caption: 'A village in the rain.' },
+      { src: alShot('06'), thumb: alShot('06-thumb'), alt: 'In-game view looking down through a forest canopy at the player on the forest floor.', width: 1919, height: 1079, caption: 'In the forest.' },
+      { src: alShot('08'), thumb: alShot('08-thumb'), alt: 'In-game view of the player walking through tall grass in a rainy forest.', width: 1919, height: 1079, caption: 'Exploring the forest.' },
+      { src: alShot('09'), thumb: alShot('09-thumb'), alt: 'The quest journal open over the game, showing two quests with their objectives and progress.', width: 1919, height: 1079, caption: 'The quest journal.' },
+      { src: alShot('01'), thumb: alShot('01-thumb'), alt: 'The quest journal and the skills and glyphs window open together, showing gem sockets, the action bar and active skills.', width: 1919, height: 1079, caption: 'Skills, glyphs and the action bar.' },
+      { src: alShot('07'), thumb: alShot('07-thumb'), alt: 'The encounter journal: lists of dungeons, raids and world bosses, with one boss, its abilities and its loot.', width: 1919, height: 1079, caption: 'The encounter journal.' },
+    ],
     diagram: {
       caption: 'One authoritative server, three ways to run it.',
       cols: 5,
