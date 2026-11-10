@@ -54,9 +54,9 @@ function IndexItem({ project }: { project: Project }) {
 /** Idle state of the bay: a quiet wireframe of whichever system is under the cursor. */
 function Standby({ project }: { project: Project }) {
   return (
-    <div className={styles.standby}>
+    <div className={styles.standby} data-standby>
       <p className={`mono ${styles.standbyHead}`}>
-        <span>Inspection bay · standing by</span>
+        <span>Preview</span>
         <span>
           {project.ref} · {project.name}
         </span>
@@ -65,7 +65,7 @@ function Standby({ project }: { project: Project }) {
         <Diagram diagram={project.diagram} tone={project.tone} id={`p-${project.id}`} preview />
       </div>
       <p className={styles.standbyText}>
-        <strong>{project.tagline}</strong> Select a system from the catalogue to open its architecture, stages and engineering notes.
+        <strong>{project.tagline}</strong> Select a project from the list to see how it works and how it was built.
       </p>
     </div>
   );
@@ -154,10 +154,10 @@ export function Projects() {
       id="projects"
       index="03"
       label="Projects"
-      meta={`${projects.length} systems catalogued`}
+      meta={`${projects.length} projects`}
       title={
         <>
-          System explorer. <em>Open one up.</em>
+          Projects <em>we have built.</em>
         </>
       }
       lede={profile.catalogueNote}
@@ -165,8 +165,7 @@ export function Projects() {
       <div className={styles.explorer} data-inspecting={selected !== undefined}>
         <div className={styles.index} data-reveal>
           <p className={`mono ${styles.indexHead}`}>
-            <span>Catalogue</span>
-            <span>Ref</span>
+            <span>Select a project</span>
           </p>
           <ul data-project-index>
             {projects.map((project) => (

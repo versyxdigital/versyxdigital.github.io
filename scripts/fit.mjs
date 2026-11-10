@@ -98,7 +98,7 @@ for (const [width, height] of sizes) {
   await page.locator('#inspection-bay svg [role="button"]').first().click();
   await page.waitForTimeout(500);
   await report('project stage open', 'projects');
-  await page.locator('[role="tab"]', { hasText: 'Engineering' }).click();
+  await page.locator('[role="tab"]', { hasText: 'How it was built' }).click();
   await page.waitForTimeout(500);
   await report('project engineering', 'projects');
   await page.keyboard.press('Escape');

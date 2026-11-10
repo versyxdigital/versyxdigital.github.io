@@ -339,6 +339,11 @@
   align-items: start;
 }
 
+.columns[data-single='true'] {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 52rem;
+}
+
 .prose {
   display: grid;
   gap: 0.8rem;

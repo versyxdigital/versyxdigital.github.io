@@ -5,8 +5,8 @@ import { scroll, scrollToSection } from '../system/scroll';
 import styles from './Nav.module.css';
 
 export const sectionMeta: Record<SectionId, { index: string; label: string }> = {
-  hero: { index: '00', label: 'Index' },
-  about: { index: '01', label: 'Studio' },
+  hero: { index: '00', label: 'Home' },
+  about: { index: '01', label: 'About' },
   tech: { index: '02', label: 'Technologies' },
   projects: { index: '03', label: 'Projects' },
   contact: { index: '04', label: 'Contact' },
@@ -111,7 +111,7 @@ export function Nav() {
               aria-current={active === id ? 'true' : undefined}
             >
               <span className={`mono ${styles.linkIndex}`}>{sectionMeta[id].index}</span>
-              {id === 'hero' ? 'Introduction' : sectionMeta[id].label}
+              {sectionMeta[id].label}
             </a>
           ))}
         </nav>

@@ -20,11 +20,6 @@ import { useMediaQuery } from '../system/useMediaQuery';
 import { widerThan } from '../system/viewport';
 import styles from './Technologies.module.css';
 
-const originLabel = {
-  skills: 'From the founder’s published skills',
-  project: 'From a project stack',
-} as const;
-
 function Filters() {
   const filter = useSystem((s) => s.categoryFilter);
   const setFilter = useSystem((s) => s.setCategoryFilter);
@@ -64,20 +59,20 @@ function Overview() {
   const category = filter ? categoryById.get(filter) : undefined;
   return (
     <div className={styles.panelBody}>
-      <p className={`mono ${styles.panelTag}`}>{category ? category.tag : 'Network'}</p>
+      <p className={`mono ${styles.panelTag}`}>{category ? 'Category' : 'Guide'}</p>
       <h3 className={styles.panelTitle}>{category ? category.label : 'How to read this'}</h3>
       <p className={styles.panelText}>
         {category
           ? category.blurb
-          : 'Every node is a technology from the published record. Lines are structural: a framework and the language it is written in, a tool and the platform it runs on.'}
+          : 'Each point is a technology we use. A line joins two that work together, such as a framework and the language it is written in.'}
       </p>
       <dl className={styles.stats}>
         <div>
-          <dt className="mono">Nodes</dt>
+          <dt className="mono">Technologies</dt>
           <dd>{category ? technologies.filter((t) => t.category === category.id).length : technologies.length}</dd>
         </div>
         <div>
-          <dt className="mono">Links</dt>
+          <dt className="mono">Connections</dt>
           <dd>
             {category
               ? techEdges.filter((e) => techById.get(e.a)?.category === category.id || techById.get(e.b)?.category === category.id).length
@@ -85,14 +80,14 @@ function Overview() {
           </dd>
         </div>
         <div>
-          <dt className="mono">Groups</dt>
+          <dt className="mono">Categories</dt>
           <dd>{category ? 1 : categories.length}</dd>
         </div>
       </dl>
       <ul className={styles.notes}>
-        <li>Hover a node to trace what it connects to.</li>
-        <li>Select one to pull its neighbourhood into focus.</li>
-        <li>Node size follows connectivity in this record. It is not a proficiency score.</li>
+        <li>Hover over a technology to see what it works with.</li>
+        <li>Select one to read about it and see which of our projects use it.</li>
+        <li>A larger point has more connections. Size is not a skill rating.</li>
       </ul>
     </div>
   );
@@ -148,7 +143,7 @@ function TechDetail({ id, compact = false }: { id: string; compact?: boolean }) 
 
       {selected && !compact && related.length > 0 && (
         <div className={styles.block}>
-          <h4 className="mono">Connected to</h4>
+          <h4 className="mono">Works with</h4>
           <div className={styles.chips}>
             {related.map((other) => (
               <TechChip key={other} id={other} />
@@ -158,13 +153,12 @@ function TechDetail({ id, compact = false }: { id: string; compact?: boolean }) 
       )}
 
       <p className={`mono ${styles.origin}`}>
-        {originLabel[tech.origin]}
         {selected ? (
           <button type="button" className={`mono ${styles.release}`} onClick={() => selectTech(null)}>
-            Release focus
+            Close
           </button>
         ) : (
-          <span>Select to focus</span>
+          <span>Click to keep this open</span>
         )}
       </p>
     </div>
@@ -205,13 +199,13 @@ export function Technologies() {
       id="tech"
       index="02"
       label="Technologies"
-      meta={`${technologies.length} nodes · ${techEdges.length} links`}
+      meta={`${technologies.length} technologies`}
       title={
         <>
-          Stack and tooling, <em>{narrow ? 'layer by layer.' : 'as a network.'}</em>
+          The technologies <em>we work with.</em>
         </>
       }
-      lede="What the studio builds with. It is drawn from the same data as the projects below, so the relationships shown are the ones that exist."
+      lede="The languages, frameworks and tools we build with. Select one to see what it is and which of our projects use it."
     >
       {/* One stable wrapper carries the scroll reveal, whichever view is inside it. */}
       <div className={styles.body} data-reveal>

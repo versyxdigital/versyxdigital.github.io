@@ -10,7 +10,7 @@ import { pending, type Project } from './types';
 export const projects: Project[] = [
   {
     id: 'mkeditor',
-    ref: 'SYS-01',
+    ref: '01',
     name: 'MKEditor',
     kind: 'Markdown editor',
     tagline: 'Markdown with style.',
@@ -144,7 +144,7 @@ export const projects: Project[] = [
     // Sources: the game's own README, design notes and project files (v0.1.209),
     // read with the founder's permission, and its public site.
     id: 'homecounties',
-    ref: 'SYS-02',
+    ref: '02',
     name: 'The Home Counties',
     kind: 'Extraction shooter',
     tagline: 'A first-person shooter built in Godot, on streets generated from real map data.',
@@ -317,7 +317,7 @@ export const projects: Project[] = [
   },
   {
     id: 'aldervast',
-    ref: 'SYS-03',
+    ref: '03',
     name: 'Aldervast',
     kind: 'Online RPG',
     tagline: 'An original fantasy online role-playing game.',
@@ -444,7 +444,7 @@ export const projects: Project[] = [
   },
   {
     id: 'edcs',
-    ref: 'SYS-04',
+    ref: '04',
     name: 'ED:CS',
     kind: 'Game-data app and API',
     tagline: 'A unified read interface over a galaxy of star systems.',
@@ -575,7 +575,7 @@ export const projects: Project[] = [
   },
   {
     id: 'omg',
-    ref: 'SYS-05',
+    ref: '05',
     name: 'OMG',
     kind: 'Programming language',
     tagline: 'A small programming language whose compiler is written in itself.',
@@ -735,7 +735,7 @@ export const projects: Project[] = [
   },
   {
     id: 'wssh',
-    ref: 'SYS-06',
+    ref: '06',
     name: 'wssh',
     kind: 'Web-based SSH client',
     tagline: 'A small and simple SSH client that runs in the browser.',

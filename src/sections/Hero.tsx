@@ -1,9 +1,7 @@
 import { useRef } from 'react';
 import { profile } from '../content';
-import { field } from '../field/fieldState';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { useSystem } from '../state/store';
-import { useLiveText } from '../system/liveText';
 import { scroll, scrollToSection } from '../system/scroll';
 import styles from './Hero.module.css';
 
@@ -34,9 +32,6 @@ export function Hero() {
     ];
   }, []);
 
-  const phaseValue = useLiveText<HTMLSpanElement>(() => field.phase.toFixed(1).padStart(6, '0'));
-  const instancesValue = useLiveText<HTMLSpanElement>(() => field.instances.toLocaleString('en-GB'));
-
   const energise = (): void => {
     hovered.current = true;
     pulse('hero:role', { ripple: 1.1 });
@@ -51,8 +46,7 @@ export function Hero() {
     <section id="hero" className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.inner}>
         <p className={`mono ${styles.eyebrow}`}>
-          <span>00 — Index</span>
-          <span className={styles.coords}>
+          <span>
             Est. {profile.established} · {profile.location}
           </span>
         </p>
@@ -81,7 +75,7 @@ export function Hero() {
         <div className={styles.actions}>
           <a className={styles.action} href="#projects" onClick={go('projects')}>
             <span className={styles.actionNode} aria-hidden="true" />
-            Inspect our systems
+            See our projects
           </a>
           <a className={`${styles.action} ${styles.actionQuiet}`} href="#contact" onClick={go('contact')}>
             <span className={styles.actionNode} aria-hidden="true" />
@@ -100,24 +94,13 @@ export function Hero() {
           </span>
           {webgl === 'ok' ? (
             <>
-              <span className={styles.hintFine}>Move across the field. It responds.</span>
-              <span className={styles.hintCoarse}>Scroll. The field follows.</span>
+              <span className={styles.hintFine}>Move your cursor. The background reacts.</span>
+              <span className={styles.hintCoarse}>Scroll to explore.</span>
             </>
           ) : (
-            <span>Scroll to explore the system.</span>
+            <span>Scroll to explore.</span>
           )}
         </p>
-        {webgl === 'ok' && (
-          <p className={`mono ${styles.telemetry}`} aria-hidden="true">
-            <span>
-              <span ref={instancesValue} /> cubes
-            </span>
-            <span>1 draw call</span>
-            <span>
-              t <span ref={phaseValue} />
-            </span>
-          </p>
-        )}
       </div>
     </section>
   );

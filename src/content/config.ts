@@ -7,7 +7,7 @@
  * filled in (or before publishing with gaps).
  */
 export const contentConfig = {
-  showPendingFields: true,
+  showPendingFields: false,
   /** Primary factual reference for everything in this folder. */
   sourceSite: 'https://sentrychris.github.io/',
   /** Date the source material was last read. */

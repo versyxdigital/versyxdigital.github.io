@@ -52,7 +52,7 @@ function ServiceRecord() {
   return (
     <div className={styles.detail} aria-live="polite">
       <div ref={anchor} className={styles.detailInner} key={service.id}>
-        <p className={`mono ${styles.detailTag}`}>Service · {service.tag}</p>
+        <p className={`mono ${styles.detailTag}`}>Service {service.tag}</p>
         <h3 className={styles.detailTitle}>{service.name}</h3>
         {isPending(service.summary) ? (
           <div className={styles.detailPending}>
@@ -66,7 +66,7 @@ function ServiceRecord() {
         <div className={styles.recordCols} data-single={service.record.length === 0}>
           {service.record.length > 0 && (
             <div>
-              <h4 className={`mono ${styles.blockLabel}`}>On record</h4>
+              <h4 className={`mono ${styles.blockLabel}`}>Experience</h4>
               <ol className={styles.exhibits}>
                 {service.record.map((line, i) => (
                   <li key={line}>
@@ -81,7 +81,7 @@ function ServiceRecord() {
           )}
 
           <div>
-            <h4 className={`mono ${styles.blockLabel}`}>In the catalogue</h4>
+            <h4 className={`mono ${styles.blockLabel}`}>Related projects</h4>
             {examples.length > 0 ? (
               <ul className={styles.examples}>
                 {examples.map((id) => {
@@ -107,7 +107,7 @@ function ServiceRecord() {
                 })}
               </ul>
             ) : (
-              <p className={styles.muted}>Nothing in the public catalogue is tagged to this service yet.</p>
+              <p className={styles.muted}>No public projects to show for this service yet.</p>
             )}
           </div>
         </div>
@@ -169,11 +169,11 @@ export function About() {
     <Section
       id="about"
       index="01"
-      label="Studio"
+      label="About"
       meta={`Est. ${profile.established} · ${profile.location}`}
       title={
         <>
-          A small and focused <em>software studio.</em>
+          What we <em>do.</em>
         </>
       }
       lede={profile.about[0]}
@@ -209,8 +209,8 @@ export function About() {
 
         <div className={styles.schematic} data-reveal style={{ '--i': 2 } as React.CSSProperties}>
           <h3 className={`mono ${styles.schematicTitle}`}>
-            What we do
-            <span>Select a node</span>
+            Our services
+            <span>Select a service</span>
           </h3>
 
           <div ref={busRef} className={styles.bus} style={{ '--count': services.length } as React.CSSProperties}>

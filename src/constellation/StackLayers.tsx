@@ -72,8 +72,8 @@ export function StackLayers({ record }: { record: (id: TechId) => ReactNode }) {
     <div className={styles.stack} data-tracing={highlight.active}>
       <p className={`mono ${styles.hint}`} aria-live="polite">
         {highlight.primaryTech && trace.total > 1
-          ? `${trace.total - 1} connected across ${trace.lit.filter((n) => n > 0).length} layers`
-          : 'Tap a technology to trace what it connects to'}
+          ? `Works with ${trace.total - 1} others, highlighted below`
+          : 'Tap a technology to read about it'}
       </p>
 
       {layers.map((layer, index) => {
@@ -106,7 +106,7 @@ export function StackLayers({ record }: { record: (id: TechId) => ReactNode }) {
                 {category.label}
               </h3>
               <span className={`mono ${styles.count}`}>
-                {highlight.primaryTech && litCount > 0 && !isOrigin ? `${litCount} linked` : techs.length}
+                {highlight.primaryTech && litCount > 0 && !isOrigin ? `${litCount} related` : techs.length}
               </span>
             </header>
 

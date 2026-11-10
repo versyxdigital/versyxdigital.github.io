@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pending } from '../components/Pending';
 import { TechChip } from '../components/TechChip';
-import { isPending, type Maybe, type Project } from '../content';
+import { contentConfig, isPending, type Maybe, type Project } from '../content';
 import { useAnchor } from '../schematic/registry';
 import { useSystem } from '../state/store';
 import { Diagram, diagramWidth } from './Diagram';
@@ -9,13 +9,16 @@ import styles from './Inspector.module.css';
 
 type Tab = 'architecture' | 'overview' | 'engineering' | 'stack';
 const tabs: { id: Tab; label: string }[] = [
-  { id: 'architecture', label: 'Architecture' },
+  { id: 'architecture', label: 'How it works' },
   { id: 'overview', label: 'Overview' },
-  { id: 'engineering', label: 'Engineering' },
-  { id: 'stack', label: 'Stack & links' },
+  { id: 'engineering', label: 'How it was built' },
+  { id: 'stack', label: 'Technology & links' },
 ];
 
 const linkGlyph = { live: '↗', source: '</>', docs: '§' } as const;
+
+/** True when a field has content to show: written, or a placeholder that is switched on. */
+const shown = (value: Maybe<unknown>): boolean => !isPending(value) || contentConfig.showPendingFields;
 
 function ListOrPending({ value, label }: { value: Maybe<string[]>; label: string }) {
   if (isPending(value)) return <Pending value={value} label={label} />;
@@ -29,7 +32,7 @@ function ListOrPending({ value, label }: { value: Maybe<string[]>; label: string
 }
 
 /**
- * The project inspector: the focused state of the system explorer.
+ * The project inspector: the open state of the projects section.
  *
  * It is one panel sized to the space it is given, so on desktop a project
  * never runs off the screen. The header says what the project is; the tabs
@@ -138,7 +141,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
                 </div>
               </div>
               <figcaption className={styles.caption}>
-                <span className="mono">Fig. {project.ref.replace('SYS-', '')}</span>
+                <span className="mono">Fig. {project.ref}</span>
                 {project.diagram.caption}
                 <span className={`mono ${styles.pan}`} aria-hidden="true">
                   ↔ Pan
@@ -186,10 +189,10 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
                 <p className={styles.stageHint}>
                   {/* In fit mode the figure caption moves here, so the drawing gets its height. */}
                   <span className={styles.hintCaption}>
-                    <span className="mono">Fig. {project.ref.replace('SYS-', '')}</span>
+                    <span className="mono">Fig. {project.ref}</span>
                     {project.diagram.caption}
                   </span>
-                  <span className="mono">Select a stage to inspect it</span>
+                  <span className="mono">Select a part of the diagram to read about it</span>
                 </p>
               )}
             </div>
@@ -200,8 +203,12 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
           <div className={styles.columns}>
             <div className={styles.prose}>
               <p>{project.description}</p>
-              <h4 className="mono">Purpose</h4>
-              {isPending(project.purpose) ? <Pending value={project.purpose} label="purpose" /> : <p>{project.purpose}</p>}
+              {shown(project.purpose) && (
+                <>
+                  <h4 className="mono">Purpose</h4>
+                  {isPending(project.purpose) ? <Pending value={project.purpose} label="purpose" /> : <p>{project.purpose}</p>}
+                </>
+              )}
             </div>
             <dl className={styles.facts}>
               {project.facts.map((fact) => (
@@ -215,17 +222,27 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
         )}
 
         {tab === 'engineering' && (
-          <div className={styles.columns}>
+          <div className={styles.columns} data-single={!shown(project.challenges) && !shown(project.achievements)}>
             <div className={styles.prose}>
               <h4 className="mono">Implementation</h4>
               <ListOrPending value={project.implementation} label="implementation" />
             </div>
-            <div className={styles.prose}>
-              <h4 className="mono">Challenges</h4>
-              <ListOrPending value={project.challenges} label="challenges" />
-              <h4 className="mono">Outcomes</h4>
-              <ListOrPending value={project.achievements} label="outcomes" />
-            </div>
+            {(shown(project.challenges) || shown(project.achievements)) && (
+              <div className={styles.prose}>
+                {shown(project.challenges) && (
+                  <>
+                    <h4 className="mono">Challenges</h4>
+                    <ListOrPending value={project.challenges} label="challenges" />
+                  </>
+                )}
+                {shown(project.achievements) && (
+                  <>
+                    <h4 className="mono">Outcomes</h4>
+                    <ListOrPending value={project.achievements} label="outcomes" />
+                  </>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -238,7 +255,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
                   <TechChip key={id} id={id} anchor />
                 ))}
               </div>
-              <p className={styles.fine}>Select a technology to open it in the constellation.</p>
+              <p className={styles.fine}>Select a technology to see it in the Technologies section.</p>
             </div>
             <div className={styles.prose}>
               <h4 className="mono">Links</h4>
@@ -253,7 +270,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
                   </li>
                 ))}
               </ul>
-              <h4 className="mono">Provenance</h4>
+              <h4 className="mono">Sources</h4>
               <p className={styles.fine}>
                 Details taken from {project.sources.includes('site') ? 'the project’s own site' : ''}
                 {project.sources.includes('site') && project.sources.includes('repository') ? ' and ' : ''}

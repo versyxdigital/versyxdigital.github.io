@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { useReveal } from '../components/useReveal';
-import { contentConfig, profile } from '../content';
-import { field } from '../field/fieldState';
+import { profile } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
-import { useSystem } from '../state/store';
-import { useLiveText } from '../system/liveText';
 import { isWide } from '../system/viewport';
 import styles from './Contact.module.css';
 
@@ -13,14 +10,11 @@ const address = (): string => `${profile.contact.email.user}@${profile.contact.e
 export function Contact() {
   const ref = useReveal<HTMLElement>();
   const [copied, setCopied] = useState(false);
-  const quality = useSystem((s) => s.quality);
-  const webgl = useSystem((s) => s.webgl);
   const head = useAnchor<HTMLSpanElement>('head:contact');
   const node = useAnchor<HTMLSpanElement>('contact:node');
   const title = useAnchor<HTMLSpanElement>('contact:title');
   const terminal = useAnchor<HTMLSpanElement>('contact:terminal');
   const end = useAnchor<HTMLSpanElement>('contact:end');
-  const instances = useLiveText<HTMLSpanElement>(() => field.instances.toLocaleString('en-GB'));
 
   // Every trace in this section converges on the one node that matters here,
   // then leaves it down a single bus that drops into the field.
@@ -94,7 +88,7 @@ export function Contact() {
           <span className="mono">Contact</span>
           <span className={styles.ticks} aria-hidden="true" />
           <span ref={terminal} className={`mono ${styles.terminal}`}>
-            End of line
+            Email or call
           </span>
         </div>
 
@@ -160,16 +154,7 @@ export function Contact() {
         <p className="mono">
           © {new Date().getFullYear()} {profile.name} · {profile.location}
         </p>
-        <p className="mono">
-          {webgl === 'ok' ? (
-            <>
-              Field: <span ref={instances} /> cubes · {quality} tier
-            </>
-          ) : (
-            'Field: static rendering'
-          )}
-        </p>
-        <p className="mono">Content verified {contentConfig.verifiedOn}</p>
+        <p className="mono">{profile.descriptor}</p>
       </footer>
     </section>
   );

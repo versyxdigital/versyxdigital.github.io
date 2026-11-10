@@ -151,7 +151,8 @@ async function desktop(browser) {
 
   check('hero: the studio name is present', (await page.locator('h1').innerText()).replace(/\s+/g, ' ').includes('Versyx Digital'));
   const heroText = await page.locator('#hero').innerText();
-  check('hero: reads as a software studio', heroText.includes('Software studio') && !/founded by/i.test(heroText));
+  check('hero: reads as a design and development agency', heroText.includes('Design and development agency') && !/founded by/i.test(heroText));
+  check('hero: no technical readouts or jargon', !/cubes|draw call|index|inspect|system/i.test(heroText), heroText.replace(/\s+/g, ' ').slice(0, 120));
   check('hero: no field readout or field markers', (await page.locator('body > #root > header').innerText()).toLowerCase().includes('field') === false && !/travelling|interference/i.test(heroText));
 
   const stats = await canvasStats(page);
@@ -191,7 +192,7 @@ async function desktop(browser) {
   await page.waitForTimeout(500);
   const record = await page.locator('#about [aria-live="polite"]').innerText();
   check('studio: selecting a service shows its record and the projects that exemplify it', record.includes('APIs') && record.includes('ED:CS'));
-  check('studio: an undescribed service is marked pending, not invented', record.toLowerCase().includes('pending'));
+  check('studio: an undescribed service shows no placeholder to visitors', !record.toLowerCase().includes('pending'));
   await page.locator('header nav a', { hasText: 'Technologies' }).click();
   await page.waitForTimeout(2600);
 
@@ -211,7 +212,7 @@ async function desktop(browser) {
   check('constellation: selecting focuses the node', (await page.locator("[aria-label='Laravel, Backend']").getAttribute('aria-pressed')) === 'true');
   check('constellation: selection changes the field mode', (await mode()) === 'focus:tech', await mode());
   await page.screenshot({ path: 'qa-screens/e2e-desktop-tech-focus.png' });
-  await page.locator('button', { hasText: 'Release focus' }).click();
+  await page.locator('aside[aria-label="Technology detail"] button', { hasText: 'Close' }).click();
   await page.waitForTimeout(600);
 
   // Keyboard model: the graph is one tab stop and the arrow keys walk it.
@@ -242,7 +243,9 @@ async function desktop(browser) {
   await goTo(page, 'projects');
   await page.evaluate(() => window.scrollBy(0, 200));
   await page.waitForTimeout(600);
-  check('explorer: standby bay previews a system', (await page.locator('#inspection-bay').innerText()).toLowerCase().includes('standing by'));
+  check('explorer: before a project is chosen, the panel previews one', (await page.locator('#inspection-bay [data-standby]').count()) === 1);
+  const projectsText = await page.locator('#projects').innerText();
+  check('projects: plain wording, no explorer or catalogue jargon', /Projects\s+we have built/i.test(projectsText.replace(/\s+/g, ' ')) && !/system explorer|inspection bay|standing by|catalogue|SYS-/i.test(projectsText));
   check('explorer: the catalogue lists the six projects', (await page.locator('[data-project-index] button').count()) === 6);
   await page.locator('[data-project-index] button', { hasText: 'wssh' }).click();
   await page.waitForTimeout(2200);
@@ -256,11 +259,11 @@ async function desktop(browser) {
   await page.waitForTimeout(500);
   check('explorer: a diagram stage can be inspected', (await page.locator('#inspection-bay [aria-live="polite"]').innerText()).includes('holds the SSH connection'));
 
-  await page.locator('[role="tab"]', { hasText: 'Engineering' }).click();
+  await page.locator('[role="tab"]', { hasText: 'How it was built' }).click();
   await page.waitForTimeout(400);
   check('explorer: tabs disclose engineering notes', (await page.locator('[role="tabpanel"]').innerText()).toLowerCase().includes('implementation'));
-  check('explorer: undocumented fields are marked pending, not invented', (await page.locator('[role="tabpanel"]').innerText()).toLowerCase().includes('pending'));
-  await page.locator('[role="tab"]', { hasText: 'Stack' }).click();
+  check('explorer: undocumented fields show no placeholder to visitors', !/pending|outcomes/i.test(await page.locator('[role="tabpanel"]').innerText()));
+  await page.locator('[role="tab"]', { hasText: 'Technology' }).click();
   await page.waitForTimeout(400);
   await page.screenshot({ path: 'qa-screens/e2e-desktop-project-stack.png' });
 
@@ -276,7 +279,7 @@ async function desktop(browser) {
 
   await page.keyboard.press('Escape');
   await page.waitForTimeout(900);
-  check('explorer: Escape closes the inspector', (await page.locator('#inspection-bay').innerText()).toLowerCase().includes('standing by'));
+  check('explorer: Escape closes the inspector', (await page.locator('#inspection-bay [data-standby]').count()) === 1);
   check('explorer: focus returns to the catalogue entry', await page.evaluate(() => document.activeElement?.textContent?.includes('wssh') ?? false));
   check('explorer: field returns to the section mode', (await mode()) === 'section:projects', await mode());
 
@@ -426,7 +429,7 @@ async function noWebgl(browser) {
   const { page, context, errors } = await open(browser, { width: 1440, height: 900, query: '?nowebgl' });
   check('fallback: no WebGL canvas is created', (await page.locator('canvas').count()) === 1, 'only the 2D schematic overlay');
   check('fallback: static field is drawn', (await page.locator('[class*="fallback"] svg path').count()) > 500);
-  check('fallback: hero content is intact', (await page.locator('#hero').innerText()).includes('Software studio'));
+  check('fallback: hero content is intact', (await page.locator('#hero').innerText()).includes('Design and development agency'));
   await page.screenshot({ path: 'qa-screens/e2e-nowebgl-hero.png' });
   await goTo(page, 'tech', 1000);
   const [x, y] = await centre(page, "[aria-label='Python, Languages']");

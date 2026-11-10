@@ -325,7 +325,7 @@ export function Constellation() {
         className={styles.svg}
         viewBox={`0 0 ${view.width} ${view.height}`}
         role="group"
-        aria-label="Technology constellation. Each node is a technology. Use the arrow keys to move between nodes and Enter to focus one."
+        aria-label="Map of technologies. Each point is a technology. Use the arrow keys to move between them and Enter to select one."
         onClick={(event) => {
           if (event.target === event.currentTarget) selectTech(null);
         }}

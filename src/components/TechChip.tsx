@@ -37,7 +37,7 @@ export function TechChip({ id, anchor = false }: { id: TechId; anchor?: boolean 
         selectTech(id);
         scrollToSection('tech');
       }}
-      title={`Show ${tech.name} in the constellation`}
+      title={`Show ${tech.name} in the Technologies section`}
     >
       <span className={styles.pip} aria-hidden="true" />
       {tech.name}

@@ -8,19 +8,19 @@ import type { Profile } from './types';
  */
 export const profile: Profile = {
   name: 'Versyx Digital',
-  descriptor: 'Software studio',
+  descriptor: 'Design and development agency',
   established: 2019,
   location: 'United Kingdom',
   intro:
-    'A small and focused UK studio, established in 2019. We specialise in web application design and development, APIs, consulting, bug fixing and AI-integrated workflows.',
+    'A small and focused UK agency, established in 2019. We design and build web applications and APIs, and offer consulting, bug fixing and AI-integrated workflows.',
   about: [
     'Bespoke development for clients across sectors, with a focus on consultation, infrastructure and frontend.',
-    'We also build and contribute to open source. Every system in the catalogue below is ours, and most of them are open to read.',
+    'We also build and contribute to open source. Every project shown further down is our own, and most have their source code public.',
   ],
   specs: [
     { label: 'Established', value: '2019' },
     { label: 'Based', value: 'United Kingdom' },
-    { label: 'Shape', value: 'Small and focused' },
+    { label: 'Size', value: 'Small and focused' },
     { label: 'Founder', value: 'Chris Rowles' },
     { label: 'Open to', value: 'Projects · Consulting' },
   ],
@@ -41,5 +41,5 @@ export const profile: Profile = {
       { label: 'Telephone', display: '+44 7522 267 722', href: 'tel:+447522267722' },
     ],
   },
-  catalogueNote: 'The studio’s own systems, each open to inspect. Client work is not catalogued here.',
+  catalogueNote: 'Projects we have built ourselves. Select one to see what it is and how it works. Client work is not shown here.',
 };
