@@ -36,7 +36,7 @@
   /* Panels: frosted glass with rounded corners, so the background shows through softly. */
   --panel-radius: 16px;
   --panel-bg: rgba(12, 15, 22, 0.46);
-  --panel-blur: blur(16px) saturate(1.25);
+  --panel-blur: blur(8px);
   --panel-line: rgba(255, 255, 255, 0.09);
 
   /* The same run as one sweep, for headline words and underlines. */
