@@ -6,7 +6,7 @@ import styles from './Diagram.module.css';
 const CELL_W = 184;
 /** Six-column diagrams use narrower cells so they still fit a laptop screen. */
 const NARROW_W = 160;
-const CELL_H = 104;
+const CELL_H = 96;
 const NODE_H = 62;
 const GAP_X = 24;
 const PAD = 10;

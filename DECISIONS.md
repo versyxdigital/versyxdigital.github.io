@@ -182,6 +182,21 @@ one: a street plan for The Home Counties (it is set on real streets), an
 island for Aldervast (the game is set on one), and a marching staircase for
 OMG (source moving through compiler stages).
 
+## 18. On desktop, a section is one screen
+
+Feedback: sections should fit the viewport, and the information was hard to
+read. From 1081×760 upward each section is `100svh` tall and laid out as a
+flex column: the header takes what it needs and the content gets the rest. The
+constellation and the architecture diagrams are scaled to that space; the
+project inspector moves its long content into tabs whose bodies scroll
+internally. `scroll-snap-type: y proximity` settles a scroll that ends near a
+section boundary without trapping the wheel. Below that size the content
+cannot fit one screen, so sections flow naturally.
+
+The root font size scales with the viewport (16px to 19px), bounded by height
+as well as width, and all sizes are in rem. This fixed type that was too small
+on a 1920-wide display without making it too large on a laptop.
+
 ## 14. Email address is assembled at runtime
 
 The existing site stores the address split to avoid harvesting. The new site

@@ -25,6 +25,13 @@ npm run preview    # serve the production build
 The build uses a relative base path, so `dist/` can be served from any
 sub-path (GitHub Pages, for example) without changes.
 
+## Deploy
+
+`.github/workflows/deploy.yml` publishes `dist/` to GitHub Pages on every push
+to `main`. In the repository, set Settings → Pages → Source to "GitHub
+Actions" once. The build uses a relative base path, so no configuration is
+needed for a project page or a custom domain.
+
 ## Checks
 
 ```bash

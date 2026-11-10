@@ -181,6 +181,10 @@
   display: none;
 }
 
+.hintCaption {
+  display: none;
+}
+
 .stageButton {
   min-height: 2.5rem;
   padding: 0.5rem 0.7rem;
@@ -505,7 +509,14 @@
   }
   .head {
     flex: none;
+    flex-wrap: nowrap;
     padding-top: clamp(0.9rem, 2.2vh, 1.5rem);
+  }
+  /* Links stack on the right instead of pushing the diagram down. */
+  .headActions {
+    flex: none;
+    max-width: 52%;
+    justify-content: flex-end;
   }
   .ref {
     margin-bottom: 0.4rem;
@@ -552,18 +563,25 @@
     height: 100%;
     min-width: 0;
     max-width: none;
-    padding: clamp(0.4rem, 1.2vh, 1rem) 1rem;
+    padding: 0.35rem 1rem;
   }
   .canvas svg {
     height: 100%;
   }
   .caption {
-    flex: none;
-    padding-block: 0.5rem;
+    display: none;
+  }
+  .hintCaption {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--text-2);
   }
   .stage {
     flex: none;
-    height: 6.4rem;
+    height: 5.75rem;
     overflow: hidden;
     padding-block: 0.8rem;
   }

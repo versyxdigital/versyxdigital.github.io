@@ -184,7 +184,14 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
                   )}
                 </div>
               ) : (
-                <p className={`mono ${styles.stageHint}`}>Select a stage to inspect it</p>
+                <p className={styles.stageHint}>
+                  {/* In fit mode the figure caption moves here, so the drawing gets its height. */}
+                  <span className={styles.hintCaption}>
+                    <span className="mono">Fig. {project.ref.replace('SYS-', '')}</span>
+                    {project.diagram.caption}
+                  </span>
+                  <span className="mono">Select a stage to inspect it</span>
+                </p>
               )}
             </div>
           </div>

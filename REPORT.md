@@ -87,6 +87,72 @@ These are judgement calls I made to keep moving. Each is quick to change.
 - **Folder and package name.** Still `rowles-portfolio`, as you specified the
   folder. The package description was updated.
 
+## Sections fit the screen, and type is larger
+
+Feedback with a screenshot at 1905×945: the information was hard to read, and
+sections did not fit the viewport. In that screenshot the type was small for a
+1920-wide display and the Studio section ran off the bottom.
+
+**Each section is now exactly one screen on desktop.** Hero, Studio,
+Technologies, Projects and Contact each fill the viewport and nothing inside
+runs past the bottom. Scrolling settles gently on section boundaries.
+
+- **Studio.** A compact header, and the service record shows its evidence and
+  its example projects side by side instead of stacked.
+- **Technologies.** The graph is sized to the height left under the filters.
+- **Projects.** The inspector is one panel sized to the screen. The
+  architecture diagram is now the first of four tabs (Architecture, Overview,
+  Engineering, Stack and links) and is scaled to the space it has. Only a
+  tab's body scrolls, and only if it has more to say than fits. The catalogue
+  is more compact: one line of classification per project, no stack line.
+
+This applies when the window is at least 1081px wide and 760px tall. Below
+that (phones, tablets, very short windows) sections flow at their natural
+height as before, because the content cannot fit one screen there.
+
+**Type is larger on large screens.** The base size scales from 16px on a small
+laptop to 19px on a 1920-wide display, and everything follows it. Secondary
+text is lighter again, and the scrim behind sections is darker.
+
+`scripts/fit.mjs` measures this: at 1905×945, 1920×1080, 1536×864, 1440×900 and
+1366×768 it visits every section and several project states and checks the
+section is one screen tall with nothing overflowing. All 55 states fit.
+
+**Trade-offs to know about.**
+
+- The field is dimmer behind Studio, Technologies and Projects than in the
+  first build. It is at full strength in the hero and below the contact
+  details.
+- Project classifications were shortened so they fit one line: for example
+  "Extraction shooter", not "Extraction shooter · early access". The status is
+  still in each project's facts.
+- The "Client work" row was removed from the catalogue; the line above the
+  catalogue already says it.
+- At 1366×768, diagrams are drawn at about 85% size to fit.
+
+## Deploying to GitHub Pages
+
+`.github/workflows/deploy.yml` builds the site and publishes it to GitHub
+Pages on every push to `main`, and can be run by hand from the Actions tab. It
+type-checks, lints and runs the unit tests first, so a broken build does not
+deploy.
+
+It has not run: this repository has no remote and I have not pushed anything.
+To use it:
+
+1. Create a repository on GitHub and add it as the remote.
+2. In the repository, go to Settings → Pages and set Source to "GitHub
+   Actions".
+3. Push `main`.
+
+No base-path change was needed. The build already uses a relative base, so it
+works at `https://<user>.github.io/<repo>/` and on a custom domain.
+
+Two things the workflow does not do. It does not run the browser smoke test,
+because hosted runners have no GPU for the WebGL field. And publishing makes
+the site public, including the pending placeholders and the contact email, so
+check "Decisions for you to check" first.
+
 ## Readability, fit and mobile pass
 
 Requested after the studio version: undo the two changes made in response to
@@ -196,6 +262,7 @@ are derived, so adding a project, technology or service updates every view.
 | Production build | Pass |
 | Browser smoke test | 80 of 80 |
 | Fit audit, six viewport sizes | No problems reported |
+| One-screen fit, five desktop sizes | All 55 states fit |
 | axe-core, WCAG A and AA | No violations, with colour contrast excluded (see below) |
 | Frame rate, high tier, 1440×900 | 60 to 61 fps |
 
@@ -256,4 +323,4 @@ Not built:
 3. Fill the pending content, or hide it.
 4. Test in Firefox and Safari, and on a real phone.
 5. Add a share image, and decide whether the games should show imagery.
-6. Choose where to host it. `dist/` works from any path as built.
+6. To publish, follow "Deploying to GitHub Pages" above.

@@ -277,7 +277,17 @@
     align-self: start;
   }
   .item {
-    padding-block: clamp(0.55rem, 1.5vh, 0.9rem);
+    grid-template-columns: 3.3rem 1fr auto;
+    padding-block: clamp(0.5rem, 1.4vh, 0.9rem);
+  }
+  .itemName {
+    font-size: clamp(1.1rem, 2.7vh, 1.6rem);
+    white-space: nowrap;
+  }
+  .itemKind {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .bay {
     height: 100%;

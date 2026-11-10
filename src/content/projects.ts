@@ -12,7 +12,7 @@ export const projects: Project[] = [
     id: 'mkeditor',
     ref: 'SYS-01',
     name: 'MKEditor',
-    kind: 'Markdown editor · desktop and web',
+    kind: 'Markdown editor',
     tagline: 'Markdown with style.',
     description:
       'A simple, fast and free markdown editor with live preview rendering. Write, format and export documents to HTML or PDF. Built on Monaco, the editor that powers Visual Studio Code.',
@@ -144,7 +144,7 @@ export const projects: Project[] = [
     id: 'homecounties',
     ref: 'SYS-02',
     name: 'The Home Counties',
-    kind: 'Extraction shooter · early access',
+    kind: 'Extraction shooter',
     tagline: 'An extraction shooter for one to four players in a near-future Britain at war.',
     description:
       'Eighteen-minute raids on real Bletchley streets. Go in with a loadout, search the houses people left in a hurry, deal with the armed scavs who moved in, and reach an exit before the timer runs out.',
@@ -287,7 +287,7 @@ export const projects: Project[] = [
     id: 'aldervast',
     ref: 'SYS-03',
     name: 'Aldervast',
-    kind: 'Online RPG · in active development',
+    kind: 'Online RPG',
     tagline: 'An original fantasy online role-playing game.',
     description:
       'A shared world of five regions, six classes, dungeons, raids and battlegrounds, with a loot-driven build game underneath: skills, sockets and a 594-node passive web.',
@@ -414,7 +414,7 @@ export const projects: Project[] = [
     id: 'edcs',
     ref: 'SYS-04',
     name: 'ED:CS',
-    kind: 'Game-data web app and API',
+    kind: 'Game-data app and API',
     tagline: 'A unified read interface over a galaxy of star systems.',
     description:
       'A companion site for Elite Dangerous, powered by its own API. Data on star systems, bodies, stations, markets and Galnet news, sourced from community projects.',
