@@ -197,7 +197,7 @@ export function Technologies() {
   return (
     <Section
       id="tech"
-      index="02"
+      index="03"
       label="Technologies"
       meta={`${technologies.length} technologies`}
       title={

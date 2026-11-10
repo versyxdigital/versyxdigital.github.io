@@ -23,7 +23,7 @@ import {
  */
 
 export type SectionId = 'hero' | 'about' | 'tech' | 'projects' | 'contact';
-export const sectionOrder: readonly SectionId[] = ['hero', 'about', 'tech', 'projects', 'contact'];
+export const sectionOrder: readonly SectionId[] = ['hero', 'about', 'projects', 'tech', 'contact'];
 
 export type Quality = 'high' | 'medium' | 'low';
 export type WebglStatus = 'pending' | 'ok' | 'unavailable';

@@ -7,8 +7,8 @@ import styles from './Nav.module.css';
 export const sectionMeta: Record<SectionId, { index: string; label: string }> = {
   hero: { index: '00', label: 'Home' },
   about: { index: '01', label: 'About' },
-  tech: { index: '02', label: 'Technologies' },
-  projects: { index: '03', label: 'Projects' },
+  projects: { index: '02', label: 'Projects' },
+  tech: { index: '03', label: 'Technologies' },
   contact: { index: '04', label: 'Contact' },
 };
 

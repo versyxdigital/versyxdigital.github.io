@@ -131,7 +131,7 @@ export function Projects() {
   return (
     <Section
       id="projects"
-      index="03"
+      index="02"
       label="Projects"
       meta={`${projects.length} projects`}
     >

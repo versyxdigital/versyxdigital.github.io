@@ -60,8 +60,8 @@ export function App() {
       <main className={styles.main}>
         <Hero />
         <About />
-        <Technologies />
         <Projects />
+        <Technologies />
         <Contact />
       </main>
       <Spine />
