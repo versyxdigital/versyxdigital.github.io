@@ -3,6 +3,10 @@ import edcsImage from '../assets/projects/edcs.webp';
 import mkeditorImage from '../assets/projects/mkeditor.webp';
 import { pending, type Project } from './types';
 
+/** MKEditor screenshots after the lead one, mkeditor-02 onwards, and every -thumb version. */
+const mkFiles = import.meta.glob<string>('../assets/projects/mkeditor-*.webp', { eager: true, query: '?url', import: 'default' });
+const mkShot = (name: string): string => mkFiles[`../assets/projects/mkeditor-${name}.webp`] ?? '';
+
 /** The Home Counties screenshots, thc-01 to thc-12, each with a small -thumb version. */
 const thcFiles = import.meta.glob<string>('../assets/projects/thc-*.webp', { eager: true, query: '?url', import: 'default' });
 const thcShot = (name: string): string => thcFiles[`../assets/projects/thc-${name}.webp`] ?? '';
@@ -50,11 +54,16 @@ export const projects: Project[] = [
     images: [
       {
         src: mkeditorImage,
+        thumb: mkShot('01-thumb'),
         alt: 'Screenshot of MKEditor: a file explorer, the markdown editor, the live preview and the AI assistant panel side by side.',
         width: 1920,
         height: 1032,
         caption: 'Editor, live preview and AI assistant.',
       },
+      { src: mkShot('02'), thumb: mkShot('02-thumb'), alt: 'Screenshot of MKEditor with a README open: markdown on the left, the rendered preview in the middle and an AI assistant chat on the right.', width: 1919, height: 1079, caption: 'Writing with the preview and the assistant open.' },
+      { src: mkShot('03'), thumb: mkShot('03-thumb'), alt: 'Screenshot of the MKEditor settings window: formatting, editing, session, pasted images, appearance and language options.', width: 1919, height: 1079, caption: 'Editor settings.' },
+      { src: mkShot('04'), thumb: mkShot('04-thumb'), alt: 'Screenshot of the MKEditor AI settings: Anthropic, OpenAI and a local Ollama install, each with its own model and connection test.', width: 1919, height: 1079, caption: 'AI providers: Anthropic, OpenAI or a local Ollama install.' },
+      { src: mkShot('05'), thumb: mkShot('05-thumb'), alt: 'Screenshot of the MKEditor keyboard shortcuts window, grouped into basic editing, text formatting, search and replace, and multi-cursor.', width: 1919, height: 1079, caption: 'Keyboard shortcuts.' },
     ],
     diagram: {
       caption: 'Document pipeline, with the desktop shell and assistant around it.',
