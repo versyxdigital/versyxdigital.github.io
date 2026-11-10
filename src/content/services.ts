@@ -12,7 +12,7 @@ export const services: Service[] = [
   {
     id: 'webapps',
     name: 'Web application design and development',
-    short: 'Web applications',
+    short: 'Web apps',
     tag: 'WEB',
     summary: 'Designing and building web applications, from interface to infrastructure.',
     record: [

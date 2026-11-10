@@ -15,6 +15,7 @@ import {
 import { useAnchor, useConnections } from '../schematic/registry';
 import { focusedTech, useSystem } from '../state/store';
 import { scrollToSection } from '../system/scroll';
+import { widerThan } from '../system/viewport';
 import styles from './Technologies.module.css';
 
 const originLabel = {
@@ -193,7 +194,8 @@ export function Technologies() {
               route: 'hvh',
               bend: 0.8,
               tone: categoryById.get(techById.get(selected)?.category ?? 'language')?.tone ?? 'cyan',
-              level: (s) => (s.activeSection === 'tech' ? 0.9 : 0),
+              // Only while graph and record sit side by side (the 1100px breakpoint in the styles).
+              level: (s) => (s.activeSection === 'tech' && widerThan(1100) ? 0.9 : 0),
               ambient: 5,
             },
           ]

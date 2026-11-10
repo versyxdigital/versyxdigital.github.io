@@ -83,7 +83,7 @@ svg {
 .mono {
   font-family: var(--font-mono);
   font-size: var(--fs-label);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }

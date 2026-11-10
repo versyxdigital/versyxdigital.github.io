@@ -75,7 +75,7 @@
   scrollbar-color: var(--line) transparent;
   padding: 1.5rem 1.4rem 1.25rem;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(11, 15, 20, 0.9), rgba(11, 15, 20, 0.78));
+  background: linear-gradient(180deg, rgba(10, 13, 18, 0.96), rgba(10, 13, 18, 0.92));
   transition: border-color var(--t-med) ease;
 }
 
@@ -150,7 +150,7 @@
 
 .stats dt {
   color: var(--text-3);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
 }
 
 .stats dd {
@@ -262,11 +262,11 @@
   padding-top: 0.9rem;
   border-top: 1px solid var(--line);
   color: var(--text-3);
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
 }
 
 .release {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   color: var(--cyan);
   border-bottom: 1px solid currentColor;
 }

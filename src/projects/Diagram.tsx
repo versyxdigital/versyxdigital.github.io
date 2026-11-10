@@ -4,8 +4,10 @@ import { route, toPath, type Pt, type RouteStyle } from '../schematic/routing';
 import styles from './Diagram.module.css';
 
 const CELL_W = 184;
-const CELL_H = 98;
-const NODE_H = 54;
+/** Six-column diagrams use narrower cells so they still fit a laptop screen. */
+const NARROW_W = 160;
+const CELL_H = 104;
+const NODE_H = 62;
 const GAP_X = 24;
 const PAD = 10;
 
@@ -16,12 +18,17 @@ interface Box {
   h: number;
 }
 
-const boxOf = (node: DiagramNode): Box => {
+const cellWidth = (diagram: DiagramData): number => (diagram.cols > 5 ? NARROW_W : CELL_W);
+
+/** Natural width of a diagram in CSS pixels, at which its type is drawn at full size. */
+export const diagramWidth = (diagram: DiagramData): number => diagram.cols * cellWidth(diagram) + PAD * 2;
+
+const boxOf = (node: DiagramNode, cell: number): Box => {
   const span = node.span ?? 1;
   return {
-    x: PAD + node.col * CELL_W + GAP_X / 2,
+    x: PAD + node.col * cell + GAP_X / 2,
     y: PAD + node.row * CELL_H + (CELL_H - NODE_H) / 2,
-    w: span * CELL_W - GAP_X,
+    w: span * cell - GAP_X,
     h: NODE_H,
   };
 };
@@ -88,12 +95,13 @@ interface DiagramProps {
  * schematic traces and carry travelling signals in the direction of data flow.
  */
 export function Diagram({ diagram, tone, id, preview = false, activeStage = null, onStage }: DiagramProps) {
-  const boxes = useMemo(() => new Map(diagram.nodes.map((n) => [n.id, boxOf(n)])), [diagram]);
+  const cell = cellWidth(diagram);
+  const boxes = useMemo(() => new Map(diagram.nodes.map((n) => [n.id, boxOf(n, cell)])), [diagram, cell]);
   const edges = useMemo(
     () => diagram.edges.map((edge) => ({ edge, geometry: edgePath(edge, boxes) })).filter((e) => e.geometry !== null),
     [diagram, boxes],
   );
-  const width = diagram.cols * CELL_W + PAD * 2;
+  const width = diagramWidth(diagram);
   const height = diagram.rows * CELL_H + PAD * 2;
   const marker = `${id}-arrow`;
 
@@ -123,7 +131,7 @@ export function Diagram({ diagram, tone, id, preview = false, activeStage = null
               className={styles.edge}
               data-dashed={edge.dashed === true}
               data-active={touchesActive}
-              style={{ '--stage': Math.max(boxes.get(edge.from)?.x ?? 0, boxes.get(edge.to)?.x ?? 0) / CELL_W } as React.CSSProperties}
+              style={{ '--stage': Math.max(boxes.get(edge.from)?.x ?? 0, boxes.get(edge.to)?.x ?? 0) / cell } as React.CSSProperties}
             >
               <path d={geometry.d} className={styles.wire} markerEnd={`url(#${marker})`} markerStart={edge.duplex ? `url(#${marker})` : undefined} />
               {!preview && (
@@ -188,11 +196,11 @@ export function Diagram({ diagram, tone, id, preview = false, activeStage = null
             {node.kind === 'source' && <path className={styles.markHeavy} d={`M0 0V${box.h}`} />}
             {node.kind === 'surface' && <path className={styles.markHeavy} d={`M${box.w} 0V${box.h}`} />}
             <path className={styles.corner} d={`M0 7V0H7M${box.w - 7} ${box.h}H${box.w}V${box.h - 7}`} />
-            <text className={styles.nodeLabel} x={12} y={node.sub ? 23 : 31}>
+            <text className={styles.nodeLabel} x={12} y={node.sub ? 26 : 36}>
               {node.label}
             </text>
             {node.sub && (
-              <text className={styles.nodeSub} x={12} y={40}>
+              <text className={styles.nodeSub} x={12} y={45}>
                 {node.sub}
               </text>
             )}

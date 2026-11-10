@@ -145,9 +145,20 @@ motion and the no-WebGL path, plus axe-core for WCAG A/AA.
 Several inspiration images are fully saturated teal or magenta. The brief asks
 for near-black with colour used sparingly, and the two conflict. The field
 follows the brief: graphite cubes, with colour only where the wave is cresting
-or a signal has landed. After seeing the full image set, lit crests were given
-tinted faces and deeper side glow so they read as illuminated bodies, which is
-what the references have in common, without raising the overall brightness.
+or a signal has landed. Two changes made after seeing the full image set
+(tinted crest faces, and instrument rings with node halos in the constellation)
+were reverted at the founder's request; the original edge-lit look stands.
+
+## 17. Text reads against a scrim, not against the field
+
+Feedback on the studio version: text was hard to read over the background in
+places. Each content section now carries a dark scrim between the field and
+the content, rather than relying on the field being dim enough. This keeps
+the field's behaviour changes visible at the section's edges and lets project
+behaviours run brighter. Type in scaled SVG (constellation labels) is sized in
+CSS pixels multiplied by the drawing's scale factor, so it does not shrink
+with the graph. Diagrams are never scaled below full size on small screens;
+they pan, and a row of stage buttons makes panning optional.
 
 ## 16. The site presents the studio, not the founder
 

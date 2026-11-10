@@ -58,7 +58,7 @@ const base: FieldParams = {
 
 export const fieldModes: Record<VisualMode, FieldMode> = {
   'section:hero': { ...base, label: 'Travelling waves · interference', travel: 1, interf: 0.6, amp: 1.65 },
-  'section:about': { ...base, label: 'Long swell', travel: 1, interf: 0.12, amp: 1.25, freq: 0.62, speed: 0.7, dim: 0.46, glow: 0.5 },
+  'section:about': { ...base, label: 'Long swell', travel: 1, interf: 0.12, amp: 1.25, freq: 0.62, speed: 0.7, dim: 0.44, glow: 0.45 },
   'section:tech': {
     ...base,
     label: 'Interference lattice',
@@ -69,8 +69,8 @@ export const fieldModes: Record<VisualMode, FieldMode> = {
     speed: 0.85,
     order: 0.55,
     twist: 0.4,
-    dim: 0.36,
-    glow: 0.6,
+    dim: 0.3,
+    glow: 0.5,
   },
   'section:projects': { ...base, label: 'Standing by', travel: 0.7, interf: 0.45, amp: 1.0, freq: 0.85, speed: 0.75, dim: 0.42, glow: 0.45 },
   'section:contact': {
@@ -96,15 +96,15 @@ export const fieldModes: Record<VisualMode, FieldMode> = {
     speed: 1.1,
     order: 0.8,
     twist: 0.3,
-    dim: 0.34,
-    glow: 1,
+    dim: 0.3,
+    glow: 0.8,
   },
-  'project:blocks': { ...base, label: 'Street plan', blocks: 1, travel: 0.04, amp: 1.5, speed: 1, twist: 0, dim: 0.52, glow: 1.0 },
-  'project:island': { ...base, label: 'Island', island: 1, travel: 0.05, amp: 1.6, speed: 1, twist: 0.4, dim: 0.58, glow: 1.15 },
-  'project:steps': { ...base, label: 'Pipeline stages', steps: 1, amp: 1.5, speed: 1, twist: 0, dim: 0.54, glow: 1.0 },
-  'project:rings': { ...base, label: 'Signal pulses', rings: 1, travel: 0.1, amp: 1.5, speed: 1, twist: 0.5, dim: 0.56, glow: 1.2 },
-  'project:scan': { ...base, label: 'Ruled rows', scan: 1, amp: 1.5, speed: 1, twist: 0, order: 0.25, dim: 0.54, glow: 1.1 },
-  'project:stars': { ...base, label: 'Catalogue of systems', stars: 1, travel: 0.06, amp: 1.4, speed: 1, twist: 0, dim: 0.56, glow: 1.2 },
+  'project:blocks': { ...base, label: 'Street plan', blocks: 1, travel: 0.04, amp: 1.5, speed: 1, twist: 0, dim: 0.74, glow: 1.0 },
+  'project:island': { ...base, label: 'Island', island: 1, travel: 0.05, amp: 1.6, speed: 1, twist: 0.4, dim: 0.8, glow: 1.15 },
+  'project:steps': { ...base, label: 'Pipeline stages', steps: 1, amp: 1.5, speed: 1, twist: 0, dim: 0.76, glow: 1.0 },
+  'project:rings': { ...base, label: 'Signal pulses', rings: 1, travel: 0.1, amp: 1.5, speed: 1, twist: 0.5, dim: 0.78, glow: 1.2 },
+  'project:scan': { ...base, label: 'Ruled rows', scan: 1, amp: 1.5, speed: 1, twist: 0, order: 0.25, dim: 0.76, glow: 1.1 },
+  'project:stars': { ...base, label: 'Catalogue of systems', stars: 1, travel: 0.06, amp: 1.4, speed: 1, twist: 0, dim: 0.78, glow: 1.2 },
 };
 
 export const paramKeys: readonly (keyof FieldParams)[] = [

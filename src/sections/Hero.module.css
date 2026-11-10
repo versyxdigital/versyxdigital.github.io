@@ -3,7 +3,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 46% 62% at 16% 52%, rgba(5, 6, 8, 0.78), rgba(5, 6, 8, 0) 72%);
+  background: radial-gradient(ellipse 52% 68% at 16% 52%, rgba(5, 6, 8, 0.88), rgba(5, 6, 8, 0) 74%);
   pointer-events: none;
 }
 
@@ -83,8 +83,34 @@
   cursor: default;
 }
 
+.roleText {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.35em;
+}
+
+/* The founder credit never breaks mid-name; on narrow screens it takes its own line. */
+.founder {
+  white-space: nowrap;
+}
+
 .at {
   color: var(--text-2);
+}
+
+@media (max-width: 560px) {
+  .roleText {
+    flex-direction: column;
+  }
+  .sep {
+    display: none;
+  }
+  .at {
+    display: inline-block;
+  }
+  .at::first-letter {
+    text-transform: uppercase;
+  }
 }
 
 /* The junction the hero's trace leaves from. */
@@ -265,7 +291,31 @@
   }
 }
 
+/* Short laptop screens: scale the name to the height so the whole hero fits. */
+@media (max-height: 800px) and (min-width: 901px) {
+  .hero {
+    padding-top: calc(var(--nav-h) + 4vh);
+    padding-bottom: 2.5rem;
+  }
+  .name {
+    font-size: clamp(3.25rem, 17vh, 10.5rem);
+  }
+  .role {
+    margin-top: 3vh;
+  }
+  .actions {
+    margin-top: 3.5vh;
+  }
+  .foot {
+    padding-top: 1.5rem;
+  }
+}
+
 @media (max-width: 900px) {
+  /* Single column: the type spans the screen, so the scrim does too. */
+  .hero::before {
+    background: linear-gradient(to bottom, rgba(5, 6, 8, 0.45), rgba(5, 6, 8, 0.7) 45%, rgba(5, 6, 8, 0.25));
+  }
   .annotations,
   .telemetry {
     display: none;

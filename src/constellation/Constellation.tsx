@@ -98,7 +98,14 @@ export function Constellation() {
     const el = wrapRef.current;
     if (!el) return;
     const observer = new ResizeObserver(([entry]) => {
-      if (entry) setCompact(entry.contentRect.width < 640);
+      if (!entry) return;
+      const width = entry.contentRect.width;
+      const isCompact = width < 640;
+      setCompact(isCompact);
+      // Canvas units per CSS pixel. Labels are sized in CSS pixels times this
+      // factor, so they stay legible when the graph is drawn small.
+      const k = (isCompact ? portraitView.width : landscapeView.width) / Math.max(1, width);
+      el.style.setProperty('--k', Math.min(isCompact ? 1.6 : 1.35, Math.max(1, k)).toFixed(3));
     });
     observer.observe(el);
     return () => observer.disconnect();
@@ -291,8 +298,10 @@ export function Constellation() {
   const showLabel = (tech: Technology, state: NodeState, placement: Placement | undefined): boolean => {
     if (state === 'dim' || placement?.emphasis === 'away') return false;
     if (!compact) return true;
-    // On the compact canvas the overview only names the anchors of the network.
+    // On the compact canvas the overview only names the anchors of the network,
+    // and a focused view names the inner ring. The record below lists the rest.
     if (placement?.emphasis === 'rest' && state === 'rest') return tech.category === 'language' || hubs.has(tech.id);
+    if (placement?.emphasis === 'ring' && (placement.ring ?? 0) > 0) return false;
     return true;
   };
 
@@ -393,7 +402,7 @@ export function Constellation() {
               <circle className={styles.hit} r={compact ? 24 : 22} />
               <circle className={styles.focusRing} r={r + 10} />
               <Glyph category={tech.category} r={r} />
-              <text className={styles.label} data-visible={showLabel(tech, state, placement)} y={r + (compact ? 15 : 17)} textAnchor="middle">
+              <text className={styles.label} data-visible={showLabel(tech, state, placement)} y={r} textAnchor="middle">
                 {tech.name}
               </text>
             </g>

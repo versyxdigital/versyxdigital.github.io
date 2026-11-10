@@ -87,17 +87,53 @@ These are judgement calls I made to keep moving. Each is quick to change.
 - **Folder and package name.** Still `rowles-portfolio`, as you specified the
   folder. The package description was updated.
 
-## Inspiration images
+## Readability, fit and mobile pass
 
-The first build was made with only three of the seventeen inspiration images
-available. I later reviewed all of them and made two changes: lit crests of
-the cube field now tint their faces and glow down their sides, and the
-constellation sits inside faint instrument rings with a halo on each node.
+Requested after the studio version: undo the two changes made in response to
+the inspiration images, make content fit and read better, and make sure it
+works on mobile.
 
-The site stays darker and less saturated than several of the references,
-because the brief asks for near-black with restrained colour. The tones are
-three values in `src/styles/tokens.css` and three constants at the top of
-`src/field/shaders.ts`; brightness per section is in `src/field/modes.ts`.
+**Reverted.** Lit crests are edge-lit again, as in the first build. The
+constellation has no instrument rings and no node halos.
+
+**Easier to read.**
+
+- Every content section now sits on a dark scrim, so body text is always set
+  against near-black. The field stays visible as texture, and at full strength
+  in the hero and below the contact details.
+- Secondary and tertiary text colours are lighter, and small labels went from
+  11px to 12px.
+- Constellation labels hold a readable size however small the graph is drawn.
+  Before, they shrank with it to about 7px on a laptop or phone.
+- Diagram type is larger, and every node label was checked to fit its box.
+- Panels (service record, technology record, standby bay) are more opaque.
+
+**Fits better.**
+
+- On short laptop screens (1280×720, 1366×768) the whole hero now fits in the
+  first screen.
+- The six-column OMG diagram uses narrower cells so it fits beside the
+  catalogue without shrinking its type.
+
+**Mobile.**
+
+- Diagrams are drawn at full size and pan sideways. Under each one is a row of
+  stage buttons, so every stage can be inspected without panning.
+- The founder credit in the hero no longer breaks mid-name.
+- In a focused constellation view only the inner ring is labelled on a phone;
+  the record below lists everything connected.
+- Traces that only make sense between side-by-side columns stay off on
+  single-column layouts.
+
+`scripts/audit.mjs` walks the site at six sizes (1280×720, 1366×768,
+1920×1080, 768×1024, 390×844, 360×740), screenshots every section and the
+main interactive states, and reports clipped text, anything off-screen and
+diagram labels that spill their boxes. It reports none. I also read through
+the screenshots at laptop, tablet and phone sizes.
+
+The seventeen inspiration images informed the first build only through three
+of them; the other fourteen arrived later, and the two changes they prompted
+have been reverted as above.
 
 ## What was implemented
 
@@ -159,6 +195,7 @@ are derived, so adding a project, technology or service updates every view.
 | Unit tests (Vitest) | 79 of 79 |
 | Production build | Pass |
 | Browser smoke test | 80 of 80 |
+| Fit audit, six viewport sizes | No problems reported |
 | axe-core, WCAG A and AA | No violations, with colour contrast excluded (see below) |
 | Frame rate, high tier, 1440×900 | 60 to 61 fps |
 
@@ -203,8 +240,8 @@ Not built:
   against the page background, and the field is lowered behind text sections,
   but a lit crest can pass behind a line of copy.
 - **No screen reader pass.**
-- **Diagrams need panning on phones.** They keep a 760px minimum width. The
-  OMG diagram is six columns wide, so its labels are the smallest.
+- **Diagrams pan sideways on phones.** They are drawn at full size so the type
+  is readable; the stage buttons under each one avoid the need to pan.
 - **The three.js chunk is about 249 kB gzipped.** It loads after first paint.
 - **`npm audit` reports 10 moderate findings**, all in the ESLint toolchain.
   Production dependencies report none.

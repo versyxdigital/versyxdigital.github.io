@@ -95,10 +95,10 @@
 
 .edgeLabel {
   font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  fill: var(--text-3);
+  fill: var(--text-2);
 }
 
 /* ── Nodes ──────────────────────────────────────────────────── */
@@ -155,7 +155,7 @@
 
 .nodeLabel {
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.01em;
   fill: var(--text);
@@ -163,7 +163,7 @@
 
 .nodeSub {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0;
   fill: var(--text-2);
 }

@@ -138,7 +138,13 @@ export function Hero() {
           }}
         >
           <span className={styles.roleText}>
-            {profile.descriptor} <span className={styles.at}>· founded by</span> {profile.founder.name}
+            <span>{profile.descriptor}</span>
+            <span className={styles.founder}>
+              <span className={styles.at}>
+                <span className={styles.sep}>· </span>founded by
+              </span>{' '}
+              {profile.founder.name}
+            </span>
           </span>
           <span ref={roleAnchor} className={styles.roleNode} aria-hidden="true" />
         </p>

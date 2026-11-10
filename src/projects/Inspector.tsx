@@ -5,7 +5,7 @@ import { isPending, type Maybe, type Project } from '../content';
 import { fieldModes } from '../field/modes';
 import { useAnchor } from '../schematic/registry';
 import { useSystem } from '../state/store';
-import { Diagram } from './Diagram';
+import { Diagram, diagramWidth } from './Diagram';
 import styles from './Inspector.module.css';
 
 type Tab = 'overview' | 'engineering' | 'stack';
@@ -96,7 +96,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
 
       <figure className={styles.figure}>
         <div className={styles.scroller} tabIndex={0} role="group" aria-label={`${project.name} architecture diagram, scrollable`}>
-          <div className={styles.canvas}>
+          <div className={styles.canvas} style={{ '--natural': `${diagramWidth(project.diagram)}px` } as React.CSSProperties}>
             <Diagram diagram={project.diagram} tone={project.tone} id={`d-${project.id}`} activeStage={stage} onStage={setStage} />
           </div>
         </div>
@@ -108,6 +108,23 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
           </span>
         </figcaption>
       </figure>
+
+      {/* Small screens: every stage as a button, so nothing depends on panning the drawing. */}
+      <div className={styles.stageList} role="group" aria-label="Diagram stages">
+        {[...project.diagram.nodes]
+          .sort((a, b) => a.col - b.col || a.row - b.row)
+          .map((node) => (
+            <button
+              key={node.id}
+              type="button"
+              className={`mono ${styles.stageButton}`}
+              aria-pressed={stage === node.id}
+              onClick={() => setStage(stage === node.id ? null : node.id)}
+            >
+              {node.label}
+            </button>
+          ))}
+      </div>
 
       <div className={styles.stage} aria-live="polite" data-open={activeStage !== undefined}>
         {activeStage ? (
@@ -127,7 +144,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
             )}
           </div>
         ) : (
-          <p className={`mono ${styles.stageHint}`}>Select a stage in the diagram to inspect it</p>
+          <p className={`mono ${styles.stageHint}`}>Select a stage to inspect it</p>
         )}
       </div>
 

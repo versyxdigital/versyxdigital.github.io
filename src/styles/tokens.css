@@ -8,8 +8,8 @@
 
   /* Type */
   --text: #e8eef2;
-  --text-2: #8b99a6;
-  --text-3: #76838f;
+  --text-2: #a6b2bd;
+  --text-3: #8a97a3;
 
   /* Signal tones. Shared with the shaders and the schematic overlay. */
   --cyan: #27dceb;
@@ -35,7 +35,7 @@
   --t-slow: 900ms;
 
   /* Type scale */
-  --fs-label: 0.6875rem;
+  --fs-label: 0.75rem;
   --fs-small: 0.8125rem;
   --fs-body: 1rem;
   --fs-lede: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem);
