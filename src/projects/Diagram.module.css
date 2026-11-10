@@ -212,3 +212,8 @@
   ry: 8px;
   fill: rgba(14, 18, 26, 0.62);
 }
+
+/* Greyscale theme (trial). */
+.diagram {
+  filter: grayscale(1);
+}

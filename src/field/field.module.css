@@ -50,3 +50,8 @@
 :global(html[data-mode]:not([data-mode='section:hero'])) .fallback svg {
   opacity: 0.3;
 }
+
+/* Greyscale theme (trial). */
+.fallback svg {
+  filter: grayscale(1);
+}

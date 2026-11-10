@@ -251,3 +251,16 @@ html[data-motion='reduced'] [data-reveal] {
   --glow-1: 221, 111, 232;
   --glow-2: 79, 139, 255;
 }
+
+/* ── Greyscale theme (trial) ── the moving background and the drawn lines lose their colour too. */
+canvas {
+  filter: grayscale(1);
+}
+
+#about,
+#projects,
+#tech,
+#contact {
+  --glow-1: 210, 214, 220;
+  --glow-2: 130, 138, 148;
+}
