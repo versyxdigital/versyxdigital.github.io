@@ -739,3 +739,24 @@
   color: var(--text);
 }
 
+/* Colour: the open project glows softly in its own colour. */
+.inspector {
+  border-color: rgba(var(--tone-rgb), 0.32);
+  background:
+    radial-gradient(ellipse 50% 60% at 100% 0%, rgba(var(--tone-rgb), 0.13), transparent 70%),
+    linear-gradient(180deg, rgba(9, 12, 17, 0.93), rgba(9, 12, 17, 0.84));
+  box-shadow: 0 0 90px -34px rgba(var(--tone-rgb), 0.6);
+}
+
+.ref {
+  color: var(--tone);
+}
+
+.thumb[aria-pressed='true'] {
+  border-color: var(--tone);
+  box-shadow: 0 0 12px -2px rgba(var(--tone-rgb), 0.8);
+}
+
+.shot a {
+  box-shadow: 0 0 40px -18px rgba(var(--tone-rgb), 0.7);
+}

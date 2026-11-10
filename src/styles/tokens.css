@@ -33,6 +33,9 @@
   --cat-infra: #ff7fa9;
   --cat-infra-rgb: 255, 127, 169;
 
+  /* The same run as one sweep, for headline words and underlines. */
+  --grad: linear-gradient(100deg, #3fe0ee 0%, #6d8cff 36%, #a97bff 64%, #ff7fa9 100%);
+
   --font-sans: 'Geist Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
 

@@ -26,6 +26,7 @@ function IndexItem({ project, shown }: { project: Project; shown: boolean }) {
         ref={anchor}
         type="button"
         className={styles.item}
+        data-hue={Number(project.ref)}
         data-tone={project.tone}
         data-selected={selected || shown}
         data-hovered={hovered}

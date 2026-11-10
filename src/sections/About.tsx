@@ -9,8 +9,13 @@ import { widerThan } from '../system/viewport';
 import styles from './About.module.css';
 import { ServiceVisual } from './ServiceVisual';
 
+/** Each service takes one of the six accent colours (see global.css). */
+const SERVICE_HUES = [1, 2, 4, 5, 6];
+const serviceHue = (id: string): number => SERVICE_HUES[services.findIndex((s) => s.id === id)] ?? 1;
+
 function ServiceNode({ service, last }: { service: Service; last: boolean }) {
   const selected = useSystem((s) => s.selectedService === service.id);
+  const hue = serviceHue(service.id);
   const hovered = useSystem((s) => s.hoveredService === service.id);
   const selectService = useSystem((s) => s.selectService);
   const hoverService = useSystem((s) => s.hoverService);
@@ -20,6 +25,7 @@ function ServiceNode({ service, last }: { service: Service; last: boolean }) {
     <button
       type="button"
       className={styles.node}
+      data-hue={hue}
       data-selected={selected}
       data-hovered={hovered}
       data-last={last}
@@ -47,7 +53,7 @@ function ServiceRecord() {
 
   return (
     <div className={styles.detail} aria-live="polite">
-      <div ref={anchor} className={styles.detailInner} key={service.id}>
+      <div ref={anchor} className={styles.detailInner} key={service.id} data-hue={serviceHue(service.id)}>
         <div className={styles.detailText}>
           <p className={`mono ${styles.detailTag}`}>Service {service.tag}</p>
           <h3 className={styles.detailTitle}>{service.name}</h3>

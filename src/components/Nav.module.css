@@ -250,3 +250,13 @@
     display: none;
   }
 }
+
+/* Colour: the active link is underlined with the palette sweep. */
+.link::after {
+  background: var(--grad);
+}
+
+.link:hover .linkIndex,
+.link[aria-current='true'] .linkIndex {
+  color: var(--cat-backend);
+}

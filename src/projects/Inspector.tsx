@@ -146,6 +146,7 @@ export function Inspector({ project, onClose, focusOnOpen = true }: { project: P
     <article
       ref={anchor}
       className={styles.inspector}
+      data-hue={Number(project.ref)}
       data-tone={project.tone}
       data-phase={transition}
       aria-labelledby={`inspect-${project.id}`}

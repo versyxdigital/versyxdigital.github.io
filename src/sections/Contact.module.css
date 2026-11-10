@@ -272,3 +272,37 @@
     padding-top: 1.5rem;
   }
 }
+
+/* Colour: glows behind, the heading and the address in the palette sweep. */
+.contact::before {
+  background:
+    radial-gradient(ellipse 44% 50% at 8% 30%, rgba(var(--glow-1, 0, 0, 0), 0.16), transparent 70%),
+    radial-gradient(ellipse 40% 46% at 92% 60%, rgba(var(--glow-2, 0, 0, 0), 0.13), transparent 70%),
+    linear-gradient(to bottom, rgba(5, 6, 8, 0), rgba(5, 6, 8, 0.6) 6rem, rgba(5, 6, 8, 0.6) 58%, rgba(5, 6, 8, 0) 82%);
+}
+
+.title span {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  padding-bottom: 0.1em;
+}
+
+.atSign {
+  color: var(--cat-data);
+}
+
+.email {
+  background: var(--grad) left bottom / 0 1px no-repeat;
+}
+
+.index {
+  color: var(--cat-backend);
+}
+
+.links a:hover .arrow {
+  color: var(--cat-data);
+}

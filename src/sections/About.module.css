@@ -487,3 +487,47 @@
   font-style: normal;
   color: var(--text-2);
 }
+
+/* Colour: a service's accent replaces cyan inside its tab and its panel, drawing included. */
+.node[data-hue],
+.detailInner[data-hue] {
+  --cyan: var(--tone);
+  --cyan-rgb: var(--tone-rgb);
+}
+
+.node .nodeTag {
+  color: var(--tone);
+  opacity: 0.75;
+}
+
+.node[data-selected='true'] .nodeTag {
+  opacity: 1;
+}
+
+.traceNode {
+  border-color: var(--tone);
+}
+
+.detailInner {
+  border-color: rgba(var(--tone-rgb), 0.38);
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(var(--tone-rgb), 0.12), transparent 70%),
+    linear-gradient(180deg, rgba(10, 13, 18, 0.95), rgba(10, 13, 18, 0.9));
+  box-shadow: 0 0 70px -28px rgba(var(--tone-rgb), 0.55);
+}
+
+.title em {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.spec dt {
+  color: var(--cat-backend);
+}
+
+.founder a:hover {
+  border-color: var(--cat-backend);
+}

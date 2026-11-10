@@ -342,3 +342,30 @@
   font-style: normal;
   color: var(--text-2);
 }
+
+/* Colour: the heading's second line in the palette sweep; each project's number in its own colour. */
+.title em {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.itemRef {
+  color: var(--tone);
+  opacity: 0.7;
+}
+
+.item:hover .itemRef,
+.item[data-selected='true'] .itemRef {
+  opacity: 1;
+}
+
+.item[data-selected='true'] {
+  background: linear-gradient(to right, rgba(var(--tone-rgb), 0.16), rgba(var(--tone-rgb), 0));
+}
+
+.itemState {
+  border-color: var(--tone);
+}

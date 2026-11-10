@@ -306,3 +306,33 @@
 :global(html[data-motion='reduced']) .inner {
   transform: none;
 }
+
+/* Colour: the second word of the name carries the palette, over two soft glows. */
+.hero {
+  background-image:
+    radial-gradient(ellipse 46% 56% at 10% 42%, rgba(var(--cat-backend-rgb), 0.2), transparent 70%),
+    radial-gradient(ellipse 34% 40% at 46% 88%, rgba(var(--cat-infra-rgb), 0.1), transparent 70%);
+}
+
+.line:nth-child(2) > span {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  padding-right: 0.06em;
+}
+
+.actionNode {
+  background: var(--grad);
+  box-shadow: 0 0 10px rgba(var(--cat-backend-rgb), 0.8);
+}
+
+.actionQuiet .actionNode {
+  box-shadow: inset 0 0 0 1px var(--cat-backend);
+}
+
+.action:hover::after {
+  background: var(--grad);
+}

@@ -207,3 +207,47 @@ html[data-motion='reduced'] [data-reveal] {
   --tone: var(--cat-infra);
   --tone-rgb: var(--cat-infra-rgb);
 }
+
+/* Six accent colours by number, for things that come in a list (services, projects). */
+:root:root [data-hue='1'] {
+  --tone: var(--cat-language);
+  --tone-rgb: var(--cat-language-rgb);
+}
+:root:root [data-hue='2'] {
+  --tone: var(--cat-frontend);
+  --tone-rgb: var(--cat-frontend-rgb);
+}
+:root:root [data-hue='3'] {
+  --tone: var(--cat-tooling);
+  --tone-rgb: var(--cat-tooling-rgb);
+}
+:root:root [data-hue='4'] {
+  --tone: var(--cat-backend);
+  --tone-rgb: var(--cat-backend-rgb);
+}
+:root:root [data-hue='5'] {
+  --tone: var(--cat-data);
+  --tone-rgb: var(--cat-data-rgb);
+}
+:root:root [data-hue='6'] {
+  --tone: var(--cat-infra);
+  --tone-rgb: var(--cat-infra-rgb);
+}
+
+/* Each section has two soft patches of colour behind it. */
+#about {
+  --glow-1: 169, 123, 255;
+  --glow-2: 63, 224, 238;
+}
+#projects {
+  --glow-1: 79, 139, 255;
+  --glow-2: 221, 111, 232;
+}
+#tech {
+  --glow-1: 125, 127, 255;
+  --glow-2: 255, 127, 169;
+}
+#contact {
+  --glow-1: 221, 111, 232;
+  --glow-2: 79, 139, 255;
+}
