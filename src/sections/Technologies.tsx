@@ -68,11 +68,11 @@ function Overview() {
       </p>
       <dl className={styles.stats}>
         <div>
-          <dt className="mono">Technologies</dt>
+          <dt className="mono">Total</dt>
           <dd>{category ? technologies.filter((t) => t.category === category.id).length : technologies.length}</dd>
         </div>
         <div>
-          <dt className="mono">Connections</dt>
+          <dt className="mono">Links</dt>
           <dd>
             {category
               ? techEdges.filter((e) => techById.get(e.a)?.category === category.id || techById.get(e.b)?.category === category.id).length
@@ -80,7 +80,7 @@ function Overview() {
           </dd>
         </div>
         <div>
-          <dt className="mono">Categories</dt>
+          <dt className="mono">Groups</dt>
           <dd>{category ? 1 : categories.length}</dd>
         </div>
       </dl>

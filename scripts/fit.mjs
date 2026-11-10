@@ -102,6 +102,8 @@ for (const [width, height] of sizes) {
   await page.waitForTimeout(500);
   await report('project engineering', 'projects');
   await page.keyboard.press('Escape');
+  // Closing the inspector re-centres the projects section on the next frame: let that settle first.
+  await page.waitForTimeout(400);
   await go('contact');
   await report('contact', 'contact');
   await page.close();
