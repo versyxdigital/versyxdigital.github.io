@@ -59,8 +59,6 @@ interface Sim {
 }
 
 const SIGNALS = 5;
-/** Radii of the instrument rings, as fractions of the canvas width. */
-const RINGS = [0.11, 0.2, 0.31, 0.44] as const;
 
 /**
  * The technology constellation.
@@ -299,10 +297,6 @@ export function Constellation() {
   };
 
   const projectName = projectFocus ? projectById.get(projectFocus)?.name : undefined;
-  // Same centre the focused arrangements use (see layout.ts).
-  const centreX = view.width / 2;
-  const centreY = view.height * (compact ? 0.42 : 0.47);
-  const ringAspect = compact ? 1 : 0.62;
 
   return (
     <div
@@ -327,29 +321,6 @@ export function Constellation() {
           if (event.key === 'Escape') selectTech(null);
         }}
       >
-        {/* Instrument rings: a fixed frame of reference the network sits in. */}
-        <g className={styles.instrument} aria-hidden="true">
-          {RINGS.map((k, i) => (
-            <ellipse key={k} cx={centreX} cy={centreY} rx={view.width * k} ry={view.width * k * ringAspect} data-dashed={i === 2} />
-          ))}
-          <path d={`M${centreX - view.width * 0.5} ${centreY}H${centreX + view.width * 0.5}M${centreX} ${centreY - view.height * 0.5}V${centreY + view.height * 0.5}`} />
-          {Array.from({ length: 36 }, (_, i) => {
-            const a = (i / 36) * Math.PI * 2;
-            const rx = view.width * RINGS[1]!;
-            const ry = rx * ringAspect;
-            const len = i % 3 === 0 ? 1.06 : 1.03;
-            return (
-              <line
-                key={i}
-                x1={centreX + Math.cos(a) * rx}
-                y1={centreY + Math.sin(a) * ry}
-                x2={centreX + Math.cos(a) * rx * len}
-                y2={centreY + Math.sin(a) * ry * len}
-              />
-            );
-          })}
-        </g>
-
         <g className={styles.edges} aria-hidden="true">
           {techEdges.map((edge) => (
             <line
@@ -420,7 +391,6 @@ export function Constellation() {
               }}
             >
               <circle className={styles.hit} r={compact ? 24 : 22} />
-              <circle className={styles.aura} r={r + 9} />
               <circle className={styles.focusRing} r={r + 10} />
               <Glyph category={tech.category} r={r} />
               <text className={styles.label} data-visible={showLabel(tech, state, placement)} y={r + (compact ? 15 : 17)} textAnchor="middle">

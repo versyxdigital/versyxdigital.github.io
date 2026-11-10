@@ -302,7 +302,7 @@ void main() {
 
   col += vec3(0.40, 0.50, 0.62) * edge * mix(0.05, 0.085, top);
   col += glow * edge * 1.25;
-  col += glow * mix(0.52 * exp(-vDepth * 0.85), 0.34 * (0.55 + 0.45 * topLit), top);
+  col += glow * mix(0.36 * exp(-vDepth * 1.3), 0.2, top);
 
   // ── Emerge from, and dissolve into, the page background ────────────
   float fade = 1.0 - smoothstep(uFadeNear, uFadeFar, length(p - uFadeCenter));
