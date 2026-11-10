@@ -111,7 +111,7 @@ float rippleHeight(vec2 p, inout vec4 tone) {
 float cursorHeight(vec2 p) {
   if (uCursor.z <= 0.001) return 0.0;
   float d = length(p - uCursor.xy);
-  return uCursor.z * 0.9 * exp(-(d * d) / 26.0) * (0.75 + 0.25 * cos(d * 0.9 - uClock * 2.4));
+  return uCursor.z * 0.7 * exp(-(d * d) / 26.0) * (0.75 + 0.25 * cos(d * 0.9 - uClock * 2.4));
 }
 
 float surface(vec2 p) {
@@ -259,7 +259,7 @@ void main() {
   vec3 tone = mix(CYAN, BLUE, smoothstep(0.0, 0.55, ph));
   tone = mix(tone, VIOLET, smoothstep(0.55, 1.0, ph));
   float energy = uGlow * crest * (0.34 + 0.66 * band) + vSpike * 0.42;
-  vec3 glow = tone * energy + vRipple.rgb * 1.35 + CYAN * vCursorE * 0.55;
+  vec3 glow = tone * energy + vRipple.rgb * 1.0 + CYAN * vCursorE * 0.2;
 
   col += vec3(0.40, 0.50, 0.62) * edge * mix(0.05, 0.085, top);
   col += glow * edge * 1.25;

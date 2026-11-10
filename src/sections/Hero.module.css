@@ -21,6 +21,9 @@
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
+  /* Scroll-linked exit: the type recedes as the camera leaves the hero pose. */
+  opacity: calc(1 - var(--hero-exit, 0) * 1.25);
+  transform: translate3d(0, calc(var(--hero-exit, 0) * -48px), 0);
 }
 
 .eyebrow {
@@ -207,6 +210,7 @@
 /* ── Foot ──────────────────────────────────────────────────── */
 .foot {
   position: relative;
+  opacity: calc(1 - var(--hero-exit, 0) * 2.2);
   width: 100%;
   max-width: var(--max);
   margin: auto auto 0;
@@ -225,8 +229,12 @@
   color: var(--text-2);
 }
 
-.hint svg {
+.hintIcon {
+  display: inline-flex;
   color: var(--cyan);
+}
+
+.hint svg {
   animation: turn 9s linear infinite;
 }
 
@@ -295,4 +303,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* The exit is positional, not decorative, but it is still motion: hold it still on request. */
+:global(html[data-motion='reduced']) .inner {
+  transform: none;
 }

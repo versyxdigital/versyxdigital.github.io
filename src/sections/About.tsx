@@ -5,7 +5,6 @@ import { TechChip } from '../components/TechChip';
 import { earlierCareer, isPending, profile, roleById, roles, type Role } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { useSystem } from '../state/store';
-import { hasGutter } from '../system/viewport';
 import styles from './About.module.css';
 
 const FIRST_YEAR = Math.min(...roles.map((r) => r.from));
@@ -120,16 +119,6 @@ export function About() {
         level: (s) => (s.activeSection === 'about' ? 0.85 : 0),
         ambient: 6,
       },
-      {
-        id: 'about:head-link',
-        from: { kind: 'anchor', id: 'head:about', side: 'l', gap: 5 },
-        to: { kind: 'anchor', id: 'about:specs', side: 'l', at: 0, gap: 0 },
-        route: 'hvh',
-        jog: -20,
-        tone: 'blue',
-        level: (s) => (s.activeSection === 'about' && hasGutter() ? 0.32 : 0),
-        ambient: 9,
-      },
     ],
     [selectedRole],
   );
@@ -137,8 +126,6 @@ export function About() {
   useEffect(() => {
     pulse('about:role-link', { delay: 0.25 });
   }, [selectedRole]);
-
-  const specs = useAnchor<HTMLDListElement>('about:specs');
 
   return (
     <Section
@@ -160,7 +147,7 @@ export function About() {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <dl ref={specs} className={styles.specs} data-reveal style={{ '--i': 1 } as React.CSSProperties}>
+          <dl className={styles.specs} data-reveal style={{ '--i': 1 } as React.CSSProperties}>
             {profile.specs.map((spec) => (
               <div key={spec.label} className={styles.spec}>
                 <dt className="mono">{spec.label}</dt>

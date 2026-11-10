@@ -14,11 +14,14 @@ export const scroll = {
   page: 0,
   /** Signed scroll velocity in viewport heights per second, smoothed. */
   velocity: 0,
+  /** How far the hero has scrolled away, 0..1. */
+  heroExit: 0,
 };
 
 let tops: number[] = [];
 let lastY = 0;
 let lastT = 0;
+let heroExit = -1;
 
 function measure(): void {
   tops = sectionOrder.map((id) => {
@@ -30,7 +33,7 @@ function measure(): void {
 function update(): void {
   const vh = window.innerHeight || 1;
   const y = window.scrollY;
-  const probe = y + vh * 0.42;
+  const probe = y + vh * 0.56;
   let index = 0;
   for (let i = 0; i < tops.length; i++) if (probe >= (tops[i] ?? 0)) index = i;
   const start = tops[index] ?? 0;
@@ -47,6 +50,15 @@ function update(): void {
   scroll.velocity += (v - scroll.velocity) * 0.25;
   lastY = y;
   lastT = now;
+
+  // How far the hero has scrolled away, 0..1. Drives its scroll-linked exit in CSS.
+  const heroEnd = tops[1] ?? vh;
+  const exit = Math.min(1, Math.max(0, y / Math.max(1, heroEnd * 0.85)));
+  if (Math.abs(exit - heroExit) > 0.002) {
+    heroExit = exit;
+    scroll.heroExit = exit;
+    document.documentElement.style.setProperty('--hero-exit', exit.toFixed(3));
+  }
 
   const active: SectionId = sectionOrder[index] ?? 'hero';
   useSystem.getState().setActiveSection(active);

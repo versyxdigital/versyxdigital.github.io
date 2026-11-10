@@ -15,6 +15,25 @@
   --tone-rgb: 160, 141, 240;
 }
 
+/* The drawing assembles left to right, in the direction data flows. */
+.node > *,
+.edge {
+  animation: assemble 520ms var(--ease-out) both;
+  animation-delay: calc(var(--stage, 0) * 85ms + 180ms);
+}
+
+.diagram[data-preview='true'] .node > *,
+.diagram[data-preview='true'] .edge {
+  animation-delay: calc(var(--stage, 0) * 40ms);
+}
+
+@keyframes assemble {
+  from {
+    opacity: 0;
+    transform: translate3d(-8px, 0, 0);
+  }
+}
+
 /* ── Edges ──────────────────────────────────────────────────── */
 .wire {
   fill: none;
@@ -145,7 +164,7 @@
 .nodeSub {
   font-family: var(--font-mono);
   font-size: 9px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
   fill: var(--text-2);
 }
 

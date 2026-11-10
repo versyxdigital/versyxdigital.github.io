@@ -12,6 +12,9 @@ import { FIELD_SIZE, MAX_RIPPLES, cellSeed } from './waveMath';
 const BACKGROUND = new THREE.Color('#050608');
 const BASE = new THREE.Color(0.125, 0.155, 0.198);
 
+/** Anything matching this is content: the cursor reticle stays out of its way. */
+const CONTENT_SELECTOR = 'a, button, h1, h2, h3, p, li, dl, svg, aside, article, header, nav, [role="button"]';
+
 /** Last known pointer position in viewport pixels, shared with the rig. */
 const pointer = { x: -1, y: -1, movedAt: -100, fine: true };
 
@@ -150,6 +153,8 @@ export function CubeField({ quality }: { quality: Quality }) {
       pointer.y = event.clientY;
       pointer.movedAt = systemClock();
       pointer.fine = event.pointerType === 'mouse' || event.pointerType === 'pen';
+      const target = event.target;
+      field.pointerFree = pointer.fine && !(target instanceof Element && target.closest(CONTENT_SELECTOR) !== null);
       if (useSystem.getState().reducedMotion) invalidate();
     };
     const onScroll = (): void => invalidate();
@@ -214,8 +219,8 @@ export function CubeField({ quality }: { quality: Quality }) {
         cursor.z += (hit.z - cursor.z) * ck;
         // A moving cursor leaves a wake of small ripples.
         const travelled = Math.hypot(cursor.x - r.lastRippleX, cursor.z - r.lastRippleZ);
-        if (travelled > 9) {
-          emitRipple(cursor.x, cursor.z, 0.28, 0);
+        if (travelled > 11) {
+          emitRipple(cursor.x, cursor.z, 0.17, 0);
           r.lastRippleX = cursor.x;
           r.lastRippleZ = cursor.z;
         }

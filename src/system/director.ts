@@ -28,7 +28,7 @@ function applyMode(mode: VisualMode, reduced: boolean): void {
   const target = pickParams(fieldModes[mode]);
   gsap.to(field.params, {
     ...target,
-    duration: reduced ? 0 : mode.startsWith('project:') ? 1.5 : 2.2,
+    duration: reduced ? 0 : mode.startsWith('project:') ? 1.5 : 1.7,
     ease: 'power2.inOut',
     overwrite: true,
     onUpdate: field.invalidate,
@@ -73,7 +73,7 @@ export function startDirector(): () => void {
       (s) => s.activeSection,
       () => {
         if (reduced()) return;
-        later(() => emitRippleAtScreen(window.innerWidth * 0.5, window.innerHeight * 0.62, 0.55, 1), 260);
+        later(() => emitRippleAtScreen(window.innerWidth * 0.5, window.innerHeight * 0.62, 0.4, 1), 260);
       },
     ),
   );

@@ -52,7 +52,7 @@ const base: FieldParams = {
 
 export const fieldModes: Record<VisualMode, FieldMode> = {
   'section:hero': { ...base, label: 'Travelling waves · interference', travel: 1, interf: 0.6, amp: 1.65 },
-  'section:about': { ...base, label: 'Long swell', travel: 1, interf: 0.12, amp: 1.25, freq: 0.62, speed: 0.7, dim: 0.5, glow: 0.7 },
+  'section:about': { ...base, label: 'Long swell', travel: 1, interf: 0.12, amp: 1.25, freq: 0.62, speed: 0.7, dim: 0.46, glow: 0.5 },
   'section:tech': {
     ...base,
     label: 'Interference lattice',
@@ -64,9 +64,9 @@ export const fieldModes: Record<VisualMode, FieldMode> = {
     order: 0.55,
     twist: 0.4,
     dim: 0.36,
-    glow: 0.9,
+    glow: 0.6,
   },
-  'section:projects': { ...base, label: 'Standing by', travel: 0.7, interf: 0.45, amp: 1.0, freq: 0.85, speed: 0.75, dim: 0.5, glow: 0.7 },
+  'section:projects': { ...base, label: 'Standing by', travel: 0.7, interf: 0.45, amp: 1.0, freq: 0.85, speed: 0.75, dim: 0.42, glow: 0.45 },
   'section:contact': {
     ...base,
     label: 'Settled lattice',

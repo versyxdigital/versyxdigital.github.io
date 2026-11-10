@@ -6,7 +6,7 @@ import styles from './Diagram.module.css';
 const CELL_W = 184;
 const CELL_H = 98;
 const NODE_H = 54;
-const GAP_X = 30;
+const GAP_X = 24;
 const PAD = 10;
 
 interface Box {
@@ -41,7 +41,13 @@ const port = (box: Box, side: Side): Pt => {
 
 const horizontal = (side: Side): boolean => side === 'l' || side === 'r';
 
-function edgePath(edge: DiagramEdge, boxes: Map<string, Box>): { d: string; mid: Pt; length: number } | null {
+interface EdgeGeometry {
+  d: string;
+  length: number;
+  label: { x: number; y: number; anchor: 'middle' | 'start' };
+}
+
+function edgePath(edge: DiagramEdge, boxes: Map<string, Box>): EdgeGeometry | null {
   const from = boxes.get(edge.from);
   const to = boxes.get(edge.to);
   if (!from || !to) return null;
@@ -56,11 +62,13 @@ function edgePath(edge: DiagramEdge, boxes: Map<string, Box>): { d: string; mid:
   const pts = route(a, b, style, 0.5, 6);
   let length = 0;
   for (let i = 1; i < pts.length; i++) length += Math.hypot(pts[i]!.x - pts[i - 1]!.x, pts[i]!.y - pts[i - 1]!.y);
-  // Label sits on the first run, just clear of the source node.
+  // The label sits on the first run: above a horizontal wire, beside a vertical one.
   const first = pts[0]!;
   const second = pts[1] ?? first;
+  const vertical = Math.abs(second.x - first.x) < 0.5;
   const mid = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
-  return { d: toPath(pts), mid, length };
+  const label = vertical ? { x: mid.x + 9, y: mid.y + 3, anchor: 'start' as const } : { x: mid.x, y: mid.y - 7, anchor: 'middle' as const };
+  return { d: toPath(pts), length, label };
 }
 
 interface DiagramProps {
@@ -110,7 +118,13 @@ export function Diagram({ diagram, tone, id, preview = false, activeStage = null
           const touchesActive = activeStage !== null && (edge.from === activeStage || edge.to === activeStage);
           const seconds = Math.max(1.6, geometry.length / 70);
           return (
-            <g key={`${edge.from}-${edge.to}`} className={styles.edge} data-dashed={edge.dashed === true} data-active={touchesActive}>
+            <g
+              key={`${edge.from}-${edge.to}`}
+              className={styles.edge}
+              data-dashed={edge.dashed === true}
+              data-active={touchesActive}
+              style={{ '--stage': Math.max(boxes.get(edge.from)?.x ?? 0, boxes.get(edge.to)?.x ?? 0) / CELL_W } as React.CSSProperties}
+            >
               <path d={geometry.d} className={styles.wire} markerEnd={`url(#${marker})`} markerStart={edge.duplex ? `url(#${marker})` : undefined} />
               {!preview && (
                 <path
@@ -129,7 +143,7 @@ export function Diagram({ diagram, tone, id, preview = false, activeStage = null
                 />
               )}
               {edge.label && !preview && (
-                <text className={styles.edgeLabel} x={geometry.mid.x} y={geometry.mid.y - 7} textAnchor="middle">
+                <text className={styles.edgeLabel} x={geometry.label.x} y={geometry.label.y} textAnchor={geometry.label.anchor}>
                   {edge.label}
                 </text>
               )}
@@ -150,6 +164,7 @@ export function Diagram({ diagram, tone, id, preview = false, activeStage = null
             data-kind={node.kind}
             data-optional={node.optional === true}
             data-active={active}
+            style={{ '--stage': node.col } as React.CSSProperties}
             transform={`translate(${box.x} ${box.y})`}
             role={interactive ? 'button' : undefined}
             tabIndex={interactive ? 0 : undefined}

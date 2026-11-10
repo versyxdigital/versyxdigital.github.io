@@ -5,7 +5,7 @@ import { interference, travel } from '../field/waveMath';
 import { pulse, registerAnchor, useConnections, useAnchor } from '../schematic/registry';
 import { useSystem } from '../state/store';
 import { signed, useLiveText } from '../system/liveText';
-import { scrollToSection } from '../system/scroll';
+import { scroll, scrollToSection } from '../system/scroll';
 import styles from './Hero.module.css';
 
 /** Field cells the hero's annotations are attached to (world x, z). */
@@ -20,6 +20,7 @@ export function Hero() {
   const webgl = useSystem((s) => s.webgl);
   const hovered = useRef(false);
   const roleAnchor = useAnchor<HTMLSpanElement>('hero:role');
+  const originAnchor = useAnchor<HTMLSpanElement>('hero:origin');
   const sectionRef = useRef<HTMLElement>(null);
   const annotA = useRef<HTMLDivElement>(null);
   const annotB = useRef<HTMLDivElement>(null);
@@ -59,7 +60,8 @@ export function Hero() {
 
   // Traces from the hero's type to specific cubes. Their ends ride the wave.
   useConnections(() => {
-    const inHero = (active: string): boolean => active === 'hero';
+    // Present while the hero is on screen, fading out over the first part of its exit.
+    const presence = (active: string): number => (active === 'hero' ? Math.max(0, 1 - scroll.heroExit * 2.4) : 0);
     return [
       {
         id: 'hero:role',
@@ -67,7 +69,7 @@ export function Hero() {
         to: { kind: 'field', ...CELL_ROLE },
         route: 'hv',
         tone: 'cyan',
-        level: (s) => (inHero(s.activeSection) ? (hovered.current ? 1 : 0.45) : 0),
+        level: (s) => presence(s.activeSection) * (hovered.current ? 1 : 0.45),
         ambient: 7,
         ripple: 0.8,
       },
@@ -77,7 +79,7 @@ export function Hero() {
         to: { kind: 'field', ...CELL_A },
         route: 'hv',
         tone: 'blue',
-        level: (s) => (inHero(s.activeSection) ? 0.34 : 0),
+        level: (s) => presence(s.activeSection) * 0.34,
         ambient: 11,
         ripple: 0.5,
       },
@@ -87,7 +89,7 @@ export function Hero() {
         to: { kind: 'field', ...CELL_B },
         route: 'hv',
         tone: 'violet',
-        level: (s) => (inHero(s.activeSection) ? 0.34 : 0),
+        level: (s) => presence(s.activeSection) * 0.34,
         ambient: 13,
         ripple: 0.5,
       },
@@ -175,12 +177,20 @@ export function Hero() {
 
       <div className={styles.foot}>
         <p className={`mono ${styles.hint}`}>
-          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-            <circle cx="8" cy="8" r="3.5" fill="none" stroke="currentColor" />
-            <path d="M8 0v3.5M8 12.5V16M0 8h3.5M12.5 8H16" stroke="currentColor" />
-          </svg>
-          <span className={styles.hintFine}>Move across the field. It responds.</span>
-          <span className={styles.hintCoarse}>Scroll. The field follows.</span>
+          <span ref={originAnchor} className={styles.hintIcon} aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="16" height="16">
+              <circle cx="8" cy="8" r="3.5" fill="none" stroke="currentColor" />
+              <path d="M8 0v3.5M8 12.5V16M0 8h3.5M12.5 8H16" stroke="currentColor" />
+            </svg>
+          </span>
+          {webgl === 'ok' ? (
+            <>
+              <span className={styles.hintFine}>Move across the field. It responds.</span>
+              <span className={styles.hintCoarse}>Scroll. The field follows.</span>
+            </>
+          ) : (
+            <span>Scroll to explore the system.</span>
+          )}
         </p>
         {webgl === 'ok' && (
           <p className={`mono ${styles.telemetry}`} aria-hidden="true">

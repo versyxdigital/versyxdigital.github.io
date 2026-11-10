@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from 'react';
 import { Nav } from './components/Nav';
 import { FieldFallback } from './field/FieldFallback';
 import { SchematicOverlay } from './schematic/SchematicOverlay';
+import { Spine } from './schematic/Spine';
 import { About } from './sections/About';
 import { Contact } from './sections/Contact';
 import { Hero } from './sections/Hero';
@@ -63,6 +64,7 @@ export function App() {
         <Projects />
         <Contact />
       </main>
+      <Spine />
       <SchematicOverlay />
     </>
   );
