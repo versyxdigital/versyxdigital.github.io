@@ -1,6 +1,6 @@
-# Chris Rowles — interactive engineering portfolio
+# Versyx Digital — interactive studio site
 
-A single-page portfolio built as one connected system: a GPU-driven field of
+The site for Versyx Digital, a small UK software studio, built as one connected system: a GPU-driven field of
 cubes that behaves like a mathematical simulation, a schematic layer of live
 traces and signals, a technology constellation and a project system explorer,
 all driven by one interaction model.
@@ -30,7 +30,7 @@ sub-path (GitHub Pages, for example) without changes.
 ```bash
 npm run typecheck  # strict TypeScript
 npm run lint       # ESLint
-npm test           # 73 unit tests (Vitest)
+npm test           # 79 unit tests (Vitest)
 npm run test:e2e   # browser smoke test against dist/ (needs Chrome or Edge installed)
 npm run check      # all of the above, plus the build
 ```
@@ -45,8 +45,8 @@ Everything the site says lives in `src/content`. No component contains copy.
 
 | File | What it holds |
 | --- | --- |
-| `profile.ts` | Name, role, introduction, contact details |
-| `experience.ts` | Roles shown on the career schematic |
+| `profile.ts` | The studio: name, introduction, founder, contact details |
+| `services.ts` | Services shown on the studio schematic |
 | `technologies.ts` | Technologies, their category and structural relationships |
 | `projects.ts` | Projects, their facts and their architecture diagrams |
 | `config.ts` | Display switches, including `showPendingFields` |
@@ -57,8 +57,8 @@ Everything the site says lives in `src/content`. No component contains copy.
 - **Add a project:** add an entry to `projects.ts` referencing technology ids.
   The constellation, catalogue and inspector pick it up. Its diagram is data:
   nodes on a grid, edges between them.
-- **Add a role:** add an entry to `experience.ts`. The career schematic places
-  it on the time axis from its years.
+- **Add or describe a service:** edit `services.ts`. Tag a project to a
+  service by adding the service id to the project's `services` list.
 - **Fill a gap:** content the source material did not cover is a `pending(...)`
   value. Replace it with real content, or set `showPendingFields` to `false` in
   `config.ts` to hide every placeholder.
@@ -77,7 +77,7 @@ src/
   schematic/      Trace routing, anchor registry, overlay canvas, the spine
   constellation/  Deterministic layout and the SVG graph
   projects/       Architecture diagram renderer and the inspector
-  sections/       Hero, About, Technologies, Projects, Contact
+  sections/       Hero, Studio (About.tsx), Technologies, Projects, Contact
   components/     Navigation, section frame, shared pieces
 e2e/              Browser smoke test
 scripts/          Visual QA helpers

@@ -3,8 +3,14 @@
 Session of 2026-11-10. Project: `C:\Users\chris\workspace\rowles-portfolio`.
 
 The site is built, runs locally, and passes every automated check. Nothing was
-pushed, deployed or published. The repository is local only, with all work committed on
-`main` and a clean working tree.
+pushed, deployed or published. The repository is local only, with all work
+committed on `main` and a clean working tree.
+
+**The site is now about Versyx Digital, not about Chris Rowles personally.**
+It was first built as a personal portfolio from the original brief. Two later
+messages changed that: a list of six projects to show, and a request to make
+the content about the studio. Both are done. The first section of this report
+covers that change; the rest describes the site as it now stands.
 
 ## How to run it
 
@@ -17,95 +23,131 @@ npm run dev        # then open the address it prints
 ```bash
 npm run build      # production build to dist/
 npm run preview    # serve dist/
-npm run check      # types, lint, 73 unit tests, build, 69 browser checks
+npm run check      # types, lint, 79 unit tests, build, 80 browser checks
 ```
 
 `npm run check` needs Chrome or Edge installed for the browser step. It does
 not download a browser.
 
+## What changed for Versyx Digital
+
+**Identity.** The hero, navigation, page title and footer say Versyx Digital.
+The line under the name reads "Software studio · founded by Chris Rowles". The
+introduction is your description of the studio, almost word for word.
+
+**Studio section.** The career timeline is gone, along with the SentryBay and
+Go Deploy Labs roles. In its place is a schematic of the five services you
+listed. Selecting one shows what is on record about it and which catalogued
+projects are examples of it.
+
+**Six projects.** The catalogue holds exactly the six you listed, in your
+order. Each has an architecture diagram drawn only from its own site or
+README, and its own field behaviour:
+
+| Ref | Project | Diagram shows | Field behaviour |
+| --- | --- | --- | --- |
+| SYS-01 | MKEditor | Document pipeline, desktop shell, AI assistant | Ruled rows |
+| SYS-02 | The Home Counties | The raid loop, hideout to extraction | Street plan |
+| SYS-03 | Aldervast | One authoritative server, three ways to run it | Island |
+| SYS-04 | ED:CS | Ingest into the catalogue, and the read path out | Catalogue of systems |
+| SYS-05 | OMG | Lexer to virtual machine, self-hosted compiler, native path | Pipeline stages |
+| SYS-06 | wssh | Browser terminal to remote shell | Signal pulses |
+
+**Vigil was removed.** It was on your existing site but not in your list, so I
+took it out. Say if you want it back; it is one entry in
+`src/content/projects.ts`, and the old one is in the git history.
+
+**Technologies.** Seven were added from the new project stacks: Rust, C,
+GDScript, Godot, xterm.js, Alpine.js and Paramiko. Guacamole was removed with
+the Go Deploy role. The graph now has 49 nodes.
+
+## Decisions for you to check
+
+These are judgement calls I made to keep moving. Each is quick to change.
+
+- **Service descriptions.** You gave the list of services, not descriptions.
+  For web applications, consulting and bug fixing I wrote one line each and
+  quoted supporting statements from your existing site. APIs and AI-integrated
+  workflows have nothing published to draw on, so they show a "Pending" block.
+  Edit `src/content/services.ts`.
+- **Which projects illustrate which service.** My tagging: MKEditor for web
+  applications and AI; ED:CS for web applications and APIs; wssh for web
+  applications. The two games and OMG are not tagged to a service.
+- **The technology graph still starts from your personal skills list.** That
+  list came from your own site, not from a Versyx source. It is labelled "From
+  the founder's published skills" in the UI. Trim it in
+  `src/content/technologies.ts` if the studio's list should be narrower.
+- **Contact details.** The email is the one published on the MKEditor site.
+  The links are the Versyx Digital GitHub organisation and your LinkedIn. That
+  page also publishes a phone number and `chris.rowles.info`; I left both out.
+- **"Open to new projects and consulting."** My wording, replacing "open to
+  lead and senior roles", which no longer fits a company site.
+- **Home Counties and Aldervast purpose.** Neither site says why the game is
+  being made, so "Purpose" is pending for both.
+- **Folder and package name.** Still `rowles-portfolio`, as you specified the
+  folder. The package description was updated.
+
 ## Inspiration images
 
 The first build was made with only three of the seventeen inspiration images
-available (the blueprint, the exploded device and the isometric dashboard).
-The other fourteen reached the session after the report was first written. I
-then reviewed all of them and made two changes in response:
+available. I later reviewed all of them and made two changes: lit crests of
+the cube field now tint their faces and glow down their sides, and the
+constellation sits inside faint instrument rings with a halo on each node.
 
-- **Cube field.** The references show cubes whose lit faces carry colour, not
-  only their edges. Lit crests now tint their top faces and glow further down
-  their sides, while troughs stay near-black.
-- **Constellation.** The network references sit inside concentric instrument
-  rings and their nodes have soft halos. The constellation now has both: faint
-  rings and bearing ticks behind the graph, and a halo on each node that
-  strengthens when the node is lit.
-
-The site stays deliberately darker and less saturated than several of the
-references, because the brief asks for near-black with restrained colour. If
-you want it closer to the teal or magenta images, the tones are three values
-in `src/styles/tokens.css` and three constants at the top of
-`src/field/shaders.ts`, and brightness per section is in `src/field/modes.ts`.
+The site stays darker and less saturated than several of the references,
+because the brief asks for near-black with restrained colour. The tones are
+three values in `src/styles/tokens.css` and three constants at the top of
+`src/field/shaders.ts`; brightness per section is in `src/field/modes.ts`.
 
 ## What was implemented
 
 **The cube field.** 15,376 cubes on the high tier, drawn in one call from one
 instanced box. All motion is computed in the vertex shader from each cube's
-cell position: three travelling waves whose headings drift so the pattern
-never loops, three orbiting point sources that interfere, radial ripples,
-a cursor swell, and terracing. Lighting, edge lines, colour propagation and
-the fade into darkness are in the fragment shader. The camera follows a rail
-with one pose per section, interpolated by scroll.
+cell position. Lighting, edge lines, colour propagation and the fade into
+darkness are in the fragment shader. The camera follows a rail with one pose
+per section, interpolated by scroll.
 
 **Field modes.** Each section and each project gives the field a different
-behaviour, and the surface morphs between them. Hero: travelling waves with
-interference. Technologies: a terraced interference lattice. Contact: a
-settled lattice. Vigil: concentric pulses from one origin. MKEditor: ruled
-rows with a travelling carriage. ED:CS: isolated columns along spiral arms.
+behaviour, and the surface morphs between them. There are eight basis
+behaviours: travelling waves, interference, concentric pulses, ruled rows,
+spiral star columns, a street plan, an island and a staircase.
 
 **Schematic overlay.** Components declare connections between named anchors.
 One canvas routes chamfered orthogonal traces between their live positions
 every frame, so they hold through scroll and resize. Traces can end on DOM
-elements, on constellation nodes, or on a specific cube in the field, where
-the end rides the wave. A spine trace joins every section heading.
+elements, on constellation nodes, or on a specific cube in the field. A spine
+trace joins every section heading.
 
 **The rule that ties it together.** A signal travels along a trace as a pulse.
 Where the trace reaches a via it becomes a ripple of the same colour in the
-field. Hovering a technology, a project or a career node all use it.
+field. Hovering a technology, a project or a service all use it.
 
-**Technology constellation.** 43 technologies, 36 structural links, 6 groups,
-each with its own glyph. Hover lights a node, its relations and the projects
-using it, and dims the rest. Selecting pulls its neighbourhood into a ring
-around it. Category filters regroup the network. Layout is a deterministic
-function, not a force simulation. On narrow screens it switches to a compact
-canvas with larger touch spacing.
+**Technology constellation.** 49 technologies in 6 groups, each with its own
+glyph. Hover lights a node, its relations and the projects using it. Selecting
+pulls its neighbourhood into a ring. Category filters regroup the network.
+Layout is a deterministic function, not a force simulation.
 
 **Project system explorer.** A catalogue, a standby bay that previews whichever
-system is under the cursor, and an inspector. Each project has an architecture
-diagram generated from data, with signals flowing along the wires and stages
-you can select. Detail is split across Overview, Engineering, and Stack and
-links.
-
-**Career schematic.** Roles on a real time axis in two parallel tracks, since
-Versyx Digital runs alongside employment. The selected role is wired to its
-record.
-
-**Contact.** Traces converge on the email node, then leave it down one bus
-that drops into the field.
+system is under the cursor, and an inspector with a data-driven architecture
+diagram, selectable stages, and detail split across three tabs.
 
 **One interaction model.** A zustand store holds intent. Two pure functions
 derive what is lit and how the field behaves. A director module turns state
-changes into choreography. Components never talk to each other directly.
+changes into choreography.
 
 **Content model.** Everything rendered comes from `src/content`. Relationships
-are derived, so adding a project or technology updates every view.
+are derived, so adding a project, technology or service updates every view.
 
 ## What is working
 
 - All five sections, at desktop, tablet and phone widths.
-- Field, overlay, constellation and explorer responding to each other.
+- Field, overlay, constellation, service schematic and explorer responding to
+  each other.
 - Keyboard: skip link, visible focus, arrow keys through the constellation,
-  Enter to focus, Escape to release, focus moved into and out of the inspector.
+  focus moved into and out of the inspector.
 - Reduced motion: the field holds still and transitions are removed.
 - No WebGL, or a software renderer: a static isometric plot of the same wave
-  function replaces the field. The rest of the site is unaffected.
+  function replaces the field.
 - Adaptive quality: three tiers, stepping down on measured frame time.
 
 ## What was tested
@@ -114,94 +156,67 @@ are derived, so adding a project or technology updates every view.
 | --- | --- |
 | TypeScript, strict | Pass |
 | ESLint | Pass, no warnings |
-| Unit tests (Vitest) | 73 of 73 |
+| Unit tests (Vitest) | 79 of 79 |
 | Production build | Pass |
-| Browser smoke test | 69 of 69 |
+| Browser smoke test | 80 of 80 |
 | axe-core, WCAG A and AA | No violations, with colour contrast excluded (see below) |
 | Frame rate, high tier, 1440×900 | 60 to 61 fps |
 
-Unit tests cover content integrity, the derived graph, trace routing, the wave
-functions, shader and CPU parity guards, the camera rail, constellation layout
-and the interaction store.
-
 The browser test runs the production build in headless Chrome at 1440×900,
-820×1180 and 390×844, plus reduced motion and no WebGL. It checks that the
-field renders and animates, that hover and selection propagate between
-systems, that the inspector, tabs and stages work, and that nothing overflows
-horizontally.
+820×1180 and 390×844, plus reduced motion and no WebGL. It opens all six
+projects and confirms each draws its diagram and gives the field a distinct
+behaviour.
 
 **How visual checks were done.** I took screenshots through headless Chrome,
-which used the machine's real GPU (RTX 3060 Ti), and inspected them at all
-three sizes across many states. Frame rate and frame-to-frame change were
-measured in the page. I did not watch the animation in a visible window: the
-in-app browser pane was hidden during the session and throttled to about
-1.5 fps. So motion quality is verified by measurement and by still frames, not
-by eye. It is worth a look in a real browser.
+which used the machine's real GPU (RTX 3060 Ti), and inspected them across
+many states, including each new project and each new field behaviour. Frame
+rate was measured in the page. I did not watch the animation in a visible
+window: the in-app browser pane was hidden and throttled. So motion quality is
+verified by measurement and still frames, not by eye.
 
 ## What remains incomplete
 
-Content the existing site does not provide. Each is a marked `pending` slot in
-`src/content`, shown as a "Pending" block in the UI:
+Content no source provides. Each is a marked `pending` slot in `src/content`:
 
-- Technology stacks for the SentryBay and Versyx Digital roles.
-- Engineering challenges for Vigil and MKEditor.
-- Outcomes or metrics for all three projects.
-- Career before 2019. The site says 12+ years but lists roles from 2019, so
-  the schematic shows an undocumented lead-in rather than invented history.
+- Descriptions for the APIs and AI-integrated workflows services.
+- Purpose for The Home Counties and Aldervast.
+- Engineering challenges for MKEditor, The Home Counties and Aldervast.
+- Outcomes or metrics for MKEditor, The Home Counties, ED:CS and wssh.
 
-Set `showPendingFields` to `false` in `src/content/config.ts` to hide the
-placeholders.
+Set `showPendingFields` to `false` in `src/content/config.ts` to hide them.
 
 Not built:
 
 - No social share image. The page has Open Graph text tags only.
-- No project screenshots. The existing site uses them; this design uses
-  architecture diagrams instead.
+- No project screenshots or game footage. Both games have strong imagery on
+  their own sites; this design uses diagrams instead and links out.
+- No client list, testimonials or case studies. Nothing published to base
+  them on.
 
 ## Known issues
 
 - **Only Chromium was tested.** Firefox and Safari, including iOS Safari, are
-  untested. The shaders use standard WebGL2 features, so I expect them to
-  work, but that is a guess.
+  untested.
 - **No real phone or tablet was used.** Mobile results come from Chrome's
   device emulation.
-- **Contrast over the field is not machine-checked.** axe cannot evaluate text
-  over a moving canvas, so that rule was switched off. Text colours meet AA
-  against the page background, and I lowered the field behind text sections,
+- **Contrast over the field is not machine-checked.** Text colours meet AA
+  against the page background, and the field is lowered behind text sections,
   but a lit crest can pass behind a line of copy.
-- **No screen reader pass.** Semantics and focus handling are in place and axe
-  is clean, but nothing was listened to with NVDA or VoiceOver.
-- **Diagrams need panning on phones.** They keep a 760px minimum width and
-  scroll sideways, with a "Pan" hint.
-- **The three.js chunk is about 249 kB gzipped.** It loads after first paint,
-  so the text appears first and the field fades in.
-- **`npm audit` reports 10 moderate findings**, all in the ESLint toolchain
-  (`minimatch`). Production dependencies report none. The suggested fix
-  downgrades ESLint, so I left it.
-- **The Vigil diagram is drawn from the dashboard README only.** The collector
-  documentation page would not load, so the diagram does not say which of
-  Tornado and FastAPI serves which endpoint.
-
-## Decisions worth checking
-
-- **Hero statement.** "Software systems, owned end to end." is my wording,
-  based on "Comfortable owning systems end-to-end" on your site. Change it in
-  `src/content/profile.ts`.
-- **Extra technologies.** Monaco, Electron and Webpack come from the MKEditor
-  stack, and Guacamole from the Go Deploy entry. They are not in your skills
-  list. Each is tagged with where it came from.
-- **Repository facts.** Some project detail comes from the public READMEs, not
-  from your site: Vigil's two modes, MKEditor's AI providers, ED:CS's A*
-  routing and Frontier OAuth. Please check they are current.
-- **Email.** Your address is shown as text and assembled at runtime, as on the
-  existing site.
-
-Full reasoning is in `DECISIONS.md`.
+- **No screen reader pass.**
+- **Diagrams need panning on phones.** They keep a 760px minimum width. The
+  OMG diagram is six columns wide, so its labels are the smallest.
+- **The three.js chunk is about 249 kB gzipped.** It loads after first paint.
+- **`npm audit` reports 10 moderate findings**, all in the ESLint toolchain.
+  Production dependencies report none.
+- **Project facts can go stale.** Version numbers and counts for the two games
+  (Aldervast 1.14.2, raid figures for The Home Counties) were read from their
+  sites on 2026-11-10 and both are in active development.
 
 ## Recommended next steps
 
 1. Open it in a normal browser and judge the motion by eye.
-2. Fill the pending content, or hide it.
-3. Test in Firefox and Safari, and on a real phone.
-4. Add a share image and decide whether you want project screenshots.
-5. Choose where to host it. `dist/` works from any path as built.
+2. Go through "Decisions for you to check" above.
+3. Fill the pending content, or hide it.
+4. Test in Firefox and Safari, and on a real phone.
+5. Add a share image, and decide whether the games should show imagery.
+6. Choose where to host it. `dist/` works from any path as built.

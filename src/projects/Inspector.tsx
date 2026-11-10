@@ -223,7 +223,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
               </ul>
               <h4 className="mono">Provenance</h4>
               <p className={styles.fine}>
-                Details taken from {project.sources.includes('site') ? 'the existing portfolio' : ''}
+                Details taken from {project.sources.includes('site') ? 'the project’s own site' : ''}
                 {project.sources.includes('site') && project.sources.includes('repository') ? ' and ' : ''}
                 {project.sources.includes('repository') ? 'the public repository documentation' : ''}.
               </p>

@@ -14,7 +14,10 @@ Session of 2026-11-10. Brief: `project_brief.md`. Mandate:
 | 5 | Time-based quality governor, software-renderer fallback, keyboard graph navigation | `69e2935` |
 | 6 | Polish: nav backdrop, filter emphasis, single-column traces, README | `46dd397` |
 | 7 | Reticle and annotation legibility, hero hit areas | `7731cf9` |
-| 8 | Reports | `da3a7b4` and the commit recording this hash |
+| 8 | Reports | `da3a7b4` |
+| 9 | Refinements after seeing all seventeen inspiration images | `63564e1` |
+| 10 | Reframe around Versyx Digital, six studio projects, three new field behaviours | `d4f3c45` |
+| 11 | Studio report and documentation | following commit |
 
 ## Research (phase 1)
 
@@ -53,15 +56,32 @@ layouts, a 4px mobile overflow from a pseudo-element, the page jumping to
 Contact when the inspector closed, hero text blocks blocking pointer
 interaction with the field beside them, a stale reticle after scrolling.
 
+## Reframing around Versyx Digital
+
+After the first delivery Chris sent two more instructions: a list of six
+projects to include, and a request to make the content about his company,
+Versyx Digital, rather than about him.
+
+Research for this pass: the sites for Aldervast and The Home Counties
+(including each one's "about" or "under the hood" page), the OMG language
+site, the READMEs for wssh and edcs-app, the Versyx Digital GitHub
+organisation, and the MKEditor site for the studio's published contact
+details.
+
+Changes: studio profile and founder note; a service schematic replacing the
+career schematic; six projects with diagrams drawn from those sources; seven
+technologies added and one removed; three new field behaviours; Vigil and the
+employment history removed. See `REPORT.md` for the judgement calls.
+
 ## Test results (final run)
 
 | Check | Result |
 | --- | --- |
 | `npm run typecheck` | Pass (strict, `noUncheckedIndexedAccess`) |
 | `npm run lint` | Pass, no warnings |
-| `npm test` | 73 / 73 |
+| `npm test` | 79 / 79 |
 | `npm run build` | Pass |
-| `npm run test:e2e` | 69 / 69 |
+| `npm run test:e2e` | 80 / 80 |
 | Frame rate, desktop, high tier | 60 to 61 fps (headless Chrome, RTX 3060 Ti) |
 | Software renderer | High to static fallback in about 8 s, then 61 fps |
 

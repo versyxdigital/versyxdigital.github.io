@@ -149,6 +149,28 @@ or a signal has landed. After seeing the full image set, lit crests were given
 tinted faces and deeper side glow so they read as illuminated bodies, which is
 what the references have in common, without raising the overall brightness.
 
+## 16. The site presents the studio, not the founder
+
+The first build followed the original brief: a personal portfolio for Chris
+Rowles. Chris then asked for the content to be about Versyx Digital and listed
+six projects to show. The content model changed, not the system:
+
+- `profile.ts` describes the studio and carries a short founder note.
+- The career schematic became a service schematic. The five services are the
+  founder's own list. A service has a description only where published
+  material supports one; otherwise it is pending.
+- Employment history (SentryBay, Go Deploy Labs) was removed. It belongs to the
+  founder, not the studio.
+- The catalogue holds exactly the six requested projects. Vigil, which was on
+  the founder's existing site but not in the list, was removed.
+- Which projects exemplify which service is recorded on the project and
+  derived in `graph.ts`. It is a judgement, and the report says so.
+
+Three field behaviours were added so each of the six projects keeps a distinct
+one: a street plan for The Home Counties (it is set on real streets), an
+island for Aldervast (the game is set on one), and a marching staircase for
+OMG (source moving through compiler stages).
+
 ## 14. Email address is assembled at runtime
 
 The existing site stores the address split to avoid harvesting. The new site

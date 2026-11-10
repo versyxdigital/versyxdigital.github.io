@@ -222,7 +222,7 @@ export const projects: Project[] = [
         {
           id: 'scavs',
           label: 'Scavs',
-          sub: 'cover · flank · investigate',
+          sub: 'cover · flank · search',
           kind: 'external',
           col: 2,
           row: 0,
