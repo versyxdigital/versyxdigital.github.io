@@ -67,7 +67,7 @@
 }
 
 .title {
-  font-size: clamp(3rem, 1.2rem + 6.4vw, 7.25rem);
+  font-size: clamp(3rem, min(1.2rem + 6.4vw, 15vh), 7.25rem);
   font-weight: 500;
   letter-spacing: -0.055em;
   line-height: 0.9;
@@ -256,5 +256,19 @@
   }
   .links a .channelLabel {
     grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1081px) and (min-height: 760px) {
+  .contact {
+    height: 100svh;
+    padding-top: calc(var(--nav-h) + clamp(0.75rem, 2.2vh, 1.75rem));
+    scroll-snap-align: start;
+  }
+  .rule {
+    margin-bottom: clamp(1.25rem, 4vh, 3rem);
+  }
+  .footer {
+    padding-top: 1.5rem;
   }
 }

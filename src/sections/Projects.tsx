@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Section } from '../components/Section';
-import { profile, projectById, projects, techById, type Project } from '../content';
+import { profile, projectById, projects, type Project } from '../content';
 import { Diagram } from '../projects/Diagram';
 import { Inspector } from '../projects/Inspector';
 import { pulse, registry, useAnchor, useConnections } from '../schematic/registry';
@@ -19,10 +19,6 @@ function IndexItem({ project }: { project: Project }) {
   const selectProject = useSystem((s) => s.selectProject);
   const hoverProject = useSystem((s) => s.hoverProject);
   const anchor = useAnchor<HTMLButtonElement>(`project:${project.id}`);
-  const stack = project.technologies
-    .slice(0, 4)
-    .map((id) => techById.get(id)?.name)
-    .filter((name) => name !== undefined);
 
   return (
     <li>
@@ -48,7 +44,6 @@ function IndexItem({ project }: { project: Project }) {
         <span className={styles.itemBody}>
           <span className={styles.itemName}>{project.name}</span>
           <span className={styles.itemKind}>{project.kind}</span>
-          <span className={`mono ${styles.itemStack}`}>{stack.join(' · ')}</span>
         </span>
         <span className={styles.itemState} aria-hidden="true" />
       </button>
@@ -178,13 +173,6 @@ export function Projects() {
               <IndexItem key={project.id} project={project} />
             ))}
           </ul>
-          <div className={styles.sealed}>
-            <span className={`mono ${styles.itemRef}`}>—</span>
-            <span className={styles.itemBody}>
-              <span className={styles.itemName}>Client work</span>
-              <span className={styles.itemKind}>Not catalogued here. Ask us about it.</span>
-            </span>
-          </div>
         </div>
 
         <div

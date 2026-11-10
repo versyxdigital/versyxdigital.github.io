@@ -186,3 +186,12 @@
   font-size: calc(9.5px * var(--k, 1));
   letter-spacing: 0.02em;
 }
+
+@media (min-width: 1081px) and (min-height: 760px) {
+  .wrap {
+    height: 100%;
+  }
+  .svg {
+    height: 100%;
+  }
+}

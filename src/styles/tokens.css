@@ -8,8 +8,8 @@
 
   /* Type */
   --text: #e8eef2;
-  --text-2: #a6b2bd;
-  --text-3: #8a97a3;
+  --text-2: #b6c1cb;
+  --text-3: #95a2ae;
 
   /* Signal tones. Shared with the shaders and the schematic overlay. */
   --cyan: #27dceb;
@@ -24,7 +24,7 @@
 
   /* Layout */
   --gutter: clamp(1.25rem, 4.2vw, 4.5rem);
-  --max: 1440px;
+  --max: 90rem;
   --nav-h: 4rem;
 
   /* Motion */

@@ -104,8 +104,11 @@ export function Constellation() {
       setCompact(isCompact);
       // Canvas units per CSS pixel. Labels are sized in CSS pixels times this
       // factor, so they stay legible when the graph is drawn small.
-      const k = (isCompact ? portraitView.width : landscapeView.width) / Math.max(1, width);
-      el.style.setProperty('--k', Math.min(isCompact ? 1.6 : 1.35, Math.max(1, k)).toFixed(3));
+      // The drawing is fitted inside its box, so the tighter dimension sets the scale.
+      const canvas = isCompact ? portraitView : landscapeView;
+      const height = entry.contentRect.height;
+      const k = Math.max(canvas.width / Math.max(1, width), height > 40 ? canvas.height / height : 0);
+      el.style.setProperty('--k', Math.min(isCompact ? 1.6 : 1.5, Math.max(1, k)).toFixed(3));
     });
     observer.observe(el);
     return () => observer.disconnect();

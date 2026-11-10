@@ -60,51 +60,55 @@ function ServiceRecord() {
           <p className={styles.detailSummary}>{service.summary}</p>
         )}
 
-        {service.record.length > 0 && (
-          <>
-            <h4 className={`mono ${styles.blockLabel}`}>On record</h4>
-            <ol className={styles.exhibits}>
-              {service.record.map((line, i) => (
-                <li key={line}>
-                  <span className={`mono ${styles.numeral}`} aria-hidden="true">
-                    {NUMERALS[i] ?? i + 1}
-                  </span>
-                  {line}
-                </li>
-              ))}
-            </ol>
-          </>
-        )}
-
-        <h4 className={`mono ${styles.blockLabel}`}>In the catalogue</h4>
-        {examples.length > 0 ? (
-          <ul className={styles.examples}>
-            {examples.map((id) => {
-              const project = projectById.get(id);
-              if (!project) return null;
-              return (
-                <li key={id}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      selectProject(id);
-                      scrollToSection('projects');
-                    }}
-                  >
-                    <span className="mono">{project.ref}</span>
-                    <span className={styles.exampleName}>{project.name}</span>
-                    <span className={styles.exampleKind}>{project.kind}</span>
-                    <span className={styles.arrow} aria-hidden="true">
-                      →
+        {/* Evidence and examples sit side by side, so the record stays short. */}
+        <div className={styles.recordCols} data-single={service.record.length === 0}>
+          {service.record.length > 0 && (
+            <div>
+              <h4 className={`mono ${styles.blockLabel}`}>On record</h4>
+              <ol className={styles.exhibits}>
+                {service.record.map((line, i) => (
+                  <li key={line}>
+                    <span className={`mono ${styles.numeral}`} aria-hidden="true">
+                      {NUMERALS[i] ?? i + 1}
                     </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <p className={styles.muted}>Nothing in the public catalogue is tagged to this service yet.</p>
-        )}
+                    {line}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          <div>
+            <h4 className={`mono ${styles.blockLabel}`}>In the catalogue</h4>
+            {examples.length > 0 ? (
+              <ul className={styles.examples}>
+                {examples.map((id) => {
+                  const project = projectById.get(id);
+                  if (!project) return null;
+                  return (
+                    <li key={id}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          selectProject(id);
+                          scrollToSection('projects');
+                        }}
+                      >
+                        <span className="mono">{project.ref}</span>
+                        <span className={styles.exampleName}>{project.name}</span>
+                        <span className={styles.arrow} aria-hidden="true">
+                          →
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className={styles.muted}>Nothing in the public catalogue is tagged to this service yet.</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -162,6 +166,18 @@ export function About() {
               </div>
             ))}
           </dl>
+          <p className={styles.founder} data-reveal style={{ '--i': 2 } as React.CSSProperties}>
+            {profile.founder.note}{' '}
+            {profile.founder.links.map((link, i) => (
+              <span key={link.href}>
+                {i > 0 && ' · '}
+                <a href={link.href} target="_blank" rel="noreferrer noopener">
+                  {link.label}
+                  <span className="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              </span>
+            ))}
+          </p>
         </div>
 
         <div className={styles.schematic} data-reveal style={{ '--i': 2 } as React.CSSProperties}>
@@ -177,22 +193,6 @@ export function About() {
           </div>
 
           <ServiceRecord />
-
-          <p className={styles.founder}>
-            <span className="mono">Founder</span>
-            <span>
-              {profile.founder.note}{' '}
-              {profile.founder.links.map((link, i) => (
-                <span key={link.href}>
-                  {i > 0 && ' · '}
-                  <a href={link.href} target="_blank" rel="noreferrer noopener">
-                    {link.label}
-                    <span className="visually-hidden"> (opens in a new tab)</span>
-                  </a>
-                </span>
-              ))}
-            </span>
-          </p>
         </div>
       </div>
     </Section>

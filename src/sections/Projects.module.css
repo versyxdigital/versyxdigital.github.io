@@ -44,7 +44,7 @@
   grid-template-columns: 3.6rem 1fr auto;
   align-items: start;
   gap: 0.5rem;
-  padding: 1.15rem 0.5rem 1.15rem 0;
+  padding: 0.85rem 0.5rem 0.85rem 0;
   border-bottom: 1px solid var(--line-soft);
   text-align: left;
   transition:
@@ -86,7 +86,7 @@
 }
 
 .itemName {
-  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  font-size: clamp(1.25rem, 1rem + 0.7vw, 1.6rem);
   font-weight: 500;
   letter-spacing: -0.035em;
   line-height: 1.1;
@@ -260,5 +260,40 @@
   }
   .itemStack {
     display: none;
+  }
+}
+
+/* Fit mode: catalogue and bay share one screen; the bay fills the height. */
+@media (min-width: 1081px) and (min-height: 760px) {
+  .explorer {
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+  }
+  .index {
+    position: relative;
+    top: 0;
+    align-self: start;
+  }
+  .item {
+    padding-block: clamp(0.55rem, 1.5vh, 0.9rem);
+  }
+  .bay {
+    height: 100%;
+    min-height: 0;
+  }
+  .standby {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .standbyCanvas {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+  }
+  .standbyCanvas svg {
+    height: 100%;
   }
 }

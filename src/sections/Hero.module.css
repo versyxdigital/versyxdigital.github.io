@@ -291,23 +291,29 @@
   }
 }
 
-/* Short laptop screens: scale the name to the height so the whole hero fits. */
-@media (max-height: 800px) and (min-width: 901px) {
+/* Wide screens: the name is sized to the height as well as the width, so the
+   whole hero always fits in the first screen. */
+@media (min-width: 901px) {
   .hero {
-    padding-top: calc(var(--nav-h) + 4vh);
-    padding-bottom: 2.5rem;
+    height: 100svh;
+    padding-top: calc(var(--nav-h) + clamp(1rem, 5vh, 4.5rem));
+    padding-bottom: clamp(1.5rem, 4vh, 3rem);
+    scroll-snap-align: start;
   }
   .name {
-    font-size: clamp(3.25rem, 17vh, 10.5rem);
+    font-size: clamp(3.25rem, min(1.2rem + 9.2vw, 18.5vh), 10.5rem);
   }
   .role {
-    margin-top: 3vh;
+    margin-top: clamp(1rem, 3.2vh, 2.5rem);
+  }
+  .intro {
+    margin-top: clamp(0.9rem, 2.4vh, 1.75rem);
   }
   .actions {
-    margin-top: 3.5vh;
+    margin-top: clamp(1.25rem, 3.6vh, 2.75rem);
   }
   .foot {
-    padding-top: 1.5rem;
+    padding-top: 1.25rem;
   }
 }
 

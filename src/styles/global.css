@@ -7,6 +7,10 @@
 }
 
 html {
+  /* Type scales with the screen: 16px on a small laptop, up to 19px on a large
+     display. Everything is sized in rem, so the whole interface follows. The
+     height term stops it growing on wide but short windows. */
+  font-size: clamp(16px, min(0.5vw + 9.6px, 1.1vh + 8.6px), 19px);
   background: var(--bg);
   color-scheme: dark;
   -webkit-text-size-adjust: 100%;
@@ -167,4 +171,13 @@ html[data-motion='reduced'] *::after {
 html[data-motion='reduced'] [data-reveal] {
   opacity: 1;
   transform: none;
+}
+
+/* Fit mode: on screens large enough, each section is exactly one screen tall
+   and scrolling settles on section boundaries. Proximity snapping only helps
+   a scroll that ends near a boundary; it never traps the wheel. */
+@media (min-width: 1081px) and (min-height: 760px) {
+  html {
+    scroll-snap-type: y proximity;
+  }
 }

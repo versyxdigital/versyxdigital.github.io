@@ -208,6 +208,17 @@
   max-width: 40rem;
 }
 
+.recordCols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 0 clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.recordCols[data-single='true'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .blockLabel {
   margin-top: 1.5rem;
   margin-bottom: 0.2rem;
@@ -224,9 +235,10 @@
   display: grid;
   grid-template-columns: 2.25rem 1fr;
   align-items: baseline;
-  padding: 0.8rem 0;
+  padding: 0.7rem 0;
   border-bottom: 1px solid var(--line-soft);
   font-size: 0.9375rem;
+  line-height: 1.45;
 }
 
 .numeral {
@@ -241,7 +253,7 @@
 .examples button {
   width: 100%;
   display: grid;
-  grid-template-columns: 4rem auto 1fr auto;
+  grid-template-columns: 4rem 1fr auto;
   align-items: baseline;
   gap: 0.9rem;
   padding: 0.75rem 0;
@@ -287,17 +299,11 @@
 }
 
 .founder {
-  display: flex;
-  gap: 1rem;
-  align-items: baseline;
-  margin-top: 1.25rem;
-  font-size: var(--fs-small);
+  max-width: 30rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
   color: var(--text-2);
-}
-
-.founder > .mono {
-  flex: none;
-  color: var(--text-3);
+  text-wrap: pretty;
 }
 
 .founder a {
@@ -348,17 +354,38 @@
   .traceNode {
     left: -5px;
   }
-  .examples button {
-    grid-template-columns: 4rem 1fr auto;
-  }
-  .exampleKind {
-    display: none;
-  }
-  .founder {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
   .spec {
     grid-template-columns: 6.5rem 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .recordCols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1081px) and (min-height: 760px) {
+  .grid {
+    flex: 1;
+    min-height: 0;
+  }
+  .side {
+    gap: clamp(1.25rem, 3vh, 2.25rem);
+  }
+  .spec {
+    padding: clamp(0.5rem, 1.3vh, 0.75rem) 0;
+  }
+  .schematicTitle {
+    margin-bottom: clamp(1rem, 2.4vh, 1.75rem);
+  }
+  .detail {
+    margin-top: clamp(1.5rem, 3.4vh, 2.5rem);
+  }
+  .detailInner {
+    padding: clamp(1.1rem, 2.6vh, 1.75rem) clamp(1.25rem, 2.4vw, 2rem);
+  }
+  .blockLabel {
+    margin-top: clamp(0.9rem, 2.2vh, 1.5rem);
   }
 }

@@ -8,8 +8,9 @@ import { useSystem } from '../state/store';
 import { Diagram, diagramWidth } from './Diagram';
 import styles from './Inspector.module.css';
 
-type Tab = 'overview' | 'engineering' | 'stack';
+type Tab = 'architecture' | 'overview' | 'engineering' | 'stack';
 const tabs: { id: Tab; label: string }[] = [
+  { id: 'architecture', label: 'Architecture' },
   { id: 'overview', label: 'Overview' },
   { id: 'engineering', label: 'Engineering' },
   { id: 'stack', label: 'Stack & links' },
@@ -30,11 +31,14 @@ function ListOrPending({ value, label }: { value: Maybe<string[]>; label: string
 
 /**
  * The project inspector: the focused state of the system explorer.
- * Disclosure is progressive — name, one line and the architecture first;
- * stage detail and the engineering notes one interaction further in.
+ *
+ * It is one panel sized to the space it is given, so on desktop a project
+ * never runs off the screen. The header says what the project is; the tabs
+ * hold everything else, starting with the architecture diagram. Only the tab
+ * body scrolls, and only when a tab has more to say than fits.
  */
 export function Inspector({ project, onClose }: { project: Project; onClose: () => void }) {
-  const [tab, setTab] = useState<Tab>('overview');
+  const [tab, setTab] = useState<Tab>('architecture');
   const [stage, setStage] = useState<string | null>(null);
   const transition = useSystem((s) => s.transition);
   const anchor = useAnchor<HTMLElement>('inspector');
@@ -42,7 +46,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
-    setTab('overview');
+    setTab('architecture');
     setStage(null);
     // Move focus into the inspector so keyboard and screen-reader users land on it.
     headingRef.current?.focus({ preventScroll: true });
@@ -94,60 +98,6 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
         </div>
       </header>
 
-      <figure className={styles.figure}>
-        <div className={styles.scroller} tabIndex={0} role="group" aria-label={`${project.name} architecture diagram, scrollable`}>
-          <div className={styles.canvas} style={{ '--natural': `${diagramWidth(project.diagram)}px` } as React.CSSProperties}>
-            <Diagram diagram={project.diagram} tone={project.tone} id={`d-${project.id}`} activeStage={stage} onStage={setStage} />
-          </div>
-        </div>
-        <figcaption className={styles.caption}>
-          <span className="mono">Fig. {project.ref.replace('SYS-', '')}</span>
-          {project.diagram.caption}
-          <span className={`mono ${styles.pan}`} aria-hidden="true">
-            ↔ Pan
-          </span>
-        </figcaption>
-      </figure>
-
-      {/* Small screens: every stage as a button, so nothing depends on panning the drawing. */}
-      <div className={styles.stageList} role="group" aria-label="Diagram stages">
-        {[...project.diagram.nodes]
-          .sort((a, b) => a.col - b.col || a.row - b.row)
-          .map((node) => (
-            <button
-              key={node.id}
-              type="button"
-              className={`mono ${styles.stageButton}`}
-              aria-pressed={stage === node.id}
-              onClick={() => setStage(stage === node.id ? null : node.id)}
-            >
-              {node.label}
-            </button>
-          ))}
-      </div>
-
-      <div className={styles.stage} aria-live="polite" data-open={activeStage !== undefined}>
-        {activeStage ? (
-          <div key={activeStage.id} className={styles.stageBody}>
-            <p className={`mono ${styles.stageKind}`}>Stage · {activeStage.kind}</p>
-            <p className={styles.stageTitle}>
-              {activeStage.label}
-              {activeStage.sub && <span> — {activeStage.sub}</span>}
-            </p>
-            <p className={styles.stageText}>{activeStage.detail}</p>
-            {activeStage.tech && activeStage.tech.length > 0 && (
-              <div className={styles.chips}>
-                {activeStage.tech.map((id) => (
-                  <TechChip key={id} id={id} />
-                ))}
-              </div>
-            )}
-          </div>
-        ) : (
-          <p className={`mono ${styles.stageHint}`}>Select a stage to inspect it</p>
-        )}
-      </div>
-
       <div className={styles.tabs} role="tablist" aria-label={`${project.name} detail`}>
         {tabs.map((t, i) => (
           <button
@@ -174,11 +124,72 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
       <div
         key={tab}
         className={styles.panel}
+        data-tab={tab}
         role="tabpanel"
         id={`panel-${project.id}-${tab}`}
         aria-labelledby={`tab-${project.id}-${tab}`}
         tabIndex={0}
       >
+        {tab === 'architecture' && (
+          <div className={styles.architecture}>
+            <figure className={styles.figure}>
+              <div className={styles.scroller} tabIndex={0} role="group" aria-label={`${project.name} architecture diagram`}>
+                <div className={styles.canvas} style={{ '--natural': `${diagramWidth(project.diagram)}px` } as React.CSSProperties}>
+                  <Diagram diagram={project.diagram} tone={project.tone} id={`d-${project.id}`} activeStage={stage} onStage={setStage} />
+                </div>
+              </div>
+              <figcaption className={styles.caption}>
+                <span className="mono">Fig. {project.ref.replace('SYS-', '')}</span>
+                {project.diagram.caption}
+                <span className={`mono ${styles.pan}`} aria-hidden="true">
+                  ↔ Pan
+                </span>
+              </figcaption>
+            </figure>
+
+            {/* Small screens: every stage as a button, so nothing depends on panning the drawing. */}
+            <div className={styles.stageList} role="group" aria-label="Diagram stages">
+              {[...project.diagram.nodes]
+                .sort((a, b) => a.col - b.col || a.row - b.row)
+                .map((node) => (
+                  <button
+                    key={node.id}
+                    type="button"
+                    className={`mono ${styles.stageButton}`}
+                    aria-pressed={stage === node.id}
+                    onClick={() => setStage(stage === node.id ? null : node.id)}
+                  >
+                    {node.label}
+                  </button>
+                ))}
+            </div>
+
+            <div className={styles.stage} aria-live="polite" data-open={activeStage !== undefined}>
+              {activeStage ? (
+                <div key={activeStage.id} className={styles.stageBody}>
+                  <div>
+                    <p className={styles.stageTitle}>
+                      <span className={`mono ${styles.stageKind}`}>{activeStage.kind}</span>
+                      {activeStage.label}
+                      {activeStage.sub && <span> — {activeStage.sub}</span>}
+                    </p>
+                    <p className={styles.stageText}>{activeStage.detail}</p>
+                  </div>
+                  {activeStage.tech && activeStage.tech.length > 0 && (
+                    <div className={styles.chips}>
+                      {activeStage.tech.map((id) => (
+                        <TechChip key={id} id={id} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className={`mono ${styles.stageHint}`}>Select a stage to inspect it</p>
+              )}
+            </div>
+          </div>
+        )}
+
         {tab === 'overview' && (
           <div className={styles.columns}>
             <div className={styles.prose}>
