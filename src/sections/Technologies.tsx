@@ -202,7 +202,7 @@ export function Technologies() {
       meta={`${technologies.length} technologies`}
       title={
         <>
-          The technologies <em>we work with.</em>
+          Tech <em>we work with.</em>
         </>
       }
       lede="The languages, frameworks and tools we build with. Select one to see what it is and which of our projects use it."
