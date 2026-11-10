@@ -216,7 +216,7 @@ async function desktop(browser) {
   await page.waitForTimeout(600);
 
   // Keyboard model: the graph is one tab stop and the arrow keys walk it.
-  check('constellation: is a single tab stop', (await page.locator('svg[aria-label^="Technology constellation"] [role="button"][tabindex="0"]').count()) === 1);
+  check('constellation: is a single tab stop', (await page.locator('svg[aria-label^="Map of technologies"] [role="button"][tabindex="0"]').count()) === 1);
   await page.locator("[aria-label='TypeScript, Languages']").focus();
   await page.keyboard.press('ArrowRight');
   await page.waitForTimeout(250);
@@ -372,7 +372,7 @@ async function mobile(browser) {
   await page.screenshot({ path: 'qa-screens/e2e-mobile-services.png' });
   await goTo(page, 'tech', 1500);
 
-  check('stack view: phones get the layered stack, not the graph', (await page.locator('svg[aria-label^="Technology constellation"]').count()) === 0);
+  check('stack view: phones get the layered stack, not the graph', (await page.locator('svg[aria-label^="Map of technologies"]').count()) === 0);
   check('stack view: every technology is named', (await page.locator('#tech button[aria-pressed]').count()) === 49);
   const targets = await page.evaluate(() => Math.min(...[...document.querySelectorAll('#tech button[aria-pressed]')].map((b) => b.getBoundingClientRect().height)));
   check('stack view: every technology is a comfortable touch target', targets >= 40, `${targets.toFixed(0)} px minimum height`);
