@@ -1,6 +1,7 @@
 import { Section } from '../components/Section';
 import { TechChip } from '../components/TechChip';
 import { Constellation, Glyph } from '../constellation/Constellation';
+import { StackLayers } from '../constellation/StackLayers';
 import {
   categories,
   categoryById,
@@ -15,6 +16,7 @@ import {
 import { useAnchor, useConnections } from '../schematic/registry';
 import { focusedTech, useSystem } from '../state/store';
 import { scrollToSection } from '../system/scroll';
+import { useMediaQuery } from '../system/useMediaQuery';
 import { widerThan } from '../system/viewport';
 import styles from './Technologies.module.css';
 
@@ -96,7 +98,8 @@ function Overview() {
   );
 }
 
-function TechDetail({ id }: { id: string }) {
+/** `compact` drops the list of connected technologies, for views that already show them lit. */
+function TechDetail({ id, compact = false }: { id: string; compact?: boolean }) {
   const tech = techById.get(id);
   const selected = useSystem((s) => s.selectedTech === id);
   const selectTech = useSystem((s) => s.selectTech);
@@ -152,7 +155,7 @@ function TechDetail({ id }: { id: string }) {
         </div>
       )}
 
-      {selected && related.length > 0 && (
+      {selected && !compact && related.length > 0 && (
         <div className={styles.block}>
           <h4 className="mono">Connected to</h4>
           <div className={styles.chips}>
@@ -181,6 +184,9 @@ export function Technologies() {
   const focus = useSystem((s) => focusedTech(s));
   const selected = useSystem((s) => s.selectedTech);
   const panel = useAnchor<HTMLElement>('tech:panel');
+  // A graph of this many nodes cannot be read on a phone: narrow screens get
+  // the same data as a layered stack instead.
+  const narrow = useMediaQuery('(max-width: 720px)');
 
   // The selected node is wired to its record in the side panel.
   useConnections(
@@ -211,19 +217,26 @@ export function Technologies() {
       meta={`${technologies.length} nodes · ${techEdges.length} links`}
       title={
         <>
-          Stack and tooling, <em>as a network.</em>
+          Stack and tooling, <em>{narrow ? 'layer by layer.' : 'as a network.'}</em>
         </>
       }
-      lede="What the studio builds with. The graph is drawn from the same data as the projects below, so the relationships shown are the ones that exist."
+      lede="What the studio builds with. It is drawn from the same data as the projects below, so the relationships shown are the ones that exist."
     >
-      <div data-reveal>
-        <Filters />
-      </div>
-      <div className={styles.stage} data-reveal style={{ '--i': 1 } as React.CSSProperties}>
-        <Constellation />
-        <aside ref={panel} className={styles.panel} aria-label="Technology detail" data-active={focus !== null}>
-          {focus ? <TechDetail id={focus} /> : <Overview />}
-        </aside>
+      {/* One stable wrapper carries the scroll reveal, whichever view is inside it. */}
+      <div className={styles.body} data-reveal>
+        {narrow ? (
+          <StackLayers record={(id) => <TechDetail id={id} compact />} />
+        ) : (
+          <>
+            <Filters />
+            <div className={styles.stage}>
+              <Constellation />
+              <aside ref={panel} className={styles.panel} aria-label="Technology detail" data-active={focus !== null}>
+                {focus ? <TechDetail id={focus} /> : <Overview />}
+              </aside>
+            </div>
+          </>
+        )}
       </div>
     </Section>
   );

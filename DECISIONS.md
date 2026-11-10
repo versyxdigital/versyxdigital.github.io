@@ -197,6 +197,20 @@ The root font size scales with the viewport (16px to 19px), bounded by height
 as well as width, and all sizes are in rem. This fixed type that was too small
 on a 1920-wide display without making it too large on a laptop.
 
+## 19. Phones get a different drawing of the technology data
+
+A 49-node graph was unreadable on a phone: most nodes unlabelled, labels
+colliding. Shrinking or simplifying the graph could not fix that, so below
+720px the same data is drawn as a layered stack (`constellation/StackLayers`):
+one layer per group, every technology named and tappable, and a signal rail
+joining the layers. Relationships are shown on demand rather than as drawn
+edges: selecting a technology lights its connections in every layer and
+energises the rail between them. The record opens in place under its layer.
+
+It shares the interaction store with the graph, registers the same `tech:`
+anchors, and uses the same highlight derivation, so nothing else in the
+system needs to know which drawing is on screen.
+
 ## 14. Email address is assembled at runtime
 
 The existing site stores the address split to avoid harvesting. The new site

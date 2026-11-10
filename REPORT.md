@@ -23,7 +23,7 @@ npm run dev        # then open the address it prints
 ```bash
 npm run build      # production build to dist/
 npm run preview    # serve dist/
-npm run check      # types, lint, 79 unit tests, build, 80 browser checks
+npm run check      # types, lint, 79 unit tests, build, 86 browser checks
 ```
 
 `npm run check` needs Chrome or Edge installed for the browser step. It does
@@ -86,6 +86,34 @@ These are judgement calls I made to keep moving. Each is quick to change.
   being made, so "Purpose" is pending for both.
 - **Folder and package name.** Still `rowles-portfolio`, as you specified the
   folder. The package description was updated.
+
+## Technologies on phones: a layered stack
+
+Feedback with a phone screenshot: the stack and tooling network did not fit
+well on mobile. It showed 49 nodes with most of them unlabelled and the few
+labels colliding. A graph of that many nodes cannot be made readable at that
+width, so phones now get a different drawing of the same data.
+
+**The layered stack.** Below 720px wide the Technologies section shows one
+layer per group (Languages, Frontend, Backend, Data, Infra and Ops, Tooling
+and engines), joined by a signal rail down the left. Every technology is
+named and is a touch target at least 44px tall.
+
+- Tap a technology and everything it connects to lights up, in whichever
+  layers those sit. Unrelated ones recede.
+- The rail energises between the layers involved and carries a pulse along
+  it, and each connected layer's count changes to "2 linked" and so on.
+- The technology's record opens in place, directly under its layer, with its
+  projects as links. Before, the record was below the whole graph.
+- It reads the same shared state as the desktop graph, so choosing a
+  technology from a project's stack tab arrives here already in focus, and
+  the cube field still ripples when one is selected.
+
+Tablets and desktops keep the network graph. The category filter row is not
+shown on phones, because the layers are the categories.
+
+Checked at 390×844 and 360×740 in Chrome's device emulation, not on a real
+phone. The section is about three screens tall on a phone.
 
 ## Sections fit the screen, and type is larger
 
@@ -323,7 +351,7 @@ are derived, so adding a project, technology or service updates every view.
 | ESLint | Pass, no warnings |
 | Unit tests (Vitest) | 79 of 79 |
 | Production build | Pass |
-| Browser smoke test | 80 of 80 |
+| Browser smoke test | 86 of 86 |
 | Fit audit, six viewport sizes | No problems reported |
 | One-screen fit, five desktop sizes | All 55 states fit |
 | axe-core, WCAG A and AA | No violations, with colour contrast excluded (see below) |

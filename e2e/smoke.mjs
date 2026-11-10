@@ -349,25 +349,24 @@ async function mobile(browser) {
   await page.waitForTimeout(2600);
   check('menu: navigates and closes', !(await page.locator('#menu').isVisible()) && (await page.evaluate(() => Math.abs(document.getElementById('tech').getBoundingClientRect().top) < 80)));
 
-  check('constellation: uses the compact canvas', (await page.locator('svg[aria-label^="Technology constellation"]').getAttribute('viewBox')) === '0 0 480 640');
+  check('stack view: phones get the layered stack, not the graph', (await page.locator('svg[aria-label^="Technology constellation"]').count()) === 0);
+  check('stack view: every technology is named', (await page.locator('#tech button[aria-pressed]').count()) === 49);
+  const targets = await page.evaluate(() => Math.min(...[...document.querySelectorAll('#tech button[aria-pressed]')].map((b) => b.getBoundingClientRect().height)));
+  check('stack view: every technology is a comfortable touch target', targets >= 40, `${targets.toFixed(0)} px minimum height`);
   const [tx, ty] = await centre(page, "[aria-label='TypeScript, Languages']");
   await page.touchscreen.tap(tx, ty);
-  await page.waitForTimeout(1800);
-  check('constellation: tap selects a node', (await page.locator("[aria-label='TypeScript, Languages']").getAttribute('aria-pressed')) === 'true');
-  check('constellation: record appears below the graph', (await page.locator('aside[aria-label="Technology detail"] h3').innerText()) === 'TypeScript');
+  await page.waitForTimeout(1500);
+  check('stack view: tap selects a technology', (await page.locator("[aria-label='TypeScript, Languages']").getAttribute('aria-pressed')) === 'true');
+  check('stack view: its record opens in place', (await page.locator('aside[aria-label="Technology detail"] h3').innerText()) === 'TypeScript');
+  check('stack view: connected technologies light up in other layers', (await page.locator("[aria-label='Next.js, Frontend']").getAttribute('data-state')) === 'lit');
+  check('stack view: unrelated technologies recede', (await page.locator("[aria-label='PostgreSQL, Data']").getAttribute('data-state')) === 'dim');
+  check('stack view: the rail energises between the layers involved', (await page.locator('#tech section[data-through="true"]').count()) >= 1);
+  check('stack view: the record is on screen', await page.evaluate(() => {
+    const r = document.querySelector('aside[aria-label="Technology detail"]').getBoundingClientRect();
+    return r.top >= 0 && r.top < window.innerHeight;
+  }));
+  check('layout: no horizontal overflow in the stack view', await noOverflow(page));
   await page.screenshot({ path: 'qa-screens/e2e-mobile-tech-focus.png' });
-
-  // Every node in a focused arrangement should be a comfortable touch target apart.
-  const spacing = await page.evaluate(() => {
-    const nodes = [...document.querySelectorAll('svg[aria-label^="Technology constellation"] [data-emphasis="ring"], [data-emphasis="core"]')].map((n) => {
-      const r = n.querySelector('circle').getBoundingClientRect();
-      return [r.left + r.width / 2, r.top + r.height / 2];
-    });
-    let min = Infinity;
-    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) min = Math.min(min, Math.hypot(nodes[i][0] - nodes[j][0], nodes[i][1] - nodes[j][1]));
-    return min;
-  });
-  check('constellation: focused nodes are spaced for touch', spacing >= 30, `${spacing.toFixed(0)} px minimum centre distance`);
 
   for (const id of ['about', 'projects', 'contact']) {
     await goTo(page, id, 1800);
