@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Tone } from '../content';
-import { emitRippleAtScreen, field, projectFieldPoint, systemClock } from '../field/fieldState';
-import { heightAt, toneIndex } from '../field/waveMath';
+import { emitRippleAtScreen, projectFieldPoint, systemClock } from '../field/fieldState';
+import { toneIndex } from '../field/waveMath';
 import { useSystem } from '../state/store';
 import { registry, setClock, type AnchorSide, type ConnectionRuntime, type Endpoint } from './registry';
 import { pointAt, polylineLength, route, slice, type Pt } from './routing';
@@ -13,7 +13,6 @@ const TONE_RGB: Record<Tone, string> = {
   violet: '158, 136, 240',
 };
 const REST_RGB = '120, 142, 164';
-const MINUS = '\u2212';
 /** Pixels per second for pulses without an explicit duration. */
 const PULSE_SPEED = 620;
 
@@ -250,73 +249,6 @@ export function SchematicOverlay() {
       if (c.pulses.length > 0 && c.pulses.every((p) => p.done)) c.pulses.length = 0;
     };
 
-    /**
-     * Cursor reticle: snaps to the cube under the pointer and reads out its
-     * field coordinates and current height. Shown only over open field in the
-     * sections where the field is the subject.
-     */
-    let reticle = 0;
-    const drawReticle = (dt: number): void => {
-      const state = useSystem.getState();
-      const wanted =
-        field.ready &&
-        field.pointerFree &&
-        !state.reducedMotion &&
-        field.cursor.strength > 0.3 &&
-        systemClock() - field.pointerMovedAt < 1.6 &&
-        (state.activeSection === 'hero' || state.activeSection === 'contact');
-      reticle += ((wanted ? 1 : 0) - reticle) * (1 - Math.exp(-dt * 8));
-      if (reticle < 0.02) return;
-      const { x, z } = field.cursor;
-      const p = projectFieldPoint(x, z);
-      if (!p.visible) return;
-      const px = Math.round(p.x) + 0.5;
-      const py = Math.round(p.y) + 0.5;
-      const alpha = reticle * 0.9;
-      // Dark keyline first, so the ring reads over lit cubes.
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = `rgba(5, 6, 8, ${(alpha * 0.7).toFixed(3)})`;
-      ctx.beginPath();
-      ctx.arc(px, py, 8, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.lineWidth = 1.25;
-      ctx.strokeStyle = `rgba(232, 253, 255, ${(alpha * 0.95).toFixed(3)})`;
-      ctx.beginPath();
-      ctx.arc(px, py, 8, 0, Math.PI * 2);
-      ctx.moveTo(px - 15, py);
-      ctx.lineTo(px - 10, py);
-      ctx.moveTo(px + 10, py);
-      ctx.lineTo(px + 15, py);
-      ctx.moveTo(px, py - 15);
-      ctx.lineTo(px, py - 10);
-      ctx.moveTo(px, py + 10);
-      ctx.lineTo(px, py + 15);
-      ctx.stroke();
-      // Leader to the readout, in the same chamfered language as the traces.
-      // It flips to the other side near the right edge so the digits stay on screen.
-      const side = px + 190 > width ? -1 : 1;
-      ctx.strokeStyle = `rgba(${REST_RGB}, ${(alpha * 0.55).toFixed(3)})`;
-      ctx.beginPath();
-      ctx.moveTo(px + 7 * side, py - 7);
-      ctx.lineTo(px + 20 * side, py - 20);
-      ctx.lineTo(px + 172 * side, py - 20);
-      ctx.stroke();
-      const h = heightAt(x, z, field);
-      const fmt = (v: number): string => `${v < 0 ? MINUS : '+'}${Math.abs(v).toFixed(1).padStart(4, '0')}`;
-      ctx.font = '500 10px "Geist Mono Variable", ui-monospace, monospace';
-      ctx.textBaseline = 'alphabetic';
-      const readout = `X ${fmt(x)}   Z ${fmt(z)}   H ${fmt(h)}`;
-      ctx.textAlign = side === 1 ? 'left' : 'right';
-      ctx.lineJoin = 'round';
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = `rgba(5, 6, 8, ${(alpha * 0.85).toFixed(3)})`;
-      ctx.strokeText(readout, px + 24 * side, py - 26);
-      ctx.fillStyle = `rgba(232, 238, 242, ${(alpha * 0.95).toFixed(3)})`;
-      ctx.fillText(readout, px + 24 * side, py - 26);
-      ctx.lineWidth = 1;
-      ctx.textAlign = 'left';
-    };
-
     const tick = (): void => {
       if (!running) return;
       frame = requestAnimationFrame(tick);
@@ -334,7 +266,6 @@ export function SchematicOverlay() {
         }
         drawConnection(c, now, dt, reduced);
       }
-      drawReticle(dt);
     };
 
     const onVisibility = (): void => {

@@ -12,11 +12,6 @@ import { FIELD_SIZE, MAX_RIPPLES, cellSeed } from './waveMath';
 const BACKGROUND = new THREE.Color('#050608');
 const BASE = new THREE.Color(0.125, 0.155, 0.198);
 
-/** Anything matching this is content: the cursor reticle stays out of its way. */
-const CONTENT_SELECTOR = 'a, button, h1, h2, h3, p, li, dl, svg, aside, article, header, nav, [role="button"]';
-
-const isOpenField = (target: EventTarget | null): boolean => !(target instanceof Element && target.closest(CONTENT_SELECTOR) !== null);
-
 /** Last known pointer position in viewport pixels, shared with the rig. */
 const pointer = { x: -1, y: -1, movedAt: -100, fine: true };
 
@@ -158,15 +153,9 @@ export function CubeField({ quality }: { quality: Quality }) {
       pointer.y = event.clientY;
       pointer.movedAt = systemClock();
       pointer.fine = event.pointerType === 'mouse' || event.pointerType === 'pen';
-      field.pointerMovedAt = pointer.movedAt;
-      field.pointerFree = pointer.fine && isOpenField(event.target);
       if (useSystem.getState().reducedMotion) invalidate();
     };
-    const onScroll = (): void => {
-      invalidate();
-      // Scrolling moves content under a stationary pointer: re-check what it is over.
-      if (pointer.fine && pointer.x >= 0) field.pointerFree = isOpenField(document.elementFromPoint(pointer.x, pointer.y));
-    };
+    const onScroll = (): void => invalidate();
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {

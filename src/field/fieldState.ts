@@ -35,10 +35,6 @@ interface FieldRuntime extends FieldSnapshot {
   unproject: (sx: number, sy: number) => { x: number; z: number } | null;
   ready: boolean;
   instances: number;
-  /** True while the pointer is over open field rather than over content. */
-  pointerFree: boolean;
-  /** System-clock time of the last pointer movement. */
-  pointerMovedAt: number;
   /** Development aid: overrides the camera rail when set (see window.__system). */
   poseOverride: { pos: [number, number, number]; target: [number, number, number]; fov: number; fadeNear: number; fadeFar: number } | null;
 }
@@ -59,8 +55,6 @@ export const field: FieldRuntime = {
   unproject: () => null,
   ready: false,
   instances: 0,
-  pointerFree: false,
-  pointerMovedAt: -100,
   poseOverride: null,
 };
 

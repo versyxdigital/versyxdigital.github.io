@@ -128,6 +128,8 @@ desktop are unchanged.
   explained there.
 - The "In use" block on every technology record, in the desktop panel and the
   phone view.
+- The cursor reticle on the cube field, with its X, Z and H readout. Moving
+  the cursor over the field still disturbs it.
 
 **A mistake of mine, since fixed.** Between 20:32 and about 20:55 on
 2026-11-10 this file was corrupted in the repository: one of my edits inserted
