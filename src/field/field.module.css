@@ -13,13 +13,6 @@
   display: block;
   width: 100%;
   height: 100%;
-  transition: opacity 900ms ease;
-}
-
-/* Behind content the cubes are a quiet texture, so they never compete with it.
-   They are at full strength only on the opening screen. */
-:global(html[data-mode]:not([data-mode='section:hero'])) .field canvas {
-  opacity: 0.32;
 }
 
 /* Static fallback: the same wave function, drawn once as an isometric plot. */
@@ -41,12 +34,4 @@
   opacity: 0.9;
   mask-image: radial-gradient(ellipse 60% 62% at 55% 55%, #000 30%, transparent 78%);
   -webkit-mask-image: radial-gradient(ellipse 60% 62% at 55% 55%, #000 30%, transparent 78%);
-}
-
-.fallback svg {
-  transition: opacity 900ms ease;
-}
-
-:global(html[data-mode]:not([data-mode='section:hero'])) .fallback svg {
-  opacity: 0.3;
 }
