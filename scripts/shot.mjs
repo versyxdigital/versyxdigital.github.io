@@ -59,14 +59,24 @@ if (typeof args.scroll === 'string') {
   await page.evaluate((y) => window.scrollBy(0, Number(y)), args.scroll);
   await page.waitForTimeout(1200);
 }
+// Pointer actions go through raw mouse events at the element's centre, so the
+// page is never scrolled as a side effect of targeting a moving SVG node.
+const centre = async (selector) => {
+  const box = await page.locator(selector).first().boundingBox();
+  if (!box) throw new Error(`No element for ${selector}`);
+  return [box.x + box.width / 2, box.y + box.height / 2];
+};
 if (typeof args.click === 'string') {
   for (const selector of args.click.split('|')) {
-    await page.locator(selector).first().click();
+    const [x, y] = await centre(selector);
+    await page.mouse.click(x, y);
     await page.waitForTimeout(900);
   }
 }
 if (typeof args.hover === 'string') {
-  await page.locator(args.hover).first().hover();
+  const [x, y] = await centre(args.hover);
+  await page.mouse.move(x - 30, y - 30);
+  await page.mouse.move(x, y, { steps: 6 });
   await page.waitForTimeout(700);
 }
 if (typeof args.js === 'string') {

@@ -1,8 +1,8 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { profile } from '../content';
-import { field } from '../field/fieldState';
+import { field, projectFieldPoint } from '../field/fieldState';
 import { interference, travel } from '../field/waveMath';
-import { pulse, useAnchor, useConnections } from '../schematic/registry';
+import { pulse, registerAnchor, useConnections, useAnchor } from '../schematic/registry';
 import { useSystem } from '../state/store';
 import { signed, useLiveText } from '../system/liveText';
 import { scrollToSection } from '../system/scroll';
@@ -11,7 +11,7 @@ import styles from './Hero.module.css';
 /** Field cells the hero's annotations are attached to (world x, z). */
 const CELL_ROLE = { x: 4.5, z: 15.5 };
 const CELL_A = { x: 19.5, z: 3.5 };
-const CELL_B = { x: 29.5, z: 19.5 };
+const CELL_B = { x: 16.5, z: 17.5 };
 
 const formatLat = (lat: number): string => `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'}`;
 const formatLon = (lon: number): string => `${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? 'E' : 'W'}`;
@@ -20,8 +20,42 @@ export function Hero() {
   const webgl = useSystem((s) => s.webgl);
   const hovered = useRef(false);
   const roleAnchor = useAnchor<HTMLSpanElement>('hero:role');
-  const annotA = useAnchor<HTMLDivElement>('hero:annot-a');
-  const annotB = useAnchor<HTMLDivElement>('hero:annot-b');
+  const sectionRef = useRef<HTMLElement>(null);
+  const annotA = useRef<HTMLDivElement>(null);
+  const annotB = useRef<HTMLDivElement>(null);
+
+  // Annotations float beside the cells they describe: each label follows its
+  // cube's projected position, so the composition holds at any viewport size.
+  useEffect(() => {
+    if (webgl !== 'ok') return;
+    registerAnchor('hero:annot-a', annotA.current);
+    registerAnchor('hero:annot-b', annotB.current);
+    const labels = [
+      { el: annotA.current, cell: CELL_A, dx: 54, dy: -84 },
+      { el: annotB.current, cell: CELL_B, dx: 46, dy: -70 },
+    ];
+    let frame = 0;
+    const place = (): void => {
+      frame = requestAnimationFrame(place);
+      const section = sectionRef.current;
+      if (!section || useSystem.getState().activeSection !== 'hero') return;
+      const origin = section.getBoundingClientRect();
+      for (const label of labels) {
+        if (!label.el || label.el.offsetParent === null) continue;
+        const p = projectFieldPoint(label.cell.x, label.cell.z);
+        label.el.style.opacity = p.visible ? '1' : '0';
+        if (p.visible) {
+          label.el.style.transform = `translate3d(${(p.x - origin.left + label.dx).toFixed(1)}px, ${(p.y - origin.top + label.dy).toFixed(1)}px, 0)`;
+        }
+      }
+    };
+    frame = requestAnimationFrame(place);
+    return () => {
+      cancelAnimationFrame(frame);
+      registerAnchor('hero:annot-a', null);
+      registerAnchor('hero:annot-b', null);
+    };
+  }, [webgl]);
 
   // Traces from the hero's type to specific cubes. Their ends ride the wave.
   useConnections(() => {
@@ -39,9 +73,9 @@ export function Hero() {
       },
       {
         id: 'hero:annot-a',
-        from: { kind: 'anchor', id: 'hero:annot-a', side: 'b', at: 0, gap: 8 },
+        from: { kind: 'anchor', id: 'hero:annot-a', side: 'b', at: 0, gap: 0 },
         to: { kind: 'field', ...CELL_A },
-        route: 'vh',
+        route: 'hv',
         tone: 'blue',
         level: (s) => (inHero(s.activeSection) ? 0.34 : 0),
         ambient: 11,
@@ -49,9 +83,9 @@ export function Hero() {
       },
       {
         id: 'hero:annot-b',
-        from: { kind: 'anchor', id: 'hero:annot-b', side: 'b', at: 0, gap: 8 },
+        from: { kind: 'anchor', id: 'hero:annot-b', side: 'b', at: 0, gap: 0 },
         to: { kind: 'field', ...CELL_B },
-        route: 'vh',
+        route: 'hv',
         tone: 'violet',
         level: (s) => (inHero(s.activeSection) ? 0.34 : 0),
         ambient: 13,
@@ -80,7 +114,7 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className={styles.hero} aria-labelledby="hero-title">
+    <section id="hero" ref={sectionRef} className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.inner}>
         <p className={`mono ${styles.eyebrow}`}>
           <span>00 — Index</span>
@@ -128,11 +162,11 @@ export function Hero() {
       {/* Annotations pinned to live cells of the field. Decorative: values are simulation telemetry. */}
       {webgl === 'ok' && (
         <div className={styles.annotations} aria-hidden="true">
-          <div ref={annotA} className={`mono ${styles.annotation} ${styles.annotA}`}>
+          <div ref={annotA} className={`mono ${styles.annotation}`}>
             <span className={styles.annotKey}>Travelling Σ</span>
             <span ref={travelValue} className={styles.annotValue} />
           </div>
-          <div ref={annotB} className={`mono ${styles.annotation} ${styles.annotB}`}>
+          <div ref={annotB} className={`mono ${styles.annotation}`}>
             <span className={styles.annotKey}>Interference Σ</span>
             <span ref={interfValue} className={styles.annotValue} />
           </div>

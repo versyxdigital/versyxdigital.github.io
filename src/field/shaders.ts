@@ -152,7 +152,7 @@ void main() {
   float spike = 0.0;
   if (uStars > 0.0001) {
     float arm = spiral(p, uPhase);
-    spike = uStars * uAmp * step(0.9, aSeed) * smoothstep(0.35, 0.9, arm)
+    spike = uStars * uAmp * step(0.925, aSeed) * smoothstep(0.35, 0.9, arm)
           * (1.6 + 0.6 * sin(uPhase * 0.9 + aSeed * 40.0)) * exp(-length(p) * 0.012);
   }
   float h = h0 + spike;
@@ -258,7 +258,7 @@ void main() {
   float ph = 0.5 + 0.5 * sin(dot(p, vec2(-0.5, 0.866)) * 0.03 + uPhase * 0.07);
   vec3 tone = mix(CYAN, BLUE, smoothstep(0.0, 0.55, ph));
   tone = mix(tone, VIOLET, smoothstep(0.55, 1.0, ph));
-  float energy = uGlow * crest * (0.34 + 0.66 * band) + vSpike * 0.55;
+  float energy = uGlow * crest * (0.34 + 0.66 * band) + vSpike * 0.42;
   vec3 glow = tone * energy + vRipple.rgb * 1.35 + CYAN * vCursorE * 0.55;
 
   col += vec3(0.40, 0.50, 0.62) * edge * mix(0.05, 0.085, top);

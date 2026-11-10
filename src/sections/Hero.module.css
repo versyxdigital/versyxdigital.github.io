@@ -1,3 +1,12 @@
+/* Darkness behind the type column, so the copy never competes with lit cubes. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 46% 62% at 16% 52%, rgba(5, 6, 8, 0.78), rgba(5, 6, 8, 0) 72%);
+  pointer-events: none;
+}
+
 .hero {
   position: relative;
   min-height: 100vh;
@@ -8,6 +17,7 @@
 }
 
 .inner {
+  position: relative;
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
@@ -173,6 +183,10 @@
 
 .annotation {
   position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  will-change: transform;
   display: flex;
   gap: 0.9rem;
   align-items: baseline;
@@ -187,18 +201,10 @@
   min-width: 3.2em;
 }
 
-.annotA {
-  top: 31%;
-  right: 30%;
-}
-
-.annotB {
-  top: 47%;
-  right: 9%;
-}
 
 /* ── Foot ──────────────────────────────────────────────────── */
 .foot {
+  position: relative;
   width: 100%;
   max-width: var(--max);
   margin: auto auto 0;

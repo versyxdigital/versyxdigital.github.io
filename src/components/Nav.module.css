@@ -7,9 +7,20 @@
   display: flex;
   align-items: center;
   gap: 2rem;
-  /* A soft fall-off rather than a bar: the field keeps the full viewport. */
-  background: linear-gradient(to bottom, rgba(5, 6, 8, 0.86), rgba(5, 6, 8, 0.5) 60%, rgba(5, 6, 8, 0));
   pointer-events: none;
+}
+
+/* A soft fall-off rather than a hard bar: content dissolves as it passes under. */
+.bar::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -1.5rem 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(5, 6, 8, 0.94) 40%, rgba(5, 6, 8, 0.6) 75%, rgba(5, 6, 8, 0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent);
 }
 
 .bar > * {

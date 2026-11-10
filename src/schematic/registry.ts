@@ -15,8 +15,11 @@ import type { RouteStyle } from './routing';
 export type AnchorSide = 'l' | 'r' | 't' | 'b' | 'c';
 
 export type Endpoint =
-  /** A registered DOM/SVG element. `at` slides the attachment along the side (0..1). */
-  | { kind: 'anchor'; id: string; side?: AnchorSide; at?: number; gap?: number; dx?: number; dy?: number }
+  /**
+   * A registered DOM/SVG element. `at` slides the attachment along the side
+   * (0..1). With `via`, the element marks a point where the trace drops into the field.
+   */
+  | { kind: 'anchor'; id: string; side?: AnchorSide; at?: number; gap?: number; dx?: number; dy?: number; via?: boolean }
   /** A world position on the cube field. The trace ends on the cube at that cell. */
   | { kind: 'field'; x: number; z: number }
   /** A via: a pixel offset from the trace's start, where the signal drops into the field below. */
@@ -31,6 +34,8 @@ export interface Connection {
   route: RouteStyle;
   /** Position of the jog for hvh / vhv routes, 0..1. */
   bend?: number;
+  /** Fixed pixel offset of the jog from the start; overrides `bend`. */
+  jog?: number;
   tone: Tone;
   /**
    * Visibility for the current interaction state: 0 hidden, ~0.3 resting,

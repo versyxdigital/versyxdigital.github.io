@@ -181,8 +181,10 @@ function cachedOverview(view: View): Map<TechId, { x: number; y: number }> {
 function focusLayout(
   view: View,
   base: Map<TechId, { x: number; y: number }>,
-  core: TechId | null,
+  core: TechId,
   inner: TechId[],
+  /** 'core' when the centre node is the subject; 'ring' when it is simply first among equals. */
+  coreEmphasis: Emphasis,
 ): Map<TechId, Placement> {
   const cx = view.width / 2;
   const cy = view.height * (isPortrait(view) ? 0.42 : 0.47);
@@ -191,10 +193,8 @@ function focusLayout(
   const points = new Map<TechId, { x: number; y: number }>();
   const pinned = new Set<TechId>();
 
-  if (core) {
-    points.set(core, { x: cx, y: cy });
-    pinned.add(core);
-  }
+  points.set(core, { x: cx, y: cy });
+  pinned.add(core);
 
   // Keep neighbours grouped by category, in the order the overview shows them,
   // so the ring reads as the same network pulled closer rather than a shuffle.
@@ -207,12 +207,12 @@ function focusLayout(
     return ca - cb || (ta?.name ?? '').localeCompare(tb?.name ?? '');
   });
 
-  const firstRing = core ? Math.min(sorted.length, portrait ? 8 : 12) : Math.min(sorted.length, portrait ? 6 : 9);
+  const firstRing = Math.min(sorted.length, portrait ? 8 : 12);
   const rings = [sorted.slice(0, firstRing), sorted.slice(firstRing)];
   const baseRx = portrait ? view.width * 0.31 : view.width * 0.19;
   const baseRy = portrait ? view.height * 0.2 : view.height * 0.27;
   rings.forEach((ring, ringIndex) => {
-    const scale = core ? 1 + ringIndex * 0.62 : 0.55 + ringIndex * 0.75;
+    const scale = 1 + ringIndex * 0.62;
     ring.forEach((id, i) => {
       const angle = -Math.PI / 2 + ((i + (ringIndex ? 0.5 : 0)) / ring.length) * Math.PI * 2;
       points.set(id, { x: cx + Math.cos(angle) * baseRx * scale, y: cy + Math.sin(angle) * baseRy * scale });
@@ -220,14 +220,14 @@ function focusLayout(
   });
 
   relax(points, view, pinned, MIN_DISTANCE + 6);
-  const outerScale = core ? (rings[1]!.length ? 1.62 : 1) : rings[1]!.length ? 1.3 : 0.55;
+  const outerScale = rings[1]!.length ? 1.62 : 1;
   const clearX = baseRx * outerScale + (portrait ? 44 : 96);
   const clearY = baseRy * outerScale + (portrait ? 52 : 78);
 
   for (const tech of technologies) {
     const placed = points.get(tech.id);
     if (placed) {
-      out.set(tech.id, { ...placed, emphasis: tech.id === core ? 'core' : 'ring' });
+      out.set(tech.id, { ...placed, emphasis: tech.id === core ? coreEmphasis : 'ring' });
       continue;
     }
     const b = base.get(tech.id) ?? { x: cx, y: cy };
@@ -253,11 +253,16 @@ function focusLayout(
 export function computeLayout(view: View, arrangement: Arrangement): Map<TechId, Placement> {
   const base = cachedOverview(view);
   if (arrangement.focus && techById.has(arrangement.focus)) {
-    return focusLayout(view, base, arrangement.focus, relatedTo(arrangement.focus));
+    return focusLayout(view, base, arrangement.focus, relatedTo(arrangement.focus), 'core');
   }
   if (arrangement.filter) {
-    const members = technologies.filter((t) => t.category === arrangement.filter).map((t) => t.id);
-    return focusLayout(view, base, null, members);
+    // A filtered group gathers around its best-connected member.
+    const members = technologies
+      .filter((t) => t.category === arrangement.filter)
+      .sort((a, b) => degreeOf(b.id) - degreeOf(a.id) || a.name.localeCompare(b.name))
+      .map((t) => t.id);
+    const [hub, ...rest] = members;
+    if (hub) return focusLayout(view, base, hub, rest, 'ring');
   }
   const out = new Map<TechId, Placement>();
   for (const [id, p] of base) out.set(id, { x: p.x, y: p.y, emphasis: 'rest' });

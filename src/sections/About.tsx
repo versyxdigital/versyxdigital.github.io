@@ -5,6 +5,7 @@ import { TechChip } from '../components/TechChip';
 import { earlierCareer, isPending, profile, roleById, roles, type Role } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { useSystem } from '../state/store';
+import { hasGutter } from '../system/viewport';
 import styles from './About.module.css';
 
 const FIRST_YEAR = Math.min(...roles.map((r) => r.from));
@@ -41,7 +42,8 @@ function RoleNode({ role, nowYear }: { role: Role; nowYear: number }) {
         <span ref={anchor} className={styles.traceNode} />
       </span>
       <span className={`mono ${styles.roleMeta}`}>
-        {role.position} · {role.period}
+        <span>{role.position}</span>
+        <span>{role.period}</span>
       </span>
     </button>
   );
@@ -110,21 +112,22 @@ export function About() {
     () => [
       {
         id: 'about:role-link',
-        from: { kind: 'anchor', id: `role:${selectedRole}`, side: 'c', gap: 0 },
-        to: { kind: 'anchor', id: 'role-detail', side: 't', at: 0.06, gap: 0 },
+        from: { kind: 'anchor', id: `role:${selectedRole}`, side: 'b', gap: 3 },
+        to: { kind: 'anchor', id: 'role-detail', side: 't', at: 0.04, gap: 0 },
         route: 'vhv',
-        bend: 0.62,
+        bend: 0.88,
         tone: 'cyan',
         level: (s) => (s.activeSection === 'about' ? 0.85 : 0),
         ambient: 6,
       },
       {
         id: 'about:head-link',
-        from: { kind: 'anchor', id: 'head:about', side: 'b', gap: 5 },
+        from: { kind: 'anchor', id: 'head:about', side: 'l', gap: 5 },
         to: { kind: 'anchor', id: 'about:specs', side: 'l', at: 0, gap: 0 },
-        route: 'vh',
+        route: 'hvh',
+        jog: -20,
         tone: 'blue',
-        level: (s) => (s.activeSection === 'about' ? 0.32 : 0),
+        level: (s) => (s.activeSection === 'about' && hasGutter() ? 0.32 : 0),
         ambient: 9,
       },
     ],
@@ -175,21 +178,11 @@ export function About() {
 
           <div className={styles.timeline} style={{ '--years': years.length } as React.CSSProperties}>
             <div className={styles.axis} aria-hidden="true">
-              <span className={`mono ${styles.axisPre}`}>Earlier</span>
+              <span className={`mono ${styles.axisPre}`}>≤ {FIRST_YEAR - 1}</span>
               {years.map((year) => (
                 <span key={year} className={`mono ${styles.axisYear}`}>
                   {year}
                 </span>
-              ))}
-            </div>
-
-            <div className={styles.track}>
-              <span className={`mono ${styles.trackLabel}`}>Employment</span>
-              <span className={styles.earlier} title={earlierCareer.note}>
-                <span className={styles.earlierTrace} aria-hidden="true" />
-              </span>
-              {employment.map((role) => (
-                <RoleNode key={role.id} role={role} nowYear={nowYear} />
               ))}
             </div>
 
@@ -199,14 +192,25 @@ export function About() {
                 <RoleNode key={role.id} role={role} nowYear={nowYear} />
               ))}
             </div>
+
+            <div className={styles.track}>
+              <span className={`mono ${styles.trackLabel}`}>Employment</span>
+              <span className={styles.earlier} title={earlierCareer.note} aria-hidden="true">
+                <span className={styles.roleOrg}>&nbsp;</span>
+                <span className={styles.earlierTrace} />
+              </span>
+              {employment.map((role) => (
+                <RoleNode key={role.id} role={role} nowYear={nowYear} />
+              ))}
+            </div>
           </div>
+
+          <RoleDetail />
 
           <p className={styles.earlierNote}>
             <span className="mono">{earlierCareer.label}</span>
             {earlierCareer.note}
           </p>
-
-          <RoleDetail />
         </div>
       </div>
     </Section>

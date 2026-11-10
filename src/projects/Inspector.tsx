@@ -103,6 +103,9 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
         <figcaption className={styles.caption}>
           <span className="mono">Fig. {project.ref.replace('SYS-', '')}</span>
           {project.diagram.caption}
+          <span className={`mono ${styles.pan}`} aria-hidden="true">
+            ↔ Pan
+          </span>
         </figcaption>
       </figure>
 

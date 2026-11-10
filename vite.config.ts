@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: 'es2022',
-    chunkSizeWarningLimit: 900,
+    // three.js is a single lazy chunk (~250 kB gzipped) loaded after first paint.
+    chunkSizeWarningLimit: 1000,
   },
   test: {
     environment: 'node',

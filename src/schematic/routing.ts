@@ -22,8 +22,12 @@ export type RouteStyle = 'hv' | 'vh' | 'hvh' | 'vhv';
 const EPS = 0.5;
 const dist = (a: Pt, b: Pt): number => Math.hypot(b.x - a.x, b.y - a.y);
 
-/** Corner points of an orthogonal route from a to b, without chamfers. */
-export function corners(a: Pt, b: Pt, style: RouteStyle, bend = 0.5): Pt[] {
+/**
+ * Corner points of an orthogonal route from a to b, without chamfers.
+ * For hvh / vhv routes the jog sits at fraction `bend` of the way, or at a
+ * fixed pixel offset `jog` from the start when one is given.
+ */
+export function corners(a: Pt, b: Pt, style: RouteStyle, bend = 0.5, jog?: number): Pt[] {
   let pts: Pt[];
   switch (style) {
     case 'hv':
@@ -33,12 +37,12 @@ export function corners(a: Pt, b: Pt, style: RouteStyle, bend = 0.5): Pt[] {
       pts = [a, { x: a.x, y: b.y }, b];
       break;
     case 'hvh': {
-      const mx = a.x + (b.x - a.x) * bend;
+      const mx = jog === undefined ? a.x + (b.x - a.x) * bend : a.x + jog;
       pts = [a, { x: mx, y: a.y }, { x: mx, y: b.y }, b];
       break;
     }
     case 'vhv': {
-      const my = a.y + (b.y - a.y) * bend;
+      const my = jog === undefined ? a.y + (b.y - a.y) * bend : a.y + jog;
       pts = [a, { x: a.x, y: my }, { x: b.x, y: my }, b];
       break;
     }
@@ -82,8 +86,8 @@ export function chamfer(pts: readonly Pt[], size: number): Pt[] {
   return out;
 }
 
-export function route(a: Pt, b: Pt, style: RouteStyle, bend = 0.5, chamferSize = 7): Pt[] {
-  return chamfer(corners(a, b, style, bend), chamferSize);
+export function route(a: Pt, b: Pt, style: RouteStyle, bend = 0.5, chamferSize = 7, jog?: number): Pt[] {
+  return chamfer(corners(a, b, style, bend, jog), chamferSize);
 }
 
 export function polylineLength(pts: readonly Pt[]): number {

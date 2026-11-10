@@ -69,7 +69,7 @@ function Standby({ project }: { project: Project }) {
         <Diagram diagram={project.diagram} tone={project.tone} id={`p-${project.id}`} preview />
       </div>
       <p className={styles.standbyText}>
-        <strong>{project.tagline}</strong> Select a system on the left to open its architecture, stages and engineering notes.
+        <strong>{project.tagline}</strong> Select a system from the catalogue to open its architecture, stages and engineering notes.
       </p>
     </div>
   );

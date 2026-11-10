@@ -126,7 +126,9 @@ export function SchematicOverlay() {
         return;
       }
 
-      const pts = route(a, b, c.def.route, c.def.bend);
+      const pts = route(a, b, c.def.route, c.def.bend, 7, c.def.jog);
+      const to = c.def.to;
+      const dropsIntoField = to.kind === 'via' || to.kind === 'field' || (to.kind === 'anchor' && to.via === true);
       const length = polylineLength(pts);
       if (length < 2) return;
       const rgb = TONE_RGB[c.def.tone];
@@ -159,7 +161,7 @@ export function SchematicOverlay() {
       if (c.reveal > 0.96) {
         const ex = Math.round(b.x) + 0.5;
         const ey = Math.round(b.y) + 0.5;
-        if (c.def.to.kind === 'via' || c.def.to.kind === 'field') {
+        if (dropsIntoField) {
           // A via: where the trace leaves this layer for the field beneath.
           ctx.beginPath();
           ctx.arc(ex, ey, 5, 0, Math.PI * 2);
@@ -207,7 +209,7 @@ export function SchematicOverlay() {
         const t = reduced ? 1 : (now - p.start) / duration;
         if (t >= 1) {
           p.done = true;
-          if (p.ripple > 0 && (c.def.to.kind === 'via' || c.def.to.kind === 'field')) {
+          if (p.ripple > 0 && dropsIntoField) {
             emitRippleAtScreen(b.x, b.y, p.ripple, toneIndex[p.tone]);
           }
           continue;
