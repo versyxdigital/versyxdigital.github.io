@@ -270,14 +270,12 @@ void main() {
   float top = step(0.5, vFaceN.y);
   vec2 p = vWorld.xz;
 
-  // ── Soft edges: light gathers towards each cube's rim instead of drawing a hard line ──
+  // ── Defined geometric edges, anti-aliased in screen space ──────────
   vec2 a = abs(vLocal.xz);
   float eT = max(a.x, a.y);
-  float edgeTop = smoothstep(0.24, 0.5, eT);
-  edgeTop *= edgeTop;
+  float edgeTop = smoothstep(0.455 - fwidth(eT), 0.455, eT);
   float u = abs(abs(vFaceN.x) > 0.5 ? vLocal.z : vLocal.x);
-  float edgeVert = smoothstep(0.24, 0.5, u);
-  edgeVert *= edgeVert * exp(-vDepth * 0.7);
+  float edgeVert = smoothstep(0.455 - fwidth(u), 0.455, u) * exp(-vDepth * 0.7);
   float edgeRim = 1.0 - smoothstep(0.0, 0.07 + fwidth(vDepth), vDepth);
   float edge = mix(max(edgeVert, edgeRim), edgeTop, top);
 
@@ -303,7 +301,7 @@ void main() {
   vec3 glow = tone * energy + vRipple.rgb * 1.0 + CYAN * vCursorE * 0.2;
 
   col += vec3(0.40, 0.50, 0.62) * edge * mix(0.05, 0.085, top);
-  col += glow * edge * 0.9;
+  col += glow * edge * 1.25;
   col += glow * mix(0.36 * exp(-vDepth * 1.3), 0.2, top);
 
   // ── Emerge from, and dissolve into, the page background ────────────
@@ -312,8 +310,7 @@ void main() {
   fade *= exp(-max(camDist - uFogStart, 0.0) * uFogDensity);
   // The nearest cubes recede as well, so the field floats in darkness on every side.
   fade *= mix(0.3, 1.0, smoothstep(uFogStart * 0.62, uFogStart * 0.98, camDist));
-  // Cubes are never fully solid: the page shows through them.
-  col = mix(uBg, col, clamp(fade * uDim, 0.0, 1.0) * 0.6);
+  col = mix(uBg, col, clamp(fade * uDim, 0.0, 1.0));
 
   // Dither: near-black gradients band badly without it.
   col += (hash12(gl_FragCoord.xy) - 0.5) / 255.0;

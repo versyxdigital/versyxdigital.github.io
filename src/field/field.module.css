@@ -19,7 +19,7 @@
 /* Behind content the cubes are a quiet texture, so they never compete with it.
    They are at full strength only on the opening screen. */
 :global(html[data-mode]:not([data-mode='section:hero'])) .field canvas {
-  opacity: 0.6;
+  opacity: 0.32;
 }
 
 /* Static fallback: the same wave function, drawn once as an isometric plot. */
