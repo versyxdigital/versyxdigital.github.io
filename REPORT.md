@@ -88,6 +88,43 @@ These are judgement calls I made to keep moving. Each is quick to change.
 - **Folder and package name.** Still `rowles-portfolio`, as you specified the
   folder. The package description was updated.
 
+## Plain-language rework (2026-11-10, late)
+
+You said most of the site made no sense and read like a sci-fi concept rather
+than an agency. This pass rewrote the wording and left the look alone. Where
+anything above or below in this report disagrees with this section, this
+section is the current state.
+
+| Where | Before | Now |
+| --- | --- | --- |
+| Under the name | Software studio | Design and development agency |
+| Hero button | Inspect our systems | See our projects |
+| Hero corner | "00 — Index", cube count, draw calls, a running clock | Only "Est. 2019 · United Kingdom" |
+| Navigation | Studio | About |
+| About title | A small and focused software studio. | What we do. |
+| Services | "What we do · Select a node", tags WEB, API, ADV, FIX, AI | "Our services · Select a service", numbered 01 to 05 |
+| Service record | On record · In the catalogue | Experience · Related projects |
+| Technologies title | Stack and tooling, as a network. | The technologies we work with. |
+| Technologies panel | Nodes, "Release focus", "From the founder's published skills" | Total, "Close", no source note |
+| Projects title | System explorer. Open one up. | Projects we have built. |
+| Project list | "Catalogue · Ref", SYS-01 to SYS-06 | "Select a project", 01 to 06 |
+| Empty project panel | Inspection bay · standing by | Preview |
+| Project tabs | Architecture · Overview · Engineering · Stack & links | How it works · Overview · How it was built · Technology & links |
+| Contact corner | End of line | Email or call |
+| Footer | Cube count, quality tier, "Content verified" date | Copyright line and "Design and development agency" |
+| Browser tab and share text | software studio | design and development agency |
+
+Two things in this pass are judgement calls for you to check:
+
+- **"Design and development agency"** is my wording for the line under the
+  name, from your "design agency" and your earlier description of the work.
+  It is one string, `descriptor` in `src/content/profile.ts`.
+- **Placeholders are now hidden from visitors.** The "Pending" boxes (two
+  service descriptions, and purpose, challenges or outcomes on some projects)
+  no longer show; `showPendingFields` is `false` in `src/content/config.ts`.
+  Nothing was invented to fill them: a heading with no content is simply left
+  out. The gaps are still listed under "What remains incomplete".
+
 ## Later content changes (2026-11-10, evening)
 
 **The Home Counties is now about how it is built.** Its entry used to describe

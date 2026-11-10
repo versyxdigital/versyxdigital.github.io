@@ -1,6 +1,6 @@
 # Versyx Digital — interactive studio site
 
-The site for Versyx Digital, a small UK software studio, built as one connected system: a GPU-driven field of
+The site for Versyx Digital, a small UK design and development agency, built as one connected system: a GPU-driven field of
 cubes that behaves like a mathematical simulation, a schematic layer of live
 traces and signals, a technology constellation and a project system explorer,
 all driven by one interaction model.
