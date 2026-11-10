@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { Section } from '../components/Section';
 import { projectById, projects, type Project } from '../content';
-import { Diagram } from '../projects/Diagram';
 import { Inspector } from '../projects/Inspector';
 import { pulse, registry, useAnchor, useConnections } from '../schematic/registry';
 import { selectHighlight, useSystem } from '../state/store';
 import { widerThan } from '../system/viewport';
 import styles from './Projects.module.css';
 
-function IndexItem({ project }: { project: Project }) {
+/** `shown` marks the project on display when none has been chosen yet. */
+function IndexItem({ project, shown }: { project: Project; shown: boolean }) {
   const selected = useSystem((s) => s.selectedProject === project.id);
   const hovered = useSystem((s) => s.hoveredProject === project.id);
   // Lit when a technology elsewhere on the page is in focus and this project uses it.
@@ -27,10 +27,10 @@ function IndexItem({ project }: { project: Project }) {
         type="button"
         className={styles.item}
         data-tone={project.tone}
-        data-selected={selected}
+        data-selected={selected || shown}
         data-hovered={hovered}
         data-lit={lit}
-        aria-pressed={selected}
+        aria-pressed={selected || shown}
         aria-controls="inspection-bay"
         onClick={() => selectProject(selected ? null : project.id)}
         onPointerEnter={(event) => {
@@ -51,39 +51,13 @@ function IndexItem({ project }: { project: Project }) {
   );
 }
 
-/** Before a project is chosen: its screenshot, or a quiet wireframe of its diagram, for whichever one is under the cursor. */
-function Standby({ project }: { project: Project }) {
-  const lead = project.images?.[0];
-  return (
-    <div className={styles.standby} data-standby>
-      <p className={`mono ${styles.standbyHead}`}>
-        <span>Preview</span>
-        <span>
-          {project.ref} · {project.name}
-        </span>
-      </p>
-      <div className={styles.standbyCanvas} key={project.id} data-image={lead !== undefined}>
-        {lead ? (
-          <img className={styles.standbyImage} src={lead.src} alt={lead.alt} width={lead.width} height={lead.height} decoding="async" />
-        ) : (
-          <Diagram diagram={project.diagram} tone={project.tone} id={`p-${project.id}`} preview />
-        )}
-      </div>
-      <p className={styles.standbyText}>
-        <strong>{project.tagline}</strong> Select a project from the list to see how it works and how it was built.
-      </p>
-    </div>
-  );
-}
-
 export function Projects() {
   const selectedId = useSystem((s) => s.selectedProject);
   const hoveredId = useSystem((s) => s.hoveredProject);
   const selectProject = useSystem((s) => s.selectProject);
   const selected = selectedId ? projectById.get(selectedId) : undefined;
-  const lastPreview = useRef<Project>(projects[0]!);
-  const hoveredProject = hoveredId ? projectById.get(hoveredId) : undefined;
-  if (hoveredProject) lastPreview.current = hoveredProject;
+  // There is always a project on display: the chosen one, or the first until one is chosen.
+  const shown = selected ?? projects[0]!;
   const bay = useAnchor<HTMLDivElement>('bay');
   const bayRef = useRef<HTMLDivElement | null>(null);
 
@@ -172,7 +146,7 @@ export function Projects() {
           </p>
           <ul data-project-index>
             {projects.map((project) => (
-              <IndexItem key={project.id} project={project} />
+              <IndexItem key={project.id} project={project} shown={selected === undefined && project.id === shown.id} />
             ))}
           </ul>
         </div>
@@ -187,7 +161,7 @@ export function Projects() {
           data-reveal
           style={{ '--i': 1 } as React.CSSProperties}
         >
-          {selected ? <Inspector key={selected.id} project={selected} onClose={close} /> : <Standby project={lastPreview.current} />}
+          <Inspector key={shown.id} project={shown} onClose={close} focusOnOpen={selected !== undefined} />
         </div>
       </div>
     </Section>

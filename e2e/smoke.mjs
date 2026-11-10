@@ -243,7 +243,7 @@ async function desktop(browser) {
   await goTo(page, 'projects');
   await page.evaluate(() => window.scrollBy(0, 200));
   await page.waitForTimeout(600);
-  check('explorer: before a project is chosen, the panel previews one', (await page.locator('#inspection-bay [data-standby]').count()) === 1);
+  check('explorer: before a project is chosen, the first project is on display', (await page.locator('#inspection-bay h3').first().innerText()) === 'MKEditor');
   const projectsText = await page.locator('#projects').innerText();
   check('projects: plain wording, no explorer or catalogue jargon', /Projects\s+we.ve built/i.test(projectsText.replace(/\s+/g, ' ')) && !/system explorer|inspection bay|standing by|catalogue|SYS-/i.test(projectsText));
   check('explorer: the catalogue lists the six projects', (await page.locator('[data-project-index] button').count()) === 6);
@@ -279,7 +279,7 @@ async function desktop(browser) {
 
   await page.keyboard.press('Escape');
   await page.waitForTimeout(900);
-  check('explorer: Escape closes the inspector', (await page.locator('#inspection-bay [data-standby]').count()) === 1);
+  check('explorer: Escape returns to the first project', (await page.locator('#inspection-bay h3').first().innerText()) === 'MKEditor');
   check('explorer: focus returns to the catalogue entry', await page.evaluate(() => document.activeElement?.textContent?.includes('wssh') ?? false));
   check('explorer: field returns to the section mode', (await mode()) === 'section:projects', await mode());
 

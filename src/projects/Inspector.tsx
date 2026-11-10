@@ -112,7 +112,7 @@ function ListOrPending({ value, label }: { value: Maybe<string[]>; label: string
  * image first; one without opens on its diagram. Only the tab body scrolls,
  * and only when a tab has more to say than fits.
  */
-export function Inspector({ project, onClose }: { project: Project; onClose: () => void }) {
+export function Inspector({ project, onClose, focusOnOpen = true }: { project: Project; onClose: () => void; focusOnOpen?: boolean }) {
   const [tab, setTab] = useState<Tab>(() => firstTab(project));
   const [stage, setStage] = useState<string | null>(null);
   const transition = useSystem((s) => s.transition);
@@ -124,7 +124,8 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
     setTab(firstTab(project));
     setStage(null);
     // Move focus into the inspector so keyboard and screen-reader users land on it.
-    headingRef.current?.focus({ preventScroll: true });
+    // Not for the project shown by default on page load: that would pull focus down the page.
+    if (focusOnOpen) headingRef.current?.focus({ preventScroll: true });
     // Keyed on the id: the project object itself is stable content.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.id]);
@@ -170,9 +171,6 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
               <span className="visually-hidden"> (opens in a new tab)</span>
             </a>
           ))}
-          <button type="button" className={`mono ${styles.close}`} onClick={onClose}>
-            Close <span aria-hidden="true">×</span>
-          </button>
         </div>
       </header>
 
