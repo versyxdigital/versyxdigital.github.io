@@ -27,6 +27,7 @@
 }
 
 .eyebrow {
+  width: fit-content;
   display: flex;
   gap: 2.5rem;
   color: var(--text-2);
@@ -43,6 +44,7 @@
 }
 
 .name {
+  width: fit-content;
   font-size: var(--fs-display);
   font-weight: 500;
   line-height: 0.86;
@@ -115,6 +117,7 @@
 }
 
 .actions {
+  width: fit-content;
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 2.25rem;
@@ -195,9 +198,10 @@
   display: flex;
   gap: 0.9rem;
   align-items: baseline;
-  padding: 0 0 0.45rem 0.1rem;
-  border-bottom: 1px solid rgba(120, 142, 164, 0.3);
-  color: var(--text-3);
+  padding: 0.3rem 0.5rem 0.4rem 0.4rem;
+  border-bottom: 1px solid rgba(120, 142, 164, 0.45);
+  background: rgba(5, 6, 8, 0.66);
+  color: var(--text-2);
   white-space: nowrap;
 }
 

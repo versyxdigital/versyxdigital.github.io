@@ -111,7 +111,7 @@ float rippleHeight(vec2 p, inout vec4 tone) {
 float cursorHeight(vec2 p) {
   if (uCursor.z <= 0.001) return 0.0;
   float d = length(p - uCursor.xy);
-  return uCursor.z * 0.7 * exp(-(d * d) / 26.0) * (0.75 + 0.25 * cos(d * 0.9 - uClock * 2.4));
+  return uCursor.z * 0.55 * exp(-(d * d) / 26.0) * (0.75 + 0.25 * cos(d * 0.9 - uClock * 2.4));
 }
 
 float surface(vec2 p) {

@@ -110,7 +110,7 @@ export function rippleAt(x: number, z: number, ripple: Ripple, clock: number): {
 export function cursorAt(x: number, z: number, cursor: Cursor, clock: number): number {
   if (cursor.strength <= 0.001) return 0;
   const d = Math.hypot(x - cursor.x, z - cursor.z);
-  return cursor.strength * 0.7 * Math.exp(-(d * d) / 26) * (0.75 + 0.25 * Math.cos(d * 0.9 - clock * 2.4));
+  return cursor.strength * 0.55 * Math.exp(-(d * d) / 26) * (0.75 + 0.25 * Math.cos(d * 0.9 - clock * 2.4));
 }
 
 /** The continuous part of the surface: basis mix, then terracing. */

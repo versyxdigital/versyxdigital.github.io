@@ -33,7 +33,7 @@ export function Hero() {
     registerAnchor('hero:annot-b', annotB.current);
     const labels = [
       { el: annotA.current, cell: CELL_A, dx: 54, dy: -84 },
-      { el: annotB.current, cell: CELL_B, dx: 46, dy: -70 },
+      { el: annotB.current, cell: CELL_B, dx: -214, dy: -66 },
     ];
     let frame = 0;
     const place = (): void => {
@@ -85,7 +85,7 @@ export function Hero() {
       },
       {
         id: 'hero:annot-b',
-        from: { kind: 'anchor', id: 'hero:annot-b', side: 'b', at: 0, gap: 0 },
+        from: { kind: 'anchor', id: 'hero:annot-b', side: 'b', at: 1, gap: 0 },
         to: { kind: 'field', ...CELL_B },
         route: 'hv',
         tone: 'violet',
