@@ -201,6 +201,21 @@ async function desktop(browser) {
   await page.locator('button', { hasText: 'Release focus' }).click();
   await page.waitForTimeout(600);
 
+  // Keyboard model: the graph is one tab stop and the arrow keys walk it.
+  check('constellation: is a single tab stop', (await page.locator('svg[aria-label^="Technology constellation"] [role="button"][tabindex="0"]').count()) === 1);
+  await page.locator("[aria-label='TypeScript, Languages']").focus();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(250);
+  const moved = await page.evaluate(() => document.activeElement?.getAttribute('aria-label') ?? '');
+  check('constellation: arrow keys move focus between nodes', moved !== '' && moved !== 'TypeScript, Languages', moved);
+  check('constellation: keyboard focus shows the record too', (await page.locator('aside[aria-label="Technology detail"] h3').innerText()) === moved.split(',')[0]);
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(900);
+  check('constellation: Enter focuses the node', await page.evaluate(() => document.activeElement?.getAttribute('aria-pressed') === 'true'));
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(700);
+  await page.evaluate(() => document.activeElement?.blur());
+
   await page.locator('button', { hasText: 'Data' }).first().click();
   await page.waitForTimeout(1500);
   check('constellation: category filter applies', (await page.locator("[aria-label='Redis, Data']").getAttribute('data-emphasis')) === 'ring');

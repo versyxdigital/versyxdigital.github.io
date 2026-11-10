@@ -8,40 +8,48 @@ import styles from './field.module.css';
 const lower: Record<Quality, Quality | null> = { high: 'medium', medium: 'low', low: null };
 
 /**
- * Adaptive quality. Watches real frame times and steps the field down a tier
- * when the device cannot hold a smooth rate. It never steps back up, which
- * avoids oscillating between tiers.
+ * Adaptive quality. Watches real frame times in short windows of wall-clock
+ * time and steps the field down a tier when the device cannot hold a smooth
+ * rate. Windows are timed, not counted in frames, so a device running at a
+ * few frames per second is corrected in seconds rather than minutes.
+ *
+ * It never steps back up, which avoids oscillating between tiers. If even the
+ * lowest tier cannot reach a usable rate, the WebGL field is retired in
+ * favour of the static rendering.
  */
 function QualityGovernor() {
-  const stats = useRef({ frames: 0, total: 0, warmup: 90, strikes: 0 });
+  const stats = useRef({ frames: 0, elapsed: 0, warmup: 1.2, strikes: 0 });
   useFrame((_, delta) => {
     const s = stats.current;
+    // A gap this long is a tab switch or a resume, not a slow frame.
+    if (delta > 1) return;
     if (s.warmup > 0) {
-      s.warmup--;
+      s.warmup -= delta;
       return;
     }
-    // Ignore tab-switch hitches.
-    if (delta > 0.25) return;
     s.frames++;
-    s.total += delta;
-    if (s.frames < 120) return;
-    const average = s.total / s.frames;
+    s.elapsed += delta;
+    if (s.elapsed < WINDOW_SECONDS) return;
+    const average = s.elapsed / s.frames;
     s.frames = 0;
-    s.total = 0;
-    if (average > 1 / 42) s.strikes++;
+    s.elapsed = 0;
+
+    if (average > 1 / 14) s.strikes += 2; // far too slow: act on this window alone
+    else if (average > 1 / 42) s.strikes += 1;
     else s.strikes = Math.max(0, s.strikes - 1);
-    if (s.strikes >= 2) {
-      const state = useSystem.getState();
-      const next = lower[state.quality];
-      if (next) {
-        state.setQuality(next);
-        s.strikes = 0;
-        s.warmup = 120;
-      }
-    }
+    if (s.strikes < 2) return;
+
+    const state = useSystem.getState();
+    const next = lower[state.quality];
+    s.strikes = 0;
+    s.warmup = 1;
+    if (next) state.setQuality(next);
+    else if (average > 1 / 14) state.setWebgl('unavailable');
   });
   return null;
 }
+
+const WINDOW_SECONDS = 1.5;
 
 export default function FieldCanvas() {
   const quality = useSystem((s) => s.quality);

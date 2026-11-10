@@ -84,6 +84,9 @@ export function Constellation() {
   const layoutRef = useRef(layout);
   layoutRef.current = layout;
 
+  // Roving tabindex: the graph is a single tab stop, arrows walk it.
+  const [roving, setRoving] = useState<TechId>('typescript');
+
   const sim = useRef(new Map<TechId, Sim>());
   const nodeEls = useRef(new Map<TechId, SVGGElement>());
   const edgeEls = useRef(new Map<string, SVGLineElement>());
@@ -243,6 +246,41 @@ export function Constellation() {
     pointer.current.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
   };
 
+  /** Moves focus to the nearest node in the pressed direction, by current on-screen position. */
+  const moveFocus = (from: TechId, dx: number, dy: number): void => {
+    const origin = sim.current.get(from);
+    if (!origin) return;
+    let best: TechId | null = null;
+    let bestScore = Infinity;
+    for (const tech of technologies) {
+      if (tech.id === from) continue;
+      const p = sim.current.get(tech.id);
+      if (!p) continue;
+      const ox = p.x - origin.x;
+      const oy = p.y - origin.y;
+      const along = ox * dx + oy * dy;
+      if (along <= 4) continue;
+      const across = Math.abs(ox * dy - oy * dx);
+      // Prefer nodes ahead and close to the axis of travel.
+      const score = along + across * 2.2;
+      if (score < bestScore) {
+        bestScore = score;
+        best = tech.id;
+      }
+    }
+    if (best) {
+      setRoving(best);
+      nodeEls.current.get(best)?.focus();
+    }
+  };
+
+  const arrows: Record<string, [number, number]> = {
+    ArrowRight: [1, 0],
+    ArrowLeft: [-1, 0],
+    ArrowDown: [0, 1],
+    ArrowUp: [0, -1],
+  };
+
   const setNode = (id: TechId) => (el: SVGGElement | null) => {
     if (el) nodeEls.current.set(id, el);
     else nodeEls.current.delete(id);
@@ -275,7 +313,7 @@ export function Constellation() {
         className={styles.svg}
         viewBox={`0 0 ${view.width} ${view.height}`}
         role="group"
-        aria-label="Technology constellation. Each node is a technology; select one to see how it is used."
+        aria-label="Technology constellation. Each node is a technology. Use the arrow keys to move between nodes and Enter to focus one."
         onClick={(event) => {
           if (event.target === event.currentTarget) selectTech(null);
         }}
@@ -325,21 +363,28 @@ export function Constellation() {
               data-tone={category?.tone}
               data-selected={isSelected}
               role="button"
-              tabIndex={0}
+              tabIndex={roving === tech.id ? 0 : -1}
               aria-pressed={isSelected}
               aria-label={`${tech.name}, ${category?.label ?? ''}`}
               onPointerEnter={(event) => {
                 if (event.pointerType === 'mouse') hoverTech(tech.id);
               }}
               onPointerLeave={() => hoverTech(null)}
-              onFocus={() => hoverTech(tech.id)}
+              onFocus={() => {
+                setRoving(tech.id);
+                hoverTech(tech.id);
+              }}
               onBlur={() => hoverTech(null)}
               onClick={(event) => {
                 event.stopPropagation();
                 selectTech(isSelected ? null : tech.id);
               }}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
+                const direction = arrows[event.key];
+                if (direction) {
+                  event.preventDefault();
+                  moveFocus(tech.id, direction[0], direction[1]);
+                } else if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
                   selectTech(isSelected ? null : tech.id);
                 }

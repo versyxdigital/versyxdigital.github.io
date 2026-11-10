@@ -1,14 +1,26 @@
 import type { Quality } from '../state/store';
 
-/** True when a WebGL2 (or WebGL1) context can actually be created. */
+const SOFTWARE_RENDERER = /swiftshader|llvmpipe|softpipe|software rasterizer|microsoft basic render/i;
+
+/**
+ * True when a hardware-accelerated WebGL context can be created.
+ *
+ * A software rasteriser technically provides WebGL, but runs a field of this
+ * size at a few frames per second, so it is treated the same as no WebGL and
+ * gets the static rendering. `?webgl=force` overrides that for testing.
+ */
 export function detectWebgl(): boolean {
   if (typeof document === 'undefined') return false;
-  if (new URLSearchParams(window.location.search).has('nowebgl')) return false;
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('nowebgl')) return false;
   try {
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
     if (!gl) return false;
+    const info = gl.getExtension('WEBGL_debug_renderer_info');
+    const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
     gl.getExtension('WEBGL_lose_context')?.loseContext();
+    if (SOFTWARE_RENDERER.test(renderer) && params.get('webgl') !== 'force') return false;
     return true;
   } catch {
     return false;
