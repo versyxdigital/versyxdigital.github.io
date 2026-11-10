@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { profile } from '../content';
-import { fieldModes } from '../field/modes';
-import { selectVisualMode, sectionOrder, useSystem, type SectionId } from '../state/store';
+import { sectionOrder, useSystem, type SectionId } from '../state/store';
 import { scroll, scrollToSection } from '../system/scroll';
 import styles from './Nav.module.css';
 
@@ -29,7 +28,6 @@ function Mark() {
 
 export function Nav() {
   const active = useSystem((s) => s.activeSection);
-  const mode = useSystem(selectVisualMode);
   const [open, setOpen] = useState(false);
   const progressRef = useRef<HTMLSpanElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
@@ -89,14 +87,6 @@ export function Nav() {
             </a>
           ))}
         </nav>
-
-        <div className={`mono ${styles.status}`} aria-hidden="true">
-          <span className={styles.statusDot} />
-          <span className={styles.statusLabel}>Field</span>
-          <span className={styles.statusValue} key={mode}>
-            {fieldModes[mode].label}
-          </span>
-        </div>
 
         <button
           type="button"

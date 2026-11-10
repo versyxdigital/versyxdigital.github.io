@@ -150,7 +150,9 @@ async function desktop(browser) {
   await page.evaluate(() => document.activeElement?.blur());
 
   check('hero: the studio name is present', (await page.locator('h1').innerText()).replace(/\s+/g, ' ').includes('Versyx Digital'));
-  check('hero: reads as a studio founded by Chris Rowles', /Software studio\s*· founded by\s*Chris Rowles/.test(await page.locator('#hero').innerText()));
+  const heroText = await page.locator('#hero').innerText();
+  check('hero: reads as a software studio', heroText.includes('Software studio') && !/founded by/i.test(heroText));
+  check('hero: no field readout or field markers', (await page.locator('body > #root > header').innerText()).toLowerCase().includes('field') === false && !/travelling|interference/i.test(heroText));
 
   const stats = await canvasStats(page);
   check('field: WebGL canvas is rendering lit geometry', stats !== null && stats.lit > 0.05, stats ? `${(stats.lit * 100).toFixed(0)}% of sampled pixels lit` : 'no canvas');
@@ -173,8 +175,8 @@ async function desktop(browser) {
   await page.screenshot({ path: 'qa-screens/e2e-desktop-hero.png' });
 
   // Section navigation changes the field mode readout.
-  // innerText reflects text-transform, so compare case-insensitively.
-  const mode = async () => (await page.locator('header [class*="statusValue"]').innerText()).toLowerCase();
+  // The director records the field's current behaviour on the document element.
+  const mode = () => page.evaluate(() => document.documentElement.dataset.mode ?? '');
   const heroMode = await mode();
   await page.locator('header nav a', { hasText: 'Technologies' }).click();
   await page.waitForTimeout(2600);
@@ -207,7 +209,7 @@ async function desktop(browser) {
   await page.mouse.click(lx, ly);
   await page.waitForTimeout(1800);
   check('constellation: selecting focuses the node', (await page.locator("[aria-label='Laravel, Backend']").getAttribute('aria-pressed')) === 'true');
-  check('constellation: selection changes the field mode', (await mode()) === 'focused interference', await mode());
+  check('constellation: selection changes the field mode', (await mode()) === 'focus:tech', await mode());
   await page.screenshot({ path: 'qa-screens/e2e-desktop-tech-focus.png' });
   await page.locator('button', { hasText: 'Release focus' }).click();
   await page.waitForTimeout(600);
@@ -245,7 +247,7 @@ async function desktop(browser) {
   await page.locator('[data-project-index] button', { hasText: 'wssh' }).click();
   await page.waitForTimeout(2200);
   check('explorer: selecting a project opens the inspector', (await page.locator('#inspection-bay h3').first().innerText()) === 'wssh');
-  check('explorer: field adopts the project signature', (await mode()) === 'signal pulses', await mode());
+  check('explorer: field adopts the project signature', (await mode()) === 'project:rings', await mode());
   check('explorer: focus moves into the inspector', await page.evaluate(() => document.activeElement?.id === 'inspect-wssh'));
   await page.screenshot({ path: 'qa-screens/e2e-desktop-project.png' });
 
@@ -276,7 +278,7 @@ async function desktop(browser) {
   await page.waitForTimeout(900);
   check('explorer: Escape closes the inspector', (await page.locator('#inspection-bay').innerText()).toLowerCase().includes('standing by'));
   check('explorer: focus returns to the catalogue entry', await page.evaluate(() => document.activeElement?.textContent?.includes('wssh') ?? false));
-  check('explorer: field returns to the section mode', (await mode()) === 'standing by', await mode());
+  check('explorer: field returns to the section mode', (await mode()) === 'section:projects', await mode());
 
   // Every catalogued system opens, takes its own field behaviour and draws its diagram.
   const behaviours = new Set();
@@ -297,7 +299,7 @@ async function desktop(browser) {
   await goTo(page, 'contact');
   const contact = await page.locator('#contact').innerText();
   check('contact: email, GitHub and LinkedIn are present', contact.includes('outlook.com') && contact.includes('github.com/versyxdigital') && contact.includes('linkedin.com/in/chris-rowles'));
-  check('contact: field settles', (await mode()) === 'settled lattice', await mode());
+  check('contact: field settles', (await mode()) === 'section:contact', await mode());
   await page.screenshot({ path: 'qa-screens/e2e-desktop-contact.png' });
 
   // ── Accessibility ───────────────────────────────────────────────────

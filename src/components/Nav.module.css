@@ -106,48 +106,6 @@
   transform: scaleX(1);
 }
 
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding-left: clamp(1rem, 2vw, 2rem);
-  border-left: 1px solid var(--line);
-  color: var(--text-3);
-  white-space: nowrap;
-  min-width: 17rem;
-}
-
-.statusDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px rgba(var(--cyan-rgb), 0.9);
-  animation: beat 3.2s ease-in-out infinite;
-}
-
-.statusValue {
-  color: var(--text-2);
-  animation: swap var(--t-med) var(--ease-out);
-}
-
-@keyframes beat {
-  0%,
-  100% {
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes swap {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-}
-
 .menuButton {
   display: none;
   margin-left: auto;
@@ -275,12 +233,6 @@
 .railStop:hover .railLabel {
   opacity: 1;
   transform: none;
-}
-
-@media (max-width: 1180px) {
-  .status {
-    display: none;
-  }
 }
 
 @media (max-width: 820px) {

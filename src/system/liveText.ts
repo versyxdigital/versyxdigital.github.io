@@ -42,7 +42,3 @@ export function useLiveText<T extends HTMLElement>(update: Updater): (element: T
     };
   }, []);
 }
-
-/** Fixed-width signed number, e.g. +0.42 / −1.07. */
-export const signed = (value: number, digits = 2): string =>
-  `${value < 0 ? '−' : '+'}${Math.abs(value).toFixed(digits)}`;
