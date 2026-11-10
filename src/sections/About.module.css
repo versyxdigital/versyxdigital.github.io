@@ -427,3 +427,50 @@
     padding: 1.1rem 1rem 1rem;
   }
 }
+
+/* ── Service drawing ── */
+/* Text on the left, the drawing on the right; stacked when the panel is narrow. */
+.detailInner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  align-items: center;
+}
+
+.detailVisual {
+  min-width: 0;
+  aspect-ratio: 400 / 220;
+  max-height: 22rem;
+  justify-self: stretch;
+}
+
+@media (max-width: 1280px) {
+  .detailInner {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* Fit mode: the panel takes the height left under the service row. */
+@media (min-width: 1081px) and (min-height: 760px) {
+  .schematic {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+  }
+  .detail {
+    flex: 1;
+    min-height: 0;
+    max-height: 25rem;
+  }
+  .detailInner {
+    height: 100%;
+  }
+  .detailVisual {
+    aspect-ratio: auto;
+    height: 100%;
+    max-height: none;
+    min-height: 0;
+  }
+}

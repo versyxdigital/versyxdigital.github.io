@@ -7,6 +7,7 @@ import { useSystem } from '../state/store';
 import { useMediaQuery } from '../system/useMediaQuery';
 import { widerThan } from '../system/viewport';
 import styles from './About.module.css';
+import { ServiceVisual } from './ServiceVisual';
 
 function ServiceNode({ service, last }: { service: Service; last: boolean }) {
   const selected = useSystem((s) => s.selectedService === service.id);
@@ -47,15 +48,21 @@ function ServiceRecord() {
   return (
     <div className={styles.detail} aria-live="polite">
       <div ref={anchor} className={styles.detailInner} key={service.id}>
-        <p className={`mono ${styles.detailTag}`}>Service {service.tag}</p>
-        <h3 className={styles.detailTitle}>{service.name}</h3>
-        {isPending(service.summary) ? (
-          <div className={styles.detailPending}>
-            <Pending value={service.summary} label="service description" />
-          </div>
-        ) : (
-          <p className={styles.detailSummary}>{service.summary}</p>
-        )}
+        <div className={styles.detailText}>
+          <p className={`mono ${styles.detailTag}`}>Service {service.tag}</p>
+          <h3 className={styles.detailTitle}>{service.name}</h3>
+          {isPending(service.summary) ? (
+            <div className={styles.detailPending}>
+              <Pending value={service.summary} label="service description" />
+            </div>
+          ) : (
+            <p className={styles.detailSummary}>{service.summary}</p>
+          )}
+        </div>
+        {/* A drawing of the service, filling the rest of the panel. */}
+        <div className={styles.detailVisual}>
+          <ServiceVisual id={service.id} />
+        </div>
       </div>
     </div>
   );

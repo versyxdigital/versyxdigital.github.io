@@ -1,0 +1,296 @@
+.visual {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: visible;
+  animation: appear 500ms var(--ease-out);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+.wire,
+.wireHot {
+  fill: none;
+  stroke: var(--text-3);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.wire[data-dashed='true'] {
+  stroke-dasharray: 3 4;
+}
+
+.wireHot {
+  stroke: var(--cyan);
+}
+
+.grid {
+  fill: none;
+  stroke: var(--line-soft);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.box {
+  fill: rgba(10, 13, 18, 0.92);
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.box[data-hot='true'] {
+  stroke: var(--cyan);
+  fill: rgba(var(--cyan-rgb), 0.07);
+}
+
+.boxText,
+.label,
+.lineNo,
+.hubText {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: var(--text-2);
+}
+
+.label {
+  fill: var(--text-3);
+}
+
+.lineNo {
+  fill: var(--text-3);
+  letter-spacing: 0;
+}
+
+.hubText {
+  font-size: 11px;
+  fill: var(--text);
+}
+
+.fill {
+  fill: var(--line);
+}
+
+.fillHot {
+  fill: rgba(var(--cyan-rgb), 0.16);
+  stroke: rgba(var(--cyan-rgb), 0.5);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dot {
+  fill: var(--text-3);
+}
+
+.dotHot {
+  fill: var(--cyan);
+}
+
+/* The signal travelling along a wire. */
+.pulse {
+  fill: var(--cyan);
+  filter: drop-shadow(0 0 4px rgba(var(--cyan-rgb), 0.9));
+}
+
+.pulse[data-tone='blue'] {
+  fill: var(--blue);
+  filter: drop-shadow(0 0 4px var(--blue));
+}
+
+.pulse[data-tone='violet'] {
+  fill: var(--violet);
+  filter: drop-shadow(0 0 4px var(--violet));
+}
+
+/* Hub in the middle of a drawing, with a ring that breathes out from it. */
+.hub {
+  fill: rgba(10, 13, 18, 0.95);
+  stroke: var(--cyan);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ring 2.6s ease-out infinite;
+}
+
+@keyframes ring {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+.spark {
+  fill: var(--cyan);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spark 2.6s ease-in-out infinite;
+}
+
+@keyframes spark {
+  50% {
+    transform: scale(0.72) rotate(45deg);
+    opacity: 0.7;
+  }
+}
+
+/* Consulting: the part under review, and the checklist ticking off. */
+.review {
+  fill: rgba(var(--cyan-rgb), 0.04);
+  stroke: var(--cyan);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: turn 14s linear infinite;
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tick {
+  fill: none;
+  stroke: var(--text-3);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.check {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+  animation: check 3s steps(1) infinite both;
+}
+
+@keyframes check {
+  0% {
+    opacity: 0;
+  }
+  30%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Bug fixing: one line goes from broken to fixed, and the steps light in turn. */
+.bugRow {
+  animation: bugRow 4s ease-in-out infinite;
+}
+
+.bugLine {
+  animation: bugLine 4s ease-in-out infinite;
+}
+
+@keyframes bugRow {
+  0%,
+  35% {
+    fill: rgba(var(--violet-rgb), 0.2);
+  }
+  55%,
+  100% {
+    fill: rgba(var(--cyan-rgb), 0.12);
+  }
+}
+
+@keyframes bugLine {
+  0%,
+  35% {
+    fill: var(--violet);
+  }
+  55%,
+  100% {
+    fill: var(--cyan);
+  }
+}
+
+.scan {
+  fill: none;
+  stroke: rgba(var(--cyan-rgb), 0.5);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  animation: scan 4s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(52px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(120px);
+    opacity: 1;
+  }
+  60%,
+  100% {
+    transform: translateY(120px);
+    opacity: 0;
+  }
+}
+
+.step {
+  fill: var(--bg);
+  stroke: var(--text-2);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  animation: step 3s ease-in-out infinite;
+}
+
+@keyframes step {
+  0%,
+  100% {
+    fill: var(--bg);
+    stroke: var(--text-2);
+  }
+  20%,
+  45% {
+    fill: var(--cyan);
+    stroke: var(--cyan);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual,
+  .ring,
+  .spark,
+  .review,
+  .check,
+  .bugRow,
+  .bugLine,
+  .scan,
+  .step {
+    animation: none;
+  }
+  .pulse,
+  .scan {
+    display: none;
+  }
+  .ring {
+    opacity: 0;
+  }
+}
