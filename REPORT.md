@@ -3,7 +3,7 @@
 Session of 2026-11-10. Project: `C:\Users\chris\workspace\rowles-portfolio`.
 
 The site is built, runs locally, and passes every automated check. Nothing was
-pushed, deployed or published. The repository is local only, with 8 commits on
+pushed, deployed or published. The repository is local only, with all work committed on
 `main` and a clean working tree.
 
 ## How to run it
