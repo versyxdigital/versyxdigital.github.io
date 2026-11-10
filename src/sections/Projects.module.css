@@ -369,3 +369,12 @@
 .itemState {
   border-color: var(--tone);
 }
+
+/* The plate behind the project list is lighter, so the background reads through it. */
+.index::before {
+  background: linear-gradient(to right, rgba(5, 6, 8, 0.55), rgba(5, 6, 8, 0.4) 70%, rgba(5, 6, 8, 0));
+}
+
+.item[data-selected='true'] {
+  border-radius: 0 12px 12px 0;
+}

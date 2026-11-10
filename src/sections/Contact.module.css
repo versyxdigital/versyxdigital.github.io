@@ -306,3 +306,11 @@
 .links a:hover .arrow {
   color: var(--cat-data);
 }
+
+.copy {
+  border-radius: 999px;
+  border-color: var(--panel-line);
+  background: rgba(12, 15, 22, 0.4);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+}

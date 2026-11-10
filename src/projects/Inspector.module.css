@@ -760,3 +760,42 @@
 .shot a {
   box-shadow: 0 0 40px -18px rgba(var(--tone-rgb), 0.7);
 }
+
+/* Soft panels: frosted glass, rounded corners, no hard corner marks. */
+.inspector {
+  border-radius: var(--panel-radius);
+  border-color: var(--panel-line);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  border-color: rgba(var(--tone-rgb), 0.26);
+  background:
+    radial-gradient(ellipse 50% 60% at 100% 0%, rgba(var(--tone-rgb), 0.14), transparent 70%),
+    var(--panel-bg);
+  overflow: hidden;
+}
+
+.inspector::before {
+  inset: 0 0 auto 0;
+  opacity: 0.7;
+}
+
+.inspector::after {
+  display: none;
+}
+
+.link,
+.thumb,
+.stageButton {
+  border-radius: 10px;
+}
+
+.shot a,
+.shot img,
+.video {
+  border-radius: 10px;
+}
+
+.shot a,
+.video {
+  overflow: hidden;
+}

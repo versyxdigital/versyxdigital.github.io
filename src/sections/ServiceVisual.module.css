@@ -294,3 +294,10 @@
     opacity: 0;
   }
 }
+
+/* Softer boxes in the service drawings. */
+rect.box {
+  rx: 5px;
+  ry: 5px;
+  fill: rgba(14, 18, 26, 0.6);
+}

@@ -531,3 +531,20 @@
 .founder a:hover {
   border-color: var(--cat-backend);
 }
+
+/* Soft panel: frosted glass, rounded corners, no hard corner marks. */
+.detailInner {
+  border-radius: var(--panel-radius);
+  border-color: var(--panel-line);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  border-color: rgba(var(--tone-rgb), 0.3);
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(var(--tone-rgb), 0.13), transparent 70%),
+    var(--panel-bg);
+}
+
+.detailInner::before,
+.detailInner::after {
+  display: none;
+}

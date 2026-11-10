@@ -267,3 +267,21 @@
     transform: translate3d(0, -6px, 0);
   }
 }
+
+/* Soft panels on phones too. */
+.record {
+  border-radius: var(--panel-radius);
+  border-color: var(--panel-line);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  background: var(--panel-bg);
+}
+
+.record::before {
+  display: none;
+}
+
+.chip {
+  border-radius: 999px;
+  background: rgba(12, 15, 22, 0.5);
+}

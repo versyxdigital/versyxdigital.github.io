@@ -329,3 +329,24 @@
 .panelTag[data-cat] {
   color: var(--tone);
 }
+
+/* Soft panels: frosted glass, rounded corners, no hard corner marks. */
+.panel {
+  border-radius: var(--panel-radius);
+  border-color: var(--panel-line);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  background: var(--panel-bg);
+}
+
+.panel::before {
+  display: none;
+}
+
+.filter {
+  border-radius: 999px;
+  border-color: var(--panel-line);
+  background: rgba(12, 15, 22, 0.4);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+}

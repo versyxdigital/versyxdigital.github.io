@@ -205,3 +205,10 @@
 .diagram[data-preview='true'] .nodeLabel {
   fill: var(--text-2);
 }
+
+/* Softer diagram boxes: rounded, and lighter so the panel behind shows through. */
+.box {
+  rx: 8px;
+  ry: 8px;
+  fill: rgba(14, 18, 26, 0.62);
+}
