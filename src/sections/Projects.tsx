@@ -140,6 +140,16 @@ export function Projects() {
     const origin = selectedId ? registry.anchors.get(`project:${selectedId}`) : undefined;
     selectProject(null);
     if (origin instanceof HTMLElement) origin.focus({ preventScroll: true });
+    // The page gets much shorter when the inspector closes. Without this the
+    // browser clamps the scroll position and the visitor lands in the next section.
+    requestAnimationFrame(() => {
+      const explorer = bayRef.current?.parentElement;
+      if (!explorer) return;
+      const rect = explorer.getBoundingClientRect();
+      if (rect.top < 0 || rect.bottom < window.innerHeight * 0.5) {
+        explorer.scrollIntoView({ behavior: 'auto', block: 'start' });
+      }
+    });
   };
 
   return (

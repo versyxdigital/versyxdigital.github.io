@@ -1,4 +1,5 @@
 .explorer {
+  scroll-margin-top: calc(var(--nav-h) + 1.5rem);
   display: grid;
   grid-template-columns: clamp(16rem, 24vw, 22rem) minmax(0, 1fr);
   gap: clamp(2rem, 4.5vw, 5rem);
@@ -161,7 +162,7 @@
 
 /* When one system is open the others recede. */
 .explorer[data-inspecting='true'] .item[data-selected='false']:not(:hover):not(:focus-visible):not([data-lit='true']) {
-  opacity: 0.5;
+  opacity: 0.62;
 }
 
 .sealed {
@@ -236,6 +237,13 @@
   .index {
     position: relative;
     top: 0;
+  }
+  /* Single column: the plate must stop at the page edge, not overhang it. */
+  .index::before {
+    right: calc(var(--gutter) * -1);
+    mask-image: none;
+    -webkit-mask-image: none;
+    background: rgba(5, 6, 8, 0.72);
   }
 }
 

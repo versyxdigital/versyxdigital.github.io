@@ -177,6 +177,8 @@
 .annotations {
   position: absolute;
   inset: 0;
+  /* Labels follow projected cubes; clip any that the camera carries off-screen. */
+  overflow: hidden;
   pointer-events: none;
   animation: fade 1600ms ease 700ms both;
 }

@@ -43,7 +43,7 @@ export const projects: Project[] = [
         {
           id: 'host',
           label: 'Host',
-          sub: 'CPU · memory · disk · network',
+          sub: 'CPU · memory · disk · net',
           kind: 'source',
           col: 0,
           row: 0.5,
@@ -120,7 +120,7 @@ export const projects: Project[] = [
         },
       ],
       edges: [
-        { from: 'host', to: 'collector', label: 'samples' },
+        { from: 'host', to: 'collector' },
         { from: 'collector', to: 'ws' },
         { from: 'collector', to: 'http' },
         { from: 'ws', to: 'dashboard' },
