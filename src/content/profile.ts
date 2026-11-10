@@ -34,11 +34,11 @@ export const profile: Profile = {
   },
   availability: 'Open to new projects and consulting.',
   contact: {
-    email: { user: 'christopher.rowles', domain: 'outlook.com' },
+    email: { user: 'hello', domain: 'versyx.digital' },
     note: 'Quickest replies are by email.',
     links: [
       { label: 'GitHub', display: 'github.com/versyxdigital', href: 'https://github.com/versyxdigital' },
-      { label: 'Founder', display: 'linkedin.com/in/chris-rowles', href: 'https://linkedin.com/in/chris-rowles' },
+      { label: 'Telephone', display: '+44 7522 267 722', href: 'tel:+447522267722' },
     ],
   },
   catalogueNote: 'The studio’s own systems, each open to inspect. Client work is not catalogued here.',

@@ -298,7 +298,8 @@ async function desktop(browser) {
   // ── Contact ─────────────────────────────────────────────────────────
   await goTo(page, 'contact');
   const contact = await page.locator('#contact').innerText();
-  check('contact: email, GitHub and LinkedIn are present', contact.includes('outlook.com') && contact.includes('github.com/versyxdigital') && contact.includes('linkedin.com/in/chris-rowles'));
+  check('contact: email, GitHub and telephone are present', contact.includes('versyx.digital') && contact.includes('hello') && contact.includes('github.com/versyxdigital') && contact.includes('+44 7522 267 722') && !contact.includes('linkedin'));
+  check('contact: the telephone number dials', (await page.locator('#contact a[href="tel:+447522267722"]').count()) === 1 && (await page.locator('#contact a[href^="tel:"][target]').count()) === 0);
   check('contact: field settles', (await mode()) === 'section:contact', await mode());
   await page.screenshot({ path: 'qa-screens/e2e-desktop-contact.png' });
 

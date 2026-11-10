@@ -77,9 +77,10 @@ These are judgement calls I made to keep moving. Each is quick to change.
   list came from your own site, not from a Versyx source. It is labelled "From
   the founder's published skills" in the UI. Trim it in
   `src/content/technologies.ts` if the studio's list should be narrower.
-- **Contact details.** The email is the one published on the MKEditor site.
-  The links are the Versyx Digital GitHub organisation and your LinkedIn. That
-  page also publishes a phone number and `chris.rowles.info`; I left both out.
+- **Contact details.** The email is `hello@versyx.digital` and the links are
+  the Versyx Digital GitHub organisation and the telephone number
+  +44 7522 267 722, both as you gave them. The earlier Outlook address and the
+  founder's LinkedIn link are no longer in the contact section.
 - **"Open to new projects and consulting."** My wording, replacing "open to
   lead and senior roles", which no longer fits a company site.
 - **Home Counties and Aldervast purpose.** Neither site says why the game is

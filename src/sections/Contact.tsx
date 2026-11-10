@@ -134,18 +134,22 @@ export function Contact() {
             </div>
 
             <ul className={styles.links}>
-              {profile.contact.links.map((link) => (
-                <li key={link.href}>
-                  <a href={link.href} target="_blank" rel="noreferrer noopener me">
-                    <span className={`mono ${styles.channelLabel}`}>{link.label}</span>
-                    <span className={styles.linkValue}>{link.display}</span>
-                    <span className={styles.arrow} aria-hidden="true">
-                      ↗
-                    </span>
-                    <span className="visually-hidden"> (opens in a new tab)</span>
-                  </a>
-                </li>
-              ))}
+              {profile.contact.links.map((link) => {
+                // A telephone number dials; it does not open a page in a new tab.
+                const external = /^https?:/.test(link.href);
+                return (
+                  <li key={link.href}>
+                    <a href={link.href} {...(external ? { target: '_blank', rel: 'noreferrer noopener me' } : {})}>
+                      <span className={`mono ${styles.channelLabel}`}>{link.label}</span>
+                      <span className={styles.linkValue}>{link.display}</span>
+                      <span className={styles.arrow} aria-hidden="true">
+                        {external ? '↗' : '→'}
+                      </span>
+                      {external && <span className="visually-hidden"> (opens in a new tab)</span>}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
             <span ref={end} className={styles.busEnd} aria-hidden="true" />
           </div>
