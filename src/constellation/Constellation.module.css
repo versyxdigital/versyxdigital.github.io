@@ -1,0 +1,178 @@
+.wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: pan-y;
+}
+
+/* ── Edges ──────────────────────────────────────────────────── */
+.edge {
+  stroke: #7d93a8;
+  stroke-width: 1;
+  stroke-opacity: 0.2;
+  vector-effect: non-scaling-stroke;
+  transition:
+    stroke var(--t-med) ease,
+    stroke-opacity var(--t-med) ease;
+}
+
+/* A link that also appears together in published projects is drawn stronger. */
+.edge[data-weight='2'] {
+  stroke-opacity: 0.34;
+}
+.edge[data-weight='3'] {
+  stroke-opacity: 0.46;
+}
+
+.edge[data-state='lit'] {
+  stroke: var(--cyan);
+  stroke-opacity: 0.85;
+}
+
+.edge[data-state='dim'] {
+  stroke-opacity: 0.05;
+}
+
+.signal {
+  fill: #e9fdff;
+  filter: drop-shadow(0 0 4px rgba(var(--cyan-rgb), 0.95));
+  pointer-events: none;
+}
+
+/* ── Nodes ──────────────────────────────────────────────────── */
+.node {
+  --tone: var(--cyan);
+  cursor: pointer;
+  outline: none;
+  transition: opacity var(--t-med) ease;
+}
+
+.node[data-tone='blue'] {
+  --tone: var(--blue);
+}
+.node[data-tone='violet'] {
+  --tone: var(--violet);
+}
+
+.hit {
+  fill: transparent;
+}
+
+.shape {
+  fill: var(--bg-2);
+  stroke: var(--tone);
+  stroke-width: 1.3;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill var(--t-med) ease,
+    stroke-opacity var(--t-med) ease,
+    filter var(--t-med) ease;
+}
+
+.halo {
+  fill: none;
+  stroke: var(--tone);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.focusRing {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  transition: opacity var(--t-fast) ease;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: var(--text-2);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity var(--t-med) ease,
+    fill var(--t-fast) ease;
+}
+
+.label[data-visible='true'] {
+  opacity: 1;
+}
+
+.node[data-state='dim'] {
+  opacity: 0.22;
+}
+
+.node[data-emphasis='away'][data-state='dim'] {
+  opacity: 0.14;
+}
+
+.node[data-state='lit'] .shape,
+.node[data-state='primary'] .shape,
+.node[data-selected='true'] .shape {
+  fill: var(--tone);
+  filter: drop-shadow(0 0 5px var(--tone));
+}
+
+.node[data-state='lit'] .label,
+.node[data-state='primary'] .label,
+.node[data-emphasis='core'] .label {
+  fill: var(--text);
+}
+
+.node[data-state='primary'] .label,
+.node:hover .label,
+.node:focus-visible .label {
+  opacity: 1;
+  fill: var(--text);
+}
+
+.node[data-emphasis='core'] .label {
+  font-size: 13px;
+}
+
+.node:hover .focusRing,
+.node[data-state='primary'] .focusRing,
+.node[data-selected='true'] .focusRing {
+  opacity: 0.7;
+  animation: orbit 14s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.node:focus-visible .focusRing {
+  opacity: 1;
+  stroke-dasharray: none;
+}
+
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.context {
+  position: absolute;
+  left: 0;
+  bottom: -0.25rem;
+  color: var(--cyan);
+}
+
+.wrap[data-compact='true'] .label {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}

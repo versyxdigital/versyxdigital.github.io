@@ -1,0 +1,232 @@
+.contact {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(6rem, 14vh, 11rem) var(--gutter) 0;
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: clamp(2rem, 6vh, 4rem);
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+}
+
+.index {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--cyan);
+}
+
+.headNode {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.ticks {
+  flex: 1;
+  height: 7px;
+  background-image: repeating-linear-gradient(to right, var(--line) 0, var(--line) 1px, transparent 1px, transparent 12px);
+}
+
+.terminal {
+  color: var(--text-3);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.title {
+  font-size: clamp(3rem, 1.4rem + 7vw, 8rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.lede {
+  margin-top: 1.75rem;
+  max-width: 30rem;
+  font-size: var(--fs-lede);
+  line-height: 1.5;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* ── Channels ───────────────────────────────────────────────── */
+.channels {
+  position: relative;
+  padding-top: 0.5rem;
+}
+
+/* Off-canvas origin for one of the converging traces. */
+.inlet {
+  position: absolute;
+  left: calc(var(--gutter) * -0.5 - 3rem);
+  top: 68%;
+  width: 1px;
+  height: 1px;
+}
+
+.primary {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.channelLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-3);
+}
+
+.node {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid var(--cyan);
+  background: var(--cyan);
+  box-shadow:
+    0 0 0 5px rgba(var(--cyan-rgb), 0.1),
+    0 0 16px rgba(var(--cyan-rgb), 0.7);
+  animation: settle 4.5s ease-in-out infinite;
+}
+
+@keyframes settle {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 5px rgba(var(--cyan-rgb), 0.1),
+      0 0 16px rgba(var(--cyan-rgb), 0.7);
+  }
+  50% {
+    box-shadow:
+      0 0 0 9px rgba(var(--cyan-rgb), 0.04),
+      0 0 22px rgba(var(--cyan-rgb), 0.35);
+  }
+}
+
+.email {
+  display: block;
+  margin-top: 0.9rem;
+  font-size: clamp(1.375rem, 0.7rem + 2.5vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  background: linear-gradient(var(--cyan), var(--cyan)) left bottom / 0 1px no-repeat;
+  transition:
+    background-size var(--t-slow) var(--ease-out),
+    color var(--t-fast) ease;
+}
+
+.atSign {
+  color: var(--cyan);
+  padding: 0 0.04em;
+}
+
+.email:hover,
+.email:focus-visible {
+  background-size: 100% 1px;
+}
+
+.copy {
+  margin-top: 1.1rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+  transition:
+    color var(--t-fast) ease,
+    border-color var(--t-fast) ease;
+}
+
+.copy:hover {
+  color: var(--text);
+  border-color: var(--cyan);
+}
+
+.links a {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line-soft);
+  transition: padding var(--t-med) var(--ease-out);
+}
+
+.linkValue {
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.arrow {
+  color: var(--text-3);
+  transition:
+    color var(--t-fast) ease,
+    transform var(--t-med) var(--ease-out);
+}
+
+.links a:hover {
+  padding-left: 0.6rem;
+}
+
+.links a:hover .arrow {
+  color: var(--cyan);
+  transform: translate(3px, -3px);
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.footer {
+  width: 100%;
+  max-width: var(--max);
+  margin: auto auto 0;
+  padding: clamp(5rem, 16vh, 11rem) 0 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  flex-wrap: wrap;
+  color: var(--text-3);
+}
+
+.footer span {
+  color: var(--text-2);
+}
+
+@media (max-width: 900px) {
+  .body {
+    grid-template-columns: 1fr;
+  }
+  .inlet {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .links a {
+    grid-template-columns: 1fr auto;
+  }
+  .links a .channelLabel {
+    grid-column: 1 / -1;
+  }
+}

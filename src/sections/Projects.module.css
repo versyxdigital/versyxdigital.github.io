@@ -1,0 +1,237 @@
+.explorer {
+  display: grid;
+  grid-template-columns: clamp(16rem, 24vw, 22rem) minmax(0, 1fr);
+  gap: clamp(2rem, 4.5vw, 5rem);
+  align-items: start;
+}
+
+/* ── Catalogue ──────────────────────────────────────────────── */
+.index {
+  position: sticky;
+  top: calc(var(--nav-h) + 1.5rem);
+}
+
+.indexHead {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-3);
+}
+
+.item,
+.sealed {
+  --tone: var(--cyan);
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3.6rem 1fr auto;
+  align-items: start;
+  gap: 0.5rem;
+  padding: 1.15rem 0.5rem 1.15rem 0;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: left;
+  transition:
+    padding var(--t-med) var(--ease-out),
+    background-color var(--t-med) ease;
+}
+
+.item[data-tone='blue'] {
+  --tone: #5c97ff;
+}
+.item[data-tone='violet'] {
+  --tone: #a08df0;
+}
+
+/* The selection marker is a trace along the entry's leading edge. */
+.item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -1px;
+  bottom: -1px;
+  width: 2px;
+  background: var(--tone);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--t-med) var(--ease-out);
+}
+
+.itemRef {
+  padding-top: 0.42rem;
+  color: var(--text-3);
+  transition: color var(--t-fast) ease;
+}
+
+.itemBody {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.itemName {
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: var(--text-2);
+  transition: color var(--t-fast) ease;
+}
+
+.itemKind {
+  font-size: var(--fs-small);
+  color: var(--text-3);
+}
+
+.itemStack {
+  margin-top: 0.45rem;
+  font-size: 0.625rem;
+  color: var(--text-3);
+  line-height: 1.6;
+}
+
+.itemState {
+  align-self: center;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--text-3);
+  transition:
+    background-color var(--t-fast) ease,
+    border-color var(--t-fast) ease,
+    transform var(--t-med) var(--ease-out),
+    box-shadow var(--t-med) ease;
+}
+
+.item:hover,
+.item:focus-visible,
+.item[data-selected='true'],
+.item[data-lit='true'] {
+  padding-left: 1rem;
+}
+
+.item:hover::before,
+.item:focus-visible::before,
+.item[data-selected='true']::before,
+.item[data-lit='true']::before {
+  transform: scaleY(1);
+}
+
+.item:hover .itemName,
+.item:focus-visible .itemName,
+.item[data-selected='true'] .itemName,
+.item[data-lit='true'] .itemName {
+  color: var(--text);
+}
+
+.item:hover .itemRef,
+.item[data-selected='true'] .itemRef,
+.item[data-lit='true'] .itemRef {
+  color: var(--tone);
+}
+
+.item[data-selected='true'] {
+  background: linear-gradient(to right, rgba(18, 24, 32, 0.9), rgba(18, 24, 32, 0));
+}
+
+.item[data-selected='true'] .itemState {
+  background: var(--tone);
+  border-color: var(--tone);
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px var(--tone);
+}
+
+.item[data-lit='true'] .itemState {
+  border-color: var(--tone);
+}
+
+/* When one system is open the others recede. */
+.explorer[data-inspecting='true'] .item[data-selected='false']:not(:hover):not(:focus-visible):not([data-lit='true']) {
+  opacity: 0.5;
+}
+
+.sealed {
+  border-bottom: 0;
+  opacity: 0.75;
+}
+
+.sealed .itemName {
+  font-size: 1.0625rem;
+  letter-spacing: -0.015em;
+}
+
+.sealed .itemRef {
+  color: var(--violet);
+}
+
+/* ── Bay ────────────────────────────────────────────────────── */
+.bay {
+  min-width: 0;
+  scroll-margin-top: calc(var(--nav-h) + 1rem);
+}
+
+.standby {
+  position: relative;
+  border: 1px dashed var(--line);
+  padding: clamp(1.25rem, 2.4vw, 2rem);
+  background: rgba(9, 12, 17, 0.55);
+}
+
+.standbyHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  color: var(--text-3);
+  margin-bottom: 1rem;
+}
+
+.standbyHead span:last-child {
+  color: var(--text-2);
+}
+
+.standbyCanvas {
+  max-width: 880px;
+  margin: 0 auto;
+  animation: swap 500ms var(--ease-out);
+}
+
+@keyframes swap {
+  from {
+    opacity: 0;
+    transform: translate3d(8px, 0, 0);
+  }
+}
+
+.standbyText {
+  margin-top: 1.25rem;
+  max-width: 40rem;
+  font-size: 0.9375rem;
+  color: var(--text-2);
+}
+
+.standbyText strong {
+  font-weight: 500;
+  color: var(--text);
+}
+
+@media (max-width: 980px) {
+  .explorer {
+    grid-template-columns: 1fr;
+  }
+  .index {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .standbyCanvas {
+    overflow-x: auto;
+  }
+  .standbyCanvas svg {
+    min-width: 620px;
+  }
+  .itemStack {
+    display: none;
+  }
+}

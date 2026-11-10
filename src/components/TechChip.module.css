@@ -1,0 +1,50 @@
+.chip {
+  --tone: var(--cyan);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 0.7rem 0.38rem 0.6rem;
+  border: 1px solid var(--line);
+  background: rgba(11, 15, 20, 0.72);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+  transition:
+    color var(--t-fast) ease,
+    border-color var(--t-fast) ease,
+    background-color var(--t-fast) ease;
+}
+
+.chip[data-tone='blue'] {
+  --tone: var(--blue);
+}
+.chip[data-tone='violet'] {
+  --tone: var(--violet);
+}
+
+.pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--tone);
+  opacity: 0.75;
+  transition:
+    opacity var(--t-fast) ease,
+    box-shadow var(--t-fast) ease;
+}
+
+.chip:hover,
+.chip:focus-visible,
+.chip[data-lit='true'] {
+  color: var(--text);
+  border-color: var(--tone);
+  background: rgba(18, 24, 32, 0.9);
+}
+
+.chip:hover .pip,
+.chip:focus-visible .pip,
+.chip[data-lit='true'] .pip {
+  opacity: 1;
+  box-shadow: 0 0 8px var(--tone);
+}

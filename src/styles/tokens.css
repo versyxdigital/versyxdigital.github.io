@@ -1,0 +1,44 @@
+:root {
+  /* Surfaces */
+  --bg: #050608;
+  --bg-2: #0b0f14;
+  --surface: #121820;
+  --line: #26313d;
+  --line-soft: #161d26;
+
+  /* Type */
+  --text: #e8eef2;
+  --text-2: #8b99a6;
+  --text-3: #66737f;
+
+  /* Signal tones. Shared with the shaders and the schematic overlay. */
+  --cyan: #27dceb;
+  --blue: #327bff;
+  --violet: #8c73e8;
+  --cyan-rgb: 39, 220, 235;
+  --blue-rgb: 50, 123, 255;
+  --violet-rgb: 140, 115, 232;
+
+  --font-sans: 'Geist Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, monospace;
+
+  /* Layout */
+  --gutter: clamp(1.25rem, 4.2vw, 4.5rem);
+  --max: 1440px;
+  --nav-h: 4rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-fast: 180ms;
+  --t-med: 420ms;
+  --t-slow: 900ms;
+
+  /* Type scale */
+  --fs-label: 0.6875rem;
+  --fs-small: 0.8125rem;
+  --fs-body: 1rem;
+  --fs-lede: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem);
+  --fs-h2: clamp(2rem, 1.2rem + 3.2vw, 4.25rem);
+  --fs-display: clamp(3.25rem, 1.2rem + 9.2vw, 10.5rem);
+}

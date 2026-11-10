@@ -1,0 +1,34 @@
+.field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg);
+}
+
+.field canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Static fallback: the same wave function, drawn once as an isometric plot. */
+.fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.fallback svg {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  width: max(140vw, 1200px);
+  transform: translateX(-42%);
+  opacity: 0.9;
+  mask-image: radial-gradient(ellipse 60% 62% at 55% 55%, #000 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 62% at 55% 55%, #000 30%, transparent 78%);
+}

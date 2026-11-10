@@ -1,0 +1,188 @@
+.diagram {
+  --tone: var(--cyan);
+  --tone-rgb: var(--cyan-rgb);
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.diagram[data-tone='blue'] {
+  --tone: #5c97ff;
+  --tone-rgb: 92, 151, 255;
+}
+.diagram[data-tone='violet'] {
+  --tone: #a08df0;
+  --tone-rgb: 160, 141, 240;
+}
+
+/* ── Edges ──────────────────────────────────────────────────── */
+.wire {
+  fill: none;
+  stroke: #4a5a6a;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--t-med) ease;
+}
+
+.edge[data-dashed='true'] .wire {
+  stroke-dasharray: 4 4;
+}
+
+.edge[data-active='true'] .wire {
+  stroke: var(--tone);
+}
+
+.arrow {
+  fill: none;
+  stroke: #6f8296;
+  stroke-width: 1.2;
+}
+
+/* A short dash travelling the length of the wire: the signal. */
+.flow {
+  fill: none;
+  stroke: var(--tone);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 5 95;
+  stroke-dashoffset: 100;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px rgba(var(--tone-rgb), 0.9));
+  animation: flow linear infinite;
+}
+
+.flowReverse {
+  animation-name: flowBack;
+  opacity: 0.7;
+}
+
+@keyframes flow {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes flowBack {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 100;
+  }
+}
+
+.edgeLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--text-3);
+}
+
+/* ── Nodes ──────────────────────────────────────────────────── */
+.node {
+  outline: none;
+}
+
+.node[role='button'] {
+  cursor: pointer;
+}
+
+.box {
+  fill: #0a0e13;
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill var(--t-fast) ease,
+    stroke var(--t-fast) ease;
+}
+
+.node[data-kind='external'] .box,
+.node[data-optional='true'] .box {
+  stroke-dasharray: 4 3;
+}
+
+.node[data-kind='transport'] .box {
+  fill: transparent;
+}
+
+.mark {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.markHeavy {
+  fill: none;
+  stroke: var(--tone);
+  stroke-width: 2;
+  stroke-opacity: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
+.corner {
+  fill: none;
+  stroke: var(--tone);
+  stroke-width: 1;
+  stroke-opacity: 0;
+  vector-effect: non-scaling-stroke;
+  transition: stroke-opacity var(--t-fast) ease;
+}
+
+.nodeLabel {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  fill: var(--text);
+}
+
+.nodeSub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  fill: var(--text-2);
+}
+
+.node[data-optional='true'] .nodeLabel {
+  fill: var(--text-2);
+}
+
+.node[role='button']:hover .box,
+.node[role='button']:focus-visible .box {
+  stroke: #56677a;
+  fill: #0e141b;
+}
+
+.node[role='button']:hover .corner,
+.node[role='button']:focus-visible .corner,
+.node[data-active='true'] .corner {
+  stroke-opacity: 1;
+}
+
+.node[data-active='true'] .box {
+  stroke: var(--tone);
+  fill: rgba(var(--tone-rgb), 0.07);
+}
+
+.node:focus-visible .box {
+  stroke: var(--cyan);
+}
+
+/* ── Preview: the same drawing, as a quiet wireframe ────────── */
+.diagram[data-preview='true'] {
+  opacity: 0.6;
+}
+
+.diagram[data-preview='true'] .box {
+  fill: transparent;
+}
+
+.diagram[data-preview='true'] .nodeLabel {
+  fill: var(--text-2);
+}

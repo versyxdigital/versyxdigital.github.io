@@ -1,0 +1,290 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + clamp(2rem, 9vh, 6.5rem)) var(--gutter) clamp(4.5rem, 9vh, 6rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: flex;
+  gap: 2.5rem;
+  color: var(--text-2);
+  margin-bottom: clamp(1.25rem, 3.5vh, 2.5rem);
+  animation: rise 900ms var(--ease-out) both;
+}
+
+.eyebrow span:first-child {
+  color: var(--cyan);
+}
+
+.coords {
+  color: var(--text-3);
+}
+
+.name {
+  font-size: var(--fs-display);
+  font-weight: 500;
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+  margin-left: -0.04em;
+  /* Keep the type legible where it crosses the lit part of the field. */
+  text-shadow: 0 0 40px rgba(5, 6, 8, 0.55);
+}
+
+/* Each line rises out of its own clip: a short, single reveal. */
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.line > span {
+  display: inline-block;
+  animation: lineIn 1100ms var(--ease-out) both;
+}
+
+.line:nth-child(2) > span {
+  animation-delay: 90ms;
+}
+
+.role {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: clamp(1.5rem, 4vh, 2.75rem);
+  font-size: clamp(1.125rem, 0.9rem + 1vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  animation: rise 900ms var(--ease-out) 220ms both;
+  cursor: default;
+}
+
+.at {
+  color: var(--text-2);
+}
+
+/* The junction the hero's trace leaves from. */
+.roleNode {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: 0 0 0 4px rgba(var(--cyan-rgb), 0.07);
+  transition: box-shadow var(--t-med) var(--ease-out);
+}
+
+.role:hover .roleNode {
+  box-shadow:
+    0 0 0 4px rgba(var(--cyan-rgb), 0.16),
+    0 0 14px rgba(var(--cyan-rgb), 0.7);
+}
+
+.intro {
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+  max-width: 35rem;
+  font-size: var(--fs-lede);
+  line-height: 1.5;
+  color: var(--text-2);
+  text-wrap: pretty;
+  text-shadow: 0 0 18px rgba(5, 6, 8, 0.9);
+  animation: rise 900ms var(--ease-out) 320ms both;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2.25rem;
+  margin-top: clamp(1.75rem, 4.5vh, 3rem);
+  animation: rise 900ms var(--ease-out) 420ms both;
+}
+
+.action {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.actionQuiet {
+  color: var(--text-2);
+}
+
+.actionNode {
+  width: 6px;
+  height: 6px;
+  background: var(--cyan);
+  transition: transform var(--t-med) var(--ease-out);
+}
+
+.actionQuiet .actionNode {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--text-2);
+}
+
+.action::after {
+  content: '';
+  position: absolute;
+  left: calc(6px + 0.75rem);
+  right: 0;
+  bottom: 0.15rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transform-origin: left;
+  transition:
+    opacity var(--t-fast) ease,
+    background-color var(--t-fast) ease;
+}
+
+.action:hover {
+  color: var(--text);
+}
+
+.action:hover::after {
+  opacity: 1;
+  background: var(--cyan);
+}
+
+.action:hover .actionNode {
+  transform: rotate(45deg) scale(1.25);
+}
+
+/* ── Field annotations ─────────────────────────────────────── */
+.annotations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: fade 1600ms ease 700ms both;
+}
+
+.annotation {
+  position: absolute;
+  display: flex;
+  gap: 0.9rem;
+  align-items: baseline;
+  padding: 0 0 0.45rem 0.1rem;
+  border-bottom: 1px solid rgba(120, 142, 164, 0.3);
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.annotValue {
+  color: var(--text);
+  min-width: 3.2em;
+}
+
+.annotA {
+  top: 31%;
+  right: 30%;
+}
+
+.annotB {
+  top: 47%;
+  right: 9%;
+}
+
+/* ── Foot ──────────────────────────────────────────────────── */
+.foot {
+  width: 100%;
+  max-width: var(--max);
+  margin: auto auto 0;
+  padding-top: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  animation: fade 1400ms ease 900ms both;
+}
+
+.hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--text-2);
+}
+
+.hint svg {
+  color: var(--cyan);
+  animation: turn 9s linear infinite;
+}
+
+.hintCoarse {
+  display: none;
+}
+
+.telemetry {
+  display: flex;
+  gap: 1.75rem;
+  color: var(--text-3);
+}
+
+.telemetry span span {
+  color: var(--text-2);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .hintFine {
+    display: none;
+  }
+  .hintCoarse {
+    display: inline;
+  }
+}
+
+@media (max-width: 900px) {
+  .annotations,
+  .telemetry {
+    display: none;
+  }
+  .coords {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .name {
+    line-height: 0.9;
+  }
+  .intro {
+    font-size: 1.0625rem;
+  }
+}
+
+@keyframes lineIn {
+  from {
+    transform: translate3d(0, 105%, 0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}

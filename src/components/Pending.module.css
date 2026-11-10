@@ -1,0 +1,17 @@
+.pending {
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed var(--line);
+  background: repeating-linear-gradient(-45deg, transparent 0 7px, rgba(38, 49, 61, 0.22) 7px 8px);
+}
+
+.tag {
+  display: block;
+  color: var(--violet);
+  margin-bottom: 0.35rem;
+}
+
+.note {
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--text-3);
+}
