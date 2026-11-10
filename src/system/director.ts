@@ -162,27 +162,11 @@ export function startDirector(): () => void {
     ),
   );
 
-  // ── Service node hover ──────────────────────────────────────────────
-  let serviceTimer = 0;
-  disposers.push(
-    store.subscribe(
-      (s) => s.hoveredService,
-      (service) => {
-        window.clearTimeout(serviceTimer);
-        if (!service || reduced()) return;
-        serviceTimer = window.setTimeout(() => {
-          signalFrom(`service:${service}`, { tone: 'blue', side: 'c', dx: 26, dy: -40, route: 'vh', ripple: 0.45 });
-        }, 120);
-      },
-    ),
-  );
-
   return () => {
     for (const dispose of disposers) dispose();
     for (const id of timers) window.clearTimeout(id);
     window.clearTimeout(hoverTimer);
     window.clearTimeout(projectTimer);
-    window.clearTimeout(serviceTimer);
     gsap.killTweensOf(field.params);
     gsap.killTweensOf(field);
   };
