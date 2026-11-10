@@ -137,13 +137,35 @@ Pages on every push to `main`, and can be run by hand from the Actions tab. It
 type-checks, lints and runs the unit tests first, so a broken build does not
 deploy.
 
-It has not run: this repository has no remote and I have not pushed anything.
-To use it:
+It has not run yet. The workflow is committed locally and I have not pushed
+it. You added the remote `versyxdigital/versyxdigital.github.io` and pushed at
+18:09 on 2026-11-10; local `main` is one commit ahead of that, and the commit
+you pushed was a snapshot of work in progress. To deploy:
 
-1. Create a repository on GitHub and add it as the remote.
+1. Push `main`.
 2. In the repository, go to Settings → Pages and set Source to "GitHub
    Actions".
-3. Push `main`.
+
+The site will be served at `https://versyxdigital.github.io/`.
+
+**Check this first: the MKEditor site is currently down.** When I looked at
+18:25 on 2026-11-10:
+
+- `https://versyxdigital.github.io/` returned GitHub's "There isn't a GitHub
+  Pages site here" 404. Earlier the same day it served the MKEditor landing
+  page.
+- `https://versyxdigital.github.io/mkeditor/` also returned 404. It worked
+  that morning.
+- `https://versyxdigital.github.io/aldervast/` still worked.
+
+My reading, which I could not confirm: the MKEditor site, including the web
+app at `/mkeditor/web`, was being served from the `versyxdigital.github.io`
+repository, and replacing that repository's contents took it offline.
+Deploying this site will bring the root back, but not `/mkeditor/`. The
+MKEditor README, its download page and this site's own MKEditor entry all
+link there. The usual fix is to publish the MKEditor site from the `mkeditor`
+repository's own Pages settings, which serves it at `/mkeditor/` alongside
+this one.
 
 No base-path change was needed. The build already uses a relative base, so it
 works at `https://<user>.github.io/<repo>/` and on a custom domain.
