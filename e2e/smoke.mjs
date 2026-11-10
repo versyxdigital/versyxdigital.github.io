@@ -351,6 +351,23 @@ async function mobile(browser) {
   await page.waitForTimeout(2600);
   check('menu: navigates and closes', !(await page.locator('#menu').isVisible()) && (await page.evaluate(() => Math.abs(document.getElementById('tech').getBoundingClientRect().top) < 80)));
 
+  // Studio on a phone: a service's record opens directly under the service tapped.
+  await goTo(page, 'about', 1500);
+  const serviceRow = page.locator('#about button[aria-pressed]', { hasText: 'Bug fixing' });
+  await serviceRow.scrollIntoViewIfNeeded();
+  await serviceRow.tap();
+  await page.waitForTimeout(1200);
+  const placed = await page.evaluate(() => {
+    const row = document.querySelector('#about button[aria-pressed="true"]').getBoundingClientRect();
+    const record = document.querySelector('#about [aria-live="polite"]').getBoundingClientRect();
+    return { gap: Math.round(record.top - row.bottom), rowTop: Math.round(row.top), recordTop: Math.round(record.top), screen: window.innerHeight };
+  });
+  check('studio: on a phone a service opens in place, right under it', placed.gap >= 0 && placed.gap < 24, `${placed.gap} px below its row`);
+  check('studio: the tapped service and its record are on screen', placed.rowTop >= 56 && placed.recordTop < placed.screen, `row at ${placed.rowTop} px`);
+  check('studio: only one record is open', (await page.locator('#about [aria-live="polite"]').count()) === 1);
+  await page.screenshot({ path: 'qa-screens/e2e-mobile-services.png' });
+  await goTo(page, 'tech', 1500);
+
   check('stack view: phones get the layered stack, not the graph', (await page.locator('svg[aria-label^="Technology constellation"]').count()) === 0);
   check('stack view: every technology is named', (await page.locator('#tech button[aria-pressed]').count()) === 49);
   const targets = await page.evaluate(() => Math.min(...[...document.querySelectorAll('#tech button[aria-pressed]')].map((b) => b.getBoundingClientRect().height)));

@@ -23,7 +23,7 @@ npm run dev        # then open the address it prints
 ```bash
 npm run build      # production build to dist/
 npm run preview    # serve dist/
-npm run check      # types, lint, 79 unit tests, build, 87 browser checks
+npm run check      # types, lint, 79 unit tests, build, 90 browser checks
 ```
 
 `npm run check` needs Chrome or Edge installed for the browser step. It does
@@ -110,6 +110,12 @@ One thing I left out on purpose: the project's notes show it is developed with
 an AI assistant. That could illustrate the "AI-integrated workflows" service,
 but it is your call whether to say so publicly, so the site does not mention
 it.
+
+**Services on phones open in place.** On a phone, a service's record used to
+sit below the whole list, so reading one and choosing the next meant scrolling
+down and back up each time. Each service is now a row that opens its record
+directly underneath it, with the next service visible below. Tablets and
+desktop are unchanged.
 
 **Removed at your request.**
 
@@ -418,7 +424,7 @@ are derived, so adding a project, technology or service updates every view.
 | ESLint | Pass, no warnings |
 | Unit tests (Vitest) | 79 of 79 |
 | Production build | Pass |
-| Browser smoke test | 87 of 87 |
+| Browser smoke test | 90 of 90 |
 | Fit audit, six viewport sizes | No problems reported |
 | One-screen fit, five desktop sizes | All 55 states fit |
 | axe-core, WCAG A and AA | No violations, with colour contrast excluded (see below) |

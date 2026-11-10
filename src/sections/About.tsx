@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { Pending } from '../components/Pending';
 import { Section } from '../components/Section';
 import { isPending, profile, projectById, projectsOfService, serviceById, services, type Service } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { useSystem } from '../state/store';
 import { scrollToSection } from '../system/scroll';
+import { useMediaQuery } from '../system/useMediaQuery';
+import { widerThan } from '../system/viewport';
 import styles from './About.module.css';
 
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
@@ -116,6 +118,30 @@ function ServiceRecord() {
 
 export function About() {
   const selectedService = useSystem((s) => s.selectedService);
+  // On a phone the record opens in place, directly under the service that was
+  // tapped, so reading one and choosing the next never means scrolling back up.
+  const narrow = useMediaQuery('(max-width: 720px)');
+  const busRef = useRef<HTMLDivElement>(null);
+  const firstRun = useRef(true);
+
+  // Opening one record closes another above it, which moves everything up.
+  // Keep the service that was just tapped on screen, under the navigation bar.
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    if (!narrow) return;
+    const frame = requestAnimationFrame(() => {
+      const node = busRef.current?.querySelector<HTMLElement>('[aria-pressed="true"]');
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      if (rect.top < 76 || rect.top > window.innerHeight * 0.7) {
+        node.scrollIntoView({ behavior: useSystem.getState().reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selectedService, narrow]);
 
   // The trace from the selected service node into its record.
   useConnections(
@@ -127,7 +153,8 @@ export function About() {
         route: 'vhv',
         bend: 0.82,
         tone: 'cyan',
-        level: (s) => (s.activeSection === 'about' ? 0.85 : 0),
+        // Side by side only: on a phone the record sits directly under its service.
+        level: (s) => (s.activeSection === 'about' && widerThan(720) ? 0.85 : 0),
         ambient: 6,
       },
     ],
@@ -186,13 +213,16 @@ export function About() {
             <span>Select a node</span>
           </h3>
 
-          <div className={styles.bus} style={{ '--count': services.length } as React.CSSProperties}>
+          <div ref={busRef} className={styles.bus} style={{ '--count': services.length } as React.CSSProperties}>
             {services.map((service, i) => (
-              <ServiceNode key={service.id} service={service} last={i === services.length - 1} />
+              <Fragment key={service.id}>
+                <ServiceNode service={service} last={i === services.length - 1} />
+                {narrow && selectedService === service.id && <ServiceRecord />}
+              </Fragment>
             ))}
           </div>
 
-          <ServiceRecord />
+          {!narrow && <ServiceRecord />}
         </div>
       </div>
     </Section>

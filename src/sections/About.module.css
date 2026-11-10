@@ -389,3 +389,41 @@
     margin-top: clamp(0.9rem, 2.2vh, 1.5rem);
   }
 }
+
+/* Phones: each service is a row, and the open one's record sits under it. */
+@media (max-width: 720px) {
+  .schematicTitle span {
+    display: none;
+  }
+  .node {
+    scroll-margin-top: calc(var(--nav-h) + 0.5rem);
+    min-height: 2.75rem;
+  }
+  .node[data-selected='true'] .nodeName {
+    color: var(--text);
+  }
+  /* A chevron says the row opens. */
+  .node::after {
+    content: '';
+    position: absolute;
+    right: 0.35rem;
+    top: 1.15rem;
+    width: 7px;
+    height: 7px;
+    border: solid var(--text-3);
+    border-width: 0 1px 1px 0;
+    transform: rotate(45deg);
+    transition: transform var(--t-med) var(--ease-out), border-color var(--t-fast) ease;
+  }
+  .node[data-selected='true']::after {
+    transform: rotate(-135deg);
+    top: 1.4rem;
+    border-color: var(--cyan);
+  }
+  .bus .detail {
+    margin: 0.15rem 0 1rem;
+  }
+  .bus .detailInner {
+    padding: 1.1rem 1rem 1rem;
+  }
+}
