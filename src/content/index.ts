@@ -1,5 +1,6 @@
 export * from './types';
 export * from './graph';
+export { clients } from './clients';
 export { contentConfig } from './config';
 export { profile } from './profile';
 export { services } from './services';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useReveal } from '../components/useReveal';
 import { sectionMeta } from '../components/Nav';
-import { profile } from '../content';
+import { clients, profile } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { isWide } from '../system/viewport';
 import styles from './Contact.module.css';
@@ -150,6 +150,18 @@ export function Contact() {
           </div>
         </div>
       </div>
+
+      {/* Shown only once there are real clients to name (see content/clients.ts). */}
+      {clients.length > 0 && (
+        <div className={styles.clients} data-reveal>
+          <p className={styles.clientsLabel}>Our clients</p>
+          <ul>
+            {clients.map((client) => (
+              <li key={client.name}>{client.name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <footer className={styles.footer}>
         <p className="mono">

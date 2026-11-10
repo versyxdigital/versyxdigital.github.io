@@ -320,3 +320,60 @@
   mask-image: linear-gradient(to bottom, transparent, #000 9rem);
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9rem);
 }
+
+/* ── Our clients ── a centred band of names above the footer, over a soft glow. */
+.clients {
+  width: 100%;
+  max-width: var(--max);
+  margin: auto auto 0;
+  padding: clamp(1.5rem, 4vh, 3rem) 1rem;
+  text-align: center;
+  background: radial-gradient(ellipse 60% 100% at 50% 50%, rgba(var(--glow-1, 255, 255, 255), 0.09), transparent 72%);
+}
+
+.clientsLabel {
+  font-size: 0.9375rem;
+  color: var(--text-2);
+  margin-bottom: clamp(1rem, 2.6vh, 1.75rem);
+}
+
+.clients ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(0.9rem, 2.4vh, 1.6rem) clamp(1.75rem, 4vw, 4rem);
+  max-width: 68rem;
+  margin: 0 auto;
+}
+
+.clients li {
+  font-size: clamp(1.125rem, 0.8rem + 1vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* With the band present the footer no longer needs its own tall gap. */
+.clients + .footer {
+  margin-top: 0;
+  padding-top: 1.5rem;
+}
+
+/* One-screen layouts: keep the band compact so the footer stays on screen. */
+@media (min-width: 1081px) and (min-height: 760px) {
+  .clients {
+    padding-block: clamp(0.75rem, 2vh, 2rem);
+  }
+  .clientsLabel {
+    margin-bottom: clamp(0.6rem, 1.6vh, 1.25rem);
+  }
+  .clients li {
+    font-size: clamp(1rem, 2.5vh, 1.6rem);
+  }
+  .clients ul {
+    row-gap: clamp(0.6rem, 1.6vh, 1.25rem);
+  }
+}
