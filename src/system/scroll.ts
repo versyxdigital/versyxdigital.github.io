@@ -75,14 +75,67 @@ export function initScroll(): () => void {
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onResize);
+  window.addEventListener('wheel', onWheel, { passive: false });
   // Layout shifts after fonts and lazy content settle.
   const observer = new ResizeObserver(onResize);
   observer.observe(document.body);
   return () => {
     window.removeEventListener('scroll', onScroll);
     window.removeEventListener('resize', onResize);
+    window.removeEventListener('wheel', onWheel);
     observer.disconnect();
   };
+}
+
+/** The screens where each section is exactly one screen tall (see global.css). */
+const FIT = '(min-width: 1081px) and (min-height: 760px)';
+let wheelLockedUntil = 0;
+
+/** True when something under the pointer can still scroll its own content that way. */
+function innerScrollerWants(target: EventTarget | null, deltaY: number): boolean {
+  let el = target instanceof Element ? target : null;
+  while (el && el !== document.documentElement && el !== document.body) {
+    if (el instanceof HTMLElement && el.scrollHeight > el.clientHeight + 1) {
+      const overflow = getComputedStyle(el).overflowY;
+      if (overflow === 'auto' || overflow === 'scroll') {
+        const atTop = el.scrollTop <= 0;
+        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+        if ((deltaY < 0 && !atTop) || (deltaY > 0 && !atBottom)) return true;
+      }
+    }
+    el = el.parentElement;
+  }
+  return false;
+}
+
+/**
+ * One movement of the wheel goes to the next or previous section. CSS snapping
+ * alone pulls a short scroll back to where it started, which feels stuck.
+ */
+function onWheel(event: WheelEvent): void {
+  if (event.ctrlKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+  if (!window.matchMedia(FIT).matches || document.body.style.overflow === 'hidden') return;
+  if (innerScrollerWants(event.target, event.deltaY)) return;
+  event.preventDefault();
+  const now = performance.now();
+  if (now < wheelLockedUntil || Math.abs(event.deltaY) < 4) return;
+
+  // The section currently filling the screen is the one whose top is nearest the top edge.
+  let current = 0;
+  let nearest = Infinity;
+  sectionOrder.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const distance = Math.abs(el.getBoundingClientRect().top);
+    if (distance < nearest) {
+      nearest = distance;
+      current = i;
+    }
+  });
+  const next = sectionOrder[current + (event.deltaY > 0 ? 1 : -1)];
+  // Long enough to swallow the tail of a trackpad swipe.
+  wheelLockedUntil = now + 1000;
+  if (next) scrollToSection(next);
 }
 
 export function scrollToSection(id: SectionId): void {

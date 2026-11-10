@@ -174,11 +174,11 @@ html[data-motion='reduced'] [data-reveal] {
 }
 
 /* Fit mode: on screens large enough, each section is exactly one screen tall
-   and scrolling settles on section boundaries. Proximity snapping only helps
-   a scroll that ends near a boundary; it never traps the wheel. */
+   and scrolling always comes to rest on a section, never between two. Smaller
+   screens are left free, because their sections are taller than the screen. */
 @media (min-width: 1081px) and (min-height: 760px) {
   html {
-    scroll-snap-type: y proximity;
+    scroll-snap-type: y mandatory;
   }
 }
 

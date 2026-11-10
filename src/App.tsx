@@ -5,7 +5,7 @@ import { SchematicOverlay } from './schematic/SchematicOverlay';
 import { Spine } from './schematic/Spine';
 import { About } from './sections/About';
 import { Hero } from './sections/Hero';
-import { useSystem, type SectionId } from './state/store';
+import { sectionOrder, useSystem, type SectionId } from './state/store';
 import { startDirector } from './system/director';
 import { detectWebgl, initialQuality, prefersReducedMotion, reducedMotionQuery } from './system/env';
 import { initScroll } from './system/scroll';
@@ -71,6 +71,24 @@ export function App() {
   useEffect(() => {
     document.documentElement.dataset.motion = reducedMotion ? 'reduced' : 'full';
   }, [reducedMotion]);
+
+  // A link straight to a section (versyx.digital/#contact) opens on that section.
+  // The lower sections arrive a moment after the page, so wait for the real one.
+  useEffect(() => {
+    const id = window.location.hash.slice(1) as SectionId;
+    if (!below || !sectionOrder.includes(id) || id === 'hero') return;
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      const el = document.getElementById(id);
+      const loaded = el !== null && el.getAttribute('aria-hidden') !== 'true';
+      if (loaded || ++tries > 60) {
+        window.clearInterval(timer);
+        // After layout has settled, and without the smooth scroll: this is where the visit starts.
+        if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
+      }
+    }, 50);
+    return () => window.clearInterval(timer);
+  }, [below]);
 
   return (
     <>
