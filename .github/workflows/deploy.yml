@@ -4,8 +4,12 @@
 # Source: "GitHub Actions". After that, every push to main deploys, and the
 # workflow can also be run by hand from the Actions tab.
 #
+# The site is served at https://versyx.digital. The custom domain is set in
+# Settings → Pages → Custom domain; with an Actions deployment that setting is
+# what counts. public/CNAME records the same domain for reference.
+#
 # The build uses a relative base path (see vite.config.ts), so the same output
-# works at https://<user>.github.io/<repo>/ and on a custom domain alike.
+# also works at the github.io address.
 
 name: Deploy to GitHub Pages
 

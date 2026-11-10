@@ -146,7 +146,36 @@ you pushed was a snapshot of work in progress. To deploy:
 2. In the repository, go to Settings → Pages and set Source to "GitHub
    Actions".
 
-The site will be served at `https://versyxdigital.github.io/`.
+3. Still in Settings → Pages, enter `versyx.digital` under Custom domain and
+   save. Tick "Enforce HTTPS" once GitHub has issued the certificate, which
+   can take up to an hour after DNS is in place.
+
+The site will be served at `https://versyx.digital/`.
+
+**DNS at GoDaddy.** For the apex domain, GitHub Pages uses four A records.
+These are the addresses GitHub documents; confirm them against GitHub's
+"Managing a custom domain" page before entering them.
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `versyxdigital.github.io` |
+
+The `www` record is optional; with it, `www.versyx.digital` redirects to the
+apex. Remove any GoDaddy "parked" A record or forwarding on `@`, or it will
+conflict.
+
+`public/CNAME` contains `versyx.digital` and is published with the site. With
+a GitHub Actions deployment GitHub takes the domain from the Pages setting,
+not from that file, so step 3 is the one that matters.
+
+**A side effect to expect.** Because this repository is the organisation's
+root Pages site, setting a custom domain on it also moves the project sites:
+`versyxdigital.github.io/aldervast/` will redirect to
+`versyx.digital/aldervast/`. Existing links keep working through the redirect.
 
 **Check this first: the MKEditor site is currently down.** When I looked at
 18:25 on 2026-11-10:
@@ -167,8 +196,8 @@ link there. The usual fix is to publish the MKEditor site from the `mkeditor`
 repository's own Pages settings, which serves it at `/mkeditor/` alongside
 this one.
 
-No base-path change was needed. The build already uses a relative base, so it
-works at `https://<user>.github.io/<repo>/` and on a custom domain.
+No base-path change was needed. The build uses a relative base, so it works
+on the custom domain and at the github.io address.
 
 Two things the workflow does not do. It does not run the browser smoke test,
 because hosted runners have no GPU for the WebGL field. And publishing makes

@@ -29,8 +29,9 @@ sub-path (GitHub Pages, for example) without changes.
 
 `.github/workflows/deploy.yml` publishes `dist/` to GitHub Pages on every push
 to `main`. In the repository, set Settings → Pages → Source to "GitHub
-Actions" once. The build uses a relative base path, so no configuration is
-needed for a project page or a custom domain.
+Actions" once, and enter `versyx.digital` under Custom domain. DNS for the
+apex domain is four A records pointing at GitHub Pages; `REPORT.md` lists
+them. The build uses a relative base path, so it needs no other configuration.
 
 ## Checks
 
