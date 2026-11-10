@@ -69,7 +69,7 @@ function Media({ project }: { project: Project }) {
               aria-label={`Screenshot ${i + 1}${item.caption ? `: ${item.caption}` : ''}`}
               onClick={() => setIndex(i)}
             >
-              <img src={item.src} alt="" width={item.width} height={item.height} decoding="async" />
+              <img src={item.thumb ?? item.src} alt="" width={item.width} height={item.height} decoding="async" />
             </button>
           ))}
           {project.video && (

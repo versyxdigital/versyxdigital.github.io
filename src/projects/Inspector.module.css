@@ -693,15 +693,20 @@
   border: 0;
 }
 
+/* One row, however many there are: it scrolls sideways instead of pushing the page down. */
 .thumbs {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
   margin-top: 0.7rem;
+  padding-bottom: 0.3rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
 }
 
 .thumb {
-  width: 4.75rem;
+  flex: none;
+  width: 4rem;
   aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;

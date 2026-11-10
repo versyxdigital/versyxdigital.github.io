@@ -3,6 +3,10 @@ import edcsImage from '../assets/projects/edcs.webp';
 import mkeditorImage from '../assets/projects/mkeditor.webp';
 import { pending, type Project } from './types';
 
+/** The Home Counties screenshots, thc-01 to thc-12, each with a small -thumb version. */
+const thcFiles = import.meta.glob<string>('../assets/projects/thc-*.webp', { eager: true, query: '?url', import: 'default' });
+const thcShot = (name: string): string => thcFiles[`../assets/projects/thc-${name}.webp`] ?? '';
+
 /**
  * The six projects the founder asked to be shown, in the order given.
  *
@@ -195,6 +199,20 @@ export const projects: Project[] = [
     technologies: ['godot', 'gdscript', 'python'],
     services: [],
     links: [{ label: 'Game site', href: 'https://thehomecounties.co.uk/', kind: 'live' }],
+    images: [
+      { src: thcShot('01'), thumb: thcShot('01-thumb'), alt: 'The Home Counties title screen: an overgrown terraced street with a wrecked car under a dark sky.', width: 1919, height: 1079, caption: 'The title screen.' },
+      { src: thcShot('02'), thumb: thcShot('02-thumb'), alt: 'The raid screen for Duncombe Street, Bletchley: an annotated aerial map with start points and exits, beside the player’s kit.', width: 1919, height: 1079, caption: 'Choosing a raid: Duncombe Street, Bletchley.' },
+      { src: thcShot('03'), thumb: thcShot('03-thumb'), alt: 'The hideout screen: equipped gear on the left and a stash grid of weapons, magazines, ammunition and medical kits on the right.', width: 1919, height: 1079, caption: 'The hideout: gear and stash.' },
+      { src: thcShot('04'), thumb: thcShot('04-thumb'), alt: 'The traders screen: four traders listed on the left and the sell list for Chalky, the fixer.', width: 1919, height: 1079, caption: 'Traders.' },
+      { src: thcShot('05'), thumb: thcShot('05-thumb'), alt: 'The gunsmith screen: an M4A1 with labelled attachment slots, its stats and the cost of the changes.', width: 1919, height: 1079, caption: 'The gunsmith.' },
+      { src: thcShot('06'), thumb: thcShot('06-thumb'), alt: 'The papers screen: a cork board with four of twelve collected papers pinned to it.', width: 1919, height: 1079, caption: 'Papers found in raids, pinned to the board.' },
+      { src: thcShot('07'), thumb: thcShot('07-thumb'), alt: 'The maps screen: a detailed overhead map of Duncombe Street with exits, a legend and raid details.', width: 1919, height: 1079, caption: 'The Duncombe Street map.' },
+      { src: thcShot('08'), thumb: thcShot('08-thumb'), alt: 'The tasks screen: a list of trader tasks and the details of one called Insurance.', width: 1919, height: 1079, caption: 'Trader tasks.' },
+      { src: thcShot('09'), thumb: thcShot('09-thumb'), alt: 'In-game view across a car park towards a shopping centre at sunrise, rifle in hand.', width: 1758, height: 980, caption: 'In a raid: a shopping centre car park.' },
+      { src: thcShot('10'), thumb: thcShot('10-thumb'), alt: 'In-game view of a street corner with concrete barriers and red smoke rising from a flare.', width: 1919, height: 1079, caption: 'In a raid: red smoke at a road block.' },
+      { src: thcShot('11'), thumb: thcShot('11-thumb'), alt: 'In-game view of a fenced construction site with a crane and a half-built block.', width: 1919, height: 1079, caption: 'In a raid: the building site.' },
+      { src: thcShot('12'), thumb: thcShot('12-thumb'), alt: 'In-game view across railway tracks towards trees and houses.', width: 1898, height: 1079, caption: 'In a raid: by the railway.' },
+    ],
     diagram: {
       caption: 'From map data to a running raid: the build pipeline and what runs in the engine.',
       cols: 5,

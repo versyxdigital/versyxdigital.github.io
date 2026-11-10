@@ -145,6 +145,8 @@ export type FieldSignature = 'rings' | 'scan' | 'stars' | 'blocks' | 'island' | 
 export interface ProjectImage {
   /** Imported asset URL. */
   src: string;
+  /** A small version for the row of thumbnails. Falls back to `src`. */
+  thumb?: string;
   /** What the screenshot shows, for people who cannot see it. */
   alt: string;
   /** Intrinsic size in pixels, so the page does not jump while it loads. */
