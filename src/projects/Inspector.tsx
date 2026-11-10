@@ -18,7 +18,76 @@ const tabs: { id: Tab; label: string }[] = [
 const linkGlyph = { live: '↗', source: '</>', docs: '§' } as const;
 
 /** A project with a screenshot opens on it; one without opens on its diagram. */
-const firstTab = (project: Project): Tab => (project.image ? 'overview' : 'architecture');
+const firstTab = (project: Project): Tab => (project.images?.length ? 'overview' : 'architecture');
+
+/**
+ * The showcase on a project's overview: one screenshot at a time, with small
+ * buttons underneath to switch between them when there are several. A video
+ * is the last of those buttons; its player loads only when it is chosen.
+ */
+function Media({ project }: { project: Project }) {
+  const images = project.images ?? [];
+  const [index, setIndex] = useState(0);
+  const image = images[index];
+  const count = images.length + (project.video ? 1 : 0);
+  return (
+    <figure className={styles.shot}>
+      {image ? (
+        <a href={image.src} target="_blank" rel="noreferrer noopener">
+          <img key={image.src} src={image.src} alt={image.alt} width={image.width} height={image.height} decoding="async" />
+          <span className="visually-hidden"> (opens full size in a new tab)</span>
+        </a>
+      ) : (
+        project.video && (
+          <div className={styles.video}>
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${project.video.youtubeId}`}
+              title={project.video.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        )
+      )}
+      <figcaption className={styles.shotCaption}>
+        <span>{image ? image.caption : project.video?.title}</span>
+        {image && (
+          <span className="mono" aria-hidden="true">
+            Select to view full size ↗
+          </span>
+        )}
+      </figcaption>
+      {count > 1 && (
+        <div className={styles.thumbs} role="group" aria-label="Screenshots and video">
+          {images.map((item, i) => (
+            <button
+              key={item.src}
+              type="button"
+              className={styles.thumb}
+              aria-pressed={index === i}
+              aria-label={`Screenshot ${i + 1}${item.caption ? `: ${item.caption}` : ''}`}
+              onClick={() => setIndex(i)}
+            >
+              <img src={item.src} alt="" width={item.width} height={item.height} decoding="async" />
+            </button>
+          ))}
+          {project.video && (
+            <button
+              type="button"
+              className={`mono ${styles.thumb}`}
+              aria-pressed={index === images.length}
+              aria-label={`Video: ${project.video.title}`}
+              onClick={() => setIndex(images.length)}
+            >
+              <span aria-hidden="true">▶ Video</span>
+            </button>
+          )}
+        </div>
+      )}
+    </figure>
+  );
+}
 
 /** True when a field has content to show: written, or a placeholder that is switched on. */
 const shown = (value: Maybe<unknown>): boolean => !isPending(value) || contentConfig.showPendingFields;
@@ -61,6 +130,7 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
   }, [project.id]);
 
   const activeStage = project.diagram.nodes.find((n) => n.id === stage);
+  const lead = project.images?.[0];
 
   const onTabKey = (event: React.KeyboardEvent, index: number): void => {
     const delta = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
@@ -208,29 +278,11 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
         {tab === 'overview' && (
           <div
             className={styles.overview}
-            data-image={project.image !== undefined}
-            style={project.image ? ({ '--ratio': project.image.width / project.image.height } as React.CSSProperties) : undefined}
+            data-image={lead !== undefined}
+            data-multi={(project.images?.length ?? 0) + (project.video ? 1 : 0) > 1}
+            style={lead ? ({ '--ratio': lead.width / lead.height } as React.CSSProperties) : undefined}
           >
-            {project.image && (
-              <figure className={styles.shot}>
-                <a href={project.image.src} target="_blank" rel="noreferrer noopener">
-                  <img
-                    src={project.image.src}
-                    alt={project.image.alt}
-                    width={project.image.width}
-                    height={project.image.height}
-                    decoding="async"
-                  />
-                  <span className="visually-hidden"> (opens full size in a new tab)</span>
-                </a>
-                <figcaption className={styles.shotCaption}>
-                  <span>{project.image.caption}</span>
-                  <span className="mono" aria-hidden="true">
-                    Select to view full size ↗
-                  </span>
-                </figcaption>
-              </figure>
-            )}
+            {lead && <Media project={project} />}
             <div className={styles.prose}>
               <p>{project.description}</p>
               {shown(project.purpose) && (

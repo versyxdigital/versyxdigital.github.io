@@ -53,6 +53,7 @@ function IndexItem({ project }: { project: Project }) {
 
 /** Before a project is chosen: its screenshot, or a quiet wireframe of its diagram, for whichever one is under the cursor. */
 function Standby({ project }: { project: Project }) {
+  const lead = project.images?.[0];
   return (
     <div className={styles.standby} data-standby>
       <p className={`mono ${styles.standbyHead}`}>
@@ -61,16 +62,9 @@ function Standby({ project }: { project: Project }) {
           {project.ref} · {project.name}
         </span>
       </p>
-      <div className={styles.standbyCanvas} key={project.id} data-image={project.image !== undefined}>
-        {project.image ? (
-          <img
-            className={styles.standbyImage}
-            src={project.image.src}
-            alt={project.image.alt}
-            width={project.image.width}
-            height={project.image.height}
-            decoding="async"
-          />
+      <div className={styles.standbyCanvas} key={project.id} data-image={lead !== undefined}>
+        {lead ? (
+          <img className={styles.standbyImage} src={lead.src} alt={lead.alt} width={lead.width} height={lead.height} decoding="async" />
         ) : (
           <Diagram diagram={project.diagram} tone={project.tone} id={`p-${project.id}`} preview />
         )}

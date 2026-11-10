@@ -154,6 +154,13 @@ export interface ProjectImage {
   caption?: string;
 }
 
+/** A video that showcases a project, hosted on YouTube. */
+export interface ProjectVideo {
+  /** The id in the YouTube address, e.g. the part after /embed/. */
+  youtubeId: string;
+  title: string;
+}
+
 export interface Project {
   id: ProjectId;
   /** Number shown in the project list, e.g. 01. */
@@ -173,8 +180,9 @@ export interface Project {
   /** Services this project is a clear example of. */
   services: ServiceId[];
   links: ProjectLink[];
-  /** Showcase screenshot. Projects without one open on their diagram instead. */
-  image?: ProjectImage;
+  /** Showcase screenshots, the lead one first. Projects without any open on their diagram instead. */
+  images?: ProjectImage[];
+  video?: ProjectVideo;
   diagram: Diagram;
   signature: FieldSignature;
   /** Why the field behaves this way for this project. A note for maintainers; not shown. */

@@ -674,4 +674,63 @@
   .overview[data-image='true'] .facts {
     grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
   }
+  /* The row of thumbnails takes height too. */
+  .overview[data-image='true'][data-multi='true'] {
+    grid-template-columns: clamp(16rem, calc((100svh - 39.75rem) * var(--ratio, 1.778)), 58%) minmax(0, 1fr);
+  }
 }
+
+.video {
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  background: #000;
+}
+
+.video iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
+}
+
+.thumb {
+  width: 4.75rem;
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text-2);
+  font-size: 0.625rem;
+  opacity: 0.6;
+  transition:
+    opacity var(--t-fast) ease,
+    border-color var(--t-fast) ease;
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb:hover,
+.thumb:focus-visible,
+.thumb[aria-pressed='true'] {
+  opacity: 1;
+}
+
+.thumb[aria-pressed='true'] {
+  border-color: var(--cyan);
+  color: var(--text);
+}
+

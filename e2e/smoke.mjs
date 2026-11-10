@@ -291,7 +291,7 @@ async function desktop(browser) {
     const title = await page.locator('#inspection-bay h3').first().innerText();
     behaviours.add(await mode());
     // A project with a screenshot opens on its overview, image first; the rest open on their diagram.
-    const shot = page.locator('#inspection-bay [role="tabpanel"] figure img');
+    const shot = page.locator('#inspection-bay [role="tabpanel"] figure a img');
     if ((await shot.count()) > 0) {
       const loaded = await shot.evaluate((img) => img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 200 && img.alt.length > 20);
       const fits = await page.locator('#inspection-bay [role="tabpanel"]').evaluate((panel) => panel.scrollHeight <= panel.clientHeight + 2);
@@ -412,7 +412,7 @@ async function mobile(browser) {
   await page.locator('[data-project-index] button', { hasText: 'ED:CS' }).tap();
   await page.waitForTimeout(2600);
   check('explorer: inspector opens on mobile', (await page.locator('#inspection-bay h3').first().innerText()) === 'ED:CS');
-  check('explorer: the project screenshot shows on mobile', await page.locator('#inspection-bay [role="tabpanel"] figure img').evaluate((img) => img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 200));
+  check('explorer: the project screenshot shows on mobile', await page.locator('#inspection-bay [role="tabpanel"] figure a img').evaluate((img) => img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 200));
   check('layout: no horizontal overflow with the inspector open', await noOverflow(page));
   await page.screenshot({ path: 'qa-screens/e2e-mobile-project.png' });
   check('console: no errors', errors.length === 0, errors.slice(0, 3).join(' | '));

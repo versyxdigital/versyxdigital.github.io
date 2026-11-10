@@ -1,4 +1,6 @@
+import edcsBodyImage from '../assets/projects/edcs-body.webp';
 import edcsImage from '../assets/projects/edcs.webp';
+import mkeditorImage from '../assets/projects/mkeditor.webp';
 import { pending, type Project } from './types';
 
 /**
@@ -40,6 +42,15 @@ export const projects: Project[] = [
     links: [
       { label: 'Project site', href: 'https://versyx.digital/mkeditor/', kind: 'live' },
       { label: 'Source', href: 'https://github.com/versyxdigital/mkeditor', kind: 'source' },
+    ],
+    images: [
+      {
+        src: mkeditorImage,
+        alt: 'Screenshot of MKEditor: a file explorer, the markdown editor, the live preview and the AI assistant panel side by side.',
+        width: 1920,
+        height: 1032,
+        caption: 'Editor, live preview and AI assistant.',
+      },
     ],
     diagram: {
       caption: 'Document pipeline, with the desktop shell and assistant around it.',
@@ -475,13 +486,23 @@ export const projects: Project[] = [
     services: ['webapps', 'apis'],
     // The hosted site and API are no longer running, so only the source is linked.
     links: [{ label: 'Source', href: 'https://github.com/sentrychris/edcs-app/', kind: 'source' }],
-    image: {
-      src: edcsImage,
-      alt: 'Screenshot of the ED:CS home screen: a ship profile panel, a count of systems logged, search filters and a table of star systems.',
-      width: 1920,
-      height: 1080,
-      caption: 'The ED:CS home screen.',
-    },
+    images: [
+      {
+        src: edcsImage,
+        alt: 'Screenshot of the ED:CS home screen: a ship profile panel, a count of systems logged, search filters and a table of star systems.',
+        width: 1920,
+        height: 1080,
+        caption: 'The ED:CS home screen.',
+      },
+      {
+        src: edcsBodyImage,
+        alt: 'Screenshot of an ED:CS page for the gas giant Ethwain A 2, with its discovery record, surface data and orbital mechanics.',
+        width: 1920,
+        height: 1080,
+        caption: 'A surveyed body: the gas giant Ethwain A 2.',
+      },
+    ],
+    video: { youtubeId: 'xV7B1JCU6ds', title: 'ED:CS video' },
     diagram: {
       caption: 'Ingest path into the catalogue, and the read path out of it.',
       cols: 5,
