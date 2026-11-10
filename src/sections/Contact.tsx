@@ -157,7 +157,7 @@ export function Contact() {
           <p className={styles.clientsLabel}>Our clients</p>
           <ul>
             {clients.map((client) => (
-              <li key={client.name}>{client.name}</li>
+              <li key={client.name}>{client.logo ? <img src={client.logo} alt={client.name} loading="lazy" decoding="async" /> : client.name}</li>
             ))}
           </ul>
         </div>
