@@ -23,6 +23,27 @@ npm run check      # types, lint, 73 unit tests, build, 69 browser checks
 `npm run check` needs Chrome or Edge installed for the browser step. It does
 not download a browser.
 
+## Inspiration images
+
+The first build was made with only three of the seventeen inspiration images
+available (the blueprint, the exploded device and the isometric dashboard).
+The other fourteen reached the session after the report was first written. I
+then reviewed all of them and made two changes in response:
+
+- **Cube field.** The references show cubes whose lit faces carry colour, not
+  only their edges. Lit crests now tint their top faces and glow further down
+  their sides, while troughs stay near-black.
+- **Constellation.** The network references sit inside concentric instrument
+  rings and their nodes have soft halos. The constellation now has both: faint
+  rings and bearing ticks behind the graph, and a halo on each node that
+  strengthens when the node is lit.
+
+The site stays deliberately darker and less saturated than several of the
+references, because the brief asks for near-black with restrained colour. If
+you want it closer to the teal or magenta images, the tones are three values
+in `src/styles/tokens.css` and three constants at the top of
+`src/field/shaders.ts`, and brightness per section is in `src/field/modes.ts`.
+
 ## What was implemented
 
 **The cube field.** 15,376 cubes on the high tier, drawn in one call from one

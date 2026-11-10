@@ -10,6 +10,30 @@
   touch-action: pan-y;
 }
 
+/* ── Instrument rings ───────────────────────────────────────── */
+.instrument ellipse,
+.instrument path,
+.instrument line {
+  fill: none;
+  stroke: #7d93a8;
+  stroke-width: 1;
+  stroke-opacity: 0.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.instrument ellipse[data-dashed='true'] {
+  stroke-dasharray: 2 7;
+  stroke-opacity: 0.42;
+}
+
+.instrument path {
+  stroke-opacity: 0.1;
+}
+
+.instrument line {
+  stroke-opacity: 0.4;
+}
+
 /* ── Edges ──────────────────────────────────────────────────── */
 .edge {
   stroke: #7d93a8;
@@ -80,6 +104,20 @@
   stroke-opacity: 0.35;
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
+}
+
+/* A soft halo in the node's tone: faint at rest, present when lit. */
+.aura {
+  fill: var(--tone);
+  opacity: 0.06;
+  transition: opacity var(--t-med) ease;
+  pointer-events: none;
+}
+
+.node[data-state='lit'] .aura,
+.node[data-state='primary'] .aura,
+.node[data-selected='true'] .aura {
+  opacity: 0.2;
 }
 
 .focusRing {

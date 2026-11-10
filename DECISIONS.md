@@ -140,6 +140,15 @@ browser binary is downloaded. `e2e/smoke.mjs` serves the production build and
 checks rendering, cross-system interaction, three viewport sizes, reduced
 motion and the no-WebGL path, plus axe-core for WCAG A/AA.
 
+## 15. Colour restraint over reference fidelity
+
+Several inspiration images are fully saturated teal or magenta. The brief asks
+for near-black with colour used sparingly, and the two conflict. The field
+follows the brief: graphite cubes, with colour only where the wave is cresting
+or a signal has landed. After seeing the full image set, lit crests were given
+tinted faces and deeper side glow so they read as illuminated bodies, which is
+what the references have in common, without raising the overall brightness.
+
 ## 14. Email address is assembled at runtime
 
 The existing site stores the address split to avoid harvesting. The new site
