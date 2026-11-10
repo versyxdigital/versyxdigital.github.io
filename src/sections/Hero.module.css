@@ -336,3 +336,15 @@
 .action:hover::after {
   background: var(--grad);
 }
+
+/* Room for descenders: the gradient is painted on the letters' box, and the
+   tight line height left the tail of the g outside it. */
+.line {
+  padding-bottom: 0.24em;
+  margin-bottom: -0.24em;
+}
+
+.line:nth-child(2) > span {
+  padding-bottom: 0.24em;
+  margin-bottom: -0.24em;
+}
