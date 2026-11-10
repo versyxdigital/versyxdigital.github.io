@@ -245,7 +245,7 @@ async function desktop(browser) {
   await page.waitForTimeout(600);
   check('explorer: before a project is chosen, the panel previews one', (await page.locator('#inspection-bay [data-standby]').count()) === 1);
   const projectsText = await page.locator('#projects').innerText();
-  check('projects: plain wording, no explorer or catalogue jargon', /Projects\s+we have built/i.test(projectsText.replace(/\s+/g, ' ')) && !/system explorer|inspection bay|standing by|catalogue|SYS-/i.test(projectsText));
+  check('projects: plain wording, no explorer or catalogue jargon', /Projects\s+we.ve built/i.test(projectsText.replace(/\s+/g, ' ')) && !/system explorer|inspection bay|standing by|catalogue|SYS-/i.test(projectsText));
   check('explorer: the catalogue lists the six projects', (await page.locator('[data-project-index] button').count()) === 6);
   await page.locator('[data-project-index] button', { hasText: 'wssh' }).click();
   await page.waitForTimeout(2200);
@@ -294,9 +294,10 @@ async function desktop(browser) {
     const shot = page.locator('#inspection-bay [role="tabpanel"] figure a img');
     if ((await shot.count()) > 0) {
       const loaded = await shot.evaluate((img) => img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 200 && img.alt.length > 20);
-      const fits = await page.locator('#inspection-bay [role="tabpanel"]').evaluate((panel) => panel.scrollHeight <= panel.clientHeight + 2);
+      const over = await page.locator('#inspection-bay [role="tabpanel"]').evaluate((panel) => panel.scrollHeight - panel.clientHeight);
+      const fits = over <= 2;
       check(`explorer: ${name} opens on its screenshot`, title === name && loaded);
-      check(`explorer: ${name} overview fits without scrolling`, fits);
+      check(`explorer: ${name} overview fits without scrolling`, fits, `${over} px over`);
       await page.screenshot({ path: 'qa-screens/e2e-desktop-project-image.png' });
       await page.locator('[role="tab"]', { hasText: 'How it works' }).click();
       await page.waitForTimeout(500);

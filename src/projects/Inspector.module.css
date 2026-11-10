@@ -669,14 +669,14 @@
    (image, description and facts) sits on one screen without scrolling. */
 @media (min-width: 1081px) and (min-height: 760px) {
   .overview[data-image='true'] {
-    grid-template-columns: clamp(16rem, calc((100svh - 35.5rem) * var(--ratio, 1.778)), 58%) minmax(0, 1fr);
+    grid-template-columns: clamp(16rem, calc((100svh - 38rem) * var(--ratio, 1.778)), 58%) minmax(0, 1fr);
   }
   .overview[data-image='true'] .facts {
     grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
   }
   /* The row of thumbnails takes height too. */
   .overview[data-image='true'][data-multi='true'] {
-    grid-template-columns: clamp(16rem, calc((100svh - 39.75rem) * var(--ratio, 1.778)), 58%) minmax(0, 1fr);
+    grid-template-columns: clamp(16rem, calc((100svh - 43rem) * var(--ratio, 1.778)), 58%) minmax(0, 1fr);
   }
 }
 
