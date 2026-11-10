@@ -314,3 +314,9 @@
   backdrop-filter: var(--panel-blur);
   -webkit-backdrop-filter: var(--panel-blur);
 }
+
+/* No seam above this section: its glows fade in from the top edge. */
+.contact::before {
+  mask-image: linear-gradient(to bottom, transparent, #000 9rem);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9rem);
+}

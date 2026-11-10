@@ -378,3 +378,8 @@
 .item[data-selected='true'] {
   border-radius: 0 12px 12px 0;
 }
+
+/* No plate behind the project list: it showed as a box with hard edges. */
+.index::before {
+  display: none;
+}

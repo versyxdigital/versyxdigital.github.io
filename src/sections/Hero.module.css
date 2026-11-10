@@ -311,7 +311,7 @@
 .hero {
   background-image:
     radial-gradient(ellipse 46% 56% at 10% 42%, rgba(var(--cat-backend-rgb), 0.2), transparent 70%),
-    radial-gradient(ellipse 34% 40% at 46% 88%, rgba(var(--cat-infra-rgb), 0.1), transparent 70%);
+    radial-gradient(ellipse 30% 30% at 52% 62%, rgba(var(--cat-infra-rgb), 0.1), transparent 70%);
 }
 
 .line:nth-child(2) > span {
