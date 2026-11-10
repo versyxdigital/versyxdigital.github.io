@@ -14,7 +14,7 @@ Session of 2026-11-10. Brief: `project_brief.md`. Mandate:
 | 5 | Time-based quality governor, software-renderer fallback, keyboard graph navigation | `69e2935` |
 | 6 | Polish: nav backdrop, filter emphasis, single-column traces, README | `46dd397` |
 | 7 | Reticle and annotation legibility, hero hit areas | `7731cf9` |
-| 8 | Reports | final commit |
+| 8 | Reports | `da3a7b4` and the commit recording this hash |
 
 ## Research (phase 1)
 
