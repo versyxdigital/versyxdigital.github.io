@@ -117,15 +117,6 @@ function TechDetail({ id, compact = false }: { id: string; compact?: boolean }) 
       <h3 className={styles.panelTitle}>{tech.name}</h3>
       <p className={styles.panelText}>{tech.summary}</p>
 
-      <div className={styles.block}>
-        <h4 className="mono">In use</h4>
-        {tech.usage ? (
-          <p className={styles.usage}>{tech.usage}</p>
-        ) : (
-          <p className={styles.muted}>Nothing in the public catalogue uses this yet. Client work is not catalogued here.</p>
-        )}
-      </div>
-
       {usedIn.length > 0 && (
         <div className={styles.block}>
           <h4 className="mono">Projects</h4>

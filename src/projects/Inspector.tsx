@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Pending } from '../components/Pending';
 import { TechChip } from '../components/TechChip';
 import { isPending, type Maybe, type Project } from '../content';
-import { fieldModes } from '../field/modes';
 import { useAnchor } from '../schematic/registry';
 import { useSystem } from '../state/store';
 import { Diagram, diagramWidth } from './Diagram';
@@ -240,8 +239,6 @@ export function Inspector({ project, onClose }: { project: Project; onClose: () 
                 ))}
               </div>
               <p className={styles.fine}>Select a technology to open it in the constellation.</p>
-              <h4 className="mono">Field behaviour · {fieldModes[`project:${project.signature}`].label}</h4>
-              <p>{project.signatureNote}</p>
             </div>
             <div className={styles.prose}>
               <h4 className="mono">Links</h4>

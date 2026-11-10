@@ -67,7 +67,7 @@ export interface Technology {
   role: TechRole;
   /** Neutral, factual one-liner about the technology itself. */
   summary: string;
-  /** Verified note on how the studio uses it. Absent when the source material is silent. */
+  /** Verified note on how the studio uses it. Kept as a record; not shown in the interface. */
   usage?: string;
   /** Structural ecosystem relationships (built on / runs on / pairs with). */
   relates?: TechId[];
@@ -162,7 +162,7 @@ export interface Project {
   links: ProjectLink[];
   diagram: Diagram;
   signature: FieldSignature;
-  /** Why the field behaves this way for this project. */
+  /** Why the field behaves this way for this project. A note for maintainers; not shown. */
   signatureNote: string;
   tone: Tone;
   sources: Source[];

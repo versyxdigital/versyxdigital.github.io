@@ -63,7 +63,7 @@ describe('highlight', () => {
     expect(h.techs.has('tornado')).toBe(true);
     expect(h.techs.has('paramiko')).toBe(true);
     expect(h.techs.has('laravel')).toBe(false);
-    expect([...h.projects]).toEqual(['wssh']);
+    expect([...h.projects].sort()).toEqual(['homecounties', 'wssh']);
   });
 
   it('lets hover take precedence over selection', () => {
