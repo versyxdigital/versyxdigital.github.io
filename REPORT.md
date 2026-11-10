@@ -137,20 +137,32 @@ Pages on every push to `main`, and can be run by hand from the Actions tab. It
 type-checks, lints and runs the unit tests first, so a broken build does not
 deploy.
 
-It has not run yet. The workflow is committed locally and I have not pushed
-it. You added the remote `versyxdigital/versyxdigital.github.io` and pushed at
-18:09 on 2026-11-10; local `main` is one commit ahead of that, and the commit
-you pushed was a snapshot of work in progress. To deploy:
+**Deployed.** On your instruction I pushed `main` at 18:41 on 2026-11-10. The
+workflow ran once and succeeded in 1m 32s (build 1m 9s, deploy 16s), and
+GitHub reported the site at `versyx.digital`. Pages was already set to deploy
+from GitHub Actions with the custom domain in place.
 
-1. Push `main`.
-2. In the repository, go to Settings → Pages and set Source to "GitHub
-   Actions".
+State when I checked straight afterwards:
 
-3. Still in Settings → Pages, enter `versyx.digital` under Custom domain and
-   save. Tick "Enforce HTTPS" once GitHub has issued the certificate, which
-   can take up to an hour after DNS is in place.
+- `http://versyx.digital/` serves this site: the right title, all five
+  sections, six projects, and no failed requests.
+- `https://versyx.digital/` failed with a certificate error. GitHub had not
+  yet issued a certificate for the domain. This normally resolves itself
+  within an hour of DNS being correct; then tick "Enforce HTTPS" in Settings →
+  Pages. If it does not, remove and re-enter the custom domain there to
+  restart the check.
+- `versyxdigital.github.io/aldervast/` now redirects to
+  `https://versyx.digital/aldervast/`, so it hits the same certificate error
+  until the certificate exists.
+- `versyx.digital/mkeditor/` returns 404. See below.
 
-The site will be served at `https://versyx.digital/`.
+The run logged a deprecation warning: `actions/checkout@v4`,
+`actions/setup-node@v4`, `actions/configure-pages@v5` and the artifact upload
+target Node 20 and are being run on Node 24. It works today; the action
+versions in `.github/workflows/deploy.yml` should be raised to their current
+majors at some point.
+
+From here every push to `main` deploys.
 
 **DNS at GoDaddy.** For the apex domain, GitHub Pages uses four A records.
 These are the addresses GitHub documents; confirm them against GitHub's
@@ -177,8 +189,8 @@ root Pages site, setting a custom domain on it also moves the project sites:
 `versyxdigital.github.io/aldervast/` will redirect to
 `versyx.digital/aldervast/`. Existing links keep working through the redirect.
 
-**Check this first: the MKEditor site is currently down.** When I looked at
-18:25 on 2026-11-10:
+**The MKEditor site is down.** When I looked at 18:25 on 2026-11-10, before
+the deploy:
 
 - `https://versyxdigital.github.io/` returned GitHub's "There isn't a GitHub
   Pages site here" 404. Earlier the same day it served the MKEditor landing
