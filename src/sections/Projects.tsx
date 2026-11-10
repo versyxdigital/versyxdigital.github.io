@@ -165,7 +165,7 @@ export function Projects() {
           System explorer. <em>Open one up.</em>
         </>
       }
-      lede={profile.ndaNote}
+      lede={profile.catalogueNote}
     >
       <div className={styles.explorer} data-inspecting={selected !== undefined}>
         <div className={styles.index} data-reveal>
@@ -179,10 +179,10 @@ export function Projects() {
             ))}
           </ul>
           <div className={styles.sealed}>
-            <span className={`mono ${styles.itemRef}`}>NDA</span>
+            <span className={`mono ${styles.itemRef}`}>—</span>
             <span className={styles.itemBody}>
-              <span className={styles.itemName}>Production systems</span>
-              <span className={styles.itemKind}>Under NDA. Available to discuss on request.</span>
+              <span className={styles.itemName}>Client work</span>
+              <span className={styles.itemKind}>Not catalogued here. Ask us about it.</span>
             </span>
           </div>
         </div>

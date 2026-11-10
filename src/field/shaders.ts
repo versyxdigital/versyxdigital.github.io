@@ -25,6 +25,9 @@ uniform float uInterf;
 uniform float uRings;
 uniform float uScan;
 uniform float uStars;
+uniform float uBlocks;
+uniform float uIsland;
+uniform float uSteps;
 uniform vec2 uFocus;
 uniform vec4 uRipple[MAX_RIPPLES];
 uniform float uRippleTone[MAX_RIPPLES];
@@ -79,6 +82,39 @@ float spiral(vec2 p, float t) {
   return 0.5 + 0.5 * sin(2.0 * atan(p.y, p.x) - log(r + 1.0) * 3.2 + t * 0.12);
 }
 
+float blocks(vec2 p, float t) {
+  const float CELL = 14.0;
+  vec2 q = p / CELL;
+  vec2 f = abs(fract(q) - 0.5);
+  float d = (0.5 - max(f.x, f.y)) * CELL;
+  float mask = smoothstep(1.4, 2.6, d);
+  vec2 cell = floor(q);
+  float v = 0.5 + 0.5 * sin(cell.x * 12.9898 + cell.y * 78.233);
+  float patrol = pow(0.5 + 0.5 * sin((p.x + p.y) * 0.25 - t * 1.4), 6.0);
+  return mask * (0.45 + 0.55 * v) * 1.3 - 0.35 + (1.0 - mask) * 0.35 * patrol;
+}
+
+float island(vec2 p, float t) {
+  float r = length(p - uFocus);
+  float dome = max(0.0, 1.0 - r / 34.0);
+  float land = dome * dome * 2.4;
+  float relief = 0.35 * sin(p.x * 0.33 + 1.3) * sin(p.y * 0.29 - 0.7);
+  float shore = smoothstep(0.0, 0.25, dome);
+  float sea = 0.12 * sin(p.x * 0.21 + p.y * 0.17 - t * 0.9);
+  return shore * (land + relief * dome * 2.0) + (1.0 - shore) * sea - 0.35;
+}
+
+float steps(vec2 p, float t) {
+  float u = p.x * 0.085 - t * 0.22;
+  float stage = floor(u);
+  float within = fract(u);
+  float level = mod(stage, 5.0);
+  float previous = mod(stage - 1.0, 5.0);
+  float h = previous + (level - previous) * smoothstep(0.0, 0.08, within);
+  float token = 0.25 * pow(0.5 + 0.5 * sin(p.y * 0.7 + stage * 2.1 - t * 2.0), 8.0);
+  return h * 0.42 - 0.8 + token;
+}
+
 float baseHeight(vec2 p) {
   float h = 0.0;
   if (uTravel > 0.0001) h += uTravel * travel(p, uPhase, uFreq);
@@ -86,6 +122,9 @@ float baseHeight(vec2 p) {
   if (uRings > 0.0001) h += uRings * rings(p, uPhase);
   if (uScan > 0.0001) h += uScan * scan(p, uPhase);
   if (uStars > 0.0001) h += uStars * (spiral(p, uPhase) * 0.3 - 0.25);
+  if (uBlocks > 0.0001) h += uBlocks * blocks(p, uPhase);
+  if (uIsland > 0.0001) h += uIsland * island(p, uPhase);
+  if (uSteps > 0.0001) h += uSteps * steps(p, uPhase);
   h *= uAmp;
   const float q = 2.2;
   return h + (floor(h * q + 0.5) / q - h) * uOrder;

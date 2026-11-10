@@ -8,7 +8,7 @@ const intent = {
   selectedTech: null,
   hoveredProject: null,
   selectedProject: null,
-  hoveredRole: null,
+  hoveredService: null,
 };
 
 describe('visual mode', () => {
@@ -17,13 +17,21 @@ describe('visual mode', () => {
   });
 
   it('adopts a project’s field signature while it is inspected in the projects section', () => {
-    expect(resolveVisualMode({ ...intent, activeSection: 'projects', selectedProject: 'vigil' })).toBe('project:rings');
-    expect(resolveVisualMode({ ...intent, activeSection: 'projects', selectedProject: 'mkeditor' })).toBe('project:scan');
-    expect(resolveVisualMode({ ...intent, activeSection: 'projects', selectedProject: 'edcs' })).toBe('project:stars');
+    const expected = {
+      mkeditor: 'project:scan',
+      homecounties: 'project:blocks',
+      aldervast: 'project:island',
+      edcs: 'project:stars',
+      omg: 'project:steps',
+      wssh: 'project:rings',
+    } as const;
+    for (const [project, mode] of Object.entries(expected)) {
+      expect(resolveVisualMode({ ...intent, activeSection: 'projects', selectedProject: project })).toBe(mode);
+    }
   });
 
   it('returns to the section mode once the visitor scrolls away from an open project', () => {
-    expect(resolveVisualMode({ ...intent, activeSection: 'about', selectedProject: 'vigil' })).toBe('section:about');
+    expect(resolveVisualMode({ ...intent, activeSection: 'about', selectedProject: 'wssh' })).toBe('section:about');
   });
 
   it('focuses the lattice on a selected technology', () => {
@@ -32,7 +40,7 @@ describe('visual mode', () => {
 
   it('always resolves to a mode the field knows', () => {
     for (const section of ['hero', 'about', 'tech', 'projects', 'contact'] as const) {
-      for (const selectedProject of [null, 'vigil', 'mkeditor', 'edcs', 'missing']) {
+      for (const selectedProject of [null, 'mkeditor', 'homecounties', 'aldervast', 'edcs', 'omg', 'wssh', 'missing']) {
         for (const selectedTech of [null, 'python']) {
           expect(fieldModes[resolveVisualMode({ activeSection: section, selectedProject, selectedTech })]).toBeDefined();
         }
@@ -53,9 +61,9 @@ describe('highlight', () => {
     expect(h.primaryTech).toBe('python');
     expect(h.techs.has('python')).toBe(true);
     expect(h.techs.has('tornado')).toBe(true);
-    expect(h.techs.has('fastapi')).toBe(true);
+    expect(h.techs.has('paramiko')).toBe(true);
     expect(h.techs.has('laravel')).toBe(false);
-    expect([...h.projects]).toEqual(['vigil']);
+    expect([...h.projects]).toEqual(['wssh']);
   });
 
   it('lets hover take precedence over selection', () => {
@@ -71,20 +79,21 @@ describe('highlight', () => {
     expect([...h.projects]).toEqual(['mkeditor']);
   });
 
-  it('lights the technologies a role names', () => {
-    const h = resolveHighlight({ ...intent, hoveredRole: 'godeploy' });
+  it('lights the projects that exemplify a hovered service, and their technologies', () => {
+    const h = resolveHighlight({ ...intent, hoveredService: 'apis' });
     expect(h.active).toBe(true);
-    expect(h.techs.has('vue')).toBe(true);
+    expect([...h.projects]).toEqual(['edcs']);
+    expect(h.techs.has('laravel')).toBe(true);
   });
 
-  it('ignores a role with no published technologies', () => {
-    expect(resolveHighlight({ ...intent, hoveredRole: 'sentrybay' }).active).toBe(false);
+  it('stays quiet for a service with nothing in the public catalogue', () => {
+    expect(resolveHighlight({ ...intent, hoveredService: 'consulting' }).active).toBe(false);
   });
 });
 
 describe('store', () => {
   beforeEach(() => {
-    useSystem.setState({ hoveredTech: null, selectedTech: null, hoveredProject: null, selectedProject: null, hoveredRole: null });
+    useSystem.setState({ hoveredTech: null, selectedTech: null, hoveredProject: null, selectedProject: null, hoveredService: null });
   });
 
   it('clears hover when a technology is selected, so the selection owns the focus', () => {
@@ -104,7 +113,7 @@ describe('store', () => {
   });
 
   it('shares one memoised highlight per intent', () => {
-    useSystem.getState().hoverProject('vigil');
+    useSystem.getState().hoverProject('wssh');
     const first = selectHighlight(useSystem.getState());
     expect(selectHighlight(useSystem.getState())).toBe(first);
     useSystem.getState().hoverProject('edcs');

@@ -154,7 +154,7 @@ export function Contact() {
 
       <footer className={styles.footer}>
         <p className="mono">
-          © {new Date().getFullYear()} {profile.name} · {profile.location.label}
+          © {new Date().getFullYear()} {profile.name} · {profile.location}
         </p>
         <p className="mono">
           {webgl === 'ok' ? (

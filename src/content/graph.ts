@@ -1,13 +1,13 @@
-import { roles } from './experience';
 import { projects } from './projects';
+import { services } from './services';
 import { categories, technologies } from './technologies';
 import {
   isPending,
   type CategoryMeta,
   type Project,
   type ProjectId,
-  type Role,
-  type RoleId,
+  type Service,
+  type ServiceId,
   type TechCategory,
   type TechId,
   type Technology,
@@ -16,9 +16,9 @@ import {
 /**
  * Relationship graph derived from the content files.
  *
- * Nothing here is authored by hand: add a project, technology or role to the
- * content files and the constellation, project explorer and career schematic
- * pick the new relationships up from this module.
+ * Nothing here is authored by hand: add a project, technology or service to
+ * the content files and the constellation, project explorer and service
+ * schematic pick the new relationships up from this module.
  */
 
 export interface TechEdge {
@@ -37,7 +37,7 @@ const byId = <T extends { id: string }>(items: T[]): Map<string, T> => new Map(i
 
 export const techById: ReadonlyMap<TechId, Technology> = byId(technologies);
 export const projectById: ReadonlyMap<ProjectId, Project> = byId(projects);
-export const roleById: ReadonlyMap<RoleId, Role> = byId(roles);
+export const serviceById: ReadonlyMap<ServiceId, Service> = byId(services);
 export const categoryById: ReadonlyMap<TechCategory, CategoryMeta> = new Map(categories.map((c) => [c.id, c]));
 
 const edgeKey = (a: TechId, b: TechId): string => (a < b ? `${a}|${b}` : `${b}|${a}`);
@@ -92,8 +92,8 @@ const projectsByTechIndex = buildIndex<TechId, ProjectId>(
   projects.flatMap((p) => p.technologies.map((t): [TechId, ProjectId] => [t, p.id])),
 );
 
-const rolesByTechIndex = buildIndex<TechId, RoleId>(
-  roles.flatMap((r) => (isPending(r.technologies) ? [] : r.technologies.map((t): [TechId, RoleId] => [t, r.id]))),
+const projectsByServiceIndex = buildIndex<ServiceId, ProjectId>(
+  projects.flatMap((p) => p.services.map((s): [ServiceId, ProjectId] => [s, p.id])),
 );
 
 const neighbourIndex = buildIndex<TechId, TechId>(
@@ -104,7 +104,8 @@ const neighbourIndex = buildIndex<TechId, TechId>(
 );
 
 export const projectsUsing = (tech: TechId): ProjectId[] => projectsByTechIndex.get(tech) ?? [];
-export const rolesUsing = (tech: TechId): RoleId[] => rolesByTechIndex.get(tech) ?? [];
+/** Projects that are a clear example of `service`. */
+export const projectsOfService = (service: ServiceId): ProjectId[] => projectsByServiceIndex.get(service) ?? [];
 /** Technologies joined to `tech` by a structural relationship. */
 export const neighboursOf = (tech: TechId): TechId[] => neighbourIndex.get(tech) ?? [];
 
@@ -122,18 +123,18 @@ export function relatedTo(tech: TechId): TechId[] {
   return [...new Set([...neighboursOf(tech), ...coUsedWith(tech)])];
 }
 
-export const techsOfRole = (role: RoleId): TechId[] => {
-  const entry = roleById.get(role);
-  return entry && !isPending(entry.technologies) ? entry.technologies : [];
-};
+/** Technologies seen across the projects that exemplify `service`. */
+export const techsOfService = (service: ServiceId): TechId[] => [
+  ...new Set(projectsOfService(service).flatMap((pid) => projectById.get(pid)?.technologies ?? [])),
+];
 
 /**
- * Connectivity of a technology: structural links + projects + roles.
+ * Connectivity of a technology: structural links + projects.
  * Used for node prominence. It measures how connected a node is in the
  * published material — it is not a skill score.
  */
 export function degreeOf(tech: TechId): number {
-  return neighboursOf(tech).length + projectsUsing(tech).length + rolesUsing(tech).length;
+  return neighboursOf(tech).length + projectsUsing(tech).length;
 }
 
 export interface IntegrityIssue {
@@ -174,10 +175,15 @@ export function checkIntegrity(): IntegrityIssue[] {
         issues.push({ where: `project:${project.id}`, message: `diagram edge ${edge.from} -> ${edge.to} references unknown node` });
     }
   }
-  for (const role of roles) {
-    if (isPending(role.technologies)) continue;
-    for (const t of role.technologies) {
-      if (!techById.has(t)) issues.push({ where: `role:${role.id}`, message: `unknown technology ${t}` });
+  const serviceIds = new Set<string>();
+  for (const service of services) {
+    if (serviceIds.has(service.id)) issues.push({ where: `service:${service.id}`, message: 'duplicate id' });
+    serviceIds.add(service.id);
+    if (!isPending(service.summary) && service.summary.length === 0) issues.push({ where: `service:${service.id}`, message: 'empty summary' });
+  }
+  for (const project of projects) {
+    for (const s of project.services) {
+      if (!serviceIds.has(s)) issues.push({ where: `project:${project.id}`, message: `unknown service ${s}` });
     }
   }
   return issues;

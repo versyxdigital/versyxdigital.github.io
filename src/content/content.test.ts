@@ -8,11 +8,12 @@ import {
   neighboursOf,
   profile,
   projects,
+  projectsOfService,
   projectsUsing,
   relatedTo,
-  roles,
-  rolesUsing,
+  services,
   techById,
+  techsOfService,
   techEdges,
   technologies,
 } from './index';
@@ -48,7 +49,28 @@ describe('content integrity', () => {
         else expect(value.length).toBeGreaterThan(0);
       }
     }
-    for (const role of roles) expect(role.exhibits.length).toBeGreaterThan(0);
+    for (const service of services) {
+      if (isPending(service.summary)) expect(service.summary.note.length).toBeGreaterThan(10);
+      else expect(service.summary.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('shows exactly the six requested projects, in the order given', () => {
+    expect(projects.map((p) => p.id)).toEqual(['mkeditor', 'homecounties', 'aldervast', 'edcs', 'omg', 'wssh']);
+  });
+
+  it('gives every project at least one link and one verified fact', () => {
+    for (const project of projects) {
+      expect(project.links.length, project.id).toBeGreaterThan(0);
+      expect(project.facts.length, project.id).toBeGreaterThan(0);
+      for (const link of project.links) expect(link.href.startsWith('https://'), link.href).toBe(true);
+    }
+  });
+
+  it('presents the studio, not an individual', () => {
+    expect(profile.name).toBe('Versyx Digital');
+    expect(profile.established).toBe(2019);
+    expect(profile.founder.name).toBe('Chris Rowles');
   });
 
   it('stores the email address split, not as a harvestable string', () => {
@@ -60,14 +82,17 @@ describe('content integrity', () => {
 
 describe('derived relationship graph', () => {
   it('derives project usage from project data', () => {
-    expect(projectsUsing('typescript').sort()).toEqual(['edcs', 'mkeditor', 'vigil']);
-    expect(projectsUsing('d3')).toEqual(['vigil']);
+    expect(projectsUsing('typescript').sort()).toEqual(['edcs', 'mkeditor', 'omg']);
+    expect(projectsUsing('godot').sort()).toEqual(['aldervast', 'homecounties']);
     expect(projectsUsing('postgresql')).toEqual([]);
   });
 
-  it('derives role usage only where the source names a technology', () => {
-    expect(rolesUsing('vue')).toEqual(['godeploy']);
-    expect(rolesUsing('react')).toEqual([]);
+  it('derives which projects exemplify a service, and their technologies', () => {
+    expect(projectsOfService('apis')).toEqual(['edcs']);
+    expect(projectsOfService('ai')).toEqual(['mkeditor']);
+    expect(projectsOfService('consulting')).toEqual([]);
+    expect(techsOfService('apis')).toContain('laravel');
+    expect(techsOfService('consulting')).toEqual([]);
   });
 
   it('builds symmetric, de-duplicated structural edges', () => {
@@ -89,7 +114,7 @@ describe('derived relationship graph', () => {
   });
 
   it('relates technologies through structure and co-usage without self-links', () => {
-    expect(coUsedWith('d3')).toContain('vue');
+    expect(coUsedWith('paramiko')).toContain('tornado');
     for (const tech of technologies) {
       expect(relatedTo(tech.id)).not.toContain(tech.id);
       expect(degreeOf(tech.id)).toBeGreaterThanOrEqual(0);

@@ -65,6 +65,9 @@ function buildMaterial(neighbours: boolean): THREE.ShaderMaterial {
       uRings: { value: 0 },
       uScan: { value: 0 },
       uStars: { value: 0 },
+      uBlocks: { value: 0 },
+      uIsland: { value: 0 },
+      uSteps: { value: 0 },
       uGlow: { value: 1 },
       uDim: { value: 1 },
       uFocus: { value: new THREE.Vector2() },
@@ -246,6 +249,9 @@ export function CubeField({ quality }: { quality: Quality }) {
     u.uRings!.value = p.rings;
     u.uScan!.value = p.scan;
     u.uStars!.value = p.stars;
+    u.uBlocks!.value = p.blocks;
+    u.uIsland!.value = p.island;
+    u.uSteps!.value = p.steps;
     u.uGlow!.value = p.glow;
     u.uDim!.value = p.dim;
     (u.uFocus!.value as THREE.Vector2).set(field.focusX, field.focusZ);

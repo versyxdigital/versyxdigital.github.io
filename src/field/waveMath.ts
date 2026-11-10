@@ -96,6 +96,49 @@ export function spiral(x: number, z: number, t: number): number {
   return 0.5 + 0.5 * Math.sin(2 * Math.atan2(z, x) - Math.log(r + 1) * 3.2 + t * 0.12);
 }
 
+const fract = (x: number): number => x - Math.floor(x);
+
+/**
+ * A street plan: raised blocks of varying height between a grid of open roads,
+ * with a pulse of movement travelling along the roads.
+ */
+export function blocks(x: number, z: number, t: number): number {
+  const CELL = 14;
+  const qx = x / CELL;
+  const qz = z / CELL;
+  const fx = Math.abs(fract(qx) - 0.5);
+  const fz = Math.abs(fract(qz) - 0.5);
+  // Distance from the nearest road centre-line, in world units.
+  const d = (0.5 - Math.max(fx, fz)) * CELL;
+  const mask = smoothstep(1.4, 2.6, d);
+  const v = 0.5 + 0.5 * Math.sin(Math.floor(qx) * 12.9898 + Math.floor(qz) * 78.233);
+  const patrol = Math.pow(0.5 + 0.5 * Math.sin((x + z) * 0.25 - t * 1.4), 6);
+  return mask * (0.45 + 0.55 * v) * 1.3 - 0.35 + (1 - mask) * 0.35 * patrol;
+}
+
+/** A single island rising to a peak at the focus, with a gentle swell on the water around it. */
+export function island(x: number, z: number, t: number, fx: number, fz: number): number {
+  const r = Math.hypot(x - fx, z - fz);
+  const dome = Math.max(0, 1 - r / 34);
+  const land = dome * dome * 2.4;
+  const relief = 0.35 * Math.sin(x * 0.33 + 1.3) * Math.sin(z * 0.29 - 0.7);
+  const shore = smoothstep(0, 0.25, dome);
+  const sea = 0.12 * Math.sin(x * 0.21 + z * 0.17 - t * 0.9);
+  return shore * (land + relief * dome * 2) + (1 - shore) * sea - 0.35;
+}
+
+/** A staircase of bands marching along x: discrete stages, one direction of travel. */
+export function steps(x: number, z: number, t: number): number {
+  const u = x * 0.085 - t * 0.22;
+  const stage = Math.floor(u);
+  const within = fract(u);
+  const level = glslMod(stage, 5);
+  const previous = glslMod(stage - 1, 5);
+  const h = previous + (level - previous) * smoothstep(0, 0.08, within);
+  const token = 0.25 * Math.pow(0.5 + 0.5 * Math.sin(z * 0.7 + stage * 2.1 - t * 2), 8);
+  return h * 0.42 - 0.8 + token;
+}
+
 /** Height contribution of one ripple, and its energy envelope (for colour). */
 export function rippleAt(x: number, z: number, ripple: Ripple, clock: number): { h: number; env: number } {
   const age = clock - ripple.start;
@@ -121,6 +164,9 @@ export function baseHeight(x: number, z: number, t: number, p: FieldParams, focu
   if (p.rings > 0.0001) h += p.rings * rings(x, z, t, focusX, focusZ);
   if (p.scan > 0.0001) h += p.scan * scan(x, z, t);
   if (p.stars > 0.0001) h += p.stars * (spiral(x, z, t) * 0.3 - 0.25);
+  if (p.blocks > 0.0001) h += p.blocks * blocks(x, z, t);
+  if (p.island > 0.0001) h += p.island * island(x, z, t, focusX, focusZ);
+  if (p.steps > 0.0001) h += p.steps * steps(x, z, t);
   h *= p.amp;
   const q = 2.2;
   return h + (Math.floor(h * q + 0.5) / q - h) * p.order;

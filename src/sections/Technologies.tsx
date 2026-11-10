@@ -7,8 +7,6 @@ import {
   projectById,
   projectsUsing,
   relatedTo,
-  roleById,
-  rolesUsing,
   techById,
   techEdges,
   technologies,
@@ -20,9 +18,8 @@ import { scrollToSection } from '../system/scroll';
 import styles from './Technologies.module.css';
 
 const originLabel = {
-  skills: 'Listed under skills',
+  skills: 'From the founder’s published skills',
   project: 'From a project stack',
-  experience: 'From the experience record',
 } as const;
 
 function Filters() {
@@ -106,7 +103,6 @@ function TechDetail({ id }: { id: string }) {
   if (!tech) return null;
   const category = categoryById.get(tech.category);
   const usedIn = projectsUsing(id);
-  const roles = rolesUsing(id);
   const related = relatedTo(id);
 
   return (
@@ -122,7 +118,7 @@ function TechDetail({ id }: { id: string }) {
         {tech.usage ? (
           <p className={styles.usage}>{tech.usage}</p>
         ) : (
-          <p className={styles.muted}>No public project links to this yet. Most production work is under NDA.</p>
+          <p className={styles.muted}>Nothing in the public catalogue uses this yet. Client work is not catalogued here.</p>
         )}
       </div>
 
@@ -152,19 +148,6 @@ function TechDetail({ id }: { id: string }) {
               );
             })}
           </ul>
-        </div>
-      )}
-
-      {roles.length > 0 && (
-        <div className={styles.block}>
-          <h4 className="mono">Roles</h4>
-          <p className={styles.muted}>
-            {roles
-              .map((rid) => roleById.get(rid))
-              .filter((r) => r !== undefined)
-              .map((r) => `${r.organisation}, ${r.period}`)
-              .join(' · ')}
-          </p>
         </div>
       )}
 
@@ -229,7 +212,7 @@ export function Technologies() {
           Stack and tooling, <em>as a network.</em>
         </>
       }
-      lede="Polyglot by necessity, opinionated by experience. The graph is built from the same data as the projects below, so the relationships shown are the ones that exist."
+      lede="What the studio builds with. The graph is drawn from the same data as the projects below, so the relationships shown are the ones that exist."
     >
       <div data-reveal>
         <Filters />

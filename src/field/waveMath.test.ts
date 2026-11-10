@@ -7,13 +7,16 @@ import {
   RIPPLE_LIFETIME,
   RIPPLE_SPEED,
   baseHeight,
+  blocks,
   cellSeed,
   heightAt,
   interference,
+  island,
   rings,
   rippleAt,
   scan,
   spiral,
+  steps,
   travel,
   type FieldSnapshot,
 } from './waveMath';
@@ -32,6 +35,11 @@ describe('basis behaviours', () => {
         expect(scan(x, z, t)).toBeLessThanOrEqual(1.36);
         expect(spiral(x, z, t)).toBeGreaterThanOrEqual(0);
         expect(spiral(x, z, t)).toBeLessThanOrEqual(1);
+        expect(blocks(x, z, t)).toBeGreaterThanOrEqual(-0.3501);
+        expect(blocks(x, z, t)).toBeLessThanOrEqual(0.9501);
+        expect(Math.abs(island(x, z, t, 0, 0))).toBeLessThan(3.2);
+        expect(steps(x, z, t)).toBeGreaterThanOrEqual(-0.8001);
+        expect(steps(x, z, t)).toBeLessThanOrEqual(1.14);
       }
     }
   });
@@ -57,6 +65,40 @@ describe('basis behaviours', () => {
     const distance = (p: number[], q: number[]): number => Math.sqrt(p.reduce((sum, v, i) => sum + (v - q[i]!) ** 2, 0));
     const reference = at(10);
     for (const later of [10 + 6.283, 10 + 30, 10 + 120, 10 + 600]) expect(distance(reference, at(later))).toBeGreaterThan(0.5);
+  });
+
+  it('draw a street plan: roads stay low and every block is raised', () => {
+    // Road centre-lines sit on multiples of the 14-unit cell; block centres are half a cell off.
+    for (const road of [-28, -14, 0, 14, 28]) expect(blocks(road, 5, 3)).toBeLessThan(0.05);
+    for (const cx of [-21, -7, 7, 21]) for (const cz of [-21, -7, 7, 21]) expect(blocks(cx, cz, 3)).toBeGreaterThan(0.2);
+  });
+
+  it('raise one island: highest at the focus, open water far from it', () => {
+    const peak = island(4, -6, 10, 4, -6);
+    expect(peak).toBeGreaterThan(1.5);
+    for (const [x, z] of [[4 + 20, -6], [4, -6 + 30], [4 - 33, -6]] as const) expect(island(x, z, 10, 4, -6)).toBeLessThan(peak);
+    for (const [x, z] of [[50, 50], [-50, 40], [45, -50]] as const) expect(Math.abs(island(x, z, 10, 4, -6) + 0.35)).toBeLessThan(0.13);
+  });
+
+  it('march a staircase in one direction', () => {
+    // Away from a riser, the level a little later in time equals the level a little further back in space.
+    const t = 20;
+    const dt = 1;
+    const shift = (0.22 * dt) / 0.085;
+    let agreed = 0;
+    let checked = 0;
+    for (let x = -50; x <= 50; x += 3.7) {
+      const u = x * 0.085 - t * 0.22;
+      const within = u - Math.floor(u);
+      if (within < 0.2 || within > 0.8) continue;
+      checked++;
+      // Compare along a row where the travelling token term is negligible.
+      const later = steps(x + shift, 0, t + dt) ;
+      const now = steps(x, 0, t);
+      if (Math.abs(later - now) < 0.26) agreed++;
+    }
+    expect(checked).toBeGreaterThan(5);
+    expect(agreed).toBe(checked);
   });
 
   it('are deterministic', () => {
@@ -141,7 +183,7 @@ describe('ripples', () => {
 
 describe('shader parity', () => {
   // The GLSL mirrors waveMath.ts. These guards catch a constant changed on one side only.
-  const constants = ['0.19', '0.62', '0.31', '0.81', '0.53', '1.13', '0.021', '0.027', '0.105', '0.475', '0.42', '3.2', '1.15', '2.2'];
+  const constants = ['0.19', '0.62', '0.31', '0.81', '0.53', '1.13', '0.021', '0.027', '0.105', '0.475', '0.42', '3.2', '1.15', '2.2', '12.9898', '78.233', '34.0', '0.085', '0.22'];
 
   it('shares its wave constants with the CPU reference', () => {
     for (const constant of constants) expect(vertexShader, constant).toContain(constant);

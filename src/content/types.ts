@@ -2,23 +2,24 @@
  * Content model.
  *
  * Every fact rendered by the site comes from the files in this folder.
- * Projects and experience entries reference technologies by stable id;
- * relationships (tech -> projects, tech -> roles) are *derived* in graph.ts
- * and never duplicated in components.
+ * Projects reference technologies and services by stable id; relationships
+ * (tech -> projects, service -> projects) are *derived* in graph.ts and never
+ * duplicated in components.
  *
- * Fields the existing site does not document are modelled as `Pending`
+ * Fields the source material does not document are modelled as `Pending`
  * rather than invented. See content/config.ts for how they are displayed.
  */
 
 export type TechId = string;
 export type ProjectId = string;
-export type RoleId = string;
+export type ServiceId = string;
 
 export type TechCategory = 'language' | 'frontend' | 'backend' | 'data' | 'infra' | 'tooling';
 
 /** Where a fact was taken from. Shown in the UI as a provenance tag. */
 export type Source =
-  | 'site' // https://sentrychris.github.io
+  | 'brief' // stated by the studio's founder for this site
+  | 'site' // the project's own public site, or https://sentrychris.github.io
   | 'repository' // public README / docs of the linked repository
   | 'derived'; // computed from other content
 
@@ -66,31 +67,26 @@ export interface Technology {
   role: TechRole;
   /** Neutral, factual one-liner about the technology itself. */
   summary: string;
-  /** Verified note on how Chris uses it. Absent when the source material is silent. */
+  /** Verified note on how the studio uses it. Absent when the source material is silent. */
   usage?: string;
   /** Structural ecosystem relationships (built on / runs on / pairs with). */
   relates?: TechId[];
-  /** Listed in the skills section of the existing site, or only seen in a project / role. */
-  origin: 'skills' | 'project' | 'experience';
+  /** Listed in the founder's published skills, or only seen in a project stack. */
+  origin: 'skills' | 'project';
 }
 
-export interface Role {
-  id: RoleId;
-  organisation: string;
-  position: string;
-  /** Inclusive start year. */
-  from: number;
-  /** End year, or null when current. */
-  to: number | null;
-  period: string;
-  sectors: string[];
-  summary: string;
-  /** Verified highlights, quoted from the existing site. */
-  exhibits: string[];
-  /** Technologies the source material explicitly ties to this role. */
-  technologies: Maybe<TechId[]>;
-  /** Parallel track on the career schematic. */
-  track: 'employment' | 'venture';
+/** Something the studio offers. The list itself comes from the founder's brief. */
+export interface Service {
+  id: ServiceId;
+  name: string;
+  /** Short form used on the schematic. */
+  short: string;
+  /** Short mono tag, e.g. "API". */
+  tag: string;
+  /** What the service covers. Pending where no source describes it. */
+  summary: Maybe<string>;
+  /** Statements about this kind of work found in published material. */
+  record: string[];
 }
 
 export interface ProjectLink {
@@ -143,14 +139,14 @@ export interface Diagram {
 }
 
 /** Mathematical behaviour the cube field adopts while the project is inspected. */
-export type FieldSignature = 'rings' | 'scan' | 'stars';
+export type FieldSignature = 'rings' | 'scan' | 'stars' | 'blocks' | 'island' | 'steps';
 
 export interface Project {
   id: ProjectId;
   /** Catalogue reference, e.g. SYS-01. */
   ref: string;
   name: string;
-  /** Short classification, e.g. "System monitoring". */
+  /** Short classification, e.g. "Markdown editor". */
   kind: string;
   tagline: string;
   description: string;
@@ -161,6 +157,8 @@ export interface Project {
   /** Short verified facts shown as a data sheet. */
   facts: { label: string; value: string }[];
   technologies: TechId[];
+  /** Services this project is a clear example of. */
+  services: ServiceId[];
   links: ProjectLink[];
   diagram: Diagram;
   signature: FieldSignature;
@@ -171,15 +169,20 @@ export interface Project {
 }
 
 export interface Profile {
+  /** The studio. */
   name: string;
-  role: string;
-  organisation: string;
-  /** Hero statement. */
-  statement: string;
+  /** One-line classification shown under the name. */
+  descriptor: string;
+  established: number;
+  location: string;
   intro: string;
   about: string[];
   specs: { label: string; value: string }[];
-  location: { label: string; lat: number; lon: number };
+  founder: {
+    name: string;
+    note: string;
+    links: { label: string; href: string }[];
+  };
   availability: string;
   contact: {
     /** Stored split so the address is not harvested from the bundle. */
@@ -187,5 +190,6 @@ export interface Profile {
     note: string;
     links: { label: string; display: string; href: string }[];
   };
-  ndaNote: string;
+  /** Shown above the project catalogue. */
+  catalogueNote: string;
 }

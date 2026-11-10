@@ -13,9 +13,6 @@ const CELL_ROLE = { x: 4.5, z: 15.5 };
 const CELL_A = { x: 19.5, z: 3.5 };
 const CELL_B = { x: 16.5, z: 17.5 };
 
-const formatLat = (lat: number): string => `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'}`;
-const formatLon = (lon: number): string => `${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? 'E' : 'W'}`;
-
 export function Hero() {
   const webgl = useSystem((s) => s.webgl);
   const hovered = useRef(false);
@@ -121,17 +118,16 @@ export function Hero() {
         <p className={`mono ${styles.eyebrow}`}>
           <span>00 — Index</span>
           <span className={styles.coords}>
-            {formatLat(profile.location.lat)} · {formatLon(profile.location.lon)}
+            Est. {profile.established} · {profile.location}
           </span>
         </p>
 
         <h1 id="hero-title" className={styles.name}>
-          <span className={styles.line}>
-            <span>Chris</span>
-          </span>
-          <span className={styles.line}>
-            <span>Rowles</span>
-          </span>
+          {profile.name.split(' ').map((word) => (
+            <span key={word} className={styles.line}>
+              <span>{word}</span>
+            </span>
+          ))}
         </h1>
 
         <p
@@ -142,7 +138,7 @@ export function Hero() {
           }}
         >
           <span className={styles.roleText}>
-            {profile.role} <span className={styles.at}>at</span> {profile.organisation}
+            {profile.descriptor} <span className={styles.at}>· founded by</span> {profile.founder.name}
           </span>
           <span ref={roleAnchor} className={styles.roleNode} aria-hidden="true" />
         </p>
@@ -152,7 +148,7 @@ export function Hero() {
         <div className={styles.actions}>
           <a className={styles.action} href="#projects" onClick={go('projects')}>
             <span className={styles.actionNode} aria-hidden="true" />
-            Inspect the systems
+            Inspect our systems
           </a>
           <a className={`${styles.action} ${styles.actionQuiet}`} href="#contact" onClick={go('contact')}>
             <span className={styles.actionNode} aria-hidden="true" />

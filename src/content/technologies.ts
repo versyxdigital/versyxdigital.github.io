@@ -1,8 +1,9 @@
 import type { CategoryMeta, Technology } from './types';
 
 /**
- * Categories follow the grouping on the existing site (Frontend, Backend,
- * Data, Infra & Ops, Tooling) with languages lifted into their own group.
+ * Categories follow the grouping on the founder's existing site (Frontend,
+ * Backend, Data, Infra & Ops, Tooling) with languages lifted into their own
+ * group. Game engines sit with tooling.
  */
 export const categories: CategoryMeta[] = [
   {
@@ -42,17 +43,17 @@ export const categories: CategoryMeta[] = [
   },
   {
     id: 'tooling',
-    label: 'Tooling',
+    label: 'Tooling & engines',
     tag: 'DX',
     tone: 'violet',
-    blurb: 'Testing, linting, packaging and version control.',
+    blurb: 'Testing, linting, packaging, version control and the engine the games run on.',
   },
 ];
 
 /**
- * Sources: the skills section of https://sentrychris.github.io/ (origin
- * 'skills'), project stacks listed there (origin 'project') and the experience
- * section (origin 'experience').
+ * Sources: the skills section of the founder's site,
+ * https://sentrychris.github.io/ (origin 'skills'), and the stacks stated by
+ * each project's own site or README (origin 'project').
  *
  * `summary` describes the technology. `usage` is only set where the source
  * material says how it was used — it is never inferred.
@@ -65,7 +66,7 @@ export const technologies: Technology[] = [
     category: 'language',
     role: 'language',
     summary: 'Statically typed superset of JavaScript.',
-    usage: 'The common language across all three open projects: the Vigil dashboard, MKEditor and the ED:CS web app.',
+    usage: 'MKEditor, the ED:CS web app, and the VS Code extension and language server for OMG.',
     origin: 'skills',
   },
   {
@@ -74,7 +75,7 @@ export const technologies: Technology[] = [
     category: 'language',
     role: 'language',
     summary: 'General-purpose language, here used for services and agents.',
-    usage: 'Powers the collector behind Vigil.',
+    usage: 'The server side of wssh.',
     origin: 'skills',
   },
   {
@@ -85,6 +86,35 @@ export const technologies: Technology[] = [
     summary: 'Server-side language behind Laravel.',
     usage: 'The ED:CS API runs on PHP 8.4.',
     origin: 'skills',
+  },
+
+  {
+    id: 'rust',
+    name: 'Rust',
+    category: 'language',
+    role: 'language',
+    summary: 'Systems language with memory safety and no garbage collector.',
+    usage: 'The OMG runtime: lexer, parser, compiler, virtual machine and REPL.',
+    origin: 'project',
+  },
+  {
+    id: 'c',
+    name: 'C',
+    category: 'language',
+    role: 'language',
+    summary: 'The portable systems language.',
+    usage: 'Target of OMG’s native path: programs are transpiled to self-contained C and compiled to small ELF binaries.',
+    origin: 'project',
+  },
+  {
+    id: 'gdscript',
+    name: 'GDScript',
+    category: 'language',
+    role: 'language',
+    summary: 'Godot’s scripting language.',
+    usage: 'Aldervast is written in it.',
+    relates: ['godot'],
+    origin: 'project',
   },
 
   // ── Frontend ────────────────────────────────────────────────
@@ -113,7 +143,6 @@ export const technologies: Technology[] = [
     category: 'frontend',
     role: 'framework',
     summary: 'Progressive component framework.',
-    usage: 'The Vigil dashboard UI. At Go Deploy Labs, drove the platform’s shift to Vue 3.',
     relates: ['typescript', 'vite'],
     origin: 'skills',
   },
@@ -132,7 +161,6 @@ export const technologies: Technology[] = [
     category: 'frontend',
     role: 'library',
     summary: 'Low-level library for data-driven visualisation.',
-    usage: 'Gauges and charts in the Vigil dashboard.',
     relates: ['typescript'],
     origin: 'skills',
   },
@@ -185,6 +213,25 @@ export const technologies: Technology[] = [
     origin: 'project',
   },
 
+  {
+    id: 'xterm',
+    name: 'xterm.js',
+    category: 'frontend',
+    role: 'library',
+    summary: 'Terminal emulator for the browser.',
+    usage: 'The terminal in wssh.',
+    origin: 'project',
+  },
+  {
+    id: 'alpine',
+    name: 'Alpine.js',
+    category: 'frontend',
+    role: 'framework',
+    summary: 'Lightweight framework for behaviour written directly in markup.',
+    usage: 'The interface around the terminal in wssh.',
+    origin: 'project',
+  },
+
   // ── Backend ─────────────────────────────────────────────────
   {
     id: 'nodejs',
@@ -220,7 +267,7 @@ export const technologies: Technology[] = [
     category: 'backend',
     role: 'framework',
     summary: 'Asynchronous Python web framework and networking library.',
-    usage: 'Part of the Vigil collector stack.',
+    usage: 'The web server in wssh.',
     relates: ['python', 'websockets'],
     origin: 'skills',
   },
@@ -230,7 +277,6 @@ export const technologies: Technology[] = [
     category: 'backend',
     role: 'framework',
     summary: 'Typed, asynchronous Python API framework.',
-    usage: 'Part of the Vigil collector stack.',
     relates: ['python', 'rest'],
     origin: 'skills',
   },
@@ -249,9 +295,19 @@ export const technologies: Technology[] = [
     category: 'backend',
     role: 'protocol',
     summary: 'Persistent, bidirectional connections for real-time data.',
-    usage: 'Streams live metrics from the Vigil collector to the dashboard.',
     relates: ['tornado'],
     origin: 'skills',
+  },
+
+  {
+    id: 'paramiko',
+    name: 'Paramiko',
+    category: 'backend',
+    role: 'library',
+    summary: 'SSH implementation for Python.',
+    usage: 'Opens and holds the SSH session in wssh.',
+    relates: ['python'],
+    origin: 'project',
   },
 
   // ── Data ────────────────────────────────────────────────────
@@ -382,15 +438,6 @@ export const technologies: Technology[] = [
     relates: ['aws'],
     origin: 'skills',
   },
-  {
-    id: 'guacamole',
-    name: 'Guacamole',
-    category: 'infra',
-    role: 'platform',
-    summary: 'Clientless remote-desktop gateway (RDP, VNC, SSH in the browser).',
-    usage: 'At Go Deploy Labs, unified RDP through Guacamole for lab access and mentor support.',
-    origin: 'experience',
-  },
 
   // ── Tooling ─────────────────────────────────────────────────
   {
@@ -466,6 +513,16 @@ export const technologies: Technology[] = [
     summary: 'Module bundler.',
     usage: 'Bundles MKEditor.',
     relates: ['typescript'],
+    origin: 'project',
+  },
+  {
+    id: 'godot',
+    name: 'Godot',
+    category: 'tooling',
+    role: 'platform',
+    summary: 'Open-source game engine.',
+    usage: 'Both games, The Home Counties and Aldervast, are built in Godot 4.7.',
+    relates: ['gdscript'],
     origin: 'project',
   },
 ];

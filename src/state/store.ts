@@ -3,11 +3,12 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import {
   projectById,
   projectsUsing,
+  projectsOfService,
   relatedTo,
-  techsOfRole,
+  techsOfService,
   type FieldSignature,
   type ProjectId,
-  type RoleId,
+  type ServiceId,
   type TechCategory,
   type TechId,
 } from '../content';
@@ -37,8 +38,8 @@ export interface SystemState {
   selectedTech: TechId | null;
   hoveredProject: ProjectId | null;
   selectedProject: ProjectId | null;
-  hoveredRole: RoleId | null;
-  selectedRole: RoleId;
+  hoveredService: ServiceId | null;
+  selectedService: ServiceId;
   categoryFilter: TechCategory | null;
   transition: Transition;
   quality: Quality;
@@ -50,8 +51,8 @@ export interface SystemState {
   selectTech: (tech: TechId | null) => void;
   hoverProject: (project: ProjectId | null) => void;
   selectProject: (project: ProjectId | null) => void;
-  hoverRole: (role: RoleId | null) => void;
-  selectRole: (role: RoleId) => void;
+  hoverService: (service: ServiceId | null) => void;
+  selectService: (service: ServiceId) => void;
   setCategoryFilter: (category: TechCategory | null) => void;
   setTransition: (transition: Transition) => void;
   setQuality: (quality: Quality) => void;
@@ -66,8 +67,8 @@ export const useSystem = create<SystemState>()(
     selectedTech: null,
     hoveredProject: null,
     selectedProject: null,
-    hoveredRole: null,
-    selectedRole: 'sentrybay',
+    hoveredService: null,
+    selectedService: 'webapps',
     categoryFilter: null,
     transition: 'idle',
     quality: 'high',
@@ -80,8 +81,8 @@ export const useSystem = create<SystemState>()(
       set((s) => (s.selectedTech === selectedTech ? s : { selectedTech, hoveredTech: selectedTech ? null : s.hoveredTech })),
     hoverProject: (hoveredProject) => set((s) => (s.hoveredProject === hoveredProject ? s : { hoveredProject })),
     selectProject: (selectedProject) => set((s) => (s.selectedProject === selectedProject ? s : { selectedProject })),
-    hoverRole: (hoveredRole) => set((s) => (s.hoveredRole === hoveredRole ? s : { hoveredRole })),
-    selectRole: (selectedRole) => set({ selectedRole }),
+    hoverService: (hoveredService) => set((s) => (s.hoveredService === hoveredService ? s : { hoveredService })),
+    selectService: (selectedService) => set({ selectedService }),
     setCategoryFilter: (categoryFilter) => set({ categoryFilter }),
     setTransition: (transition) => set({ transition }),
     setQuality: (quality) => set({ quality }),
@@ -92,7 +93,7 @@ export const useSystem = create<SystemState>()(
 
 type Intent = Pick<
   SystemState,
-  'activeSection' | 'hoveredTech' | 'selectedTech' | 'hoveredProject' | 'selectedProject' | 'hoveredRole'
+  'activeSection' | 'hoveredTech' | 'selectedTech' | 'hoveredProject' | 'selectedProject' | 'hoveredService'
 >;
 
 /** The mathematical behaviour the cube field should currently adopt. */
@@ -127,7 +128,7 @@ const EMPTY: Highlight = { techs: new Set(), primaryTech: null, projects: new Se
 /**
  * Derives what should be illuminated from the current intent.
  * Single source of truth for the constellation, the project index, the
- * inspector's technology chips and the career schematic.
+ * inspector's technology chips and the service schematic.
  */
 export function resolveHighlight(state: Intent): Highlight {
   const tech = focusedTech(state);
@@ -144,15 +145,17 @@ export function resolveHighlight(state: Intent): Highlight {
     const project = projectById.get(projectId);
     if (project) return { techs: new Set(project.technologies), primaryTech: null, projects: new Set([projectId]), active: true };
   }
-  if (state.hoveredRole) {
-    const techs = techsOfRole(state.hoveredRole);
-    if (techs.length > 0) return { techs: new Set(techs), primaryTech: null, projects: new Set(), active: true };
+  if (state.hoveredService) {
+    const related = projectsOfService(state.hoveredService);
+    if (related.length > 0) {
+      return { techs: new Set(techsOfService(state.hoveredService)), primaryTech: null, projects: new Set(related), active: true };
+    }
   }
   return EMPTY;
 }
 
 const highlightKey = (s: Intent): string =>
-  `${s.hoveredTech}|${s.selectedTech}|${s.hoveredProject}|${s.selectedProject}|${s.hoveredRole}`;
+  `${s.hoveredTech}|${s.selectedTech}|${s.hoveredProject}|${s.selectedProject}|${s.hoveredService}`;
 
 let cachedKey = '';
 let cachedHighlight: Highlight = EMPTY;

@@ -1,141 +1,148 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { Pending } from '../components/Pending';
 import { Section } from '../components/Section';
-import { TechChip } from '../components/TechChip';
-import { earlierCareer, isPending, profile, roleById, roles, type Role } from '../content';
+import { isPending, profile, projectById, projectsOfService, serviceById, services, type Service } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { useSystem } from '../state/store';
+import { scrollToSection } from '../system/scroll';
 import styles from './About.module.css';
 
-const FIRST_YEAR = Math.min(...roles.map((r) => r.from));
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 
-function RoleNode({ role, nowYear }: { role: Role; nowYear: number }) {
-  const selected = useSystem((s) => s.selectedRole === role.id);
-  const hovered = useSystem((s) => s.hoveredRole === role.id);
-  const selectRole = useSystem((s) => s.selectRole);
-  const hoverRole = useSystem((s) => s.hoverRole);
-  const anchor = useAnchor<HTMLSpanElement>(`role:${role.id}`);
-  // Grid columns: 1 = the undocumented lead-in, then one column per year.
-  const start = role.from - FIRST_YEAR + 2;
-  const end = (role.to ?? nowYear + 1) - FIRST_YEAR + 2;
+function ServiceNode({ service, last }: { service: Service; last: boolean }) {
+  const selected = useSystem((s) => s.selectedService === service.id);
+  const hovered = useSystem((s) => s.hoveredService === service.id);
+  const selectService = useSystem((s) => s.selectService);
+  const hoverService = useSystem((s) => s.hoverService);
+  const anchor = useAnchor<HTMLSpanElement>(`service:${service.id}`);
 
   return (
     <button
       type="button"
-      className={styles.role}
-      data-track={role.track}
+      className={styles.node}
       data-selected={selected}
       data-hovered={hovered}
-      data-current={role.to === null}
-      style={{ gridColumn: `${start} / ${end}` }}
+      data-last={last}
       aria-pressed={selected}
-      onClick={() => selectRole(role.id)}
-      onPointerEnter={() => hoverRole(role.id)}
-      onPointerLeave={() => hoverRole(null)}
-      onFocus={() => hoverRole(role.id)}
-      onBlur={() => hoverRole(null)}
+      onClick={() => selectService(service.id)}
+      onPointerEnter={() => hoverService(service.id)}
+      onPointerLeave={() => hoverService(null)}
+      onFocus={() => hoverService(service.id)}
+      onBlur={() => hoverService(null)}
     >
-      <span className={styles.roleOrg}>{role.organisation}</span>
+      <span className={`mono ${styles.nodeTag}`}>{service.tag}</span>
       <span className={styles.trace} aria-hidden="true">
         <span ref={anchor} className={styles.traceNode} />
       </span>
-      <span className={`mono ${styles.roleMeta}`}>
-        <span>{role.position}</span>
-        <span>{role.period}</span>
-      </span>
+      <span className={styles.nodeName}>{service.short}</span>
     </button>
   );
 }
 
-function RoleDetail() {
-  const selectedId = useSystem((s) => s.selectedRole);
-  const role = roleById.get(selectedId) ?? roles[0];
-  const anchor = useAnchor<HTMLDivElement>('role-detail');
-  if (!role) return null;
+function ServiceRecord() {
+  const selectedId = useSystem((s) => s.selectedService);
+  const selectProject = useSystem((s) => s.selectProject);
+  const service = serviceById.get(selectedId) ?? services[0];
+  const anchor = useAnchor<HTMLDivElement>('service-record');
+  if (!service) return null;
+  const examples = projectsOfService(service.id);
+
   return (
     <div className={styles.detail} aria-live="polite">
-      <div ref={anchor} className={styles.detailInner} key={role.id}>
-        <header className={styles.detailHead}>
-          <div>
-            <p className={`mono ${styles.detailPeriod}`}>{role.period}</p>
-            <h3 className={styles.detailTitle}>
-              {role.position} <span>· {role.organisation}</span>
-            </h3>
+      <div ref={anchor} className={styles.detailInner} key={service.id}>
+        <p className={`mono ${styles.detailTag}`}>Service · {service.tag}</p>
+        <h3 className={styles.detailTitle}>{service.name}</h3>
+        {isPending(service.summary) ? (
+          <div className={styles.detailPending}>
+            <Pending value={service.summary} label="service description" />
           </div>
-          <ul className={styles.sectors} aria-label="Sectors">
-            {role.sectors.map((sector) => (
-              <li key={sector} className="mono">
-                {sector}
-              </li>
-            ))}
-          </ul>
-        </header>
-        <p className={styles.detailSummary}>{role.summary}</p>
-        <ol className={styles.exhibits}>
-          {role.exhibits.map((exhibit, i) => (
-            <li key={exhibit}>
-              <span className={`mono ${styles.numeral}`} aria-hidden="true">
-                {NUMERALS[i] ?? i + 1}
-              </span>
-              {exhibit}
-            </li>
-          ))}
-        </ol>
-        <div className={styles.detailTech}>
-          <span className={`mono ${styles.detailTechLabel}`}>Technologies</span>
-          {isPending(role.technologies) ? (
-            <Pending value={role.technologies} label="role technologies" />
-          ) : (
-            <div className={styles.chips}>
-              {role.technologies.map((id) => (
-                <TechChip key={id} id={id} />
+        ) : (
+          <p className={styles.detailSummary}>{service.summary}</p>
+        )}
+
+        {service.record.length > 0 && (
+          <>
+            <h4 className={`mono ${styles.blockLabel}`}>On record</h4>
+            <ol className={styles.exhibits}>
+              {service.record.map((line, i) => (
+                <li key={line}>
+                  <span className={`mono ${styles.numeral}`} aria-hidden="true">
+                    {NUMERALS[i] ?? i + 1}
+                  </span>
+                  {line}
+                </li>
               ))}
-            </div>
-          )}
-        </div>
+            </ol>
+          </>
+        )}
+
+        <h4 className={`mono ${styles.blockLabel}`}>In the catalogue</h4>
+        {examples.length > 0 ? (
+          <ul className={styles.examples}>
+            {examples.map((id) => {
+              const project = projectById.get(id);
+              if (!project) return null;
+              return (
+                <li key={id}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      selectProject(id);
+                      scrollToSection('projects');
+                    }}
+                  >
+                    <span className="mono">{project.ref}</span>
+                    <span className={styles.exampleName}>{project.name}</span>
+                    <span className={styles.exampleKind}>{project.kind}</span>
+                    <span className={styles.arrow} aria-hidden="true">
+                      →
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className={styles.muted}>Nothing in the public catalogue is tagged to this service yet.</p>
+        )}
       </div>
     </div>
   );
 }
 
 export function About() {
-  const nowYear = useMemo(() => new Date().getFullYear(), []);
-  const years = useMemo(() => Array.from({ length: nowYear - FIRST_YEAR + 1 }, (_, i) => FIRST_YEAR + i), [nowYear]);
-  const selectedRole = useSystem((s) => s.selectedRole);
-  const employment = roles.filter((r) => r.track === 'employment').sort((a, b) => a.from - b.from);
-  const venture = roles.filter((r) => r.track === 'venture');
+  const selectedService = useSystem((s) => s.selectedService);
 
-  // The trace from the selected career node into its record.
+  // The trace from the selected service node into its record.
   useConnections(
     () => [
       {
-        id: 'about:role-link',
-        from: { kind: 'anchor', id: `role:${selectedRole}`, side: 'b', gap: 3 },
-        to: { kind: 'anchor', id: 'role-detail', side: 't', at: 0.04, gap: 0 },
+        id: 'about:service-link',
+        from: { kind: 'anchor', id: `service:${selectedService}`, side: 'b', gap: 3 },
+        to: { kind: 'anchor', id: 'service-record', side: 't', at: 0.04, gap: 0 },
         route: 'vhv',
-        bend: 0.88,
+        bend: 0.82,
         tone: 'cyan',
         level: (s) => (s.activeSection === 'about' ? 0.85 : 0),
         ambient: 6,
       },
     ],
-    [selectedRole],
+    [selectedService],
   );
 
   useEffect(() => {
-    pulse('about:role-link', { delay: 0.25 });
-  }, [selectedRole]);
+    pulse('about:service-link', { delay: 0.25 });
+  }, [selectedService]);
 
   return (
     <Section
       id="about"
       index="01"
-      label="About"
-      meta="Operator record"
+      label="Studio"
+      meta={`Est. ${profile.established} · ${profile.location}`}
       title={
         <>
-          Comfortable owning systems <em>end to end.</em>
+          A small and focused <em>software studio.</em>
         </>
       }
       lede={profile.about[0]}
@@ -157,46 +164,34 @@ export function About() {
           </dl>
         </div>
 
-        <div className={styles.career} data-reveal style={{ '--i': 2 } as React.CSSProperties}>
-          <h3 className={`mono ${styles.careerTitle}`}>
-            Career schematic
+        <div className={styles.schematic} data-reveal style={{ '--i': 2 } as React.CSSProperties}>
+          <h3 className={`mono ${styles.schematicTitle}`}>
+            What we do
             <span>Select a node</span>
           </h3>
 
-          <div className={styles.timeline} style={{ '--years': years.length } as React.CSSProperties}>
-            <div className={styles.axis} aria-hidden="true">
-              <span className={`mono ${styles.axisPre}`}>≤ {FIRST_YEAR - 1}</span>
-              {years.map((year) => (
-                <span key={year} className={`mono ${styles.axisYear}`}>
-                  {year}
-                </span>
-              ))}
-            </div>
-
-            <div className={styles.track}>
-              <span className={`mono ${styles.trackLabel}`}>Independent</span>
-              {venture.map((role) => (
-                <RoleNode key={role.id} role={role} nowYear={nowYear} />
-              ))}
-            </div>
-
-            <div className={styles.track}>
-              <span className={`mono ${styles.trackLabel}`}>Employment</span>
-              <span className={styles.earlier} title={earlierCareer.note} aria-hidden="true">
-                <span className={styles.roleOrg}>&nbsp;</span>
-                <span className={styles.earlierTrace} />
-              </span>
-              {employment.map((role) => (
-                <RoleNode key={role.id} role={role} nowYear={nowYear} />
-              ))}
-            </div>
+          <div className={styles.bus} style={{ '--count': services.length } as React.CSSProperties}>
+            {services.map((service, i) => (
+              <ServiceNode key={service.id} service={service} last={i === services.length - 1} />
+            ))}
           </div>
 
-          <RoleDetail />
+          <ServiceRecord />
 
-          <p className={styles.earlierNote}>
-            <span className="mono">{earlierCareer.label}</span>
-            {earlierCareer.note}
+          <p className={styles.founder}>
+            <span className="mono">Founder</span>
+            <span>
+              {profile.founder.note}{' '}
+              {profile.founder.links.map((link, i) => (
+                <span key={link.href}>
+                  {i > 0 && ' · '}
+                  <a href={link.href} target="_blank" rel="noreferrer noopener">
+                    {link.label}
+                    <span className="visually-hidden"> (opens in a new tab)</span>
+                  </a>
+                </span>
+              ))}
+            </span>
           </p>
         </div>
       </div>

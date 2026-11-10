@@ -26,6 +26,9 @@ export interface FieldParams {
   rings: number;
   scan: number;
   stars: number;
+  blocks: number;
+  island: number;
+  steps: number;
   /** Terrace quantisation, 0 = smooth, 1 = stepped. */
   order: number;
 }
@@ -47,6 +50,9 @@ const base: FieldParams = {
   rings: 0,
   scan: 0,
   stars: 0,
+  blocks: 0,
+  island: 0,
+  steps: 0,
   order: 0,
 };
 
@@ -93,7 +99,10 @@ export const fieldModes: Record<VisualMode, FieldMode> = {
     dim: 0.34,
     glow: 1,
   },
-  'project:rings': { ...base, label: 'Sample pulses', rings: 1, travel: 0.1, amp: 1.5, speed: 1, twist: 0.5, dim: 0.56, glow: 1.2 },
+  'project:blocks': { ...base, label: 'Street plan', blocks: 1, travel: 0.04, amp: 1.5, speed: 1, twist: 0, dim: 0.52, glow: 1.0 },
+  'project:island': { ...base, label: 'Island', island: 1, travel: 0.05, amp: 1.6, speed: 1, twist: 0.4, dim: 0.58, glow: 1.15 },
+  'project:steps': { ...base, label: 'Pipeline stages', steps: 1, amp: 1.5, speed: 1, twist: 0, dim: 0.54, glow: 1.0 },
+  'project:rings': { ...base, label: 'Signal pulses', rings: 1, travel: 0.1, amp: 1.5, speed: 1, twist: 0.5, dim: 0.56, glow: 1.2 },
   'project:scan': { ...base, label: 'Ruled rows', scan: 1, amp: 1.5, speed: 1, twist: 0, order: 0.25, dim: 0.54, glow: 1.1 },
   'project:stars': { ...base, label: 'Catalogue of systems', stars: 1, travel: 0.06, amp: 1.4, speed: 1, twist: 0, dim: 0.56, glow: 1.2 },
 };
@@ -110,6 +119,9 @@ export const paramKeys: readonly (keyof FieldParams)[] = [
   'rings',
   'scan',
   'stars',
+  'blocks',
+  'island',
+  'steps',
   'order',
 ];
 

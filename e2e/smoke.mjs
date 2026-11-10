@@ -149,8 +149,8 @@ async function desktop(browser) {
   check('keyboard: focus is visible', await page.evaluate(() => getComputedStyle(document.activeElement).outlineStyle !== 'none'));
   await page.evaluate(() => document.activeElement?.blur());
 
-  check('hero: name and role are present', (await page.locator('h1').innerText()).replace(/\s+/g, ' ').includes('Chris Rowles'));
-  check('hero: role reads Lead Developer at SentryBay', (await page.locator('#hero').innerText()).includes('Lead Developer at SentryBay'));
+  check('hero: the studio name is present', (await page.locator('h1').innerText()).replace(/\s+/g, ' ').includes('Versyx Digital'));
+  check('hero: reads as a studio founded by Chris Rowles', /Software studio\s*· founded by\s*Chris Rowles/.test(await page.locator('#hero').innerText()));
 
   const stats = await canvasStats(page);
   check('field: WebGL canvas is rendering lit geometry', stats !== null && stats.lit > 0.05, stats ? `${(stats.lit * 100).toFixed(0)}% of sampled pixels lit` : 'no canvas');
@@ -181,6 +181,17 @@ async function desktop(browser) {
   const techMode = await mode();
   check('navigation: section link scrolls and the field changes mode', heroMode !== techMode, `${heroMode} → ${techMode}`);
   check('navigation: active link is marked', (await page.locator('header nav a[aria-current="true"]').innerText()).includes('Technologies'));
+
+  // ── Studio ──────────────────────────────────────────────────────────
+  await goTo(page, 'about');
+  check('studio: all five services are on the schematic', (await page.locator('#about button[aria-pressed]').count()) === 5);
+  await page.locator('#about button[aria-pressed]', { hasText: 'APIs' }).click();
+  await page.waitForTimeout(500);
+  const record = await page.locator('#about [aria-live="polite"]').innerText();
+  check('studio: selecting a service shows its record and the projects that exemplify it', record.includes('APIs') && record.includes('ED:CS'));
+  check('studio: an undescribed service is marked pending, not invented', record.toLowerCase().includes('pending'));
+  await page.locator('header nav a', { hasText: 'Technologies' }).click();
+  await page.waitForTimeout(2600);
 
   // ── Constellation ───────────────────────────────────────────────────
   const [lx, ly] = await centre(page, "[aria-label='Laravel, Backend']");
@@ -216,29 +227,32 @@ async function desktop(browser) {
   await page.waitForTimeout(700);
   await page.evaluate(() => document.activeElement?.blur());
 
-  await page.locator('button', { hasText: 'Data' }).first().click();
+  // Scoped to the filter row: other buttons on the page also contain the word "data".
+  const filters = page.locator('#tech [aria-label="Filter by category"] button');
+  await filters.filter({ hasText: 'Data' }).click();
   await page.waitForTimeout(1500);
   check('constellation: category filter applies', (await page.locator("[aria-label='Redis, Data']").getAttribute('data-emphasis')) === 'ring');
   check('constellation: filtered-out nodes move away', (await page.locator("[aria-label='React, Frontend']").getAttribute('data-emphasis')) === 'away');
   await page.screenshot({ path: 'qa-screens/e2e-desktop-tech-filter.png' });
-  await page.locator('button', { hasText: /^All/ }).first().click();
+  await filters.filter({ hasText: /^All/ }).click();
 
   // ── Project explorer ────────────────────────────────────────────────
   await goTo(page, 'projects');
   await page.evaluate(() => window.scrollBy(0, 200));
   await page.waitForTimeout(600);
   check('explorer: standby bay previews a system', (await page.locator('#inspection-bay').innerText()).toLowerCase().includes('standing by'));
-  await page.locator('[data-project-index] button', { hasText: 'Vigil' }).click();
+  check('explorer: the catalogue lists the six projects', (await page.locator('[data-project-index] button').count()) === 6);
+  await page.locator('[data-project-index] button', { hasText: 'wssh' }).click();
   await page.waitForTimeout(2200);
-  check('explorer: selecting a project opens the inspector', (await page.locator('#inspection-bay h3').first().innerText()) === 'Vigil');
-  check('explorer: field adopts the project signature', (await mode()) === 'sample pulses', await mode());
-  check('explorer: focus moves into the inspector', await page.evaluate(() => document.activeElement?.id === 'inspect-vigil'));
+  check('explorer: selecting a project opens the inspector', (await page.locator('#inspection-bay h3').first().innerText()) === 'wssh');
+  check('explorer: field adopts the project signature', (await mode()) === 'signal pulses', await mode());
+  check('explorer: focus moves into the inspector', await page.evaluate(() => document.activeElement?.id === 'inspect-wssh'));
   await page.screenshot({ path: 'qa-screens/e2e-desktop-project.png' });
 
-  const [sx, sy] = await centre(page, '#inspection-bay svg [aria-label^="vigil-collector"]');
+  const [sx, sy] = await centre(page, '#inspection-bay svg [aria-label^="SSH client"]');
   await page.mouse.click(sx, sy);
   await page.waitForTimeout(500);
-  check('explorer: a diagram stage can be inspected', (await page.locator('#inspection-bay [aria-live="polite"]').innerText()).includes('gathers system samples'));
+  check('explorer: a diagram stage can be inspected', (await page.locator('#inspection-bay [aria-live="polite"]').innerText()).includes('holds the SSH connection'));
 
   await page.locator('[role="tab"]', { hasText: 'Engineering' }).click();
   await page.waitForTimeout(400);
@@ -249,22 +263,40 @@ async function desktop(browser) {
   await page.screenshot({ path: 'qa-screens/e2e-desktop-project-stack.png' });
 
   // A technology chip in the inspector drives the shared highlight.
-  const [cx, cy] = await centre(page, '[role="tabpanel"] button:has-text("D3")');
+  // The chip can sit below the fold once a stage is open: bring it into view before pointing at it.
+  await page.locator('[role="tabpanel"] button:has-text("Paramiko")').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(500);
+  const [cx, cy] = await centre(page, '[role="tabpanel"] button:has-text("Paramiko")');
   await page.mouse.move(cx, cy, { steps: 4 });
   await page.waitForTimeout(400);
-  check('system: hovering a technology in the inspector lights its project in the catalogue', (await page.locator('[data-project-index] button', { hasText: 'Vigil' }).getAttribute('data-lit')) === 'true');
+  check('system: hovering a technology in the inspector lights its project in the catalogue', (await page.locator('[data-project-index] button', { hasText: 'wssh' }).getAttribute('data-lit')) === 'true');
   await page.mouse.move(10, 400);
 
   await page.keyboard.press('Escape');
   await page.waitForTimeout(900);
   check('explorer: Escape closes the inspector', (await page.locator('#inspection-bay').innerText()).toLowerCase().includes('standing by'));
-  check('explorer: focus returns to the catalogue entry', await page.evaluate(() => document.activeElement?.textContent?.includes('Vigil') ?? false));
+  check('explorer: focus returns to the catalogue entry', await page.evaluate(() => document.activeElement?.textContent?.includes('wssh') ?? false));
   check('explorer: field returns to the section mode', (await mode()) === 'standing by', await mode());
+
+  // Every catalogued system opens, takes its own field behaviour and draws its diagram.
+  const behaviours = new Set();
+  for (const name of ['MKEditor', 'The Home Counties', 'Aldervast', 'ED:CS', 'OMG', 'wssh']) {
+    await page.locator('[data-project-index] button', { hasText: name }).click();
+    await page.waitForTimeout(1900);
+    const title = await page.locator('#inspection-bay h3').first().innerText();
+    const stages = await page.locator('#inspection-bay svg [role="button"]').count();
+    behaviours.add(await mode());
+    check(`explorer: ${name} opens with an architecture diagram`, title === name && stages >= 6, `${stages} stages`);
+  }
+  check('explorer: each project gives the field a distinct behaviour', behaviours.size === 6, [...behaviours].join(', '));
+  await page.screenshot({ path: 'qa-screens/e2e-desktop-project-last.png' });
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(900);
 
   // ── Contact ─────────────────────────────────────────────────────────
   await goTo(page, 'contact');
   const contact = await page.locator('#contact').innerText();
-  check('contact: email, GitHub and LinkedIn are present', contact.includes('outlook.com') && contact.includes('github.com/sentrychris') && contact.includes('linkedin.com/in/chris-rowles'));
+  check('contact: email, GitHub and LinkedIn are present', contact.includes('outlook.com') && contact.includes('github.com/versyxdigital') && contact.includes('linkedin.com/in/chris-rowles'));
   check('contact: field settles', (await mode()) === 'settled lattice', await mode());
   await page.screenshot({ path: 'qa-screens/e2e-desktop-contact.png' });
 
@@ -362,9 +394,9 @@ async function reducedMotion(browser) {
   check('reduced motion: field holds still', stats !== null && stats.changed < 0.01, stats ? `${(stats.changed * 100).toFixed(1)}% of sampled pixels changed` : '');
   check('reduced motion: content is visible without scroll reveals', await page.evaluate(() => getComputedStyle(document.querySelector('#about h2')).opacity === '1'));
   await goTo(page, 'projects', 800);
-  await page.locator('[data-project-index] button', { hasText: 'Vigil' }).click();
+  await page.locator('[data-project-index] button', { hasText: 'Aldervast' }).click();
   await page.waitForTimeout(600);
-  check('reduced motion: explorer still works', (await page.locator('#inspection-bay h3').first().innerText()) === 'Vigil');
+  check('reduced motion: explorer still works', (await page.locator('#inspection-bay h3').first().innerText()) === 'Aldervast');
   await page.screenshot({ path: 'qa-screens/e2e-reduced-project.png' });
   check('console: no errors', errors.length === 0, errors.slice(0, 3).join(' | '));
   await context.close();
@@ -375,7 +407,7 @@ async function noWebgl(browser) {
   const { page, context, errors } = await open(browser, { width: 1440, height: 900, query: '?nowebgl' });
   check('fallback: no WebGL canvas is created', (await page.locator('canvas').count()) === 1, 'only the 2D schematic overlay');
   check('fallback: static field is drawn', (await page.locator('[class*="fallback"] svg path').count()) > 500);
-  check('fallback: hero content is intact', (await page.locator('#hero').innerText()).includes('Lead Developer at SentryBay'));
+  check('fallback: hero content is intact', (await page.locator('#hero').innerText()).includes('Software studio'));
   await page.screenshot({ path: 'qa-screens/e2e-nowebgl-hero.png' });
   await goTo(page, 'tech', 1000);
   const [x, y] = await centre(page, "[aria-label='Python, Languages']");

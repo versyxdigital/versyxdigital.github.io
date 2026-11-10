@@ -1,38 +1,45 @@
 import type { Profile } from './types';
 
-/** Source: https://sentrychris.github.io/ (hero, about, specifications, contact). */
+/**
+ * Sources: the founder's description of the studio (given for this site), the
+ * Versyx Digital entry on https://sentrychris.github.io/, the Versyx Digital
+ * GitHub organisation, and the contact details published on the studio's
+ * MKEditor site.
+ */
 export const profile: Profile = {
-  name: 'Chris Rowles',
-  role: 'Lead Developer',
-  organisation: 'SentryBay',
-  statement: 'Software systems, owned end to end.',
+  name: 'Versyx Digital',
+  descriptor: 'Software studio',
+  established: 2019,
+  location: 'United Kingdom',
   intro:
-    'Twelve-plus years building, testing and maintaining software and web applications across frontend, backend and infrastructure. I inherit complex legacy systems, bring them back up to standard, and ship clean, well-tested code on top.',
+    'A small and focused UK studio, established in 2019. We specialise in web application design and development, APIs, consulting, bug fixing and AI-integrated workflows.',
   about: [
-    'Most of the work has been hands-on across the full stack: frontend, backend and infrastructure. The rest has been leading teams through reviews, mentoring and architectural decisions.',
-    'A proven track record of inheriting complex legacy systems, bringing them back up to standard, and shipping clean, well-tested code on top.',
-    'Polyglot by necessity, opinionated by experience. I also ship things in my spare time.',
+    'Bespoke development for clients across sectors, with a focus on consultation, infrastructure and frontend.',
+    'We also build and contribute to open source. Every system in the catalogue below is ours, and most of them are open to read.',
   ],
   specs: [
+    { label: 'Established', value: '2019' },
     { label: 'Based', value: 'United Kingdom' },
-    { label: 'Role', value: 'Lead Developer' },
-    { label: 'Experience', value: '12+ years' },
-    { label: 'Stack', value: 'Polyglot · web-first' },
-    { label: 'Open to', value: 'Lead · Senior · Consulting' },
+    { label: 'Shape', value: 'Small and focused' },
+    { label: 'Founder', value: 'Chris Rowles' },
+    { label: 'Open to', value: 'Projects · Consulting' },
   ],
-  location: { label: 'United Kingdom', lat: 51.5074, lon: -0.1278 },
-  availability: 'Open to lead engineering roles, senior IC roles and consulting.',
-  contact: {
-    email: { user: 'christopher.rowles', domain: 'outlook.com' },
-    note: 'Quickest replies are by email; everything else also reaches me.',
+  founder: {
+    name: 'Chris Rowles',
+    note: 'Founded and run by Chris Rowles, a developer with twelve-plus years across frontend, backend and infrastructure.',
     links: [
-      { label: 'GitHub', display: 'github.com/sentrychris', href: 'https://github.com/sentrychris' },
-      {
-        label: 'LinkedIn',
-        display: 'linkedin.com/in/chris-rowles',
-        href: 'https://linkedin.com/in/chris-rowles',
-      },
+      { label: 'GitHub', href: 'https://github.com/sentrychris' },
+      { label: 'LinkedIn', href: 'https://linkedin.com/in/chris-rowles' },
     ],
   },
-  ndaNote: 'Most production work is under NDA. The open systems are catalogued here; reach out for the rest.',
+  availability: 'Open to new projects and consulting.',
+  contact: {
+    email: { user: 'christopher.rowles', domain: 'outlook.com' },
+    note: 'Quickest replies are by email.',
+    links: [
+      { label: 'GitHub', display: 'github.com/versyxdigital', href: 'https://github.com/versyxdigital' },
+      { label: 'Founder', display: 'linkedin.com/in/chris-rowles', href: 'https://linkedin.com/in/chris-rowles' },
+    ],
+  },
+  catalogueNote: 'The studio’s own systems, each open to inspect. Client work is not catalogued here.',
 };

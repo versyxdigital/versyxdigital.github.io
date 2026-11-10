@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Chris Rowles \u2014 interactive engineering portfolio. A living computational system.",
+  "description": "Versyx Digital: interactive studio site. A living computational system.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
