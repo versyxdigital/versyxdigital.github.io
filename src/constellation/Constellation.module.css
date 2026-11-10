@@ -145,6 +145,15 @@
   font-size: 13px;
 }
 
+/* Nodes pulled into the centre (a filtered group, or a focused node's ring) read a step stronger. */
+.node[data-emphasis='ring'] .label {
+  fill: var(--text);
+}
+
+.node[data-emphasis='ring'] .shape {
+  stroke-width: 1.8;
+}
+
 .node:hover .focusRing,
 .node[data-state='primary'] .focusRing,
 .node[data-selected='true'] .focusRing {

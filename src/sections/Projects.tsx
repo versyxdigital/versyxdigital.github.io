@@ -5,6 +5,7 @@ import { Diagram } from '../projects/Diagram';
 import { Inspector } from '../projects/Inspector';
 import { pulse, registry, useAnchor, useConnections } from '../schematic/registry';
 import { selectHighlight, useSystem } from '../state/store';
+import { widerThan } from '../system/viewport';
 import styles from './Projects.module.css';
 
 function IndexItem({ project }: { project: Project }) {
@@ -102,8 +103,9 @@ export function Projects() {
               route: 'hvh' as const,
               bend: 0.5,
               tone,
+              // Only while catalogue and bay sit side by side (see the 980px breakpoint in the styles).
               level: (s: { activeSection: string; selectedProject: string | null }) =>
-                s.activeSection === 'projects' ? (s.selectedProject ? 1 : 0.5) : 0,
+                s.activeSection === 'projects' && widerThan(980) ? (s.selectedProject ? 1 : 0.5) : 0,
               ambient: 4,
             },
           ]
