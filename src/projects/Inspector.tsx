@@ -34,7 +34,7 @@ function Media({ project }: { project: Project }) {
     <figure className={styles.shot}>
       {image ? (
         <a href={image.src} target="_blank" rel="noreferrer noopener">
-          <img key={image.src} src={image.src} alt={image.alt} width={image.width} height={image.height} decoding="async" />
+          <img key={image.src} src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
           <span className="visually-hidden"> (opens full size in a new tab)</span>
         </a>
       ) : (
@@ -69,7 +69,7 @@ function Media({ project }: { project: Project }) {
               aria-label={`Screenshot ${i + 1}${item.caption ? `: ${item.caption}` : ''}`}
               onClick={() => setIndex(i)}
             >
-              <img src={item.thumb ?? item.src} alt="" width={item.width} height={item.height} decoding="async" />
+              <img src={item.thumb ?? item.src} alt="" width={item.width} height={item.height} loading="lazy" decoding="async" />
             </button>
           ))}
           {project.video && (
