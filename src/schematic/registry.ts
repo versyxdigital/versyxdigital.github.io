@@ -40,6 +40,12 @@ export interface Connection {
   /** No connector circle where the line starts: it runs straight out of its anchor. */
   plainStart?: boolean;
   /**
+   * Colour for pulses sent along this line, as "r, g, b", read when each pulse
+   * leaves. The line itself keeps its tone. Where such a pulse lands in the
+   * field it leaves a faint tint of the same colour.
+   */
+  pulseRgb?: () => string;
+  /**
    * Visibility for the current interaction state: 0 hidden, ~0.3 resting,
    * 1 fully energised. Evaluated every frame, so keep it cheap.
    */
@@ -54,6 +60,8 @@ export interface Pulse {
   start: number;
   duration: number;
   tone: Tone;
+  /** Its own colour as "r, g, b", when the line gives its pulses one. */
+  rgb?: string;
   ripple: number;
   done: boolean;
 }
@@ -117,6 +125,7 @@ export function pulse(id: string, options: PulseOptions = {}): void {
     start: now() + (options.delay ?? 0),
     duration: options.duration ?? -1,
     tone: options.tone ?? runtime.def.tone,
+    rgb: runtime.def.pulseRgb?.(),
     ripple: options.ripple ?? runtime.def.ripple ?? 0,
     done: false,
   });

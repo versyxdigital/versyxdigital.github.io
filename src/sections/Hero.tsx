@@ -1,7 +1,9 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { profile } from '../content';
-import { pulse, useAnchor, useConnections } from '../schematic/registry';
+import { systemClock } from '../field/fieldState';
+import { pulse, registry, useAnchor, useConnections } from '../schematic/registry';
 import { useSystem } from '../state/store';
+import { accentRgb } from '../system/accent';
 import { scroll, scrollToSection } from '../system/scroll';
 import styles from './Hero.module.css';
 
@@ -24,6 +26,8 @@ export function Hero() {
         // Straight out of the dot beside the subtitle, with no connector circle.
         from: { kind: 'anchor', id: 'hero:role', side: 'r', gap: 0 },
         plainStart: true,
+        // Each pulse leaves in whatever colour the dot is at that moment.
+        pulseRgb: () => accentRgb(systemClock()),
         to: { kind: 'field', ...CELL_ROLE },
         route: 'hv',
         tone: 'cyan',
@@ -32,6 +36,17 @@ export function Hero() {
         ripple: 0.8,
       },
     ];
+  }, []);
+
+  // The dot beside the subtitle drifts slowly through the accent colours.
+  useEffect(() => {
+    const paint = (): void => {
+      const dot = registry.anchors.get('hero:role');
+      if (dot instanceof HTMLElement) dot.style.setProperty('--dot', accentRgb(systemClock()));
+    };
+    paint();
+    const timer = window.setInterval(paint, 120);
+    return () => window.clearInterval(timer);
   }, []);
 
   const energise = (): void => {

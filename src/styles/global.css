@@ -257,9 +257,8 @@ html[data-motion='reduced'] [data-reveal] {
 }
 
 /* ── Greyscale theme (trial) ── the moving background and the drawn lines lose their colour too. */
-canvas {
-  filter: grayscale(1);
-}
+/* (The field and the line overlay grey themselves in code; see uGrey in
+   CubeField.tsx and GREYSCALE in SchematicOverlay.tsx.) */
 
 #about,
 #clients,

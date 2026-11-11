@@ -1,5 +1,5 @@
 import { fieldModes, pickParams, type FieldParams } from './modes';
-import { MAX_RIPPLES, heightAt, type Cursor, type FieldSnapshot, type Ripple } from './waveMath';
+import { MAX_RIPPLES, MAX_TINTS, heightAt, type Cursor, type FieldSnapshot, type Ripple, type Tint } from './waveMath';
 
 /**
  * Mutable, non-React state of the cube field.
@@ -27,6 +27,8 @@ interface FieldRuntime extends FieldSnapshot {
   cursor: Cursor;
   /** Index of the next ripple slot to overwrite. */
   rippleHead: number;
+  tints: Tint[];
+  tintHead: number;
   /** Bumped whenever something changed that needs a redraw in on-demand mode. */
   invalidate: () => void;
   /** World (x, y, z) -> viewport pixels. Installed by the camera rig. */
@@ -50,6 +52,8 @@ export const field: FieldRuntime = {
   ripples: Array.from({ length: MAX_RIPPLES }, emptyRipple),
   cursor: { x: 0, z: 0, strength: 0 },
   rippleHead: 0,
+  tints: Array.from({ length: MAX_TINTS }, (): Tint => ({ x: 0, z: 0, start: -1000, r: 0, g: 0, b: 0 })),
+  tintHead: 0,
   invalidate: () => {},
   project: () => ({ x: 0, y: 0, visible: false }),
   unproject: () => null,
@@ -76,6 +80,23 @@ export function emitRippleAtScreen(sx: number, sy: number, amp: number, tone: nu
   const hit = field.unproject(sx, sy);
   if (!hit) return false;
   emitRipple(hit.x, hit.z, amp, tone);
+  return true;
+}
+
+/** Drops a hint of colour into the field under a viewport position. `rgb` is "r, g, b" from 0 to 255. */
+export function emitTintAtScreen(sx: number, sy: number, rgb: string): boolean {
+  const hit = field.unproject(sx, sy);
+  const slot = field.tints[field.tintHead];
+  if (!hit || !slot) return false;
+  const [r = 0, g = 0, b = 0] = rgb.split(',').map(Number);
+  slot.x = hit.x;
+  slot.z = hit.z;
+  slot.start = systemClock();
+  slot.r = r / 255;
+  slot.g = g / 255;
+  slot.b = b / 255;
+  field.tintHead = (field.tintHead + 1) % MAX_TINTS;
+  field.invalidate();
   return true;
 }
 

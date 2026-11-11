@@ -17,8 +17,21 @@ export const FIELD_SIZE = 112;
 export const MAX_RIPPLES = 8;
 export const RIPPLE_SPEED = 11;
 export const RIPPLE_LIFETIME = 6;
+/** Colour tints: how many can be spreading at once, and how long one lasts in seconds. */
+export const MAX_TINTS = 3;
+export const TINT_LIFETIME = 5;
 
 const TAU = 6.283185307179586;
+
+/** A soft patch of colour spreading out from a point and fading. Colour is 0..1 per channel. */
+export interface Tint {
+  x: number;
+  z: number;
+  start: number;
+  r: number;
+  g: number;
+  b: number;
+}
 
 /** A radial disturbance. `start` is in system-clock seconds. */
 export interface Ripple {

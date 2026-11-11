@@ -7,7 +7,7 @@ import { scroll } from '../system/scroll';
 import { blankPose, poseAt } from './cameraRail';
 import { emitRipple, field, systemClock } from './fieldState';
 import { fragmentShader, vertexShader } from './shaders';
-import { FIELD_SIZE, MAX_RIPPLES, cellSeed } from './waveMath';
+import { FIELD_SIZE, MAX_RIPPLES, cellSeed, MAX_TINTS } from './waveMath';
 
 const BACKGROUND = new THREE.Color('#060606');
 const BASE = new THREE.Color(0.125, 0.155, 0.198);
@@ -68,6 +68,10 @@ function buildMaterial(neighbours: boolean): THREE.ShaderMaterial {
       uFocus: { value: new THREE.Vector2() },
       uRipple: { value: Array.from({ length: MAX_RIPPLES }, () => new THREE.Vector4(0, 0, -1000, 0)) },
       uRippleTone: { value: new Float32Array(MAX_RIPPLES) },
+      uTint: { value: Array.from({ length: MAX_TINTS }, () => new THREE.Vector4(0, 0, -1000, 0)) },
+      uTintColour: { value: Array.from({ length: MAX_TINTS }, () => new THREE.Vector3()) },
+      // Greyscale theme: 1 draws the field in grey, 0 in its original colours.
+      uGrey: { value: 1 },
       uCursor: { value: new THREE.Vector3() },
       uBg: { value: BACKGROUND },
       uBase: { value: BASE },
@@ -257,6 +261,14 @@ export function CubeField({ quality }: { quality: Quality }) {
       if (!ripple) continue;
       ripples[i]!.set(ripple.x, ripple.z, ripple.start, ripple.amp);
       tones[i] = ripple.tone;
+    }
+    const tints = u.uTint!.value as THREE.Vector4[];
+    const tintColours = u.uTintColour!.value as THREE.Vector3[];
+    for (let i = 0; i < MAX_TINTS; i++) {
+      const tint = field.tints[i];
+      if (!tint) continue;
+      tints[i]!.set(tint.x, tint.z, tint.start, 0);
+      tintColours[i]!.set(tint.r, tint.g, tint.b);
     }
   });
 

@@ -1,18 +1,31 @@
 import { useEffect, useRef } from 'react';
 import type { Tone } from '../content';
-import { emitRippleAtScreen, projectFieldPoint, systemClock } from '../field/fieldState';
+import { emitRippleAtScreen, emitTintAtScreen, projectFieldPoint, systemClock } from '../field/fieldState';
 import { toneIndex } from '../field/waveMath';
 import { useSystem } from '../state/store';
 import { registry, setClock, type AnchorSide, type ConnectionRuntime, type Endpoint } from './registry';
 import { pointAt, polylineLength, route, slice, type Pt } from './routing';
 import styles from './schematic.module.css';
 
-const TONE_RGB: Record<Tone, string> = {
-  cyan: '39, 220, 235',
-  blue: '80, 145, 255',
-  violet: '158, 136, 240',
+/**
+ * Greyscale theme: lines are drawn in grey here in code rather than through a
+ * CSS filter, so that a pulse with its own colour can keep it. Set to false
+ * to draw the three tones in colour again.
+ */
+const GREYSCALE = true;
+const themed = (rgb: string): string => {
+  if (!GREYSCALE) return rgb;
+  const [r = 0, g = 0, b = 0] = rgb.split(',').map(Number);
+  const y = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+  return `${y}, ${y}, ${y}`;
 };
-const REST_RGB = '120, 142, 164';
+
+const TONE_RGB: Record<Tone, string> = {
+  cyan: themed('39, 220, 235'),
+  blue: themed('80, 145, 255'),
+  violet: themed('158, 136, 240'),
+};
+const REST_RGB = themed('120, 142, 164');
 /** Pixels per second for pulses without an explicit duration. */
 const PULSE_SPEED = 620;
 
@@ -210,7 +223,7 @@ export function SchematicOverlay() {
         if (c.lastAmbientSlot === -1) c.lastAmbientSlot = slot;
         else if (slot !== c.lastAmbientSlot) {
           c.lastAmbientSlot = slot;
-          c.pulses.push({ start: now, duration: -1, tone: c.def.tone, ripple: (c.def.ripple ?? 0) * 0.6, done: false });
+          c.pulses.push({ start: now, duration: -1, tone: c.def.tone, rgb: c.def.pulseRgb?.(), ripple: (c.def.ripple ?? 0) * 0.6, done: false });
         }
       }
 
@@ -224,10 +237,11 @@ export function SchematicOverlay() {
           if (p.ripple > 0 && dropsIntoField) {
             emitRippleAtScreen(b.x, b.y, p.ripple, toneIndex[p.tone]);
           }
+          if (p.rgb && dropsIntoField) emitTintAtScreen(b.x, b.y, p.rgb);
           continue;
         }
         const eased = t * t * (3 - 2 * t);
-        const prgb = TONE_RGB[p.tone];
+        const prgb = p.rgb ?? TONE_RGB[p.tone];
         const tail = Math.min(0.5, 70 / length);
         const body = slice(pts, Math.max(0, eased - tail), eased);
         ctx.lineCap = 'round';
@@ -243,7 +257,7 @@ export function SchematicOverlay() {
         ctx.beginPath();
         ctx.arc(head.x, head.y, 5.5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = '#f4fdff';
+        ctx.fillStyle = p.rgb ? `rgb(${p.rgb})` : '#f4fdff';
         ctx.beginPath();
         ctx.arc(head.x, head.y, 1.7, 0, Math.PI * 2);
         ctx.fill();

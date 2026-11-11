@@ -1,4 +1,4 @@
-import { MAX_RIPPLES, RIPPLE_LIFETIME, RIPPLE_SPEED } from './waveMath';
+import { MAX_RIPPLES, MAX_TINTS, RIPPLE_LIFETIME, RIPPLE_SPEED, TINT_LIFETIME } from './waveMath';
 
 /**
  * GLSL for the cube field.
@@ -165,7 +165,10 @@ attribute float aSeed;
 
 uniform float uCell;
 uniform float uTwist;
+uniform vec4 uTint[${MAX_TINTS}];
+uniform vec3 uTintColour[${MAX_TINTS}];
 
+varying vec3 vTint;
 varying vec3 vWorld;
 varying vec3 vLocal;
 varying vec3 vFaceN;
@@ -217,6 +220,20 @@ void main() {
   vNormal = vec3(c * normal.x - s * normal.z, normal.y, s * normal.x + c * normal.z);
   vSlope = slope;
   vRipple = tone;
+
+  // Colour dropped into the field: a soft patch that widens and thins out,
+  // like pigment spreading in water, then fades.
+  vec3 tint = vec3(0.0);
+  for (int i = 0; i < ${MAX_TINTS}; i++) {
+    float age = uClock - uTint[i].z;
+    if (age <= 0.0 || age >= ${f(TINT_LIFETIME)}) continue;
+    float reach = 2.5 + age * 6.5;
+    float d = length(p - uTint[i].xy);
+    float blot = exp(-(d * d) / (2.0 * reach * reach));
+    float life = smoothstep(0.0, 0.5, age) * (1.0 - smoothstep(${f(TINT_LIFETIME)} * 0.35, ${f(TINT_LIFETIME)}, age));
+    tint += uTintColour[i] * blot * life;
+  }
+  vTint = tint;
   vH = h0;
   vSeed = aSeed;
   vDepth = depth;
@@ -240,7 +257,9 @@ uniform float uFadeNear;
 uniform float uFadeFar;
 uniform float uFogStart;
 uniform float uFogDensity;
+uniform float uGrey;
 
+varying vec3 vTint;
 varying vec3 vWorld;
 varying vec3 vLocal;
 varying vec3 vFaceN;
@@ -305,6 +324,13 @@ void main() {
   col += vec3(0.40, 0.50, 0.62) * edge * mix(0.05, 0.085, top);
   col += glow * edge * 0.9;
   col += glow * mix(0.36 * exp(-vDepth * 1.3), 0.2, top);
+
+  // Greyscale theme: the field loses its colour here rather than through a CSS
+  // filter, so that a tint dropped into it afterwards can keep its own.
+  float luma = dot(col, vec3(0.299, 0.587, 0.114));
+  col = mix(col, vec3(luma), uGrey);
+  // A hint only: strongest on lit tops and edges, barely there in the shadows.
+  col += vTint * (0.025 + 0.4 * luma + 0.07 * edge);
 
   // ── Emerge from, and dissolve into, the page background ────────────
   float fade = 1.0 - smoothstep(uFadeNear, uFadeFar, length(p - uFadeCenter));
