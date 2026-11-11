@@ -106,7 +106,9 @@ export function About() {
     () => [
       {
         id: 'about:service-link',
-        from: { kind: 'anchor', id: `service:${selectedService}`, side: 'b', gap: 3 },
+        // Straight out of the bottom of the service's dot, with no connector circle.
+        from: { kind: 'anchor', id: `service:${selectedService}`, side: 'b', gap: 0 },
+        plainStart: true,
         to: { kind: 'anchor', id: 'service-record', side: 't', at: 0.04, gap: 0 },
         route: 'vhv',
         bend: 0.82,

@@ -164,10 +164,12 @@ export function SchematicOverlay() {
       ctx.lineWidth = 1;
       ctx.strokeStyle = `rgba(${nodeRgb}, ${(0.9 * nodeAlpha).toFixed(3)})`;
       ctx.fillStyle = '#060606';
-      ctx.beginPath();
-      ctx.arc(Math.round(a.x) + 0.5, Math.round(a.y) + 0.5, 3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
+      if (!c.def.plainStart) {
+        ctx.beginPath();
+        ctx.arc(Math.round(a.x) + 0.5, Math.round(a.y) + 0.5, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
       if (c.reveal > 0.96) {
         const ex = Math.round(b.x) + 0.5;
         const ey = Math.round(b.y) + 0.5;
