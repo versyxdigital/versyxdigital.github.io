@@ -108,7 +108,6 @@ export function App() {
       <main className={styles.main}>
         <Hero />
         <About />
-        {clients.length > 0 && <Clients />}
         <Later id="projects" ready={below}>
           <Projects />
         </Later>
@@ -117,6 +116,7 @@ export function App() {
             <Technologies />
           </Later>
         )}
+        {clients.length > 0 && <Clients />}
         <Later id="contact" ready={below}>
           <Contact />
         </Later>

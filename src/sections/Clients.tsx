@@ -5,7 +5,7 @@ import { ClientGlyph } from './ClientGlyph';
 import styles from './Clients.module.css';
 
 /**
- * "Our clients": centred rows of logos, straight after About.
+ * "Our clients": centred rows of logos, between Projects and Contact.
  * A client with a logo file shows it in white; otherwise its name is set as a
  * text wordmark beside a mock-up symbol (see content/clients.ts).
  */

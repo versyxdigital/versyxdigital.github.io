@@ -25,7 +25,7 @@ import {
  */
 
 export type SectionId = 'hero' | 'about' | 'clients' | 'tech' | 'projects' | 'contact';
-const allSections: readonly SectionId[] = ['hero', 'about', 'clients', 'projects', 'tech', 'contact'];
+const allSections: readonly SectionId[] = ['hero', 'about', 'projects', 'tech', 'clients', 'contact'];
 /** The sections on the page, in order. Technologies can be switched off in content/config.ts. */
 export const sectionOrder: readonly SectionId[] = allSections.filter(
   (id) => (id !== 'tech' || contentConfig.showTechnologies) && (id !== 'clients' || clients.length > 0),
