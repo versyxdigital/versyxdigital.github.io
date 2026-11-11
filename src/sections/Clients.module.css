@@ -104,8 +104,11 @@
 }
 
 @media (max-width: 720px) {
+  /* One client per line. */
   .wall {
-    gap: 2rem 2.25rem;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 2rem;
   }
   .tile {
     white-space: normal;
