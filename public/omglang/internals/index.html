@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How OMG works — from source text to a running program</title>
+    <meta
+      name="description"
+      content="How a programming language is put together, shown with a real one. Type OMG code and watch the lexer, parser and compiler work on it live, step through a stack machine, and see how a compiler comes to be written in its own language."
+    />
+    <meta name="author" content="Chris Rowles" />
+    <link rel="canonical" href="https://versyx.digital/omglang/internals/" />
+    <meta property="og:title" content="How OMG works — from source text to a running program" />
+    <meta property="og:description" content="Type OMG code and watch the lexer, parser and compiler work on it live." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://versyx.digital/omglang/internals/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#0e0d14" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('omg-theme');
+          if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="../" aria-label="OMG home">
+          <span class="brand-mark" aria-hidden="true">;;;</span>
+          <span class="brand-name">OMG</span>
+        </a>
+        <nav class="nav-links" aria-label="Site">
+          <a class="nav-link" href="../learn/">Learn</a>
+          <a class="nav-link" href="../playground/">Playground</a>
+          <a class="nav-link" href="./" aria-current="page">How it works</a>
+        </nav>
+        <div class="nav-end">
+          <a class="icon-btn gh" href="https://github.com/sentrychris/omglang" aria-label="OMG on GitHub">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.32c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.81.06 1.23.83 1.23.83.72 1.23 1.88.88 2.34.67.07-.52.28-.88.51-1.08-1.77-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          </a>
+          <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch between light and dark">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap doc">
+      <nav class="toc" aria-label="On this page">
+        <div class="toc-title">How it works</div>
+        <select class="select toc-select" aria-label="Jump to a section"></select>
+        <ol>
+          <li><a href="#overview">Four steps</a></li>
+          <li><a href="#lexer">The lexer</a></li>
+          <li><a href="#parser">The parser</a></li>
+          <li><a href="#compiler">The compiler</a></li>
+          <li><a href="#vm">The virtual machine</a></li>
+          <li><a href="#control">Loops, functions, errors</a></li>
+          <li><a href="#self-hosting">A compiler in its own language</a></li>
+          <li><a href="#backends">Native code and JavaScript</a></li>
+          <li><a href="#this-site">What runs on this site</a></li>
+          <li><a href="#source">Read the source</a></li>
+        </ol>
+      </nav>
+
+      <main id="main" class="prose">
+        <header>
+          <h1>How OMG works</h1>
+          <p class="lede">
+            OMG exists to show how a language is put together, so nothing here is hidden. This page follows a program
+            from text to output. The boxes are live: they run the real OMG compiler on whatever you type.
+          </p>
+        </header>
+
+        <!-- ───────────── Overview ───────────── -->
+        <section id="overview">
+          <h2><span class="num">01</span>Four steps</h2>
+          <p>
+            A computer cannot run <code>emit 1 + 2 * 3</code> as it stands. It is only a row of characters. Getting
+            from there to the number 7 on the screen takes four steps, each one simple on its own, each one handing a
+            tidier form of the program to the next.
+          </p>
+
+          <div class="pipeline">
+            <div class="stage">
+              <div class="stage-n">00 source</div>
+              <h3>Text</h3>
+              <code>emit 1 + 2 * 3</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">01 lexer</div>
+              <h3>Tokens</h3>
+              <code>EMIT NUM PLUS
+NUM STAR NUM</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">02 parser</div>
+              <h3>Syntax tree</h3>
+              <code>emit
+└ add
+  ├ 1
+  └ mul
+    ├ 2
+    └ 3</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">03 compiler</div>
+              <h3>Bytecode</h3>
+              <code>PushInt(1)
+PushInt(2)
+PushInt(3)
+Mul
+Add
+Emit</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">04 VM</div>
+              <h3>Result</h3>
+              <code>7</code>
+            </div>
+          </div>
+
+          <p style="margin-top: 1.2em">
+            The first three steps together are what people mean by "the compiler". The last one is the virtual
+            machine, or VM: a program that pretends to be a very simple computer. The rest of this page takes the
+            steps one at a time.
+          </p>
+        </section>
+
+        <!-- ───────────── Lexer ───────────── -->
+        <section id="lexer">
+          <h2><span class="num">02</span>The lexer: characters to tokens</h2>
+          <p>
+            The lexer reads the source one character at a time and groups the characters into tokens: the words and
+            symbols of the language. Each token has a kind, sometimes a value, and the line it came from.
+          </p>
+
+          <div class="lab" data-stages="tokens">
+            <textarea aria-label="OMG source to turn into tokens">
+;;;omg
+alloc total := 1 + 2 * 3   # a comment
+emit "total: " + total
+</textarea>
+          </div>
+
+          <p>Things to notice, and to try:</p>
+          <ul>
+            <li>
+              The comment, the spaces and the <code>;;;omg</code> header are gone. The lexer throws away everything
+              the later steps do not need.
+            </li>
+            <li>
+              <code>alloc</code> and <code>emit</code> get kinds of their own, because they are keywords.
+              <code>total</code> is an <code>ID</code>, a name the program made up. Rename it and see.
+            </li>
+            <li>
+              The end of a line is a token too (<code>NL</code>). OMG has no semicolons, so a new line is what ends a
+              statement.
+            </li>
+            <li>
+              The lexer knows nothing about grammar. Type <code>+ + alloc 3</code> and it will list the tokens without
+              complaint. It only objects to characters it cannot make into a token at all. Try an <code>@</code>.
+            </li>
+          </ul>
+        </section>
+
+        <!-- ───────────── Parser ───────────── -->
+        <section id="parser">
+          <h2><span class="num">03</span>The parser: tokens to a tree</h2>
+          <p>
+            A flat list of tokens does not say which operation happens first. The parser works that out and records
+            the answer as a tree, called the abstract syntax tree or AST. An operation sits above the things it
+            operates on.
+          </p>
+
+          <div class="lab" data-stages="ast,tokens">
+            <textarea aria-label="OMG source to parse into a syntax tree">
+emit 1 + 2 * 3
+</textarea>
+          </div>
+
+          <p>
+            Read the tree from the inside out. The <code>mul</code> of 2 and 3 is tucked inside the
+            <code>add</code>, so it has to be worked out first. That is all operator precedence is: a rule the
+            parser applies when it decides where to hang each node.
+          </p>
+          <ul>
+            <li>
+              Change the line to <code>emit (1 + 2) * 3</code>. The brackets do not appear in the tree. They have
+              done their job by putting <code>add</code> inside <code>mul</code> instead.
+            </li>
+            <li>
+              Each node is a small list: what it is, its parts, and a line number at the end. The line numbers are
+              carried along so that an error message can say where things went wrong.
+            </li>
+            <li>
+              This is where grammar mistakes are caught. Delete the <code>3</code> and the parser reports a syntax
+              error, because <code>*</code> needs something on its right.
+            </li>
+          </ul>
+          <p>
+            OMG's parser is a recursive-descent parser. That means it is a set of ordinary functions, one for each
+            piece of grammar (one for statements, one for expressions, one for function calls), which call each other
+            the same way the grammar nests. It is the kind you can write by hand and read from top to bottom.
+          </p>
+        </section>
+
+        <!-- ───────────── Compiler ───────────── -->
+        <section id="compiler">
+          <h2><span class="num">04</span>The compiler: a tree to bytecode</h2>
+          <p>
+            A tree is easy to reason about but awkward to run. The compiler walks it and writes out a flat list of
+            small instructions, called bytecode. The trick is the order of the walk: for each operation it first
+            writes the code for the parts, then the instruction for the operation itself.
+          </p>
+
+          <div class="lab" data-stages="bytecode,ast">
+            <textarea aria-label="OMG source to compile to bytecode">
+emit 1 + 2 * 3
+</textarea>
+          </div>
+
+          <p>
+            So <code>1 + 2 * 3</code> becomes: push 1, push 2, push 3, multiply, add. The operators come after their
+            operands, and the multiply comes before the add, which is exactly the order the work has to happen in.
+            Put brackets round <code>1 + 2</code> again and watch <code>Add</code> move ahead of <code>Mul</code>.
+          </p>
+          <p>
+            The whole instruction set is small, about fifty instructions. Most of them do one obvious thing: push a
+            value, load or store a variable, do arithmetic, compare, jump, call, return.
+          </p>
+        </section>
+
+        <!-- ───────────── VM ───────────── -->
+        <section id="vm">
+          <h2><span class="num">05</span>The virtual machine: running bytecode</h2>
+          <p>
+            The VM is a loop. It looks at the next instruction, does what it says, and moves on. Its working memory
+            is a stack: a pile of values where you can only add to the top or take from the top. An instruction like
+            <code>Add</code> takes the top two values off and puts their sum back.
+          </p>
+          <p>Step through the bytecode from above and watch the stack.</p>
+
+          <div class="stepper" id="stepper">
+            <div class="stepper-grid">
+              <div class="stepper-col">
+                <h4>Bytecode</h4>
+                <ol class="code-list" data-code></ol>
+              </div>
+              <div class="stepper-col">
+                <h4>Stack</h4>
+                <div class="stack" data-stack aria-live="polite"></div>
+              </div>
+              <div class="stepper-col">
+                <h4>Output</h4>
+                <div class="stepper-out" data-out></div>
+              </div>
+            </div>
+            <div class="stepper-bar">
+              <button class="btn btn-primary btn-sm" type="button" data-step>Step</button>
+              <button class="btn btn-sm" type="button" data-reset>Reset</button>
+              <span class="stepper-say" data-say aria-live="polite">Press Step to run the first instruction.</span>
+            </div>
+          </div>
+
+          <p>
+            That is the entire idea. A stack machine needs no knowledge of precedence, brackets or grammar. All of
+            that was settled earlier, and what is left is a list of steps so simple that the loop running them fits
+            on a page.
+          </p>
+        </section>
+
+        <!-- ───────────── Control flow ───────────── -->
+        <section id="control">
+          <h2><span class="num">06</span>Loops, functions and errors</h2>
+          <p>
+            Bytecode has no <code>loop</code> or <code>if</code>. It has jumps: instructions that change which
+            instruction comes next. A loop is a test, a jump out if the test fails, the body, and a jump back to the
+            test.
+          </p>
+
+          <div class="lab" data-stages="bytecode,run">
+            <textarea aria-label="An OMG loop to compile">
+alloc i := 0
+loop i < 3 {
+    emit i
+    i := i + 1
+}
+</textarea>
+          </div>
+
+          <p>
+            Find <code>JumpIfFalse</code> and <code>Jump</code> in the listing. The numbers in brackets are the
+            positions they jump to. An <code>if</code> is the same shape without the jump back. Replace the loop with
+            one and compare.
+          </p>
+
+          <h3>Functions</h3>
+          <p>
+            A function's instructions are placed after the main program, and a table records where each function
+            starts. <code>Call</code> remembers where it came from, jumps to the function, and <code>Ret</code> jumps
+            back with the result on the stack.
+          </p>
+
+          <div class="lab" data-stages="bytecode,run">
+            <textarea aria-label="An OMG function to compile">
+proc square(x) {
+    return x * x
+}
+emit square(4)
+</textarea>
+          </div>
+
+          <p>
+            Each call gets a frame: a private set of variables, so that the <code>x</code> of one call cannot disturb
+            the <code>x</code> of another. Frames are also what a traceback prints when something fails. One more
+            detail is worth seeing: when the last thing a function does is call another function, the compiler emits
+            <code>TailCall</code>, which reuses the current frame instead of stacking a new one. Add the line
+            <code>proc twice(x) { return square(x) }</code> at the top and look for it.
+          </p>
+
+          <h3>Errors</h3>
+          <p>
+            <code>try</code> compiles to <code>SetupExcept</code>, which tells the VM where to jump if anything goes
+            wrong before the matching <code>PopBlock</code>. When an error is raised, the VM unwinds to that point and
+            hands the message to the <code>except</code> block.
+          </p>
+
+          <div class="lab" data-stages="bytecode,run">
+            <textarea aria-label="An OMG try and except block to compile">
+try {
+    emit [1, 2][5]
+} except err {
+    emit "caught: " + err
+}
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Self-hosting ───────────── -->
+        <section id="self-hosting">
+          <h2><span class="num">07</span>A compiler in its own language</h2>
+          <p>
+            Here is the part that makes OMG more than an exercise. There are two compilers, and one of them is
+            written in OMG.
+          </p>
+          <ul>
+            <li>
+              <strong>The Rust compiler</strong> came first. A new language cannot compile itself on day one, because
+              nothing yet exists to run it, so the first compiler has to be written in something else. This one,
+              along with the VM, is the Rust program you get from <code>cargo build</code>.
+            </li>
+            <li>
+              <strong>The OMG compiler</strong> is the same lexer, parser and code generator, written again in OMG:
+              about 2,700 lines in a single file, <code>compiler.omg</code>. It is an ordinary OMG program that reads
+              source text and writes bytecode.
+            </li>
+          </ul>
+          <p>
+            When the Rust program is built, it uses the Rust compiler once, to compile <code>compiler.omg</code> into
+            bytecode, and stores that bytecode inside itself. From then on, running <code>omg hello.omg</code> does
+            this:
+          </p>
+
+          <div class="layers">
+            <div class="layer"><b>1</b><span>The VM runs the OMG compiler, which reads <code>hello.omg</code> and writes bytecode.</span></div>
+            <div class="layers-arrow">▼</div>
+            <div class="layer"><b>2</b><span>The same VM then runs that bytecode. This is your program.</span></div>
+          </div>
+
+          <p>
+            So every program is compiled by a compiler written in the language being compiled. A language that can
+            do this is called self-hosting.
+          </p>
+
+          <h3>How do you know the two agree?</h3>
+          <p>
+            Two compilers for one language is a risk: they could drift apart. OMG guards against that with a strict
+            test. Both compilers are given the same source, and their outputs must be identical, byte for byte. The
+            hardest input to get right is the compiler itself, so that is what the test uses:
+          </p>
+
+          <pre class="code">omg --verify-self-hosted bootstrap/src/compiler.omg</pre>
+
+          <p>
+            This compiles <code>compiler.omg</code> once with the Rust compiler and once with the OMG compiler, and
+            compares the results. It is called a fixed-point check: a compiler, fed its own source, produces itself.
+            It runs on every change to the repository. If the two ever disagree, one of them has a bug.
+          </p>
+          <p>
+            There is a stronger version. OMG also has a second virtual machine, written in OMG
+            (<code>vm.omg</code>). With it, the OMG compiler can run on the OMG VM, which itself runs on the Rust VM.
+            That is three layers of interpretation, and the output still has to match:
+          </p>
+
+          <pre class="code">omg --verify-omg-vm bootstrap/src/compiler.omg</pre>
+
+          <p>
+            When that passes, every step that understands the language happened inside OMG. Rust is only the floor
+            it stands on.
+          </p>
+        </section>
+
+        <!-- ───────────── Backends ───────────── -->
+        <section id="backends">
+          <h2><span class="num">08</span>Native code and JavaScript</h2>
+          <p>
+            A VM is the simplest way to run bytecode, not the only one. OMG has two backends that translate bytecode
+            into another language instead, so that something faster can run it. Both are written in OMG.
+          </p>
+          <ul>
+            <li>
+              <strong>The C backend</strong> turns a program's bytecode into C source. An ordinary C compiler then
+              produces a small stand-alone executable, around 30 KB, that needs neither Rust nor the VM. On Linux and
+              macOS the whole OMG toolchain can be built this way, after which it rebuilds itself with no Rust
+              involved at all.
+            </li>
+            <li>
+              <strong>The JavaScript backend</strong> does the same job with JavaScript as the target, which is what
+              lets OMG run in a web page.
+            </li>
+          </ul>
+          <p>
+            Both keep the shape of the bytecode: each instruction becomes a line or two that does the same thing to a
+            stack. Here is what they produce. The output is long because it is complete, so scroll down to the
+            numbered <code>case</code> lines and match them against the bytecode.
+          </p>
+
+          <div class="lab" data-stages="js,c,bytecode">
+            <textarea aria-label="OMG source to translate to JavaScript and C">
+emit 1 + 2 * 3
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── This site ───────────── -->
+        <section id="this-site">
+          <h2><span class="num">09</span>What runs on this site</h2>
+          <p>
+            No server runs your code, and none of this site is a rewrite of OMG in JavaScript. The OMG compiler and
+            the OMG VM, both written in OMG, were translated to JavaScript by the JavaScript backend. That single
+            file is what your browser loads. When you press Run, the layers are:
+          </p>
+
+          <div class="layers">
+            <div class="layer is-you"><b>Your program</b><span>text in the editor</span></div>
+            <div class="layers-arrow">▼ compiled by</div>
+            <div class="layer"><b>The OMG compiler</b><span>written in OMG</span><code>compiler.omg</code></div>
+            <div class="layers-arrow">▼ bytecode, run by</div>
+            <div class="layer"><b>The OMG virtual machine</b><span>written in OMG</span><code>vm.omg</code></div>
+            <div class="layers-arrow">▼ both translated ahead of time by</div>
+            <div class="layer"><b>The JavaScript backend</b><span>written in OMG</span><code>native-js.omg</code></div>
+            <div class="layers-arrow">▼ and run by</div>
+            <div class="layer"><b>Your browser</b><span>its JavaScript engine, in a background worker</span></div>
+          </div>
+
+          <p>
+            Interpreting bytecode with a VM that is itself translated code is not fast. The
+            <a href="../playground/">playground</a> therefore offers a second engine. Switch it to
+            <strong>JS</strong> and your program is compiled to bytecode, translated to JavaScript by the backend
+            running in your browser, and run directly, with no VM in between. On a recursive function the difference
+            is roughly a hundredfold. Both engines must give the same answers; only the route differs.
+          </p>
+        </section>
+
+        <!-- ───────────── Source ───────────── -->
+        <section id="source">
+          <h2><span class="num">10</span>Read the source</h2>
+          <p>
+            Everything described on this page is a file you can open. None of them is long.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><th colspan="2">The OMG toolchain, in OMG</th></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/compiler.omg"><code>compiler.omg</code></a></td><td>Lexer, parser and bytecode generator.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/vm.omg"><code>vm.omg</code></a></td><td>The virtual machine.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/native-c.omg"><code>native-c.omg</code></a></td><td>The C backend.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/native-js.omg"><code>native-js.omg</code></a></td><td>The JavaScript backend.</td></tr>
+
+                <tr><th colspan="2">The Rust runtime</th></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/lexer.rs"><code>lexer.rs</code></a></td><td>The first lexer.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/parser.rs"><code>parser.rs</code></a></td><td>The first parser.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/compiler.rs"><code>compiler.rs</code></a></td><td>The first compiler.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/vm.rs"><code>vm.rs</code></a></td><td>The virtual machine every native run uses.</td></tr>
+
+                <tr><th colspan="2">Further reading</th></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/compilation-pipeline.md">Compilation pipeline</a></td><td>How <code>omg foo.omg</code> runs a script, in more detail.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/tree/main/docs/native">Native compilation</a></td><td>The path from OMG to a stand-alone executable.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="next">
+            <a class="card" href="../playground/">
+              <div class="card-body">
+                <h3>Try it on your own code</h3>
+                <p>The playground shows the tokens, tree, bytecode, C and JavaScript for anything you write.</p>
+              </div>
+            </a>
+            <a class="card" href="../learn/">
+              <div class="card-body">
+                <h3>Learn the language</h3>
+                <p>A tour of OMG with examples you can edit and run.</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <span>OMG is made by <a href="https://versyx.digital/">Chris Rowles</a> and released under the MIT licence.</span>
+        <span class="footer-links">
+          <a href="../">Home</a>
+          <a href="../learn/">Learn</a>
+          <a href="../playground/">Playground</a>
+          <a href="https://github.com/sentrychris/omglang">GitHub</a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="../assets/site.js"></script>
+    <script>
+      // The stack machine stepper: a hand-written model of the VM running the
+      // seven instructions that `emit 1 + 2 * 3` compiles to.
+      (function () {
+        var root = document.getElementById('stepper');
+        if (!root) return;
+        var codeEl = root.querySelector('[data-code]');
+        var stackEl = root.querySelector('[data-stack]');
+        var outEl = root.querySelector('[data-out]');
+        var sayEl = root.querySelector('[data-say]');
+        var stepBtn = root.querySelector('[data-step]');
+        var resetBtn = root.querySelector('[data-reset]');
+
+        var program = [
+          { op: 'PushInt', arg: 1 },
+          { op: 'PushInt', arg: 2 },
+          { op: 'PushInt', arg: 3 },
+          { op: 'Mul' },
+          { op: 'Add' },
+          { op: 'Emit' },
+          { op: 'Halt' },
+        ];
+        var pc, stack, output, fresh;
+
+        function render(message) {
+          codeEl.innerHTML = '';
+          program.forEach(function (ins, i) {
+            var li = document.createElement('li');
+            if (i === pc) li.className = 'is-next';
+            else if (i < pc) li.className = 'is-done';
+            var num = document.createElement('span');
+            num.className = 'pc';
+            num.textContent = ('000' + i).slice(-4);
+            var text = document.createElement('span');
+            text.textContent = ins.op + (ins.arg !== undefined ? '(' + ins.arg + ')' : '');
+            li.append(num, text);
+            codeEl.appendChild(li);
+          });
+
+          stackEl.innerHTML = '';
+          if (stack.length === 0) {
+            var empty = document.createElement('div');
+            empty.className = 'stack-empty';
+            empty.textContent = 'empty';
+            stackEl.appendChild(empty);
+          }
+          stack.forEach(function (value, i) {
+            var cell = document.createElement('span');
+            cell.textContent = value;
+            if (fresh && i === stack.length - 1) cell.className = 'is-new';
+            stackEl.appendChild(cell);
+          });
+
+          outEl.textContent = output;
+          sayEl.textContent = message;
+          stepBtn.disabled = pc >= program.length;
+        }
+
+        function reset() {
+          pc = 0;
+          stack = [];
+          output = '';
+          fresh = false;
+          render('Press Step to run the first instruction.');
+        }
+
+        function step() {
+          var ins = program[pc];
+          var message;
+          fresh = false;
+          if (ins.op === 'PushInt') {
+            stack.push(ins.arg);
+            fresh = true;
+            message = 'Put ' + ins.arg + ' on top of the stack.';
+          } else if (ins.op === 'Mul' || ins.op === 'Add') {
+            var b = stack.pop();
+            var a = stack.pop();
+            var result = ins.op === 'Mul' ? a * b : a + b;
+            stack.push(result);
+            fresh = true;
+            message = 'Take ' + a + ' and ' + b + ' off the top, put ' + a + (ins.op === 'Mul' ? ' × ' : ' + ') + b + ' = ' + result + ' back.';
+          } else if (ins.op === 'Emit') {
+            var value = stack.pop();
+            output += value + '\n';
+            message = 'Take ' + value + ' off the stack and print it.';
+          } else {
+            message = 'Stop. The stack is empty and the program is done.';
+          }
+          pc += ins.op === 'Halt' ? program.length : 1;
+          render(message);
+        }
+
+        stepBtn.addEventListener('click', step);
+        resetBtn.addEventListener('click', reset);
+        reset();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Learn OMG — a tour of the language</title>
+    <meta
+      name="description"
+      content="A hands-on tour of the OMG programming language. Every example on the page can be edited and run in your browser: variables, numbers, strings, lists, dictionaries, loops, functions, closures, modules, files and errors."
+    />
+    <meta name="author" content="Chris Rowles" />
+    <link rel="canonical" href="https://versyx.digital/omglang/learn/" />
+    <meta property="og:title" content="Learn OMG — a tour of the language" />
+    <meta property="og:description" content="A hands-on tour of OMG. Every example can be edited and run in your browser." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://versyx.digital/omglang/learn/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#0e0d14" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('omg-theme');
+          if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="../" aria-label="OMG home">
+          <span class="brand-mark" aria-hidden="true">;;;</span>
+          <span class="brand-name">OMG</span>
+        </a>
+        <nav class="nav-links" aria-label="Site">
+          <a class="nav-link" href="./" aria-current="page">Learn</a>
+          <a class="nav-link" href="../playground/">Playground</a>
+          <a class="nav-link" href="../internals/">How it works</a>
+        </nav>
+        <div class="nav-end">
+          <a class="icon-btn gh" href="https://github.com/sentrychris/omglang" aria-label="OMG on GitHub">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.32c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.81.06 1.23.83 1.23.83.72 1.23 1.88.88 2.34.67.07-.52.28-.88.51-1.08-1.77-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          </a>
+          <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch between light and dark">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap doc">
+      <nav class="toc" aria-label="On this page">
+        <div class="toc-title">The tour</div>
+        <select class="select toc-select" aria-label="Jump to a lesson"></select>
+        <ol>
+          <li><a href="#hello">Hello, world</a></li>
+          <li><a href="#variables">Variables</a></li>
+          <li><a href="#numbers">Numbers and math</a></li>
+          <li><a href="#floats">Floats</a></li>
+          <li><a href="#strings">Strings</a></li>
+          <li><a href="#booleans">Booleans and comparisons</a></li>
+          <li><a href="#conditionals">Conditionals</a></li>
+          <li><a href="#loops">Loops</a></li>
+          <li><a href="#lists">Lists</a></li>
+          <li><a href="#dictionaries">Dictionaries</a></li>
+          <li><a href="#functions">Functions</a></li>
+          <li><a href="#imports">Modules</a></li>
+          <li><a href="#files">Files</a></li>
+          <li><a href="#errors">Errors</a></li>
+          <li><a href="#builtins">Built-in functions</a></li>
+          <li><a href="#next">Where next</a></li>
+        </ol>
+      </nav>
+
+      <main id="main" class="prose">
+        <header>
+          <h1>Learn OMG</h1>
+          <p class="lede">
+            A tour of the whole language, from the first line to closures and error handling. Every example is live:
+            change it, press <strong>Run</strong> (or <kbd>Ctrl</kbd> <kbd>Enter</kbd>) and see what happens. Breaking
+            things is the point.
+          </p>
+        </header>
+
+        <!-- ───────────── Hello ───────────── -->
+        <section id="hello">
+          <h2><span class="num">01</span>Hello, world</h2>
+          <p>The smallest OMG program prints one line.</p>
+
+          <div class="snippet" data-file="hello.omg">
+            <textarea>
+;;;omg
+
+emit "Hello, world!"
+</textarea>
+          </div>
+
+          <p>Three things to know before going further:</p>
+          <ul>
+            <li>
+              OMG files start with <code>;;;omg</code> on the first line by convention. It is optional, but editors
+              and tools use it to recognise the language.
+            </li>
+            <li><code>emit</code> prints a value, followed by a new line.</li>
+            <li>
+              <code>#</code> starts a comment that runs to the end of the line. Longer comments go between
+              <code>/*</code> and <code>*/</code>.
+            </li>
+          </ul>
+        </section>
+
+        <!-- ───────────── Variables ───────────── -->
+        <section id="variables">
+          <h2><span class="num">02</span>Variables</h2>
+          <p>
+            You introduce a new variable with <code>alloc</code>. You change one that already exists with
+            <code>:=</code> on its own.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc name := "Chris"        # introduce a new variable
+emit name
+
+name := "Bob"                # change it: no alloc the second time
+emit name
+</textarea>
+          </div>
+
+          <p>
+            The two are kept apart on purpose. Assigning to a name that was never introduced is an error, so a typo
+            cannot quietly create a second variable. Run this one and read the message.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc count := 0
+cont := count + 1            # a typo: "cont" was never introduced
+emit count
+</textarea>
+          </div>
+
+          <p>The rules in full:</p>
+          <ul>
+            <li>Every new name needs <code>alloc</code>. Declaring the same name twice at the top level is an error.</li>
+            <li>A name declared inside a function is local to that function and invisible outside it.</li>
+            <li>
+              A function can read and update a global with plain <code>:=</code>. To get a separate local that hides
+              the global, use <code>alloc</code> again inside the function.
+            </li>
+          </ul>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc total := 0
+
+proc add(n) {
+    total := total + n           # updates the global
+    alloc doubled := n * 2       # local to this call
+    return doubled
+}
+
+emit add(5)                      # 10
+emit total                       # 5
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Numbers ───────────── -->
+        <section id="numbers">
+          <h2><span class="num">03</span>Numbers and math</h2>
+          <p>
+            OMG has integers and floats. Integer math stays in integers, with one exception: <code>/</code> is true
+            division and always gives a float. Use <code>//</code> when you want a whole number back.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+emit 1 + 2          # 3
+emit 10 - 3         # 7
+emit 4 * 5          # 20
+emit 10 / 3         # 3.3333...  true division, always a float
+emit 10 // 3        # 3          floor division
+emit 10 % 3         # 1          remainder
+emit -7 // 2        # -4         floor rounds towards minus infinity
+</textarea>
+          </div>
+
+          <p>Integers are 64-bit, and the bitwise operators work on them.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+emit 6 & 3          # 2      AND
+emit 6 | 3          # 7      OR
+emit 6 ^ 3          # 5      XOR
+emit ~1             # -2     NOT
+emit 1 << 3         # 8      shift left
+emit 16 >> 2        # 4      shift right
+emit 0b1010         # 10     a binary literal
+emit hex(255)       # ff
+emit binary(5, 8)   # 00000101
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Floats ───────────── -->
+        <section id="floats">
+          <h2><span class="num">04</span>Floats</h2>
+          <p>A number with a decimal point or an exponent is a float.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+emit 1.5
+emit 2.0 + 3.5      # 5.5
+emit 1.0e3          # 1000.0   scientific notation
+emit 10 / 4         # 2.5
+emit 10.5 // 3      # 3.0      floor division on a float stays a float
+emit 5 == 5.0       # true     comparisons look at the value
+emit 0.1 + 0.2 == 0.3
+</textarea>
+          </div>
+
+          <p>
+            That last line prints <code>false</code>. It is not a bug in OMG: floats are 64-bit IEEE-754 numbers, the
+            same as in most languages, and 0.1 has no exact binary form.
+          </p>
+          <p>The usual math functions are built in, and <code>int</code> and <code>float</code> convert between the two kinds.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+emit sqrt(2.0)      # 1.4142135623730951
+emit pow(2, 10)     # 1024     int to the power of an int stays an int
+emit floor(3.7)     # 3
+emit ceil(3.2)      # 4
+emit round(2.5)     # 2        ties go to the nearest even number
+emit round(3.5)     # 4
+emit abs(-4)        # 4
+emit int(3.99)      # 3        cuts towards zero
+emit int("42") + 1  # 43       parses a string
+emit float(3)       # 3.0
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Strings ───────────── -->
+        <section id="strings">
+          <h2><span class="num">05</span>Strings</h2>
+          <p>
+            Strings go between double quotes. <code>+</code> joins them, and joining a string to a number converts the
+            number for you.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc greeting := "Hello"
+alloc name := "world"
+emit greeting + ", " + name + "!"
+
+emit length(greeting)       # 5
+emit greeting[0]            # H
+emit greeting[-1]           # o      negative indexes count from the end
+emit greeting[1:4]          # ell    from 1 up to, not including, 4
+
+emit "answer: " + 42        # numbers are converted when joined
+emit "tab\there, quote \"here\""
+</textarea>
+          </div>
+
+          <p>
+            Inside a string these escapes work: <code>\n</code> (new line), <code>\t</code> (tab), <code>\r</code>,
+            <code>\\</code>, <code>\"</code> and <code>\0</code>. To get at individual characters as numbers, use
+            <code>ascii</code> and <code>chr</code>.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+emit ascii("A")             # 65
+emit chr(65 + 1)            # B
+
+# Shift every letter of a word one place along the alphabet.
+alloc word := "HAL"
+alloc out := ""
+alloc i := 0
+loop i < length(word) {
+    out := out + chr(ascii(word[i]) + 1)
+    i := i + 1
+}
+emit out
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Booleans ───────────── -->
+        <section id="booleans">
+          <h2><span class="num">06</span>Booleans and comparisons</h2>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+emit 5 > 3              # true
+emit 5 == 5             # true
+emit 5 != 4             # true
+emit "abc" < "abd"      # true     strings compare alphabetically
+emit true and false     # false
+emit true or false      # true
+</textarea>
+          </div>
+
+          <p>
+            Anything can stand in for a condition. These count as false: <code>false</code>, <code>0</code>, the empty
+            string <code>""</code>, the empty list <code>[]</code> and the empty dictionary <code>{}</code>. Everything
+            else counts as true.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc items := []
+if items {
+    emit "there are items"
+} else {
+    emit "the list is empty"
+}
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Conditionals ───────────── -->
+        <section id="conditionals">
+          <h2><span class="num">07</span>Conditionals</h2>
+          <p>
+            <code>if</code> picks a branch. <code>elif</code> is short for "else if": you can have as many as you
+            like, and the final <code>else</code> is optional. Try a few scores.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc score := 75
+
+if score >= 90 {
+    emit "A"
+} elif score >= 80 {
+    emit "B"
+} elif score >= 70 {
+    emit "C"
+} else {
+    emit "F"
+}
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Loops ───────────── -->
+        <section id="loops">
+          <h2><span class="num">08</span>Loops</h2>
+          <p>
+            OMG has one looping construct: <code>loop</code>, followed by a condition and a block. The block runs for
+            as long as the condition holds, like <code>while</code> in other languages.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc i := 0
+loop i < 5 {
+    emit i
+    i := i + 1
+}
+</textarea>
+          </div>
+
+          <p>
+            <code>break</code> leaves the innermost loop early. There is no <code>for</code>: count with a variable,
+            as above.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+# The first power of 2 greater than 100.
+alloc n := 1
+loop true {
+    if n > 100 {
+        break
+    }
+    n := n * 2
+}
+emit n
+</textarea>
+          </div>
+
+          <div class="note">
+            <p>
+              If you write a loop that never ends, nothing bad happens here. Press <strong>Stop</strong>, or wait:
+              examples on this page are stopped after ten seconds.
+            </p>
+          </div>
+        </section>
+
+        <!-- ───────────── Lists ───────────── -->
+        <section id="lists">
+          <h2><span class="num">09</span>Lists</h2>
+          <p>A list holds values in order. It can be indexed, sliced and changed in place.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc xs := [10, 20, 30]
+emit xs                 # [10, 20, 30]
+emit length(xs)         # 3
+emit xs[0]              # 10
+emit xs[-1]             # 30
+emit xs[1:3]            # [20, 30]
+
+xs[0] := 99             # replace one element
+xs := xs + [40]         # joining makes a new, longer list
+emit xs                 # [99, 20, 30, 40]
+</textarea>
+          </div>
+
+          <p>
+            Two variables can hold the same list. A change made through one is visible through the other, because
+            there is only one list.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc a := [1, 2, 3]
+alloc b := a
+b[0] := 99
+emit a                  # [99, 2, 3]
+</textarea>
+          </div>
+
+          <p>Lists and loops together cover most everyday work. This one adds up a list and finds its largest value.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc temps := [14, 17, 21, 19, 12]
+
+alloc sum := 0
+alloc highest := temps[0]
+alloc i := 0
+loop i < length(temps) {
+    sum := sum + temps[i]
+    if temps[i] > highest {
+        highest := temps[i]
+    }
+    i := i + 1
+}
+
+emit "average: " + sum / length(temps)
+emit "highest: " + highest
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Dictionaries ───────────── -->
+        <section id="dictionaries">
+          <h2><span class="num">10</span>Dictionaries</h2>
+          <p>
+            A dictionary maps names to values. The keys are strings, and you can reach an entry with a dot
+            (<code>person.name</code>) or with brackets (<code>person["name"]</code>). Brackets are the ones to use
+            when the key is in a variable.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc person := {name: "Chris", age: 32}
+
+emit person.name                # Chris
+emit person["age"]              # 32
+
+person.age := 33                # change a value
+person["job"] := "engineer"     # add a new key
+
+emit person
+emit dict_keys(person)          # [name, age, job]
+emit has_key(person, "job")     # true
+</textarea>
+          </div>
+
+          <p>
+            Entries keep the order they were added in. <code>dict_keys</code> gives you the keys as a list, which is
+            how you walk over a dictionary.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc stock := {apples: 12, pears: 0, plums: 7}
+
+alloc keys := dict_keys(stock)
+alloc i := 0
+loop i < length(keys) {
+    alloc k := keys[i]
+    if stock[k] == 0 {
+        emit k + ": sold out"
+    } else {
+        emit k + ": " + stock[k]
+    }
+    i := i + 1
+}
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Functions ───────────── -->
+        <section id="functions">
+          <h2><span class="num">11</span>Functions</h2>
+          <p><code>proc</code>, short for procedure, defines a function. <code>return</code> hands back a value.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc square(x) {
+    return x * x
+}
+
+emit square(4)          # 16
+emit square(7)          # 49
+</textarea>
+          </div>
+
+          <p>A function can call itself. This is the classic recursive Fibonacci.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc fib(n) {
+    if n < 2 { return n }
+    return fib(n - 1) + fib(n - 2)
+}
+
+alloc i := 0
+loop i < 10 {
+    emit "fib(" + i + ") = " + fib(i)
+    i := i + 1
+}
+</textarea>
+          </div>
+
+          <h3>Functions are values</h3>
+          <p>You can pass a function to another function, keep it in a variable, or return it.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc apply_twice(f, x) {
+    return f(f(x))
+}
+
+proc inc(n) {
+    return n + 1
+}
+
+emit apply_twice(inc, 5)        # 7
+</textarea>
+          </div>
+
+          <h3>Closures</h3>
+          <p>
+            A function defined inside another one remembers the variables around it, even after the outer function
+            has returned. That is a closure. Each call to <code>make_adder</code> below makes a new <code>add</code>
+            with its own <code>n</code>.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc make_adder(n) {
+    proc add(x) {
+        return x + n        # n comes from make_adder
+    }
+    return add
+}
+
+alloc add5 := make_adder(5)
+alloc add100 := make_adder(100)
+
+emit add5(10)           # 15
+emit add100(7)          # 107
+</textarea>
+          </div>
+
+          <p>
+            The inner function shares the variable itself, not a copy of its value. If it changes the variable, the
+            change is still there on the next call. That is enough to build a counter with private state.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc make_counter() {
+    alloc n := 0
+    proc tick() {
+        n := n + 1
+        return n
+    }
+    return tick
+}
+
+alloc a := make_counter()
+alloc b := make_counter()
+emit a()        # 1
+emit a()        # 2
+emit b()        # 1   b has its own n
+emit a()        # 3
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Imports ───────────── -->
+        <section id="imports">
+          <h2><span class="num">12</span>Modules</h2>
+          <p>
+            A program can be split across files. Suppose this is saved as <code>mathlib.omg</code>:
+          </p>
+
+          <div class="filebox">
+            <div class="filebox-name">mathlib.omg</div>
+            <pre data-omg-file="mathlib.omg">;;;omg
+
+alloc PI := 3.141592653589793
+
+proc square(x) {
+    return x * x
+}
+
+proc cube(x) {
+    return x * x * x
+}</pre>
+          </div>
+
+          <p>
+            Another file brings it in with <code>import</code> and gives it a name. The module's top-level
+            <code>proc</code> and <code>alloc</code> definitions are then reached through that name.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+import "mathlib.omg" as math
+
+emit math.square(5)     # 25
+emit math.cube(3)       # 27
+emit math.PI * math.square(2)
+</textarea>
+          </div>
+
+          <p>
+            The path in quotes is relative to the file doing the importing. A module is read and run once, however
+            many times it is imported, and what it exports is read-only.
+          </p>
+        </section>
+
+        <!-- ───────────── Files ───────────── -->
+        <section id="files">
+          <h2><span class="num">13</span>Files</h2>
+          <p>
+            <code>read_file</code> reads a whole text file in one go, and gives <code>false</code> if it cannot. Say
+            there is a file called <code>notes.txt</code>:
+          </p>
+
+          <div class="filebox">
+            <div class="filebox-name">notes.txt</div>
+            <pre data-omg-file="notes.txt">buy milk
+fix the parser
+call Sam</pre>
+          </div>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+alloc text := read_file("notes.txt")
+if text == false {
+    emit "could not read notes.txt"
+} else {
+    emit "got " + length(text) + " characters:"
+    emit text
+}
+</textarea>
+          </div>
+
+          <p>
+            For more control, open a handle. The second argument is the mode: <code>"r"</code> to read,
+            <code>"w"</code> to write and <code>"a"</code> to append. Add a <code>b</code> (<code>"rb"</code>,
+            <code>"wb"</code>) to work with bytes instead of text, as a list of numbers from 0 to 255.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+# Write a file...
+alloc h := file_open("greeting.txt", "w")
+file_write(h, "hi from OMG\n")
+file_close(h)
+
+# ...read it back as text...
+alloc h2 := file_open("greeting.txt", "r")
+emit file_read(h2)
+file_close(h2)
+
+# ...and again as raw bytes.
+alloc h3 := file_open("greeting.txt", "rb")
+emit file_read(h3)
+file_close(h3)
+
+emit read_dir(".")
+</textarea>
+          </div>
+
+          <div class="note">
+            <p>
+              On this site, files live in memory and are gone when the program ends. Nothing touches your disk. On
+              your own machine the same code reads and writes real files, relative to the folder you ran
+              <code>omg</code> from.
+            </p>
+          </div>
+        </section>
+
+        <!-- ───────────── Errors ───────────── -->
+        <section id="errors">
+          <h2><span class="num">14</span>Errors</h2>
+          <p>
+            Things go wrong: a bad index, a missing key, a division by zero. When nothing handles the error, the
+            program stops and prints a traceback that shows where it happened and how it got there.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc third(xs) {
+    return xs[2]
+}
+
+proc report(xs) {
+    emit "third item: " + third(xs)
+}
+
+report([1, 2, 3])
+report([1])                 # too short
+emit "never reached"
+</textarea>
+          </div>
+
+          <p>
+            To carry on instead, wrap the risky part in <code>try</code> and <code>except</code>. The name after
+            <code>except</code> receives the error as a string.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+try {
+    alloc xs := [1, 2, 3]
+    emit xs[99]
+} except err {
+    emit "oops: " + err
+}
+emit "still running"
+</textarea>
+          </div>
+
+          <p>Raise an error of your own with <code>panic</code>.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc divide(a, b) {
+    if b == 0 {
+        panic("cannot divide " + a + " by zero")
+    }
+    return a / b
+}
+
+emit divide(10, 4)
+
+try {
+    emit divide(10, 0)
+} except err {
+    emit "caught: " + err
+}
+</textarea>
+          </div>
+
+          <p>
+            <code>facts</code> states something that must be true. If it is, nothing happens. If it is not, the
+            program stops with an <code>AssertionError</code>. It is a simple way to write tests.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+proc max(a, b) {
+    if a > b { return a }
+    return b
+}
+
+facts max(1, 2) == 2
+facts max(5, 3) == 5
+facts max(2, 2) == 2
+emit "all tests passed"
+
+facts max(1, 2) == 1        # wrong on purpose
+</textarea>
+          </div>
+        </section>
+
+        <!-- ───────────── Built-ins ───────────── -->
+        <section id="builtins">
+          <h2><span class="num">15</span>Built-in functions</h2>
+          <p>These are always available, with nothing to import.</p>
+
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><th colspan="2">Strings and characters</th></tr>
+                <tr><td><code>length(x)</code></td><td>Length of a string or a list, or the number of entries in a dictionary.</td></tr>
+                <tr><td><code>chr(n)</code></td><td>The one-character string for the number <code>n</code>.</td></tr>
+                <tr><td><code>ascii(c)</code></td><td>The number for a one-character string.</td></tr>
+                <tr><td><code>string_bytes(s)</code></td><td>The UTF-8 bytes of <code>s</code>, as a list of integers.</td></tr>
+                <tr><td><code>bytes_to_string(bytes)</code></td><td>The reverse: a list of bytes to a string.</td></tr>
+
+                <tr><th colspan="2">Numbers</th></tr>
+                <tr><td><code>int(x)</code>, <code>float(x)</code></td><td>Convert between the two kinds of number, or parse one from a string.</td></tr>
+                <tr><td><code>floor(x)</code>, <code>ceil(x)</code></td><td>Round a float down or up to an integer.</td></tr>
+                <tr><td><code>round(x)</code></td><td>Round to the nearest integer. Ties go to the even one.</td></tr>
+                <tr><td><code>abs(x)</code></td><td>Absolute value.</td></tr>
+                <tr><td><code>sqrt(x)</code>, <code>pow(a, b)</code>, <code>log(x)</code></td><td>Square root, power, natural logarithm.</td></tr>
+                <tr><td><code>sin(x)</code>, <code>cos(x)</code>, <code>tan(x)</code></td><td>Trigonometry, in radians.</td></tr>
+                <tr><td><code>hex(n)</code></td><td>Lower-case hexadecimal text for an integer.</td></tr>
+                <tr><td><code>binary(n)</code>, <code>binary(n, w)</code></td><td>Binary text. With a width, the low <code>w</code> bits, padded with zeros.</td></tr>
+
+                <tr><th colspan="2">Dictionaries</th></tr>
+                <tr><td><code>dict_keys(d)</code></td><td>The keys, in the order they were added.</td></tr>
+                <tr><td><code>has_key(d, k)</code></td><td>Whether <code>d</code> has the key <code>k</code>.</td></tr>
+                <tr><td><code>freeze(d)</code></td><td>A read-only version of a dictionary.</td></tr>
+
+                <tr><th colspan="2">Files</th></tr>
+                <tr><td><code>read_file(path)</code></td><td>The whole file as text, or <code>false</code>.</td></tr>
+                <tr><td><code>file_open(path, mode)</code></td><td>Open a file and return a handle.</td></tr>
+                <tr><td><code>file_read(h)</code>, <code>file_write(h, data)</code></td><td>Read what is left, or write, through a handle.</td></tr>
+                <tr><td><code>file_close(h)</code></td><td>Close a handle. Written data is saved at this point.</td></tr>
+                <tr><td><code>file_exists(path)</code>, <code>is_dir(path)</code></td><td>Ask about a path.</td></tr>
+                <tr><td><code>read_dir(path)</code>, <code>make_dir(path)</code></td><td>List a folder, or create one.</td></tr>
+
+                <tr><th colspan="2">Time and errors</th></tr>
+                <tr><td><code>time_ms()</code></td><td>The current time in milliseconds. Useful for timing things.</td></tr>
+                <tr><td><code>sleep_ms(n)</code></td><td>Pause for <code>n</code> milliseconds.</td></tr>
+                <tr><td><code>panic(msg)</code></td><td>Raise an error that <code>try</code> can catch.</td></tr>
+                <tr><td><code>exit(code)</code></td><td>End the program with a status code.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Every program can also read three variables: <code>args</code>, the command-line arguments as a list of
+            strings; <code>module_file</code>, the path of the running script; and <code>current_dir</code>, the
+            folder <code>omg</code> was run from.
+          </p>
+          <p>
+            A few more exist for programs that run in a terminal: reading the keyboard and standard input, and
+            starting other programs. They need a real terminal, so they do nothing useful on this site. The
+            <a href="https://github.com/sentrychris/omglang#built-in-functions">README</a> lists them all.
+          </p>
+        </section>
+
+        <!-- ───────────── Next ───────────── -->
+        <section id="next">
+          <h2><span class="num">16</span>Where next</h2>
+          <p>That is the whole language. Two good places to go from here:</p>
+
+          <div class="next">
+            <a class="card" href="../playground/">
+              <div class="card-body">
+                <h3>The playground</h3>
+                <p>A full-size editor with longer examples: sorting, a maze solver, ciphers, a virtual machine and a spinning donut.</p>
+              </div>
+            </a>
+            <a class="card" href="../internals/">
+              <div class="card-body">
+                <h3>How it works</h3>
+                <p>What happens between pressing Run and seeing output, one compiler stage at a time.</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <span>OMG is made by <a href="https://versyx.digital/">Chris Rowles</a> and released under the MIT licence.</span>
+        <span class="footer-links">
+          <a href="../">Home</a>
+          <a href="../playground/">Playground</a>
+          <a href="../internals/">How it works</a>
+          <a href="https://github.com/sentrychris/omglang">GitHub</a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="../assets/site.js"></script>
+  </body>
+</html>

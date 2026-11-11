@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OMG — a small programming language, built end to end</title>
+    <meta
+      name="description"
+      content="OMG is a small programming language made for fun and for learning how languages get put together. Learn it in an afternoon, run it in your browser, and see every stage of its compiler."
+    />
+    <meta name="author" content="Chris Rowles" />
+    <link rel="canonical" href="https://versyx.digital/omglang/" />
+    <meta property="og:title" content="OMG — a small programming language, built end to end" />
+    <meta
+      property="og:description"
+      content="Learn OMG, run it in your browser, and see every stage of a compiler that is written in the language it compiles."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://versyx.digital/omglang/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#0e0d14" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('omg-theme');
+          if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="./" aria-label="OMG home">
+          <span class="brand-mark" aria-hidden="true">;;;</span>
+          <span class="brand-name">OMG</span>
+        </a>
+        <nav class="nav-links" aria-label="Site">
+          <a class="nav-link" href="learn/">Learn</a>
+          <a class="nav-link" href="playground/">Playground</a>
+          <a class="nav-link" href="internals/">How it works</a>
+        </nav>
+        <div class="nav-end">
+          <a class="icon-btn gh" href="https://github.com/sentrychris/omglang" aria-label="OMG on GitHub">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.32c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.81.06 1.23.83 1.23.83.72 1.23 1.88.88 2.34.67.07-.52.28-.88.51-1.08-1.77-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          </a>
+          <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch between light and dark">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ───────────── Hero ───────────── -->
+      <section class="hero">
+        <div class="wrap hero-grid">
+          <div>
+            <div class="eyebrow">;;;omg</div>
+            <h1>A small language, built <em>end to end</em>.</h1>
+            <p class="lede">
+              OMG is a programming language made for fun, and for learning how languages get put together. It has the
+              usual things: variables, math, strings, lists, dictionaries, loops, functions and files. Nothing flashy.
+              What makes it worth a look is that you can follow it all the way down, to a compiler written in OMG itself.
+            </p>
+            <div class="cta">
+              <a class="btn btn-primary" href="learn/">Take the tour</a>
+              <a class="btn" href="playground/">Open the playground</a>
+            </div>
+            <p class="hero-note">The editor on this page is live. It runs in your browser; nothing is installed or sent anywhere.</p>
+          </div>
+
+          <div class="window">
+            <div class="window-bar">
+              <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="window-title">try it</span>
+            </div>
+            <div class="snippet" data-file="hello.omg" data-autorun>
+              <textarea aria-label="An OMG program you can edit and run">
+;;;omg
+
+# Edit me, then press Run (or Ctrl+Enter).
+proc greet(name) {
+    return "Hello, " + name + "!"
+}
+
+alloc names := ["world", "OMG"]
+alloc i := 0
+loop i < length(names) {
+    emit greet(names[i])
+    i := i + 1
+}
+</textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── The language ───────────── -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head">
+            <div class="kicker"># the language</div>
+            <h2>Everything a language needs, and not much more</h2>
+            <p>
+              Six keywords get you most of the way: <code>alloc</code>, <code>emit</code>, <code>if</code>,
+              <code>loop</code>, <code>proc</code> and <code>return</code>. Each card opens the matching lesson, where
+              every example can be edited and run.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <a class="card" href="learn/#variables">
+              <div class="card-body">
+                <h3>Variables</h3>
+                <p><code>alloc</code> introduces a name, <code>:=</code> changes it. A typo is an error, never a silent new variable.</p>
+              </div>
+              <pre data-omg>alloc count := 0
+count := count + 1
+emit count          # 1</pre>
+            </a>
+
+            <a class="card" href="learn/#functions">
+              <div class="card-body">
+                <h3>Functions and closures</h3>
+                <p>Functions are values. An inner function remembers the variables around it.</p>
+              </div>
+              <pre data-omg>proc make_adder(n) {
+    proc add(x) { return x + n }
+    return add
+}
+emit make_adder(5)(10)   # 15</pre>
+            </a>
+
+            <a class="card" href="learn/#lists">
+              <div class="card-body">
+                <h3>Lists and dictionaries</h3>
+                <p>Indexing, negative indexes, slices, and dictionaries with dot or bracket access.</p>
+              </div>
+              <pre data-omg>alloc xs := [10, 20, 30]
+emit xs[-1]         # 30
+alloc p := {name: "Chris"}
+emit p.name         # Chris</pre>
+            </a>
+
+            <a class="card" href="learn/#loops">
+              <div class="card-body">
+                <h3>One loop</h3>
+                <p>There is a single looping construct. It runs while its condition holds, and <code>break</code> leaves it.</p>
+              </div>
+              <pre data-omg>alloc n := 1
+loop n &lt;= 100 {
+    n := n * 2
+}
+emit n              # 128</pre>
+            </a>
+
+            <a class="card" href="learn/#errors">
+              <div class="card-body">
+                <h3>Errors you can catch</h3>
+                <p>Uncaught errors print a traceback with line numbers. <code>try</code> and <code>except</code> recover.</p>
+              </div>
+              <pre data-omg>try {
+    emit [1, 2, 3][99]
+} except err {
+    emit "oops: " + err
+}</pre>
+            </a>
+
+            <a class="card" href="learn/#imports">
+              <div class="card-body">
+                <h3>Files and modules</h3>
+                <p>Split a program across files with <code>import</code>, and read and write files as text or bytes.</p>
+              </div>
+              <pre data-omg>import "mathlib.omg" as math
+emit math.square(5)     # 25
+emit read_file("notes.txt")</pre>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── How it works ───────────── -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head">
+            <div class="kicker"># how it works</div>
+            <h2>Follow one line all the way down</h2>
+            <p>
+              Running a program takes four steps. Here is what each one makes of
+              <code>emit 1 + 2 * 3</code>. These are the real outputs, not a diagram of the idea.
+            </p>
+          </div>
+
+          <div class="pipeline">
+            <div class="stage">
+              <div class="stage-n">00 source</div>
+              <h3>Text</h3>
+              <p>A program starts as characters in a file.</p>
+              <code>emit 1 + 2 * 3</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">01 lexer</div>
+              <h3>Tokens</h3>
+              <p>The lexer groups characters into words and symbols.</p>
+              <code>EMIT NUM PLUS
+NUM STAR NUM</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">02 parser</div>
+              <h3>Syntax tree</h3>
+              <p>The parser works out what belongs to what: <code>*</code> binds tighter than <code>+</code>.</p>
+              <code>emit
+└ add
+  ├ 1
+  └ mul
+    ├ 2
+    └ 3</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">03 compiler</div>
+              <h3>Bytecode</h3>
+              <p>The compiler flattens the tree into simple instructions.</p>
+              <code>PushInt(1)
+PushInt(2)
+PushInt(3)
+Mul
+Add
+Emit</code>
+            </div>
+            <div class="stage">
+              <div class="stage-n">04 virtual machine</div>
+              <h3>Result</h3>
+              <p>The VM carries the instructions out on a stack.</p>
+              <code>7</code>
+            </div>
+          </div>
+
+          <p class="fact">
+            <strong>The compiler is written in OMG.</strong> A first compiler, written in Rust, exists to get things
+            started. The real one is about 2,700 lines of OMG, and it compiles itself. Both must produce identical
+            bytecode, byte for byte, and a test checks that on every change. This site goes one step further: the code
+            running in your browser is that OMG compiler and an OMG virtual machine, turned into JavaScript by a
+            backend that is also written in OMG.
+          </p>
+
+          <div class="cta" style="margin-top: 28px">
+            <a class="btn" href="internals/">See how it works</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── Written in OMG ───────────── -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head">
+            <div class="kicker"># written in OMG</div>
+            <h2>Small, but it does real work</h2>
+            <p>The best test of a language is writing things in it. All of these live in the repository.</p>
+          </div>
+
+          <ul class="built-list">
+            <li>
+              <span class="what">its own compiler</span>
+              <span class="desc">Lexer, parser and bytecode generator. It compiles every program you run, including itself.</span>
+            </li>
+            <li>
+              <span class="what">a virtual machine</span>
+              <span class="desc">A second VM, in OMG, that runs the same bytecode as the Rust one. It powers this site.</span>
+            </li>
+            <li>
+              <span class="what">two backends</span>
+              <span class="desc">One turns bytecode into C for small native programs, the other into JavaScript.</span>
+            </li>
+            <li>
+              <span class="what">a SQL database</span>
+              <span class="desc">omgdb: a paged file format on disk, a hand-written SQL parser and an interactive shell.</span>
+            </li>
+            <li>
+              <span class="what">terminal games</span>
+              <span class="desc">Snake, Pong, Tetris and a small roguelike, plus a spinning ASCII donut.</span>
+            </li>
+            <li>
+              <span class="what">Unix tools</span>
+              <span class="desc"><code>wc</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>head</code>, <code>tail</code>, a hex dump, base64 and a JSON formatter.</span>
+            </li>
+            <li>
+              <span class="what">a text editor</span>
+              <span class="desc">A terminal editor with undo and redo, written against raw keyboard input.</span>
+            </li>
+            <li>
+              <span class="what">a tiny web stack</span>
+              <span class="desc">A Markdown to HTML converter, a static site generator and an HTTP server.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ───────────── Install ───────────── -->
+      <section class="section">
+        <div class="wrap install">
+          <div>
+            <div class="kicker"># on your machine</div>
+            <h2>Run it locally</h2>
+            <p style="color: var(--text-2)">
+              You need <a href="https://rustup.rs/">Rust</a> 1.80 or newer and nothing else. The runtime builds on
+              Linux, macOS and Windows. Run <code>omg</code> with no arguments for an interactive prompt.
+            </p>
+            <div class="cta">
+              <a class="btn" href="https://github.com/sentrychris/omglang">View the source on GitHub</a>
+            </div>
+          </div>
+          <pre class="code"><span class="tok-comment"># build the runtime</span>
+git clone https://github.com/sentrychris/omglang
+cd omglang
+cargo build --release --manifest-path runtime/Cargo.toml
+
+<span class="tok-comment"># run a program</span>
+runtime/target/release/omg examples/hello_world.omg</pre>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <span>OMG is made by <a href="https://versyx.digital/">Chris Rowles</a> and released under the MIT licence.</span>
+        <span class="footer-links">
+          <a href="learn/">Learn</a>
+          <a href="playground/">Playground</a>
+          <a href="internals/">How it works</a>
+          <a href="https://github.com/sentrychris/omglang">GitHub</a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="assets/site.js"></script>
+  </body>
+</html>
