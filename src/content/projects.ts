@@ -11,6 +11,10 @@ const mkShot = (name: string): string => mkFiles[`../assets/projects/mkeditor-${
 const alFiles = import.meta.glob<string>('../assets/projects/aldervast-*.webp', { eager: true, query: '?url', import: 'default' });
 const alShot = (name: string): string => alFiles[`../assets/projects/aldervast-${name}.webp`] ?? '';
 
+/** Vigil screenshots, vigil-01 onwards, each with a small -thumb version. */
+const vigilFiles = import.meta.glob<string>('../assets/projects/vigil-*.webp', { eager: true, query: '?url', import: 'default' });
+const vigilShot = (name: string): string => vigilFiles[`../assets/projects/vigil-${name}.webp`] ?? '';
+
 /** OMG images, omg-01 and omg-02, each with a small -thumb version. */
 const omgFiles = import.meta.glob<string>('../assets/projects/omg-*.webp', { eager: true, query: '?url', import: 'default' });
 const omgShot = (name: string): string => omgFiles[`../assets/projects/omg-${name}.webp`] ?? '';
@@ -218,6 +222,9 @@ export const projects: Project[] = [
     links: [
       { label: 'Dashboard source', href: 'https://github.com/sentrychris/vigil', kind: 'source' },
       { label: 'Collector source', href: 'https://github.com/sentrychris/vigil-collector', kind: 'source' },
+    ],
+    images: [
+      { src: vigilShot('01'), thumb: vigilShot('01-thumb'), alt: 'The Vigil dashboard: cards for platform, processor, memory and disk, a service status list, gauges, and live charts of network traffic, disk activity, processor and memory use.', width: 1600, height: 900, caption: 'The dashboard, live on a server.' },
     ],
     diagram: {
       caption: 'From the machine being watched to the charts on screen.',
