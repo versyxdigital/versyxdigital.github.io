@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import type { Tone } from '../content';
 import { emitRippleAtScreen, emitTintAtScreen, projectFieldPoint, systemClock } from '../field/fieldState';
 import { toneIndex } from '../field/waveMath';
+import { ACCENT_COLOUR } from '../system/accent';
 import { useSystem } from '../state/store';
 import { registry, setClock, type AnchorSide, type ConnectionRuntime, type Endpoint } from './registry';
 import { pointAt, polylineLength, route, slice, type Pt } from './routing';
@@ -255,7 +256,8 @@ export function SchematicOverlay() {
           if (p.ripple > 0 && dropsIntoField) {
             emitRippleAtScreen(b.x, b.y, p.ripple, toneIndex[p.tone]);
           }
-          if (p.rgb && dropsIntoField) emitTintAtScreen(b.x, b.y, p.rgb);
+          // The tint is a colour effect: it stays off while the accent is grey.
+          if (p.rgb && dropsIntoField && ACCENT_COLOUR) emitTintAtScreen(b.x, b.y, p.rgb);
           continue;
         }
         const eased = t * t * (3 - 2 * t);

@@ -410,22 +410,22 @@
 /* A dash of colour: each project's bullet takes its own colour with a soft
    glow, in the same run as the service dots and technology pills. */
 .item[data-hue='1'] {
-  --dot: 63, 224, 238;
+  --dot: 245, 245, 245;
 }
 .item[data-hue='2'] {
-  --dot: 79, 139, 255;
+  --dot: 221, 221, 221;
 }
 .item[data-hue='3'] {
-  --dot: 125, 127, 255;
+  --dot: 197, 197, 197;
 }
 .item[data-hue='4'] {
-  --dot: 169, 123, 255;
+  --dot: 172, 172, 172;
 }
 .item[data-hue='5'] {
-  --dot: 221, 111, 232;
+  --dot: 147, 147, 147;
 }
 .item[data-hue='6'] {
-  --dot: 255, 127, 169;
+  --dot: 124, 124, 124;
 }
 
 .item[data-hue] .itemState {

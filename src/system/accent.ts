@@ -15,11 +15,20 @@ const STOPS: readonly (readonly [number, number, number])[] = [
   [255, 127, 169], // rose
 ];
 
+/**
+ * Greyscale theme: with this off, the accent is one steady pale grey, so the
+ * logo, the hero dot, its pulse and the @ all sit in the greyscale. Set it to
+ * true to bring back the slow drift through the six colours.
+ */
+export const ACCENT_COLOUR = false;
+const GREY: [number, number, number] = [236, 236, 236];
+
 /** Seconds for one full loop: slow enough that the change is never noticed as movement. */
 const PERIOD = 54;
 
 /** The accent at a time in seconds, as red, green and blue from 0 to 255. */
 export function accentAt(seconds: number): [number, number, number] {
+  if (!ACCENT_COLOUR) return GREY;
   const position = (((seconds % PERIOD) + PERIOD) % PERIOD) / PERIOD * STOPS.length;
   const index = Math.floor(position) % STOPS.length;
   const from = STOPS[index]!;

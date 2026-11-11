@@ -263,18 +263,18 @@
 
 /* The logo takes the drifting accent colour (set on the brand link from Nav.tsx), with a soft glow. */
 .mark {
-  filter: drop-shadow(0 0 5px rgba(var(--accent, 79, 139, 255), 0.55));
+  filter: drop-shadow(0 0 5px rgba(var(--accent, 236, 236, 236), 0.55));
 }
 
 .markTop,
 .markSpine {
-  stroke: rgb(var(--accent, 79, 139, 255));
+  stroke: rgb(var(--accent, 236, 236, 236));
 }
 
 .markBody {
-  stroke: rgba(var(--accent, 79, 139, 255), 0.45);
+  stroke: rgba(var(--accent, 236, 236, 236), 0.45);
 }
 
 .markDot {
-  fill: rgb(var(--accent, 79, 139, 255));
+  fill: rgb(var(--accent, 236, 236, 236));
 }

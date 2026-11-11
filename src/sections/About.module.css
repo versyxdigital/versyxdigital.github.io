@@ -552,19 +552,19 @@
 /* A dash of colour: each service's dot on the line takes its own colour with a
    soft glow, like the dots on the technology tags. */
 .node[data-hue='1'] {
-  --dot: 63, 224, 238;
+  --dot: 245, 245, 245;
 }
 .node[data-hue='2'] {
-  --dot: 79, 139, 255;
+  --dot: 221, 221, 221;
 }
 .node[data-hue='4'] {
-  --dot: 169, 123, 255;
+  --dot: 172, 172, 172;
 }
 .node[data-hue='5'] {
-  --dot: 221, 111, 232;
+  --dot: 147, 147, 147;
 }
 .node[data-hue='6'] {
-  --dot: 255, 127, 169;
+  --dot: 124, 124, 124;
 }
 
 .node[data-hue] .traceNode {
@@ -590,19 +590,19 @@
 
 /* Each service's number on the line, and the "Service 01" tag in its panel, take the dot's colour too. */
 .detailInner[data-hue='1'] {
-  --dot: 63, 224, 238;
+  --dot: 245, 245, 245;
 }
 .detailInner[data-hue='2'] {
-  --dot: 79, 139, 255;
+  --dot: 221, 221, 221;
 }
 .detailInner[data-hue='4'] {
-  --dot: 169, 123, 255;
+  --dot: 172, 172, 172;
 }
 .detailInner[data-hue='5'] {
-  --dot: 221, 111, 232;
+  --dot: 147, 147, 147;
 }
 .detailInner[data-hue='6'] {
-  --dot: 255, 127, 169;
+  --dot: 124, 124, 124;
 }
 
 .node[data-hue] .nodeTag {

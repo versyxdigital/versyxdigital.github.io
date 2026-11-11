@@ -323,6 +323,6 @@
 
 /* The @ in the address follows the drifting accent colour, with the logo and the hero dot. */
 .atSign {
-  color: rgb(var(--accent, 79, 139, 255));
-  text-shadow: 0 0 14px rgba(var(--accent, 79, 139, 255), 0.45);
+  color: rgb(var(--accent, 236, 236, 236));
+  text-shadow: 0 0 14px rgba(var(--accent, 236, 236, 236), 0.45);
 }
