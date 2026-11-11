@@ -826,7 +826,7 @@ export const projects: Project[] = [
     technologies: ['rust', 'c', 'typescript'],
     services: [],
     links: [
-      { label: 'Language site', href: 'https://sentrychris.github.io/omglang/', kind: 'live' },
+      { label: 'Language site', href: 'https://versyx.digital/omglang', kind: 'live' },
       { label: 'Source', href: 'https://github.com/sentrychris/omglang', kind: 'source' },
     ],
     images: [
