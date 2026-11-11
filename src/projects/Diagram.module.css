@@ -213,7 +213,54 @@
   fill: rgba(18, 18, 19, 0.62);
 }
 
-/* Greyscale theme (trial). */
-.diagram {
-  filter: grayscale(1);
+/* Greyscale theme (trial): the drawing is grey, except for one dot per box. */
+.diagram,
+.diagram[data-tone='blue'],
+.diagram[data-tone='violet'] {
+  --tone: var(--cyan);
+  --tone-rgb: var(--cyan-rgb);
+}
+
+.node[role='button']:hover .box,
+.node[role='button']:focus-visible .box {
+  fill: rgba(30, 30, 31, 0.8);
+}
+
+/* A dash of colour: each box carries a small glowing dot, coloured by what
+   kind of stage it is. */
+.kindDot {
+  --dot: 125, 127, 255;
+  fill: rgb(var(--dot));
+  filter: drop-shadow(0 0 4px rgba(var(--dot), 0.9));
+}
+.node[data-kind='source'] .kindDot {
+  --dot: 63, 224, 238;
+}
+.node[data-kind='process'] .kindDot {
+  --dot: 79, 139, 255;
+}
+.node[data-kind='transport'] .kindDot {
+  --dot: 169, 123, 255;
+}
+.node[data-kind='store'] .kindDot {
+  --dot: 221, 111, 232;
+}
+.node[data-kind='surface'] .kindDot {
+  --dot: 255, 127, 169;
+}
+.node[data-kind='external'] .kindDot {
+  --dot: 150, 150, 150;
+}
+.node[data-optional='true'] .kindDot {
+  opacity: 0.55;
+}
+
+/* Same scale in every diagram: a narrower one takes its share of the width
+   the widest would, and sits centred. Phones pan the drawing at full size. */
+@media (min-width: 861px) {
+  .diagram:not([data-preview='true']) {
+    display: block;
+    width: calc(100% * var(--share, 1));
+    margin-inline: auto;
+  }
 }

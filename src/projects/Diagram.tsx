@@ -3,9 +3,10 @@ import type { Diagram as DiagramData, DiagramEdge, DiagramNode, Side, Tone } fro
 import { route, toPath, type Pt, type RouteStyle } from '../schematic/routing';
 import styles from './Diagram.module.css';
 
+/** Every diagram uses the same cell, so a box is the same size in all of them. */
 const CELL_W = 184;
-/** Six-column diagrams use narrower cells so they still fit a laptop screen. */
-const NARROW_W = 160;
+/** The widest diagram. Narrower ones are drawn at the same scale and centred. */
+const MAX_COLS = 6;
 const CELL_H = 96;
 const NODE_H = 62;
 const GAP_X = 24;
@@ -18,10 +19,11 @@ interface Box {
   h: number;
 }
 
-const cellWidth = (diagram: DiagramData): number => (diagram.cols > 5 ? NARROW_W : CELL_W);
+const cellWidth = (_diagram: DiagramData): number => CELL_W;
 
 /** Natural width of a diagram in CSS pixels, at which its type is drawn at full size. */
 export const diagramWidth = (diagram: DiagramData): number => diagram.cols * cellWidth(diagram) + PAD * 2;
+const MAX_WIDTH = MAX_COLS * CELL_W + PAD * 2;
 
 const boxOf = (node: DiagramNode, cell: number): Box => {
   const span = node.span ?? 1;
@@ -111,6 +113,7 @@ export function Diagram({ diagram, tone, id, preview = false, activeStage = null
       viewBox={`0 0 ${width} ${height}`}
       data-tone={tone}
       data-preview={preview}
+      style={{ '--share': Math.min(1, width / MAX_WIDTH) } as React.CSSProperties}
       role={preview ? 'img' : 'group'}
       aria-label={diagram.caption}
     >
@@ -196,6 +199,8 @@ export function Diagram({ diagram, tone, id, preview = false, activeStage = null
             {node.kind === 'source' && <path className={styles.markHeavy} d={`M0 0V${box.h}`} />}
             {node.kind === 'surface' && <path className={styles.markHeavy} d={`M${box.w} 0V${box.h}`} />}
             <path className={styles.corner} d={`M0 7V0H7M${box.w - 7} ${box.h}H${box.w}V${box.h - 7}`} />
+            {/* A dot of colour for the kind of stage this is. */}
+            <circle className={styles.kindDot} cx={box.w - 12} cy={12} r={2.6} />
             <text className={styles.nodeLabel} x={12} y={node.sub ? 26 : 36}>
               {node.label}
             </text>
