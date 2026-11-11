@@ -247,9 +247,9 @@ async function desktop(browser) {
   const projectsText = await page.locator('#projects').innerText();
   check('projects: plain wording, no explorer or catalogue jargon', /Projects\s+we.ve built/i.test(projectsText.replace(/\s+/g, ' ')) && !/system explorer|inspection bay|standing by|catalogue|SYS-/i.test(projectsText));
   check('explorer: the catalogue lists the six projects', (await page.locator('[data-project-index] button').count()) === 6);
-  await page.locator('[data-project-index] button', { hasText: 'wssh' }).click();
+  await page.locator('[data-project-index] button', { hasText: 'Wssh' }).click();
   await page.waitForTimeout(2200);
-  check('explorer: selecting a project opens the inspector', (await page.locator('#inspection-bay h3').first().innerText()) === 'wssh');
+  check('explorer: selecting a project opens the inspector', (await page.locator('#inspection-bay h3').first().innerText()) === 'Wssh');
   check('explorer: field adopts the project signature', (await mode()) === 'project:rings', await mode());
   check('explorer: focus moves into the inspector', await page.evaluate(() => document.activeElement?.id === 'inspect-wssh'));
   await page.screenshot({ path: 'qa-screens/e2e-desktop-project.png' });
@@ -274,18 +274,18 @@ async function desktop(browser) {
   const [cx, cy] = await centre(page, '[role="tabpanel"] button:has-text("Paramiko")');
   await page.mouse.move(cx, cy, { steps: 4 });
   await page.waitForTimeout(400);
-  check('system: hovering a technology in the inspector lights its project in the catalogue', (await page.locator('[data-project-index] button', { hasText: 'wssh' }).getAttribute('data-lit')) === 'true');
+  check('system: hovering a technology in the inspector lights its project in the catalogue', (await page.locator('[data-project-index] button', { hasText: 'Wssh' }).getAttribute('data-lit')) === 'true');
   await page.mouse.move(10, 400);
 
   await page.keyboard.press('Escape');
   await page.waitForTimeout(900);
   check('explorer: Escape returns to the first project', (await page.locator('#inspection-bay h3').first().innerText()) === 'MKEditor');
-  check('explorer: focus returns to the catalogue entry', await page.evaluate(() => document.activeElement?.textContent?.includes('wssh') ?? false));
+  check('explorer: focus returns to the catalogue entry', await page.evaluate(() => document.activeElement?.textContent?.includes('Wssh') ?? false));
   check('explorer: field returns to the section mode', (await mode()) === 'section:projects', await mode());
 
   // Every catalogued system opens, takes its own field behaviour and draws its diagram.
   const behaviours = new Set();
-  for (const name of ['MKEditor', 'The Home Counties', 'Aldervast', 'ED:CS', 'OMG', 'wssh']) {
+  for (const name of ['MKEditor', 'The Home Counties', 'Aldervast', 'ED:CS', 'OMG', 'Wssh']) {
     await page.locator('[data-project-index] button', { hasText: name }).click();
     await page.waitForTimeout(1900);
     const title = await page.locator('#inspection-bay h3').first().innerText();

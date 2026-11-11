@@ -11,6 +11,10 @@ const mkShot = (name: string): string => mkFiles[`../assets/projects/mkeditor-${
 const alFiles = import.meta.glob<string>('../assets/projects/aldervast-*.webp', { eager: true, query: '?url', import: 'default' });
 const alShot = (name: string): string => alFiles[`../assets/projects/aldervast-${name}.webp`] ?? '';
 
+/** Wssh screenshots, wssh-01 and wssh-02, each with a small -thumb version. */
+const wsshFiles = import.meta.glob<string>('../assets/projects/wssh-*.webp', { eager: true, query: '?url', import: 'default' });
+const wsshShot = (name: string): string => wsshFiles[`../assets/projects/wssh-${name}.webp`] ?? '';
+
 /** The Home Counties screenshots, thc-01 to thc-12, each with a small -thumb version. */
 const thcFiles = import.meta.glob<string>('../assets/projects/thc-*.webp', { eager: true, query: '?url', import: 'default' });
 const thcShot = (name: string): string => thcFiles[`../assets/projects/thc-${name}.webp`] ?? '';
@@ -808,7 +812,7 @@ export const projects: Project[] = [
   {
     id: 'wssh',
     ref: '06',
-    name: 'wssh',
+    name: 'Wssh',
     kind: 'Web-based SSH client',
     tagline: 'A small and simple SSH client that runs in the browser.',
     description:
@@ -833,6 +837,10 @@ export const projects: Project[] = [
     technologies: ['python', 'tornado', 'paramiko', 'xterm', 'alpine'],
     services: ['webapps'],
     links: [{ label: 'Source', href: 'https://github.com/sentrychris/wssh', kind: 'source' }],
+    images: [
+      { src: wsshShot('01'), thumb: wsshShot('01-thumb'), alt: 'The Wssh connection screen: a form for hostname, port, username, password and an optional private key, with a Connect button.', width: 1040, height: 600, caption: 'The connection screen.' },
+      { src: wsshShot('02'), thumb: wsshShot('02-thumb'), alt: 'A remote shell session in the browser running the htop process viewer, showing processor and memory use and a list of processes.', width: 1600, height: 828, caption: 'A remote shell in the browser, running htop.' },
+    ],
     diagram: {
       caption: 'From a browser terminal to a remote shell.',
       cols: 4,

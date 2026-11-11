@@ -2,7 +2,7 @@
  * Converts an image to WebP for the project showcase, using the installed
  * Chrome (no image library needed).
  *
- *   node scripts/webp.mjs <input.png|jpg> <output.webp> [--w=1920] [--q=0.86]
+ *   node scripts/webp.mjs <input.png|jpg> <output.webp> [--w=1920] [--q=0.86] [--crop=x,y,width,height]
  *
  * `--w` caps the width (the image is never enlarged). Prints the output size
  * and dimensions, which go into the project's `image` entry in
@@ -20,6 +20,8 @@ if (!input || !output) {
 const args = Object.fromEntries(rest.map((arg) => arg.replace(/^--/, '').split('=')));
 const maxWidth = Number(args.w ?? 1920);
 const quality = Number(args.q ?? 0.86);
+/** Optional region of the source to keep, in source pixels. */
+const crop = typeof args.crop === 'string' ? args.crop.split(',').map(Number) : null;
 
 const mime = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp' }[extname(input).toLowerCase()];
 if (!mime) {
@@ -31,22 +33,23 @@ const source = `data:${mime};base64,${readFileSync(input).toString('base64')}`;
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 const page = await browser.newPage();
 const result = await page.evaluate(
-  async ({ source, maxWidth, quality }) => {
+  async ({ source, maxWidth, quality, crop }) => {
     const image = new Image();
     image.src = source;
     await image.decode();
-    const scale = Math.min(1, maxWidth / image.naturalWidth);
-    const width = Math.round(image.naturalWidth * scale);
-    const height = Math.round(image.naturalHeight * scale);
+    const [sx, sy, sw, sh] = crop ?? [0, 0, image.naturalWidth, image.naturalHeight];
+    const scale = Math.min(1, maxWidth / sw);
+    const width = Math.round(sw * scale);
+    const height = Math.round(sh * scale);
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const context = canvas.getContext('2d');
     context.imageSmoothingQuality = 'high';
-    context.drawImage(image, 0, 0, width, height);
+    context.drawImage(image, sx, sy, sw, sh, 0, 0, width, height);
     return { width, height, data: canvas.toDataURL('image/webp', quality) };
   },
-  { source, maxWidth, quality },
+  { source, maxWidth, quality, crop },
 );
 await browser.close();
 
