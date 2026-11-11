@@ -15,7 +15,7 @@ const alShot = (name: string): string => alFiles[`../assets/projects/aldervast-$
 const vigilFiles = import.meta.glob<string>('../assets/projects/vigil-*.webp', { eager: true, query: '?url', import: 'default' });
 const vigilShot = (name: string): string => vigilFiles[`../assets/projects/vigil-${name}.webp`] ?? '';
 
-/** OMG images, omg-01 and omg-02, each with a small -thumb version. */
+/** OMG screenshots, omg-01 to omg-03, each with a small -thumb version. */
 const omgFiles = import.meta.glob<string>('../assets/projects/omg-*.webp', { eager: true, query: '?url', import: 'default' });
 const omgShot = (name: string): string => omgFiles[`../assets/projects/omg-${name}.webp`] ?? '';
 
@@ -830,8 +830,9 @@ export const projects: Project[] = [
       { label: 'Source', href: 'https://github.com/sentrychris/omglang', kind: 'source' },
     ],
     images: [
-      { src: omgShot('01'), thumb: omgShot('01-thumb'), alt: 'The OMG programming language logo: the letters OMG under a terminal window showing a prompt, on a blue to green background.', width: 1600, height: 908, caption: 'The OMG logo.' },
-      { src: omgShot('02'), thumb: omgShot('02-thumb'), alt: 'The OMG language site: a blue to green header with the name and a View on GitHub button, above an introduction and a contents list for the language tour.', width: 1600, height: 908, caption: 'The language site and its documentation.' },
+      { src: omgShot('01'), thumb: omgShot('01-thumb'), alt: 'The OMG language site home page: the headline “A small language, built end to end” beside a live code editor showing a short program and its output.', width: 1600, height: 908, caption: 'The language site, with a live editor on the home page.' },
+      { src: omgShot('02'), thumb: omgShot('02-thumb'), alt: 'A section of the OMG site titled “Everything a language needs, and not much more”, with six cards of short code examples: variables, functions and closures, lists and dictionaries, loops, errors, and files and modules.', width: 1600, height: 910, caption: 'The language at a glance, in six runnable examples.' },
+      { src: omgShot('03'), thumb: omgShot('03-thumb'), alt: 'The OMG playground: a program that imports a module on the left and its printed output on the right, with tabs for tokens, syntax tree, bytecode, C and JavaScript.', width: 1600, height: 900, caption: 'The playground, running a program in the browser.' },
     ],
     diagram: {
       caption: 'Compilation pipeline, with the self-hosted compiler and the native path.',
