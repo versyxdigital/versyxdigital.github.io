@@ -21,6 +21,8 @@ function IndexItem({ project, shown }: { project: Project; shown: boolean }) {
   const selectProject = useSystem((s) => s.selectProject);
   const hoverProject = useSystem((s) => s.hoverProject);
   const anchor = useAnchor<HTMLButtonElement>(`project:${project.id}`);
+  // The bullet at the end of the row: the line to the project panel leaves from it.
+  const dot = useAnchor<HTMLSpanElement>(`project-dot:${project.id}`);
 
   return (
     <li>
@@ -48,7 +50,7 @@ function IndexItem({ project, shown }: { project: Project; shown: boolean }) {
           <span className={styles.itemName}>{project.name}</span>
           <span className={styles.itemKind}>{project.kind}</span>
         </span>
-        <span className={styles.itemState} aria-hidden="true" />
+        <span ref={dot} className={styles.itemState} aria-hidden="true" />
       </button>
     </li>
   );
@@ -78,7 +80,9 @@ export function Projects() {
         ? [
             {
               id: 'projects:index-link',
-              from: { kind: 'anchor' as const, id: `project:${linked}`, side: 'r' as const, gap: 0 },
+              // Straight out of the row's bullet, with no connector circle.
+              from: { kind: 'anchor' as const, id: `project-dot:${linked}`, side: 'r' as const, gap: 0 },
+              plainStart: true,
               to: { kind: 'anchor' as const, id: 'bay', side: 'l' as const, at: 0.07, gap: 0 },
               route: 'hvh' as const,
               bend: 0.5,
