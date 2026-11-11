@@ -11,6 +11,8 @@
  *   import exampleLogo from '../assets/clients/example.svg';
  *   export const clients: Client[] = [{ name: 'Example Ltd', logo: exampleLogo }, { name: 'Another Ltd' }];
  */
+import mkccLogo from '../assets/clients/milton-keynes-city-council.svg';
+
 export interface Client {
   name: string;
   /** Imported SVG file: the client's own logo. Replaces the text wordmark. */
@@ -30,7 +32,8 @@ export type ClientGlyphId = 'wave' | 'roof' | 'grid' | 'block' | 'pivot' | 'infi
 export const clients: Client[] = [
   { name: 'Ganges Lounge', mark: 'serif', glyph: 'wave' },
   { name: 'Amwah Property', mark: 'caps', glyph: 'roof' },
-  { name: 'Milton Keynes Council', mark: 'tight', glyph: 'grid' },
+  // Logo file supplied by Chris Rowles. The logo reads "Milton Keynes City Council".
+  { name: 'Milton Keynes City Council', logo: mkccLogo },
   { name: 'Korben', mark: 'heavy', glyph: 'block' },
   { name: 'Pivotal IQ', mark: 'mono', glyph: 'pivot' },
   { name: 'Mistress Infinity Productions', mark: 'light', glyph: 'infinity' },

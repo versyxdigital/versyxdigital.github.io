@@ -381,9 +381,9 @@
 /* Client logos: any SVG is flattened to white, so every mark sits in the greyscale theme. */
 .clients img {
   display: block;
-  height: clamp(1.5rem, 3.4vh, 2.5rem);
+  height: clamp(1.9rem, 4.2vh, 3rem);
   width: auto;
-  max-width: 11rem;
+  max-width: 14rem;
   filter: brightness(0) invert(1);
   opacity: 0.9;
 }
