@@ -406,3 +406,41 @@
     max-width: 100%;
   }
 }
+
+/* A dash of colour: each project's bullet takes its own colour with a soft
+   glow, in the same run as the service dots and technology pills. */
+.item[data-hue='1'] {
+  --dot: 63, 224, 238;
+}
+.item[data-hue='2'] {
+  --dot: 79, 139, 255;
+}
+.item[data-hue='3'] {
+  --dot: 125, 127, 255;
+}
+.item[data-hue='4'] {
+  --dot: 169, 123, 255;
+}
+.item[data-hue='5'] {
+  --dot: 221, 111, 232;
+}
+.item[data-hue='6'] {
+  --dot: 255, 127, 169;
+}
+
+.item[data-hue] .itemState {
+  border-color: rgb(var(--dot));
+  background: color-mix(in srgb, rgb(var(--dot)) 30%, var(--bg));
+  box-shadow: 0 0 8px 1px rgba(var(--dot), 0.7);
+}
+
+.item[data-hue]:hover .itemState,
+.item[data-hue]:focus-visible .itemState {
+  box-shadow: 0 0 12px 2px rgba(var(--dot), 0.9);
+}
+
+.item[data-hue][data-selected='true'] .itemState {
+  background: rgb(var(--dot));
+  border-color: rgb(var(--dot));
+  box-shadow: 0 0 12px 2px rgba(var(--dot), 0.85);
+}
