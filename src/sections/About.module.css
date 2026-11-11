@@ -569,7 +569,8 @@
 
 .node[data-hue] .traceNode {
   border-color: rgb(var(--dot));
-  background: rgba(var(--dot), 0.25);
+  /* Solid, so the line stops at the dot instead of showing through it. */
+  background: color-mix(in srgb, rgb(var(--dot)) 30%, var(--bg));
   box-shadow: 0 0 8px 1px rgba(var(--dot), 0.7);
 }
 
