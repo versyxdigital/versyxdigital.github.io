@@ -393,4 +393,16 @@
   .item {
     scroll-margin-top: calc(var(--nav-h) + 0.5rem);
   }
+  /* Keep the open project to the width of the screen: without these the
+     panel grows to fit its widest content (the tabs and the thumbnail row). */
+  .explorer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .index,
+  .index ul,
+  .inline,
+  .inline .bay {
+    min-width: 0;
+    max-width: 100%;
+  }
 }
