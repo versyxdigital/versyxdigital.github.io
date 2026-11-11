@@ -38,5 +38,4 @@ export const clients: Client[] = [
   { name: 'Pivotal IQ', mark: 'mono', glyph: 'pivot' },
   { name: 'Miss Infinity Productions', mark: 'light', glyph: 'infinity' },
   { name: 'Platinum Desires', mark: 'caps', glyph: 'gem' },
-  { name: 'Darkside UK', mark: 'serif', glyph: 'crescent' },
 ];
