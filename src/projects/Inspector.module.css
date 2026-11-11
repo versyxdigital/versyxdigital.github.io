@@ -827,3 +827,91 @@
 .inspector[data-hue='7'] {
   --dot: 112, 112, 112;
 }
+
+/* ── Lightbox ── a project image opened large over the page. */
+.lightbox {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: clamp(0.75rem, 3vw, 2.5rem);
+  border: 0;
+  background: transparent;
+  color: var(--text);
+}
+
+.lightbox[open] {
+  display: grid;
+  place-items: center;
+}
+
+.lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.lightboxFigure {
+  margin: 0;
+  display: grid;
+  gap: 0.9rem;
+  max-width: 100%;
+  animation: lightboxIn 220ms var(--ease-out);
+}
+
+.lightboxFigure img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100dvh - 8rem);
+  margin: 0 auto;
+  border: 1px solid var(--panel-line);
+  border-radius: 12px;
+  box-shadow: 0 30px 90px -30px rgba(0, 0, 0, 0.9);
+}
+
+.lightboxBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  flex-wrap: wrap;
+  font-size: var(--fs-small);
+  color: var(--text-2);
+}
+
+.lightboxControls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.lightboxControls button {
+  min-width: 2.75rem;
+  min-height: 2.5rem;
+  padding: 0 0.85rem;
+  border: 1px solid var(--panel-line);
+  border-radius: 999px;
+  background: rgba(15, 15, 15, 0.6);
+  color: var(--text);
+  transition: border-color var(--t-fast) ease;
+}
+
+.lightboxControls button:hover,
+.lightboxControls button:focus-visible {
+  border-color: var(--text-2);
+}
+
+@keyframes lightboxIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+.shot a {
+  cursor: zoom-in;
+}

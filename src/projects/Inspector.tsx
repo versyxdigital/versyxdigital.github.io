@@ -30,12 +30,39 @@ function Media({ project }: { project: Project }) {
   const [index, setIndex] = useState(0);
   const image = images[index];
   const count = images.length + (project.video ? 1 : 0);
+
+  // The lightbox: the image opens large over the page, with no navigation away.
+  const [zoomed, setZoomed] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog || !zoomed) return;
+    if (!dialog.open) dialog.showModal();
+    // Hold the page still behind it (the section scrolling checks for this too).
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+      if (dialog.open) dialog.close();
+    };
+  }, [zoomed]);
+  const step = (by: number): void => {
+    if (images.length > 1) setIndex((i) => (Math.min(i, images.length - 1) + by + images.length) % images.length);
+  };
+
   return (
+    <>
     <figure className={styles.shot}>
       {image ? (
-        <a href={image.src} target="_blank" rel="noreferrer noopener">
+        <a
+          href={image.src}
+          onClick={(event) => {
+            // A plain link without JavaScript; with it, the image opens in the lightbox instead.
+            event.preventDefault();
+            setZoomed(true);
+          }}
+        >
           <img key={image.src} src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
-          <span className="visually-hidden"> (opens full size in a new tab)</span>
+          <span className="visually-hidden"> (opens a larger view)</span>
         </a>
       ) : (
         project.video && (
@@ -54,7 +81,7 @@ function Media({ project }: { project: Project }) {
         <span>{image ? image.caption : project.video?.title}</span>
         {image && (
           <span className="mono" aria-hidden="true">
-            Select to view full size ↗
+            Select to enlarge
           </span>
         )}
       </figcaption>
@@ -86,6 +113,51 @@ function Media({ project }: { project: Project }) {
         </div>
       )}
     </figure>
+
+    {zoomed && image && (
+      <dialog
+        ref={dialogRef}
+        className={styles.lightbox}
+        aria-label={`${project.name} screenshot`}
+        onClose={() => setZoomed(false)}
+        onClick={(event) => {
+          // A click on the dark surround, not on the image or a control, closes it.
+          if (event.target === event.currentTarget) setZoomed(false);
+        }}
+        onKeyDown={(event) => {
+          // Keep keys inside the lightbox: Escape must not also close the project behind it.
+          event.stopPropagation();
+          if (event.key === 'ArrowRight') step(1);
+          if (event.key === 'ArrowLeft') step(-1);
+        }}
+      >
+        <figure className={styles.lightboxFigure}>
+          <img key={image.src} src={image.src} alt={image.alt} width={image.width} height={image.height} />
+          <figcaption className={styles.lightboxBar}>
+            <span>{image.caption}</span>
+            <span className={styles.lightboxControls}>
+              {images.length > 1 && (
+                <>
+                  <button type="button" className="mono" onClick={() => step(-1)} aria-label="Previous image">
+                    ←
+                  </button>
+                  <span className="mono" aria-live="polite">
+                    {index + 1} / {images.length}
+                  </span>
+                  <button type="button" className="mono" onClick={() => step(1)} aria-label="Next image">
+                    →
+                  </button>
+                </>
+              )}
+              <button type="button" className="mono" onClick={() => setZoomed(false)}>
+                Close ×
+              </button>
+            </span>
+          </figcaption>
+        </figure>
+      </dialog>
+    )}
+    </>
   );
 }
 
