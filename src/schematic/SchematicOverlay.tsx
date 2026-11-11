@@ -186,7 +186,25 @@ export function SchematicOverlay() {
       if (c.reveal > 0.96) {
         const ex = Math.round(b.x) + 0.5;
         const ey = Math.round(b.y) + 0.5;
-        if (dropsIntoField) {
+        const accent = c.def.pulseRgb?.();
+        if (dropsIntoField && accent) {
+          // A line with coloured pulses ends in the same dot it starts from:
+          // same size, same drifting colour, same soft glow.
+          const [r = 0, g = 0, bl = 0] = accent.split(',').map(Number);
+          const mix = (v: number): number => Math.round(6 + (v - 6) * 0.3);
+          ctx.save();
+          ctx.globalAlpha = Math.min(1, c.level / 0.3);
+          ctx.shadowColor = `rgba(${accent}, 0.7)`;
+          ctx.shadowBlur = 9;
+          ctx.fillStyle = `rgb(${mix(r)}, ${mix(g)}, ${mix(bl)})`;
+          ctx.strokeStyle = `rgb(${accent})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(ex, ey, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        } else if (dropsIntoField) {
           // A via: where the trace leaves this layer for the field beneath.
           ctx.beginPath();
           ctx.arc(ex, ey, 5, 0, Math.PI * 2);
