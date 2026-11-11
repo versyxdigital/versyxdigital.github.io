@@ -15,7 +15,9 @@ function Wire({ d, tone = 'cyan', dur = 2.8, begin = 0, dashed = false }: { d: s
   return (
     <>
       <path className={styles.wire} d={d} data-dashed={dashed} />
-      <circle r="2.6" className={styles.pulse} data-tone={tone}>
+      {/* Hidden until its journey starts: a signal with a delay would otherwise wait in the drawing's top-left corner. */}
+      <circle r="2.6" className={styles.pulse} data-tone={tone} visibility="hidden">
+        <set attributeName="visibility" to="visible" begin={`${begin}s`} fill="freeze" />
         <animateMotion dur={`${dur}s`} begin={`${begin}s`} repeatCount="indefinite" path={d} />
       </circle>
     </>
