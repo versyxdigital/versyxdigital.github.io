@@ -12,6 +12,14 @@ import { ServiceVisual } from './ServiceVisual';
 /** Each service takes one of the six accent colours (see global.css). */
 const SERVICE_HUES = [1, 2, 4, 5, 6];
 const serviceHue = (id: string): number => SERVICE_HUES[services.findIndex((s) => s.id === id)] ?? 1;
+/** The colour of each service's dot (matches --dot in About.module.css), for the pulse that leaves it. */
+const HUE_RGB: Record<number, string> = {
+  1: '63, 224, 238',
+  2: '79, 139, 255',
+  4: '169, 123, 255',
+  5: '221, 111, 232',
+  6: '255, 127, 169',
+};
 
 function ServiceNode({ service, last }: { service: Service; last: boolean }) {
   const selected = useSystem((s) => s.selectedService === service.id);
@@ -111,6 +119,8 @@ export function About() {
         route: 'vhv',
         bend: 0.82,
         tone: 'cyan',
+        // The line and its pulse take the colour of the dot they leave from.
+        rgb: HUE_RGB[serviceHue(selectedService)],
         // Side by side only: on a phone the record sits directly under its service.
         level: (s) => (s.activeSection === 'about' && widerThan(720) ? 0.85 : 0),
         ambient: 6,

@@ -7,12 +7,24 @@ import { registry, setClock, type AnchorSide, type ConnectionRuntime, type Endpo
 import { pointAt, polylineLength, route, slice, type Pt } from './routing';
 import styles from './schematic.module.css';
 
-const TONE_RGB: Record<Tone, string> = {
-  cyan: '39, 220, 235',
-  blue: '80, 145, 255',
-  violet: '158, 136, 240',
+/**
+ * Greyscale theme: lines are drawn in grey unless a connection names its own
+ * colour. Set to false to draw the three tones in colour again.
+ */
+const GREYSCALE = true;
+const grey = (rgb: string): string => {
+  const [r = 0, g = 0, b = 0] = rgb.split(',').map(Number);
+  const y = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+  return `${y}, ${y}, ${y}`;
 };
-const REST_RGB = '120, 142, 164';
+const themed = (rgb: string): string => (GREYSCALE ? grey(rgb) : rgb);
+
+const TONE_RGB: Record<Tone, string> = {
+  cyan: themed('39, 220, 235'),
+  blue: themed('80, 145, 255'),
+  violet: themed('158, 136, 240'),
+};
+const REST_RGB = themed('120, 142, 164');
 /** Pixels per second for pulses without an explicit duration. */
 const PULSE_SPEED = 620;
 
@@ -141,7 +153,7 @@ export function SchematicOverlay() {
       const dropsIntoField = to.kind === 'via' || to.kind === 'field' || (to.kind === 'anchor' && to.via === true);
       const length = polylineLength(pts);
       if (length < 2) return;
-      const rgb = TONE_RGB[c.def.tone];
+      const rgb = c.def.rgb ?? TONE_RGB[c.def.tone];
       const energy = Math.min(1, Math.max(0, (c.level - 0.3) / 0.7));
 
       // ── Trace ───────────────────────────────────────────────────────
@@ -225,7 +237,7 @@ export function SchematicOverlay() {
           continue;
         }
         const eased = t * t * (3 - 2 * t);
-        const prgb = TONE_RGB[p.tone];
+        const prgb = c.def.rgb ?? TONE_RGB[p.tone];
         const tail = Math.min(0.5, 70 / length);
         const body = slice(pts, Math.max(0, eased - tail), eased);
         ctx.lineCap = 'round';
@@ -289,5 +301,5 @@ export function SchematicOverlay() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className={styles.overlay} aria-hidden="true" />;
+  return <canvas ref={canvasRef} className={styles.overlay} data-overlay aria-hidden="true" />;
 }

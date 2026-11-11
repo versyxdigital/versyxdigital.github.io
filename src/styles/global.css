@@ -257,7 +257,8 @@ html[data-motion='reduced'] [data-reveal] {
 }
 
 /* ── Greyscale theme (trial) ── the moving background and the drawn lines lose their colour too. */
-canvas {
+/* The line overlay greys its own lines in code, so it can keep a coloured one. */
+canvas:not([data-overlay]) {
   filter: grayscale(1);
 }
 
