@@ -301,3 +301,33 @@ rect.box {
   ry: 5px;
   fill: rgba(18, 18, 19, 0.6);
 }
+
+/* ── A dash of colour ──
+   Kept deliberately sparse: only the signals travelling along the wires and
+   the one highlighted element in each drawing take the service's colour (the
+   same one as its dot on the line above). Everything else stays grey. */
+.pulse,
+.pulse[data-tone='blue'],
+.pulse[data-tone='violet'] {
+  fill: rgb(var(--dot, 200, 200, 200));
+  filter: drop-shadow(0 0 4px rgba(var(--dot, 200, 200, 200), 0.85));
+}
+
+.box[data-hot='true'],
+.hub {
+  stroke: rgba(var(--dot, 200, 200, 200), 0.75);
+}
+
+.box[data-hot='true'] {
+  fill: rgba(var(--dot, 200, 200, 200), 0.07);
+}
+
+.fillHot {
+  fill: rgba(var(--dot, 200, 200, 200), 0.12);
+  stroke: rgba(var(--dot, 200, 200, 200), 0.45);
+}
+
+.dotHot,
+.spark {
+  fill: rgb(var(--dot, 200, 200, 200));
+}
