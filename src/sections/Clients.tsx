@@ -17,11 +17,12 @@ export function Clients() {
       label="Clients"
       meta={`${clients.length} clients`}
     >
-      {/* Centred rows of logos under a small caption, with no boxes around them. */}
+      {/* Same heading as About and Projects: large, top left, second word in the gradient. */}
+      <h2 id="clients-title" className={styles.title} data-reveal>
+        Our <em>clients.</em>
+      </h2>
+      {/* Centred rows of logos, with no boxes around them. */}
       <div className={styles.band} data-reveal>
-        <h2 id="clients-title" className={styles.caption}>
-          Our clients
-        </h2>
         <ul className={styles.wall}>
         {clients.map((client) => (
           <li key={client.name} className={styles.tile}>

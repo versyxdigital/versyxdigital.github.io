@@ -1,3 +1,20 @@
+/* The section heading, in the same size and style as About and Projects. */
+.title {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.title em {
+  font-style: normal;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
 /* Centred rows of logos over a soft glow: no boxes, plenty of air between them. */
 .band {
   display: flex;
@@ -5,15 +22,6 @@
   justify-content: center;
   padding: clamp(2.5rem, 8vh, 6rem) 0;
   background: radial-gradient(ellipse 58% 62% at 50% 52%, rgba(255, 255, 255, 0.07), transparent 72%);
-}
-
-.caption {
-  margin-bottom: clamp(2rem, 6vh, 4rem);
-  font-size: clamp(1rem, 0.9rem + 0.3vw, 1.2rem);
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--text-2);
-  text-align: center;
 }
 
 .wall {
