@@ -43,12 +43,7 @@ export function Nav() {
 
   // The logo drifts through the same accent colours as the dot on the hero, in step with it.
   useEffect(() => {
-    // Set on the page root too, so anything on the page can use the same drifting colour.
-    const paint = (): void => {
-      const rgb = accentRgb(systemClock());
-      brandRef.current?.style.setProperty('--accent', rgb);
-      document.documentElement.style.setProperty('--accent', rgb);
-    };
+    const paint = (): void => brandRef.current?.style.setProperty('--accent', accentRgb(systemClock()));
     paint();
     const timer = window.setInterval(paint, 120);
     return () => window.clearInterval(timer);
