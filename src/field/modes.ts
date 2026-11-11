@@ -59,6 +59,7 @@ const base: FieldParams = {
 export const fieldModes: Record<VisualMode, FieldMode> = {
   'section:hero': { ...base, label: 'Travelling waves · interference', travel: 1, interf: 0.6, amp: 1.65 },
   'section:about': { ...base, label: 'Long swell', travel: 1, interf: 0.12, amp: 1.25, freq: 0.62, speed: 0.7, dim: 0.44, glow: 0.45 },
+  'section:clients': { ...base, label: 'Slow swell', travel: 0.9, interf: 0.25, amp: 1.05, freq: 0.7, speed: 0.6, dim: 0.42, glow: 0.42 },
   'section:tech': {
     ...base,
     label: 'Interference lattice',

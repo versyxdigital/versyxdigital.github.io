@@ -1,10 +1,11 @@
 import { Suspense, lazy, useEffect, useState, type ReactNode } from 'react';
 import { Nav } from './components/Nav';
-import { contentConfig } from './content';
+import { clients, contentConfig } from './content';
 import { FieldFallback } from './field/FieldFallback';
 import { SchematicOverlay } from './schematic/SchematicOverlay';
 import { Spine } from './schematic/Spine';
 import { About } from './sections/About';
+import { Clients } from './sections/Clients';
 import { Hero } from './sections/Hero';
 import { sectionOrder, useSystem, type SectionId } from './state/store';
 import { startDirector } from './system/director';
@@ -107,6 +108,7 @@ export function App() {
       <main className={styles.main}>
         <Hero />
         <About />
+        {clients.length > 0 && <Clients />}
         <Later id="projects" ready={below}>
           <Projects />
         </Later>

@@ -7,6 +7,7 @@ import styles from './Nav.module.css';
 const labels: Record<SectionId, string> = {
   hero: 'Home',
   about: 'About',
+  clients: 'Clients',
   projects: 'Projects',
   tech: 'Technologies',
   contact: 'Contact',

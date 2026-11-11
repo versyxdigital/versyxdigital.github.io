@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import {
+  clients,
   contentConfig,
   projectById,
   projectsUsing,
@@ -23,10 +24,12 @@ import {
  * consequences are derived below and orchestrated by system/director.ts.
  */
 
-export type SectionId = 'hero' | 'about' | 'tech' | 'projects' | 'contact';
-const allSections: readonly SectionId[] = ['hero', 'about', 'projects', 'tech', 'contact'];
+export type SectionId = 'hero' | 'about' | 'clients' | 'tech' | 'projects' | 'contact';
+const allSections: readonly SectionId[] = ['hero', 'about', 'clients', 'projects', 'tech', 'contact'];
 /** The sections on the page, in order. Technologies can be switched off in content/config.ts. */
-export const sectionOrder: readonly SectionId[] = allSections.filter((id) => id !== 'tech' || contentConfig.showTechnologies);
+export const sectionOrder: readonly SectionId[] = allSections.filter(
+  (id) => (id !== 'tech' || contentConfig.showTechnologies) && (id !== 'clients' || clients.length > 0),
+);
 
 export type Quality = 'high' | 'medium' | 'low';
 export type WebglStatus = 'pending' | 'ok' | 'unavailable';

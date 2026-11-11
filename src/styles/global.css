@@ -239,6 +239,10 @@ html[data-motion='reduced'] [data-reveal] {
   --glow-1: 169, 123, 255;
   --glow-2: 63, 224, 238;
 }
+#clients {
+  --glow-1: 63, 224, 238;
+  --glow-2: 169, 123, 255;
+}
 #projects {
   --glow-1: 79, 139, 255;
   --glow-2: 221, 111, 232;
@@ -258,6 +262,7 @@ canvas {
 }
 
 #about,
+#clients,
 #projects,
 #tech,
 #contact {

@@ -19,6 +19,7 @@ type Rail = Record<SectionId, CameraPose>;
 const landscape: Rail = {
   hero: { pos: [-22, 20, 58], target: [11, -4, 2], fov: 25, fadeNear: 14, fadeFar: 54 },
   about: { pos: [-34, 19, 26], target: [-2, -3, -2], fov: 36, fadeNear: 12, fadeFar: 54 },
+  clients: { pos: [-4, 30, 38], target: [0, -3, 0], fov: 35, fadeNear: 12, fadeFar: 54 },
   tech: { pos: [0, 62, 16], target: [0, 0, 1], fov: 34, fadeNear: 20, fadeFar: 58 },
   projects: { pos: [32, 15, 33], target: [-1, -2, 0], fov: 36, fadeNear: 12, fadeFar: 54 },
   contact: { pos: [0, 8.5, 46], target: [0, 3.5, 0], fov: 34, fadeNear: 14, fadeFar: 58 },
@@ -28,6 +29,7 @@ const landscape: Rail = {
 const portrait: Rail = {
   hero: { pos: [-8, 17, 46], target: [3, -9, 0], fov: 46, fadeNear: 14, fadeFar: 52 },
   about: { pos: [-26, 24, 34], target: [0, -8, 0], fov: 46, fadeNear: 10, fadeFar: 48 },
+  clients: { pos: [0, 28, 38], target: [0, -8, 0], fov: 46, fadeNear: 10, fadeFar: 48 },
   tech: { pos: [0, 70, 14], target: [0, 0, 0], fov: 44, fadeNear: 16, fadeFar: 52 },
   projects: { pos: [26, 20, 38], target: [0, -8, 0], fov: 46, fadeNear: 10, fadeFar: 48 },
   contact: { pos: [0, 10, 52], target: [0, -1, 0], fov: 46, fadeNear: 12, fadeFar: 52 },
