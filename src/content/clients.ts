@@ -17,4 +17,11 @@ export interface Client {
   logo?: string;
 }
 
-export const clients: Client[] = [];
+// Names given by Chris Rowles on 2026-11-11.
+export const clients: Client[] = [
+  { name: 'Ganges Lounge' },
+  { name: 'Amwah Property' },
+  { name: 'Milton Keynes Council' },
+  { name: 'Korben' },
+  { name: 'Pivotal IQ' },
+];
