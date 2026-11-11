@@ -389,50 +389,74 @@
 }
 
 /* ── Block lettering ──
-   The name is extruded into a solid 3D block: a stack of copies stepping down
-   and to the right, shaded from light to dark, with the drifting accent colour
-   on its deepest edge and a soft glow under it. The copies sit on a layer
-   behind the letters, so the faces keep their own fill. */
+   Big-impact poster lettering: heavy capitals, slanted, extruded into a deep
+   solid block. The depth is a stack of copies stepping down and to the left,
+   shaded from mid-grey to near-black, with the drifting accent colour on its
+   deepest edge and a soft glow under it. The copies sit on a layer behind the
+   letters, so the faces keep their own fill. */
+.name {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  font-size: calc(var(--fs-display) * 0.92);
+  transform: skewX(-10deg);
+  transform-origin: left bottom;
+  margin-left: 0.06em;
+}
+
 .line {
   position: relative;
   isolation: isolate;
   /* Room for the depth, which would otherwise be clipped. */
-  padding-right: 0.16em;
-  margin-right: -0.16em;
-  padding-bottom: 0.3em;
-  margin-bottom: -0.3em;
+  padding: 0 0.1em 0.3em 0.16em;
+  margin: 0 -0.1em -0.3em -0.16em;
 }
 
 .line::before {
   content: attr(data-text);
   position: absolute;
-  left: 0;
+  left: 0.16em;
   top: 0;
   z-index: -1;
   white-space: nowrap;
   color: transparent;
   -webkit-text-fill-color: transparent;
   text-shadow:
-    0.0055em 0.0055em 0 rgb(112, 112, 112),
-    0.011em 0.011em 0 rgb(106, 106, 106),
-    0.0165em 0.0165em 0 rgb(99, 99, 99),
-    0.022em 0.022em 0 rgb(93, 93, 93),
-    0.0275em 0.0275em 0 rgb(86, 86, 86),
-    0.033em 0.033em 0 rgb(80, 80, 80),
-    0.0385em 0.0385em 0 rgb(73, 73, 73),
-    0.044em 0.044em 0 rgb(67, 67, 67),
-    0.0495em 0.0495em 0 rgb(60, 60, 60),
-    0.055em 0.055em 0 rgb(54, 54, 54),
-    0.0605em 0.0605em 0 rgb(47, 47, 47),
-    0.066em 0.066em 0 rgb(41, 41, 41),
-    0.0715em 0.0715em 0 rgb(34, 34, 34),
-    0.077em 0.077em 0 rgb(28, 28, 28),
-    0.0825em 0.0825em 0 rgba(var(--accent, 79, 139, 255), 0.9),
-    0.097em 0.097em 0.22em rgba(var(--accent, 79, 139, 255), 0.45),
-    0.127em 0.157em 0.5em rgba(0, 0, 0, 0.6);
+    -0.0052em 0.0052em 0 rgb(104, 104, 104),
+    -0.0104em 0.0104em 0 rgb(100, 100, 100),
+    -0.0156em 0.0156em 0 rgb(96, 96, 96),
+    -0.0208em 0.0208em 0 rgb(92, 92, 92),
+    -0.026em 0.026em 0 rgb(88, 88, 88),
+    -0.0312em 0.0312em 0 rgb(84, 84, 84),
+    -0.0364em 0.0364em 0 rgb(81, 81, 81),
+    -0.0416em 0.0416em 0 rgb(77, 77, 77),
+    -0.0468em 0.0468em 0 rgb(73, 73, 73),
+    -0.052em 0.052em 0 rgb(69, 69, 69),
+    -0.0572em 0.0572em 0 rgb(65, 65, 65),
+    -0.0624em 0.0624em 0 rgb(61, 61, 61),
+    -0.0676em 0.0676em 0 rgb(57, 57, 57),
+    -0.0728em 0.0728em 0 rgb(53, 53, 53),
+    -0.078em 0.078em 0 rgb(49, 49, 49),
+    -0.0832em 0.0832em 0 rgb(45, 45, 45),
+    -0.0884em 0.0884em 0 rgb(42, 42, 42),
+    -0.0936em 0.0936em 0 rgb(38, 38, 38),
+    -0.0988em 0.0988em 0 rgb(34, 34, 34),
+    -0.104em 0.104em 0 rgb(30, 30, 30),
+    -0.1092em 0.1092em 0 rgb(26, 26, 26),
+    -0.1144em 0.1144em 0 rgb(22, 22, 22),
+    -0.1196em 0.1196em 0 rgba(var(--accent, 79, 139, 255), 0.95),
+    -0.1344em 0.1344em 0.2em rgba(var(--accent, 79, 139, 255), 0.5),
+    -0.1644em 0.2044em 0.5em rgba(0, 0, 0, 0.65);
   animation: lineIn 1100ms var(--ease-out) both;
 }
 
 .line:nth-child(2)::before {
   animation-delay: 90ms;
+}
+
+/* The second word keeps its gradient face without the extra room it needed in lower case. */
+.line:nth-child(2) > span {
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
