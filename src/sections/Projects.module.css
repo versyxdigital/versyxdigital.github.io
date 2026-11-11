@@ -444,3 +444,13 @@
   border-color: rgb(var(--dot));
   box-shadow: 0 0 12px 2px rgba(var(--dot), 0.85);
 }
+
+/* The row's number and the bar down its leading edge take the bullet's colour too. */
+.item[data-hue] .itemRef {
+  color: rgb(var(--dot));
+}
+
+.item[data-hue]::before {
+  background: rgb(var(--dot));
+  box-shadow: 0 0 8px rgba(var(--dot), 0.6);
+}

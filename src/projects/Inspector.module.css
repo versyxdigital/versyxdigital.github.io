@@ -799,3 +799,27 @@
 .video {
   overflow: hidden;
 }
+
+/* The number at the top of the open project matches its bullet in the list. */
+.inspector[data-hue='1'] {
+  --dot: 63, 224, 238;
+}
+.inspector[data-hue='2'] {
+  --dot: 79, 139, 255;
+}
+.inspector[data-hue='3'] {
+  --dot: 125, 127, 255;
+}
+.inspector[data-hue='4'] {
+  --dot: 169, 123, 255;
+}
+.inspector[data-hue='5'] {
+  --dot: 221, 111, 232;
+}
+.inspector[data-hue='6'] {
+  --dot: 255, 127, 169;
+}
+
+.inspector[data-hue] .ref {
+  color: rgb(var(--dot));
+}
