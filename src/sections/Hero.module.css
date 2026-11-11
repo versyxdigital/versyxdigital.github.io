@@ -391,8 +391,8 @@
 /* ── Block lettering ──
    Big-impact poster lettering: heavy capitals, slanted, extruded into a deep
    solid block. The depth is a stack of copies stepping down and to the left,
-   shaded from mid-grey to near-black, with the drifting accent colour on its
-   deepest edge and a soft glow under it. The copies sit on a layer behind the
+   shaded from mid-grey to near-black, with a pale grey line on its deepest
+   edge and a soft glow under it. Greyscale, like the rest of the site. The copies sit on a layer behind the
    letters, so the faces keep their own fill. */
 .name {
   font-weight: 900;
@@ -445,8 +445,8 @@
     -0.104em 0.104em 0 rgb(30, 30, 30),
     -0.1092em 0.1092em 0 rgb(26, 26, 26),
     -0.1144em 0.1144em 0 rgb(22, 22, 22),
-    -0.1196em 0.1196em 0 rgba(var(--accent, 79, 139, 255), 0.95),
-    -0.1344em 0.1344em 0.2em rgba(var(--accent, 79, 139, 255), 0.5),
+    -0.1196em 0.1196em 0 rgb(150, 150, 150),
+    -0.1344em 0.1344em 0.2em rgba(255, 255, 255, 0.14),
     -0.1644em 0.2044em 0.5em rgba(0, 0, 0, 0.65);
   animation: lineIn 1100ms var(--ease-out) both;
 }
