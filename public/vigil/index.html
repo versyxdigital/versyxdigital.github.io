@@ -6,7 +6,7 @@
     <title>Vigil — Real-time system monitoring</title>
     <meta
       name="description"
-      content="Vigil is a free, lightweight, real-time system monitor for Linux, Windows and macOS. One small binary samples your machine every second and serves a live dashboard."
+      content="Vigil is a free system monitoring utility with remote connection capabilities, for Linux, Windows and macOS. One small binary samples your machine every second and serves a live dashboard, on the machine itself or across your network."
     />
     <meta name="author" content="Chris Rowles" />
     <link rel="canonical" href="https://versyx.digital/vigil/" />
@@ -1352,10 +1352,11 @@
           <span class="accent">finally beautiful.</span>
         </h1>
         <p class="lede">
-          Vigil is a free, lightweight, real-time system monitor. One small
-          binary samples your machine every second and serves a live dashboard
-          of CPU, memory, disks, network, processes and service checks. There's
-          nothing else to install or host.
+          Vigil is a free system monitoring utility with remote connection
+          capabilities. One small binary samples your machine every second and
+          serves a live dashboard of CPU, memory, disks, network, processes and
+          service checks, on the machine itself or to anywhere on your network.
+          There's nothing else to install or host.
         </p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="https://status.edcs.app" target="_blank" rel="noopener">
@@ -1527,7 +1528,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
             </div>
             <h3>Linux, Windows &amp; macOS</h3>
-            <p>One codebase, native on each. No admin rights needed, and CPU temperature on Windows from HWiNFO, Afterburner or LibreHardwareMonitor.</p>
+            <p>One codebase, native on each. On Windows it sits in the system tray. No admin rights needed, and CPU temperature on Windows from HWiNFO, Afterburner or LibreHardwareMonitor.</p>
           </div>
         </div>
       </div>
@@ -1595,7 +1596,7 @@
         </div>
 
         <p class="arch-note reveal">
-          The dashboard always talks to the collector that served it, so
+          The dashboard always talks to the copy of Vigil that served it, so
           there's no API address to configure and no second app to keep in
           step. Prefer your own frontend? Everything it shows comes from the
           same JSON endpoints.
@@ -1610,7 +1611,7 @@
           <div class="section-eyebrow">Deployment patterns</div>
           <h2 class="section-title">From your desk to your servers.</h2>
           <p class="section-lede">
-            Each machine runs its own collector and serves its own dashboard.
+            Each machine runs its own copy of Vigil and serves its own dashboard.
             Most installs look like one of these.
           </p>
         </div>
@@ -1620,7 +1621,7 @@
             <span class="pattern-pill" style="color: var(--emerald);">Single host</span>
             <h4>Run it, open :4500</h4>
             <p>
-              Start the collector and open <code>localhost:4500</code>.
+              Start Vigil and open <code>localhost:4500</code>.
               By default it only listens locally, so it's good for dev
               boxes, gaming PCs and any "what is this machine doing right
               now?" moment.
@@ -1671,7 +1672,7 @@
 
         <div class="pricing-grid">
           <div class="pricing-card tier-install reveal">
-            <span class="pricing-eyebrow">Vigil Collector</span>
+            <span class="pricing-eyebrow">Vigil</span>
 
             <div class="pricing-amount">
               <span class="pricing-currency"></span>
@@ -1708,7 +1709,7 @@
               href="https://github.com/sentrychris/vigil-collector"
               target="_blank"
               rel="noopener"
-              aria-label="Get Vigil Collector on GitHub"
+              aria-label="Get Vigil on GitHub"
             >
               <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 3v12"></path>
