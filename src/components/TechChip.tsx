@@ -25,7 +25,7 @@ export function TechChip({ id, anchor = false }: { id: TechId; anchor?: boolean 
   if (!contentConfig.showTechnologies) {
     return (
       <span className={styles.chip} data-tone={tone} data-static="true">
-        <span className={styles.pip} aria-hidden="true" />
+        <span className={styles.pip} data-group={tech.category} aria-hidden="true" />
         {tech.name}
       </span>
     );
@@ -49,7 +49,7 @@ export function TechChip({ id, anchor = false }: { id: TechId; anchor?: boolean 
       }}
       title={`Show ${tech.name} in the Technologies section`}
     >
-      <span className={styles.pip} aria-hidden="true" />
+      <span className={styles.pip} data-group={tech.category} aria-hidden="true" />
       {tech.name}
     </button>
   );

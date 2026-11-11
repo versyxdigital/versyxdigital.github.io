@@ -53,3 +53,42 @@
 .chip[data-static='true'] {
   cursor: default;
 }
+
+/* A dash of colour: each dot takes its technology group's colour, with a soft
+   glow. These are the only coloured marks in the greyscale theme. */
+.pip[data-group] {
+  width: 6px;
+  height: 6px;
+  opacity: 1;
+  background: rgb(var(--dot));
+  box-shadow: 0 0 8px 1px rgba(var(--dot), 0.75);
+}
+.pip[data-group='language'] {
+  --dot: 63, 224, 238;
+}
+.pip[data-group='frontend'] {
+  --dot: 79, 139, 255;
+}
+.pip[data-group='tooling'] {
+  --dot: 125, 127, 255;
+}
+.pip[data-group='backend'] {
+  --dot: 169, 123, 255;
+}
+.pip[data-group='data'] {
+  --dot: 221, 111, 232;
+}
+.pip[data-group='infra'] {
+  --dot: 255, 127, 169;
+}
+
+.chip:hover .pip[data-group],
+.chip:focus-visible .pip[data-group],
+.chip[data-lit='true'] .pip[data-group] {
+  box-shadow: 0 0 12px 2px rgba(var(--dot), 0.95);
+}
+
+.chip:hover,
+.chip:focus-visible {
+  border-color: var(--line);
+}
