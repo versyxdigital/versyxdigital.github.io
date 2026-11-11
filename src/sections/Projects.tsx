@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { sectionMeta } from '../components/Nav';
 import { Section } from '../components/Section';
 import { projectById, projects, type Project } from '../content';
 import { Inspector } from '../projects/Inspector';
 import { pulse, registry, useAnchor, useConnections } from '../schematic/registry';
 import { selectHighlight, useSystem } from '../state/store';
+import { useMediaQuery } from '../system/useMediaQuery';
 import { widerThan } from '../system/viewport';
 import styles from './Projects.module.css';
 
@@ -62,6 +63,9 @@ export function Projects() {
   const shown = selected ?? projects[0]!;
   const bay = useAnchor<HTMLDivElement>('bay');
   const bayRef = useRef<HTMLDivElement | null>(null);
+  // In one column (phones and small tablets) the open project sits directly
+  // under its row in the list, so choosing another never means scrolling back up.
+  const stacked = useMediaQuery('(max-width: 980px)');
 
   const linked = selectedId ?? hoveredId;
   const tone = (linked && projectById.get(linked)?.tone) || 'cyan';
@@ -104,14 +108,19 @@ export function Projects() {
     if (!selectedId) return;
     pulse('projects:index-link', { delay: 0.08 });
     pulse('projects:bay-field', { delay: 0.5, ripple: 0.9 });
-    // On single-column layouts the bay is below the index: bring it into view.
-    const el = bayRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (rect.top > window.innerHeight * 0.6 || rect.top < 0) {
-      el.scrollIntoView({ behavior: useSystem.getState().reducedMotion ? 'auto' : 'smooth', block: 'start' });
-    }
-  }, [selectedId]);
+    if (!stacked) return;
+    // Opening one project closes another above it, which moves everything up.
+    // Keep the row that was just tapped at the top, under the navigation bar.
+    const frame = requestAnimationFrame(() => {
+      const row = registry.anchors.get(`project:${selectedId}`);
+      if (!(row instanceof HTMLElement)) return;
+      const top = row.getBoundingClientRect().top;
+      if (top < 64 || top > window.innerHeight * 0.35) {
+        row.scrollIntoView({ behavior: useSystem.getState().reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selectedId, stacked]);
 
   const close = (): void => {
     // Return focus to the entry that opened the inspector.
@@ -129,6 +138,21 @@ export function Projects() {
       }
     });
   };
+
+  const panel = (
+    <div
+      id="inspection-bay"
+      ref={(el) => {
+        bay(el);
+        bayRef.current = el;
+      }}
+      className={styles.bay}
+      data-reveal={stacked ? undefined : true}
+      style={{ '--i': 1 } as React.CSSProperties}
+    >
+      <Inspector key={shown.id} project={shown} onClose={close} focusOnOpen={selected !== undefined} />
+    </div>
+  );
 
   return (
     <Section
@@ -148,23 +172,15 @@ export function Projects() {
           </p>
           <ul data-project-index>
             {projects.map((project) => (
-              <IndexItem key={project.id} project={project} shown={selected === undefined && project.id === shown.id} />
+              <Fragment key={project.id}>
+                <IndexItem project={project} shown={selected === undefined && project.id === shown.id} />
+                {stacked && project.id === shown.id && <li className={styles.inline}>{panel}</li>}
+              </Fragment>
             ))}
           </ul>
         </div>
 
-        <div
-          id="inspection-bay"
-          ref={(el) => {
-            bay(el);
-            bayRef.current = el;
-          }}
-          className={styles.bay}
-          data-reveal
-          style={{ '--i': 1 } as React.CSSProperties}
-        >
-          <Inspector key={shown.id} project={shown} onClose={close} focusOnOpen={selected !== undefined} />
-        </div>
+        {!stacked && panel}
       </div>
     </Section>
   );
