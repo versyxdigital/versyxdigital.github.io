@@ -5,6 +5,7 @@ import { pulse, registry, useAnchor, useConnections } from '../schematic/registr
 import { useSystem } from '../state/store';
 import { accentRgb } from '../system/accent';
 import { scroll, scrollToSection } from '../system/scroll';
+import { widerThan } from '../system/viewport';
 import styles from './Hero.module.css';
 
 /** The field cell the hero's trace is attached to (world x, z). */
@@ -31,7 +32,8 @@ export function Hero() {
         to: { kind: 'field', ...CELL_ROLE },
         route: 'hv',
         tone: 'cyan',
-        level: (s) => presence(s.activeSection) * (hovered.current ? 1 : 0.45),
+        // Not on phones: there is no room for the line beside the text.
+        level: (s) => (widerThan(720) ? presence(s.activeSection) * (hovered.current ? 1 : 0.45) : 0),
         ambient: 7,
         ripple: 0.8,
       },

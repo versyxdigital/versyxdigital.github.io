@@ -387,3 +387,10 @@
 .action:hover .actionNode {
   box-shadow: 0 0 12px 2px rgba(var(--dot), 0.9);
 }
+
+/* Phones: no line beside the subtitle, so no dot for it to leave from either. */
+@media (max-width: 720px) {
+  .roleNode {
+    display: none;
+  }
+}

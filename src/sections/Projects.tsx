@@ -100,7 +100,8 @@ export function Projects() {
         to: { kind: 'via', dx: 34, dy: 46 },
         route: 'vh',
         tone,
-        level: (s) => (s.activeSection === 'projects' ? (s.selectedProject ? 0.9 : 0.3) : 0),
+        // Side by side only: on phones and small tablets the panel sits in the list, with no line out of it.
+        level: (s) => (s.activeSection === 'projects' && widerThan(980) ? (s.selectedProject ? 0.9 : 0.3) : 0),
         ambient: selectedId ? 3.5 : 9,
         ripple: selectedId ? 0.7 : 0.4,
       },
