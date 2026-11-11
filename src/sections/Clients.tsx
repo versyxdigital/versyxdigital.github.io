@@ -19,7 +19,7 @@ export function Clients() {
     >
       {/* Same heading as About and Projects: large, top left, second word in the gradient. */}
       <h2 id="clients-title" className={styles.title} data-reveal>
-        Our <em>clients.</em>
+        Who <em>we’ve worked with.</em>
       </h2>
       {/* Centred rows of logos, with no boxes around them. */}
       <div className={styles.band} data-reveal>
