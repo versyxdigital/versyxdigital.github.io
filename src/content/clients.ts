@@ -24,4 +24,6 @@ export const clients: Client[] = [
   { name: 'Milton Keynes Council' },
   { name: 'Korben' },
   { name: 'Pivotal IQ' },
+  { name: 'Mistress Infinity Productions' },
+  { name: 'Platinum Desires' },
 ];
