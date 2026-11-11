@@ -24,7 +24,7 @@ const thcFiles = import.meta.glob<string>('../assets/projects/thc-*.webp', { eag
 const thcShot = (name: string): string => thcFiles[`../assets/projects/thc-${name}.webp`] ?? '';
 
 /**
- * The six projects the founder asked to be shown, in the order given.
+ * The projects the founder asked to be shown, in the order given.
  *
  * Sources: each project's own public site and the README of its repository.
  * Architecture diagrams only contain components those sources describe.
@@ -178,10 +178,151 @@ export const projects: Project[] = [
     sources: ['site', 'repository'],
   },
   {
+    // Sources: the READMEs and docs of sentrychris/vigil and sentrychris/vigil-collector,
+    // read on 2026-11-11. The dashboard's Hub mode (which talks to a separate hub
+    // service) is left out: the collector has since removed its hub client.
+    id: 'vigil',
+    ref: '02',
+    name: 'Vigil',
+    kind: 'Server monitoring',
+    tagline: 'A lightweight monitoring dashboard for a server, fed by a collector that barely registers on it.',
+    description:
+      'Two parts. Vigil Collector is a small Rust service that samples a machine once a second and serves the result over HTTP and WebSocket. Vigil is the dashboard that draws it: live charts for processor, memory, disks, network and the busiest processes.',
+    purpose: 'See what a server is doing right now, without the monitor becoming one of the things using it up.',
+    challenges: [
+      'Keeping the collector cheap. A profiled tick cost about 11,000 microseconds, most of it scanning processes. Scanning the top processes and reading processor frequency every fifth tick, and re-listing mounted disks once a minute, brought the average to about 3,000.',
+      'Serving many dashboards for the price of one. A single sampler builds each snapshot and caches it as ready-made JSON, so every HTTP request and WebSocket frame is a read of that cache, not new work.',
+      'One codebase for Linux, Windows and macOS. Each platform reads disks, disk activity, temperature and process memory in its own way, with a fallback so every field is always present in the payload.',
+    ],
+    implementation: [
+      'The collector is written in Rust on Tokio and Axum. One task ticks once a second, collects the metrics off the main loop and publishes the snapshot atomically.',
+      'A dashboard asks for a single-use worker id over HTTP, then opens a WebSocket with it. The id expires after five seconds if it is not claimed.',
+      'A configurable list of URLs is checked on request for reachability and response time.',
+      'The dashboard is built with Vue 3, TypeScript and Pinia, with the charts drawn in D3. It shows live data over WebSocket, or polls over HTTP every 30 seconds, with a switch between the two.',
+      'The collector also carries its own built-in dashboard, embedded in the binary.',
+    ],
+    achievements: [
+      'Idle processor use settles at around 0.23% of one core, however many clients are connected.',
+      'The release binary is about 5 MB and needs nothing shipped alongside it.',
+      'Continuous integration builds it on Linux, Windows and macOS, then starts the binary and checks each endpoint responds.',
+    ],
+    facts: [
+      { label: 'Collector', value: 'Rust · Tokio · Axum' },
+      { label: 'Dashboard', value: 'Vue 3 · TypeScript · D3' },
+      { label: 'Runs on', value: 'Linux · Windows · macOS' },
+      { label: 'Cadence', value: 'One snapshot a second' },
+      { label: 'Licence', value: 'MIT' },
+    ],
+    technologies: ['rust', 'vue', 'typescript', 'd3', 'vite', 'sass', 'bootstrap', 'websockets', 'rest', 'vitest', 'playwright', 'github-actions'],
+    services: ['webapps', 'apis'],
+    links: [
+      { label: 'Dashboard source', href: 'https://github.com/sentrychris/vigil', kind: 'source' },
+      { label: 'Collector source', href: 'https://github.com/sentrychris/vigil-collector', kind: 'source' },
+    ],
+    diagram: {
+      caption: 'From the machine being watched to the charts on screen.',
+      cols: 5,
+      rows: 3,
+      nodes: [
+        {
+          id: 'host',
+          label: 'The machine',
+          sub: 'CPU · memory · disks',
+          kind: 'source',
+          col: 0,
+          row: 1,
+          detail: 'The server being watched. Its processor, memory, disks, disk activity, network throughput and busiest processes are read through the operating system, differently on Linux, Windows and macOS.',
+        },
+        {
+          id: 'sampler',
+          label: 'Sampler',
+          sub: 'once a second',
+          kind: 'process',
+          col: 1,
+          row: 1,
+          detail: 'A single task that ticks once a second and gathers every metric. Expensive reads, such as scanning processes, run every fifth tick; the list of mounted disks is refreshed once a minute.',
+          tech: ['rust'],
+        },
+        {
+          id: 'cache',
+          label: 'Snapshot',
+          sub: 'ready-made JSON',
+          kind: 'store',
+          col: 2,
+          row: 1,
+          detail: 'Each snapshot is turned into JSON once and published atomically. Every reader shares the same copy, so serving another client adds no extra work.',
+          tech: ['rust'],
+        },
+        {
+          id: 'server',
+          label: 'Collector API',
+          sub: 'HTTP · WebSocket',
+          kind: 'transport',
+          col: 3,
+          row: 1,
+          detail: 'Serves the current snapshot over HTTP and pushes it over WebSocket once a second. A client first asks for a single-use worker id, then connects with it.',
+          tech: ['rest', 'websockets'],
+        },
+        {
+          id: 'dashboard',
+          label: 'Vigil dashboard',
+          sub: 'Vue 3 · D3',
+          kind: 'surface',
+          col: 4,
+          row: 1,
+          detail: 'Live gauges and charts for processor, memory, disks, disk activity and network, with tables of the busiest processes. Runs live over WebSocket or polls over HTTP every 30 seconds.',
+          tech: ['vue', 'typescript', 'd3'],
+        },
+        {
+          id: 'probes',
+          label: 'Health checks',
+          sub: 'your list of URLs',
+          kind: 'external',
+          col: 3,
+          row: 0,
+          detail: 'A configurable list of web addresses, checked on request for whether they respond and how quickly. The list can be changed without restarting the collector.',
+        },
+        {
+          id: 'builtin',
+          label: 'Built-in dashboard',
+          sub: 'inside the binary',
+          kind: 'surface',
+          col: 3,
+          row: 2,
+          detail: 'A small dashboard embedded in the collector itself, so one file is enough to see a machine’s numbers in a browser.',
+          optional: true,
+        },
+        {
+          id: 'own',
+          label: 'Your own app',
+          sub: 'same endpoints',
+          kind: 'external',
+          col: 4,
+          row: 0,
+          detail: 'Anything that can make an HTTP request or open a WebSocket can read the same snapshots.',
+          optional: true,
+        },
+      ],
+      edges: [
+        { from: 'host', to: 'sampler' },
+        { from: 'sampler', to: 'cache' },
+        { from: 'cache', to: 'server' },
+        { from: 'server', to: 'dashboard' },
+        { from: 'probes', to: 'server', fromSide: 'b', toSide: 't' },
+        { from: 'server', to: 'builtin', fromSide: 'b', toSide: 't' },
+        { from: 'server', to: 'own', dashed: true },
+      ],
+    },
+    signature: 'rings',
+    signatureNote: 'A steady pulse from one origin: a sample taken every second.',
+    tone: 'blue',
+    sources: ['repository'],
+  },
+  {
     // Sources: the game's own README, design notes and project files (v0.1.209),
     // read with the founder's permission, and its public site.
     id: 'homecounties',
-    ref: '02',
+    ref: '03',
     name: 'The Home Counties',
     kind: 'Extraction shooter',
     tagline: 'A first-person shooter built in Godot, on streets generated from real map data.',
@@ -368,7 +509,7 @@ export const projects: Project[] = [
   },
   {
     id: 'aldervast',
-    ref: '03',
+    ref: '04',
     name: 'Aldervast',
     kind: 'Online RPG',
     tagline: 'An original fantasy online role-playing game.',
@@ -507,7 +648,7 @@ export const projects: Project[] = [
   },
   {
     id: 'edcs',
-    ref: '04',
+    ref: '05',
     name: 'ED:CS',
     kind: 'Game-data app and API',
     tagline: 'A unified read interface over a galaxy of star systems.',
@@ -655,7 +796,7 @@ export const projects: Project[] = [
   },
   {
     id: 'omg',
-    ref: '05',
+    ref: '06',
     name: 'OMG',
     kind: 'Programming language',
     tagline: 'A small programming language whose compiler is written in itself.',
@@ -819,7 +960,7 @@ export const projects: Project[] = [
   },
   {
     id: 'wssh',
-    ref: '06',
+    ref: '07',
     name: 'Wssh',
     kind: 'Web-based SSH client',
     tagline: 'A small and simple SSH client that runs in the browser.',

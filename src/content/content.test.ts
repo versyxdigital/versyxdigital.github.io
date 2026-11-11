@@ -56,7 +56,7 @@ describe('content integrity', () => {
   });
 
   it('shows exactly the six requested projects, in the order given', () => {
-    expect(projects.map((p) => p.id)).toEqual(['mkeditor', 'homecounties', 'aldervast', 'edcs', 'omg', 'wssh']);
+    expect(projects.map((p) => p.id)).toEqual(['mkeditor', 'vigil', 'homecounties', 'aldervast', 'edcs', 'omg', 'wssh']);
   });
 
   it('gives every project at least one link and one verified fact', () => {
@@ -82,13 +82,13 @@ describe('content integrity', () => {
 
 describe('derived relationship graph', () => {
   it('derives project usage from project data', () => {
-    expect(projectsUsing('typescript').sort()).toEqual(['edcs', 'mkeditor', 'omg']);
+    expect(projectsUsing('typescript').sort()).toEqual(['edcs', 'mkeditor', 'omg', 'vigil']);
     expect(projectsUsing('godot').sort()).toEqual(['aldervast', 'homecounties']);
     expect(projectsUsing('postgresql')).toEqual([]);
   });
 
   it('derives which projects exemplify a service, and their technologies', () => {
-    expect(projectsOfService('apis')).toEqual(['edcs']);
+    expect(projectsOfService('apis')).toEqual(['vigil', 'edcs']);
     expect(projectsOfService('ai')).toEqual(['mkeditor']);
     expect(projectsOfService('consulting')).toEqual([]);
     expect(techsOfService('apis')).toContain('laravel');

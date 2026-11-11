@@ -823,3 +823,7 @@
 .inspector[data-hue] .ref {
   color: rgb(var(--dot));
 }
+
+.inspector[data-hue='7'] {
+  --dot: 112, 112, 112;
+}

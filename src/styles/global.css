@@ -268,3 +268,8 @@ html[data-motion='reduced'] [data-reveal] {
   --glow-1: 214, 214, 214;
   --glow-2: 138, 138, 138;
 }
+
+:root:root [data-hue='7'] {
+  --tone: var(--cat-infra);
+  --tone-rgb: var(--cat-infra-rgb);
+}

@@ -19,6 +19,7 @@ describe('visual mode', () => {
   it('adopts a project’s field signature while it is inspected in the projects section', () => {
     const expected = {
       mkeditor: 'project:scan',
+      vigil: 'project:rings',
       homecounties: 'project:blocks',
       aldervast: 'project:island',
       edcs: 'project:stars',
@@ -80,7 +81,7 @@ describe('highlight', () => {
   it('lights the projects that exemplify a hovered service, and their technologies', () => {
     const h = resolveHighlight({ ...intent, hoveredService: 'apis' });
     expect(h.active).toBe(true);
-    expect([...h.projects]).toEqual(['edcs']);
+    expect([...h.projects]).toEqual(['vigil', 'edcs']);
     expect(h.techs.has('laravel')).toBe(true);
   });
 
