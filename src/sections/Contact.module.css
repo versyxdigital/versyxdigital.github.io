@@ -320,3 +320,9 @@
   mask-image: linear-gradient(to bottom, transparent, #000 9rem);
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9rem);
 }
+
+/* The @ in the address follows the drifting accent colour, with the logo and the hero dot. */
+.atSign {
+  color: rgb(var(--accent, 79, 139, 255));
+  text-shadow: 0 0 14px rgba(var(--accent, 79, 139, 255), 0.45);
+}
