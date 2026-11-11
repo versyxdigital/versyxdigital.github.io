@@ -37,8 +37,6 @@ export interface Connection {
   /** Fixed pixel offset of the jog from the start; overrides `bend`. */
   jog?: number;
   tone: Tone;
-  /** A colour of its own, as "r, g, b". Overrides the tone, and is kept in colour by the greyscale theme. */
-  rgb?: string;
   /**
    * Visibility for the current interaction state: 0 hidden, ~0.3 resting,
    * 1 fully energised. Evaluated every frame, so keep it cheap.
