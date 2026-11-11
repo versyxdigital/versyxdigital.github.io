@@ -21,7 +21,9 @@ export function Hero() {
     return [
       {
         id: 'hero:role',
-        from: { kind: 'anchor', id: 'hero:role', side: 'r', gap: 10 },
+        // Straight out of the dot beside the subtitle, with no connector circle.
+        from: { kind: 'anchor', id: 'hero:role', side: 'r', gap: 0 },
+        plainStart: true,
         to: { kind: 'field', ...CELL_ROLE },
         route: 'hv',
         tone: 'cyan',

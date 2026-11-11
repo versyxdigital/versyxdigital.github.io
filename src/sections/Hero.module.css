@@ -348,3 +348,16 @@
   padding-bottom: 0.24em;
   margin-bottom: -0.24em;
 }
+
+/* A dash of colour: the dot beside the subtitle is blue with a soft glow, and
+   solid so the line leaves from its edge. */
+.roleNode {
+  --dot: 79, 139, 255;
+  border-color: rgb(var(--dot));
+  background: color-mix(in srgb, rgb(var(--dot)) 30%, var(--bg));
+  box-shadow: 0 0 8px 1px rgba(var(--dot), 0.7);
+}
+
+.role:hover .roleNode {
+  box-shadow: 0 0 12px 2px rgba(var(--dot), 0.9);
+}
