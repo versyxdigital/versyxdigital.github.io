@@ -361,3 +361,10 @@
 .role:hover .roleNode {
   box-shadow: 0 0 12px 2px rgba(var(--dot), 0.9);
 }
+
+/* Optical alignment: sit the dot on the middle of the lowercase letters, which
+   is a touch below the middle of the line. The line follows the dot. */
+.roleNode {
+  position: relative;
+  top: 0.09em;
+}
