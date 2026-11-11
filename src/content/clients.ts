@@ -13,18 +13,23 @@
  */
 export interface Client {
   name: string;
-  /** Imported SVG file. */
+  /** Imported SVG file: the client's own logo. Replaces the text wordmark. */
   logo?: string;
+  /**
+   * How the name is set while there is no logo file. These are plain type
+   * treatments so the row reads as a strip of marks; they are not the clients' logos.
+   */
+  mark?: 'serif' | 'caps' | 'heavy' | 'mono' | 'light' | 'tight';
 }
 
 // Names given by Chris Rowles on 2026-11-11.
 export const clients: Client[] = [
-  { name: 'Ganges Lounge' },
-  { name: 'Amwah Property' },
-  { name: 'Milton Keynes Council' },
-  { name: 'Korben' },
-  { name: 'Pivotal IQ' },
-  { name: 'Mistress Infinity Productions' },
-  { name: 'Platinum Desires' },
-  { name: 'Temptations UK' },
+  { name: 'Ganges Lounge', mark: 'serif' },
+  { name: 'Amwah Property', mark: 'caps' },
+  { name: 'Milton Keynes Council', mark: 'tight' },
+  { name: 'Korben', mark: 'heavy' },
+  { name: 'Pivotal IQ', mark: 'mono' },
+  { name: 'Mistress Infinity Productions', mark: 'light' },
+  { name: 'Platinum Desires', mark: 'caps' },
+  { name: 'Temptations UK', mark: 'serif' },
 ];
