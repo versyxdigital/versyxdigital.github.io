@@ -36,7 +36,7 @@ export const clients: Client[] = [
   { name: 'Milton Keynes City Council', logo: mkccLogo },
   { name: 'Korben', mark: 'heavy', glyph: 'block' },
   { name: 'Pivotal IQ', mark: 'mono', glyph: 'pivot' },
-  { name: 'Mistress Infinity Productions', mark: 'light', glyph: 'infinity' },
+  { name: 'Miss Infinity Productions', mark: 'light', glyph: 'infinity' },
   { name: 'Platinum Desires', mark: 'caps', glyph: 'gem' },
   { name: 'Darkside UK', mark: 'serif', glyph: 'crescent' },
 ];
