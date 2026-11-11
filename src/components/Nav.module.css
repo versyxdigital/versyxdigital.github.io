@@ -260,3 +260,21 @@
 .link[aria-current='true'] .linkIndex {
   color: var(--cat-backend);
 }
+
+/* The logo takes the drifting accent colour (set on the brand link from Nav.tsx), with a soft glow. */
+.mark {
+  filter: drop-shadow(0 0 5px rgba(var(--accent, 79, 139, 255), 0.55));
+}
+
+.markTop,
+.markSpine {
+  stroke: rgb(var(--accent, 79, 139, 255));
+}
+
+.markBody {
+  stroke: rgba(var(--accent, 79, 139, 255), 0.45);
+}
+
+.markDot {
+  fill: rgb(var(--accent, 79, 139, 255));
+}

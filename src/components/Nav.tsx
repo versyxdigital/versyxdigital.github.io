@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { profile } from '../content';
+import { systemClock } from '../field/fieldState';
 import { sectionOrder, useSystem, type SectionId } from '../state/store';
+import { accentRgb } from '../system/accent';
 import { scroll, scrollToSection } from '../system/scroll';
 import styles from './Nav.module.css';
 
@@ -24,10 +26,10 @@ const links = sectionOrder.filter((id) => id !== 'hero');
 function Mark() {
   return (
     <svg className={styles.mark} viewBox="0 0 28 28" width="28" height="28" aria-hidden="true">
-      <path d="M14 3.5 23 8.6v10.3L14 24 5 18.9V8.6z" fill="none" stroke="var(--line)" />
+      <path className={styles.markBody} d="M14 3.5 23 8.6v10.3L14 24 5 18.9V8.6z" fill="none" stroke="var(--line)" />
       <path className={styles.markTop} d="M14 3.5 23 8.6 14 13.7 5 8.6z" />
-      <path d="M14 13.7V24" stroke="var(--blue)" />
-      <circle cx="14" cy="13.7" r="1.4" fill="var(--cyan)" />
+      <path className={styles.markSpine} d="M14 13.7V24" stroke="var(--blue)" />
+      <circle className={styles.markDot} cx="14" cy="13.7" r="1.4" fill="var(--cyan)" />
     </svg>
   );
 }
@@ -37,6 +39,15 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const progressRef = useRef<HTMLSpanElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
+  const brandRef = useRef<HTMLAnchorElement>(null);
+
+  // The logo drifts through the same accent colours as the dot on the hero, in step with it.
+  useEffect(() => {
+    const paint = (): void => brandRef.current?.style.setProperty('--accent', accentRgb(systemClock()));
+    paint();
+    const timer = window.setInterval(paint, 120);
+    return () => window.clearInterval(timer);
+  }, []);
 
   // Scroll progress on the rail, written straight to the DOM.
   useEffect(() => {
@@ -74,7 +85,7 @@ export function Nav() {
   return (
     <>
       <header className={styles.bar}>
-        <a className={styles.brand} href="#hero" onClick={go('hero')} aria-label={`${profile.name}, back to top`}>
+        <a ref={brandRef} className={styles.brand} href="#hero" onClick={go('hero')} aria-label={`${profile.name}, back to top`}>
           <Mark />
           <span className={styles.brandName}>{profile.name}</span>
         </a>
