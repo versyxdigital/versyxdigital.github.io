@@ -11,6 +11,10 @@ const mkShot = (name: string): string => mkFiles[`../assets/projects/mkeditor-${
 const alFiles = import.meta.glob<string>('../assets/projects/aldervast-*.webp', { eager: true, query: '?url', import: 'default' });
 const alShot = (name: string): string => alFiles[`../assets/projects/aldervast-${name}.webp`] ?? '';
 
+/** OMG images, omg-01 and omg-02, each with a small -thumb version. */
+const omgFiles = import.meta.glob<string>('../assets/projects/omg-*.webp', { eager: true, query: '?url', import: 'default' });
+const omgShot = (name: string): string => omgFiles[`../assets/projects/omg-${name}.webp`] ?? '';
+
 /** Wssh screenshots, wssh-01 and wssh-02, each with a small -thumb version. */
 const wsshFiles = import.meta.glob<string>('../assets/projects/wssh-*.webp', { eager: true, query: '?url', import: 'default' });
 const wsshShot = (name: string): string => wsshFiles[`../assets/projects/wssh-${name}.webp`] ?? '';
@@ -686,6 +690,10 @@ export const projects: Project[] = [
     links: [
       { label: 'Language site', href: 'https://sentrychris.github.io/omglang/', kind: 'live' },
       { label: 'Source', href: 'https://github.com/sentrychris/omglang', kind: 'source' },
+    ],
+    images: [
+      { src: omgShot('01'), thumb: omgShot('01-thumb'), alt: 'The OMG programming language logo: the letters OMG under a terminal window showing a prompt, on a blue to green background.', width: 1600, height: 908, caption: 'The OMG logo.' },
+      { src: omgShot('02'), thumb: omgShot('02-thumb'), alt: 'The OMG language site: a blue to green header with the name and a View on GitHub button, above an introduction and a contents list for the language tour.', width: 1600, height: 908, caption: 'The language site and its documentation.' },
     ],
     diagram: {
       caption: 'Compilation pipeline, with the self-hosted compiler and the native path.',
