@@ -254,13 +254,3 @@
 .node[data-optional='true'] .kindDot {
   opacity: 0.55;
 }
-
-/* Same scale in every diagram: a narrower one takes its share of the width
-   the widest would, and sits centred. Phones pan the drawing at full size. */
-@media (min-width: 861px) {
-  .diagram:not([data-preview='true']) {
-    display: block;
-    width: calc(100% * var(--share, 1));
-    margin-inline: auto;
-  }
-}
