@@ -1,57 +1,62 @@
-/* A wall of glass tiles, in the same panel style as the rest of the site. */
+/* Centred rows of logos over a soft glow: no boxes, plenty of air between them. */
+.band {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2.5rem, 8vh, 6rem) 0;
+  background: radial-gradient(ellipse 58% 62% at 50% 52%, rgba(255, 255, 255, 0.07), transparent 72%);
+}
+
+.caption {
+  margin-bottom: clamp(2rem, 6vh, 4rem);
+  font-size: clamp(1rem, 0.9rem + 0.3vw, 1.2rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-2);
+  text-align: center;
+}
+
 .wall {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(2.25rem, 7vh, 4.75rem) clamp(2.5rem, 5.5vw, 6rem);
+  max-width: 78rem;
+  margin: 0 auto;
 }
 
 .tile {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  min-height: clamp(7rem, 18vh, 11rem);
-  padding: 1.5rem 1.25rem;
-  border: 1px solid var(--panel-line);
-  border-radius: var(--panel-radius);
-  background: var(--panel-bg);
-  backdrop-filter: var(--panel-blur);
-  -webkit-backdrop-filter: var(--panel-blur);
+  gap: 0.8rem;
   color: var(--text);
-  font-size: clamp(1.0625rem, 0.75rem + 0.75vw, 1.5rem);
+  font-size: clamp(1.25rem, 0.85rem + 1.05vw, 2rem);
   font-weight: 600;
   letter-spacing: -0.03em;
-  line-height: 1.15;
-  text-align: center;
-  transition:
-    border-color var(--t-med) ease,
-    background-color var(--t-med) ease;
+  line-height: 1.1;
+  white-space: nowrap;
+  opacity: 0.94;
+  transition: opacity var(--t-med) ease;
 }
 
 .tile:hover {
-  border-color: rgba(255, 255, 255, 0.22);
-  background: rgba(24, 24, 24, 0.6);
+  opacity: 1;
 }
 
 /* Mock-up symbol beside a name. */
 .tile svg {
   flex: none;
-  width: clamp(1.6rem, 3.4vh, 2.25rem);
-  height: clamp(1.6rem, 3.4vh, 2.25rem);
-}
-
-/* A long name wraps under itself, beside its symbol, like a logo lock-up. */
-.tile span {
-  max-width: 10.5em;
-  text-align: left;
+  width: clamp(1.9rem, 4.4vh, 2.9rem);
+  height: clamp(1.9rem, 4.4vh, 2.9rem);
 }
 
 /* A client's own logo: any SVG is flattened to white, so it sits in the greyscale theme. */
 .tile img {
   display: block;
-  height: clamp(2.5rem, 6vh, 4rem);
+  height: clamp(3rem, 7.5vh, 5rem);
   width: auto;
-  max-width: 82%;
+  max-width: 100%;
   filter: brightness(0) invert(1);
   opacity: 0.92;
 }
@@ -90,36 +95,24 @@
   letter-spacing: -0.05em;
 }
 
-@media (max-width: 1080px) {
-  .wall {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 720px) {
   .wall {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 2.25rem;
   }
   .tile {
-    flex-direction: column;
-    min-height: 7.5rem;
-    padding: 1.1rem 0.75rem;
-  }
-  .tile span {
-    max-width: none;
+    white-space: normal;
     text-align: center;
+  }
+  .tile img {
+    height: 2.6rem;
   }
 }
 
-/* One-screen layouts: the wall takes the height left under the heading. */
+/* One-screen layouts: the band is centred in the height left under the rule. */
 @media (min-width: 1081px) and (min-height: 760px) {
-  .wall {
+  .band {
     flex: 1;
     min-height: 0;
-    max-height: 32rem;
-    grid-auto-rows: minmax(0, 1fr);
-  }
-  .tile {
-    min-height: 0;
+    padding: 0 0 clamp(1rem, 4vh, 3rem);
   }
 }

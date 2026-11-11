@@ -5,7 +5,7 @@ import { ClientGlyph } from './ClientGlyph';
 import styles from './Clients.module.css';
 
 /**
- * "Our clients": a wall of tiles, one per client, straight after About.
+ * "Our clients": centred rows of logos, straight after About.
  * A client with a logo file shows it in white; otherwise its name is set as a
  * text wordmark beside a mock-up symbol (see content/clients.ts).
  */
@@ -16,13 +16,13 @@ export function Clients() {
       index={sectionMeta.clients.index}
       label="Clients"
       meta={`${clients.length} clients`}
-      title={
-        <>
-          Our <em>clients.</em>
-        </>
-      }
     >
-      <ul className={styles.wall} data-reveal>
+      {/* Centred rows of logos under a small caption, with no boxes around them. */}
+      <div className={styles.band} data-reveal>
+        <h2 id="clients-title" className={styles.caption}>
+          Our clients
+        </h2>
+        <ul className={styles.wall}>
         {clients.map((client) => (
           <li key={client.name} className={styles.tile}>
             {client.logo ? (
@@ -35,7 +35,8 @@ export function Clients() {
             )}
           </li>
         ))}
-      </ul>
+        </ul>
+      </div>
     </Section>
   );
 }
