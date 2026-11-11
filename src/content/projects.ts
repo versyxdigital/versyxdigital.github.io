@@ -184,27 +184,29 @@ export const projects: Project[] = [
   {
     // Sources: the README and docs of sentrychris/vigil-collector and the product
     // site at /vigil, read on 2026-11-11. The dashboard now lives in that repository
-    // and is built into the collector binary; the old hub and Vigil Pro are gone.
+    // and is built into the binary; the old hub and Vigil Pro are gone. Renamed from
+    // "Vigil Collector" to "Vigil" on 2026-11-11.
     id: 'vigil',
     ref: '02',
     name: 'Vigil',
-    kind: 'Server monitoring',
-    tagline: 'A lightweight monitoring dashboard for a server, fed by a collector that barely registers on it.',
+    kind: 'System monitoring',
+    tagline: 'A system monitoring utility with remote connection capabilities, light enough to barely register on the machine it watches.',
     description:
-      'One small Rust program that samples a machine once a second, serves the result over HTTP and WebSocket, and carries its own live dashboard: charts for processor, memory, disks, network and the busiest processes, built into the binary.',
-    purpose: 'See what a server is doing right now, without the monitor becoming one of the things using it up.',
+      'One small Rust program that samples a machine once a second, serves the result over HTTP and WebSocket to the same machine or across the network, and carries its own live dashboard: charts for processor, memory, disks, network and the busiest processes, built into the binary.',
+    purpose: 'See what a machine is doing right now, from the machine itself or from anywhere on the network, without the monitor becoming one of the things using it up.',
     challenges: [
-      'Keeping the collector cheap. A profiled tick cost about 11,000 microseconds, most of it scanning processes. Scanning the top processes and reading processor frequency every fifth tick, and re-listing mounted disks once a minute, brought the average to about 3,000.',
+      'Keeping Vigil cheap. A profiled tick cost about 11,000 microseconds, most of it scanning processes. Scanning the top processes and reading processor frequency every fifth tick, and re-listing mounted disks once a minute, brought the average to about 3,000.',
       'Serving many dashboards for the price of one. A single sampler builds each snapshot and caches it as ready-made JSON, so every HTTP request and WebSocket frame is a read of that cache, not new work.',
       'One codebase for Linux, Windows and macOS. Each platform reads disks, disk activity, temperature and process memory in its own way, with a fallback so every field is always present in the payload.',
-      'Processor temperature on Windows without a kernel driver. The collector reads it from HWiNFO, MSI Afterburner or LibreHardwareMonitor when one is running, and otherwise from the ACPI thermal zone, but only once that value has been seen to change, since many desktops report a fixed placeholder there.',
+      'Processor temperature on Windows without a kernel driver. Vigil reads it from HWiNFO, MSI Afterburner or LibreHardwareMonitor when one is running, and otherwise from the ACPI thermal zone, but only once that value has been seen to change, since many desktops report a fixed placeholder there.',
     ],
     implementation: [
-      'The collector is written in Rust on Tokio and Axum. One task ticks once a second, collects the metrics off the main loop and publishes the snapshot atomically.',
+      'Vigil is written in Rust on Tokio and Axum. One task ticks once a second, collects the metrics off the main loop and publishes the snapshot atomically.',
       'A dashboard asks for a single-use worker id over HTTP, then opens a WebSocket with it. The id expires after five seconds if it is not claimed.',
       'A configurable list of URLs is checked on request for reachability and response time.',
       'The dashboard is built with Vue 3, TypeScript and Pinia, with the charts drawn in D3. It shows live data over WebSocket, or polls over HTTP every 30 seconds, with a switch between the two.',
-      'The dashboard is built with Vite as part of the Cargo build and embedded in the binary, so one file serves both the API and the page. It always talks to the collector that served it, so there is nothing to configure.',
+      'The dashboard is built with Vite as part of the Cargo build and embedded in the binary, so one file serves both the API and the page. It always talks to the copy of Vigil that served it, so there is nothing to configure.',
+      'On Windows it runs in the system tray, one copy per computer, with a menu to open the dashboard, see how many dashboards are connected, restart or quit.',
     ],
     achievements: [
       'Idle processor use settles at around 0.23% of one core, however many clients are connected.',
@@ -212,7 +214,7 @@ export const projects: Project[] = [
       'Continuous integration builds it on Linux, Windows and macOS, then starts the binary and checks each endpoint responds.',
     ],
     facts: [
-      { label: 'Collector', value: 'Rust · Tokio · Axum' },
+      { label: 'Backend', value: 'Rust · Tokio · Axum' },
       { label: 'Dashboard', value: 'Vue 3 · D3, built in' },
       { label: 'Runs on', value: 'Linux · Windows · macOS' },
       { label: 'Cadence', value: 'One snapshot a second' },
@@ -263,7 +265,7 @@ export const projects: Project[] = [
         },
         {
           id: 'server',
-          label: 'Collector API',
+          label: 'API',
           sub: 'HTTP · WebSocket',
           kind: 'transport',
           col: 3,
@@ -278,7 +280,7 @@ export const projects: Project[] = [
           kind: 'surface',
           col: 4,
           row: 1,
-          detail: 'Live gauges and charts for processor, memory, disks, disk activity and network, with tables of the busiest processes. Built into the collector and served at its own address, so one file is enough to see a machine in a browser. Runs live over WebSocket or polls over HTTP every 30 seconds.',
+          detail: 'Live gauges and charts for processor, memory, disks, disk activity and network, with tables of the busiest processes. Built into Vigil and served at its own address, so one file is enough to see a machine in a browser. Runs live over WebSocket or polls over HTTP every 30 seconds.',
           tech: ['vue', 'typescript', 'd3'],
         },
         {
@@ -288,7 +290,7 @@ export const projects: Project[] = [
           kind: 'external',
           col: 3,
           row: 0,
-          detail: 'A configurable list of web addresses, checked on request for whether they respond and how quickly. The list can be changed without restarting the collector.',
+          detail: 'A configurable list of web addresses, checked on request for whether they respond and how quickly. The list can be changed without restarting Vigil.',
         },
         {
           id: 'own',
