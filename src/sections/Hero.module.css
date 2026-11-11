@@ -368,3 +368,22 @@
   position: relative;
   top: 0.09em;
 }
+
+/* A dash of colour on the two hero links: blue for "See our projects", purple
+   for "Get in touch", in the same style as the dots (tinted fill, soft glow). */
+.actionNode {
+  --dot: 79, 139, 255;
+  border: 1px solid rgb(var(--dot));
+  background: color-mix(in srgb, rgb(var(--dot)) 30%, var(--bg));
+  box-shadow: 0 0 8px 1px rgba(var(--dot), 0.7);
+}
+
+.actionQuiet .actionNode {
+  --dot: 169, 123, 255;
+  background: color-mix(in srgb, rgb(var(--dot)) 30%, var(--bg));
+  box-shadow: 0 0 8px 1px rgba(var(--dot), 0.7);
+}
+
+.action:hover .actionNode {
+  box-shadow: 0 0 12px 2px rgba(var(--dot), 0.9);
+}
