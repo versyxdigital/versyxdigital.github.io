@@ -17,9 +17,9 @@ export function Clients() {
       label="Clients"
       meta={`${clients.length} clients`}
     >
-      {/* Same heading as Projects: large, top left, broken after the first word, second line in the gradient. */}
+      {/* Same heading as About and Projects: large, top left, second word in the gradient. */}
       <h2 id="clients-title" className={styles.title} data-reveal>
-        Clients <em>we’ve worked with.</em>
+        Our <em>clients.</em>
       </h2>
       {/* Centred rows of logos, with no boxes around them. */}
       <div className={styles.band} data-reveal>
