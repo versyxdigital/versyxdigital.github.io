@@ -182,37 +182,38 @@ export const projects: Project[] = [
     sources: ['site', 'repository'],
   },
   {
-    // Sources: the READMEs and docs of sentrychris/vigil and sentrychris/vigil-collector,
-    // read on 2026-11-11. The dashboard's Hub mode (which talks to a separate hub
-    // service) is left out: the collector has since removed its hub client.
+    // Sources: the README and docs of sentrychris/vigil-collector and the product
+    // site at /vigil, read on 2026-11-11. The dashboard now lives in that repository
+    // and is built into the collector binary; the old hub and Vigil Pro are gone.
     id: 'vigil',
     ref: '02',
     name: 'Vigil',
     kind: 'Server monitoring',
     tagline: 'A lightweight monitoring dashboard for a server, fed by a collector that barely registers on it.',
     description:
-      'Two parts. Vigil Collector is a small Rust service that samples a machine once a second and serves the result over HTTP and WebSocket. Vigil is the dashboard that draws it: live charts for processor, memory, disks, network and the busiest processes.',
+      'One small Rust program that samples a machine once a second, serves the result over HTTP and WebSocket, and carries its own live dashboard: charts for processor, memory, disks, network and the busiest processes, built into the binary.',
     purpose: 'See what a server is doing right now, without the monitor becoming one of the things using it up.',
     challenges: [
       'Keeping the collector cheap. A profiled tick cost about 11,000 microseconds, most of it scanning processes. Scanning the top processes and reading processor frequency every fifth tick, and re-listing mounted disks once a minute, brought the average to about 3,000.',
       'Serving many dashboards for the price of one. A single sampler builds each snapshot and caches it as ready-made JSON, so every HTTP request and WebSocket frame is a read of that cache, not new work.',
       'One codebase for Linux, Windows and macOS. Each platform reads disks, disk activity, temperature and process memory in its own way, with a fallback so every field is always present in the payload.',
+      'Processor temperature on Windows without a kernel driver. The collector reads it from HWiNFO, MSI Afterburner or LibreHardwareMonitor when one is running, and otherwise from the ACPI thermal zone, but only once that value has been seen to change, since many desktops report a fixed placeholder there.',
     ],
     implementation: [
       'The collector is written in Rust on Tokio and Axum. One task ticks once a second, collects the metrics off the main loop and publishes the snapshot atomically.',
       'A dashboard asks for a single-use worker id over HTTP, then opens a WebSocket with it. The id expires after five seconds if it is not claimed.',
       'A configurable list of URLs is checked on request for reachability and response time.',
       'The dashboard is built with Vue 3, TypeScript and Pinia, with the charts drawn in D3. It shows live data over WebSocket, or polls over HTTP every 30 seconds, with a switch between the two.',
-      'The collector also carries its own built-in dashboard, embedded in the binary.',
+      'The dashboard is built with Vite as part of the Cargo build and embedded in the binary, so one file serves both the API and the page. It always talks to the collector that served it, so there is nothing to configure.',
     ],
     achievements: [
       'Idle processor use settles at around 0.23% of one core, however many clients are connected.',
-      'The release binary is about 5 MB and needs nothing shipped alongside it.',
+      'The release binary is about 5 MB with the dashboard included, and needs nothing shipped alongside it.',
       'Continuous integration builds it on Linux, Windows and macOS, then starts the binary and checks each endpoint responds.',
     ],
     facts: [
       { label: 'Collector', value: 'Rust · Tokio · Axum' },
-      { label: 'Dashboard', value: 'Vue 3 · TypeScript · D3' },
+      { label: 'Dashboard', value: 'Vue 3 · D3, built in' },
       { label: 'Runs on', value: 'Linux · Windows · macOS' },
       { label: 'Cadence', value: 'One snapshot a second' },
       { label: 'Licence', value: 'MIT' },
@@ -220,11 +221,11 @@ export const projects: Project[] = [
     technologies: ['rust', 'vue', 'typescript', 'd3', 'vite', 'sass', 'bootstrap', 'websockets', 'rest', 'vitest', 'playwright', 'github-actions'],
     services: ['webapps', 'apis'],
     links: [
-      { label: 'Dashboard source', href: 'https://github.com/sentrychris/vigil', kind: 'source' },
-      { label: 'Collector source', href: 'https://github.com/sentrychris/vigil-collector', kind: 'source' },
+      { label: 'Project site', href: 'https://versyx.digital/vigil/', kind: 'live' },
+      { label: 'Source', href: 'https://github.com/sentrychris/vigil-collector', kind: 'source' },
     ],
     images: [
-      { src: vigilShot('01'), thumb: vigilShot('01-thumb'), alt: 'The Vigil dashboard: cards for platform, processor, memory and disk, a service status list, gauges, and live charts of network traffic, disk activity, processor and memory use.', width: 1600, height: 900, caption: 'The dashboard, live on a server.' },
+      { src: vigilShot('01'), thumb: vigilShot('01-thumb'), alt: 'The Vigil dashboard: cards for platform, processor, memory and disk, a service status list, gauges, and live charts of network traffic, disk activity, processor and memory use.', width: 1600, height: 900, caption: 'The dashboard, live on a Windows PC.' },
     ],
     diagram: {
       caption: 'From the machine being watched to the charts on screen.',
@@ -272,12 +273,12 @@ export const projects: Project[] = [
         },
         {
           id: 'dashboard',
-          label: 'Vigil dashboard',
-          sub: 'Vue 3 · D3',
+          label: 'Dashboard',
+          sub: 'inside the binary',
           kind: 'surface',
           col: 4,
           row: 1,
-          detail: 'Live gauges and charts for processor, memory, disks, disk activity and network, with tables of the busiest processes. Runs live over WebSocket or polls over HTTP every 30 seconds.',
+          detail: 'Live gauges and charts for processor, memory, disks, disk activity and network, with tables of the busiest processes. Built into the collector and served at its own address, so one file is enough to see a machine in a browser. Runs live over WebSocket or polls over HTTP every 30 seconds.',
           tech: ['vue', 'typescript', 'd3'],
         },
         {
@@ -290,22 +291,12 @@ export const projects: Project[] = [
           detail: 'A configurable list of web addresses, checked on request for whether they respond and how quickly. The list can be changed without restarting the collector.',
         },
         {
-          id: 'builtin',
-          label: 'Built-in dashboard',
-          sub: 'inside the binary',
-          kind: 'surface',
-          col: 3,
-          row: 2,
-          detail: 'A small dashboard embedded in the collector itself, so one file is enough to see a machine’s numbers in a browser.',
-          optional: true,
-        },
-        {
           id: 'own',
           label: 'Your own app',
           sub: 'same endpoints',
           kind: 'external',
-          col: 4,
-          row: 0,
+          col: 3,
+          row: 2,
           detail: 'Anything that can make an HTTP request or open a WebSocket can read the same snapshots.',
           optional: true,
         },
@@ -316,8 +307,7 @@ export const projects: Project[] = [
         { from: 'cache', to: 'server' },
         { from: 'server', to: 'dashboard' },
         { from: 'probes', to: 'server', fromSide: 'b', toSide: 't' },
-        { from: 'server', to: 'builtin', fromSide: 'b', toSide: 't' },
-        { from: 'server', to: 'own', dashed: true },
+        { from: 'server', to: 'own', fromSide: 'b', toSide: 't', dashed: true },
       ],
     },
     signature: 'rings',
