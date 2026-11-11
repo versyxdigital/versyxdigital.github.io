@@ -390,38 +390,51 @@
 
 /* Text wordmarks: each name gets its own type treatment, so the row reads as a
    strip of marks until real logo files are supplied. */
-.clients li[data-mark='serif'] {
+.clients li span[data-mark='serif'] {
   font-family: Georgia, 'Times New Roman', serif;
   font-weight: 400;
   font-style: italic;
   letter-spacing: -0.01em;
   font-size: 1.12em;
 }
-.clients li[data-mark='caps'] {
+.clients li span[data-mark='caps'] {
   text-transform: uppercase;
   font-weight: 500;
   letter-spacing: 0.22em;
   font-size: 0.72em;
 }
-.clients li[data-mark='heavy'] {
+.clients li span[data-mark='heavy'] {
   text-transform: uppercase;
   font-weight: 800;
   letter-spacing: 0.04em;
 }
-.clients li[data-mark='mono'] {
+.clients li span[data-mark='mono'] {
   font-family: var(--font-mono);
   font-weight: 500;
   letter-spacing: -0.02em;
   font-size: 0.92em;
 }
-.clients li[data-mark='light'] {
+.clients li span[data-mark='light'] {
   font-weight: 300;
   letter-spacing: 0.01em;
 }
-.clients li[data-mark='tight'] {
+.clients li span[data-mark='tight'] {
   font-weight: 700;
   letter-spacing: -0.05em;
 }
 .clients li {
   opacity: 0.92;
+}
+
+/* Mock-up logos: a drawn symbol beside each name. */
+.clients li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.clients li svg {
+  flex: none;
+  width: clamp(1.4rem, 3.2vh, 2rem);
+  height: clamp(1.4rem, 3.2vh, 2rem);
 }

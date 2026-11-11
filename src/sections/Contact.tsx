@@ -4,6 +4,7 @@ import { sectionMeta } from '../components/Nav';
 import { clients, profile } from '../content';
 import { pulse, useAnchor, useConnections } from '../schematic/registry';
 import { isWide } from '../system/viewport';
+import { ClientGlyph } from './ClientGlyph';
 import styles from './Contact.module.css';
 
 const address = (): string => `${profile.contact.email.user}@${profile.contact.email.domain}`;
@@ -157,7 +158,16 @@ export function Contact() {
           <p className={styles.clientsLabel}>Our clients</p>
           <ul>
             {clients.map((client) => (
-              <li key={client.name} data-mark={client.logo ? undefined : client.mark}>{client.logo ? <img src={client.logo} alt={client.name} loading="lazy" decoding="async" /> : client.name}</li>
+              <li key={client.name}>
+                {client.logo ? (
+                  <img src={client.logo} alt={client.name} loading="lazy" decoding="async" />
+                ) : (
+                  <>
+                    {client.glyph && <ClientGlyph id={client.glyph} />}
+                    <span data-mark={client.mark}>{client.name}</span>
+                  </>
+                )}
+              </li>
             ))}
           </ul>
         </div>

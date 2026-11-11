@@ -20,16 +20,20 @@ export interface Client {
    * treatments so the row reads as a strip of marks; they are not the clients' logos.
    */
   mark?: 'serif' | 'caps' | 'heavy' | 'mono' | 'light' | 'tight';
+  /** Mock-up symbol drawn beside the name (see sections/ClientGlyph.tsx). Not the client's own logo. */
+  glyph?: ClientGlyphId;
 }
+
+export type ClientGlyphId = 'wave' | 'roof' | 'grid' | 'block' | 'pivot' | 'infinity' | 'gem' | 'crescent';
 
 // Names given by Chris Rowles on 2026-11-11.
 export const clients: Client[] = [
-  { name: 'Ganges Lounge', mark: 'serif' },
-  { name: 'Amwah Property', mark: 'caps' },
-  { name: 'Milton Keynes Council', mark: 'tight' },
-  { name: 'Korben', mark: 'heavy' },
-  { name: 'Pivotal IQ', mark: 'mono' },
-  { name: 'Mistress Infinity Productions', mark: 'light' },
-  { name: 'Platinum Desires', mark: 'caps' },
-  { name: 'Temptations UK', mark: 'serif' },
+  { name: 'Ganges Lounge', mark: 'serif', glyph: 'wave' },
+  { name: 'Amwah Property', mark: 'caps', glyph: 'roof' },
+  { name: 'Milton Keynes Council', mark: 'tight', glyph: 'grid' },
+  { name: 'Korben', mark: 'heavy', glyph: 'block' },
+  { name: 'Pivotal IQ', mark: 'mono', glyph: 'pivot' },
+  { name: 'Mistress Infinity Productions', mark: 'light', glyph: 'infinity' },
+  { name: 'Platinum Desires', mark: 'caps', glyph: 'gem' },
+  { name: 'Temptations UK', mark: 'serif', glyph: 'crescent' },
 ];
