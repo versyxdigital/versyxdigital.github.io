@@ -548,3 +548,41 @@
 .detailInner::after {
   display: none;
 }
+
+/* A dash of colour: each service's dot on the line takes its own colour with a
+   soft glow, like the dots on the technology tags. */
+.node[data-hue='1'] {
+  --dot: 63, 224, 238;
+}
+.node[data-hue='2'] {
+  --dot: 79, 139, 255;
+}
+.node[data-hue='4'] {
+  --dot: 169, 123, 255;
+}
+.node[data-hue='5'] {
+  --dot: 221, 111, 232;
+}
+.node[data-hue='6'] {
+  --dot: 255, 127, 169;
+}
+
+.node[data-hue] .traceNode {
+  border-color: rgb(var(--dot));
+  background: rgba(var(--dot), 0.25);
+  box-shadow: 0 0 8px 1px rgba(var(--dot), 0.7);
+}
+
+.node[data-hue]:hover .traceNode,
+.node[data-hue]:focus-visible .traceNode {
+  border-color: rgb(var(--dot));
+  box-shadow: 0 0 12px 2px rgba(var(--dot), 0.9);
+}
+
+.node[data-hue][data-selected='true'] .traceNode {
+  background: rgb(var(--dot));
+  border-color: rgb(var(--dot));
+  box-shadow:
+    0 0 0 4px rgba(var(--dot), 0.16),
+    0 0 14px 2px rgba(var(--dot), 0.85);
+}
