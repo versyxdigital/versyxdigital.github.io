@@ -387,3 +387,52 @@
 .action:hover .actionNode {
   box-shadow: 0 0 12px 2px rgba(var(--dot), 0.9);
 }
+
+/* ── Block lettering ──
+   The name is extruded into a solid 3D block: a stack of copies stepping down
+   and to the right, shaded from light to dark, with the drifting accent colour
+   on its deepest edge and a soft glow under it. The copies sit on a layer
+   behind the letters, so the faces keep their own fill. */
+.line {
+  position: relative;
+  isolation: isolate;
+  /* Room for the depth, which would otherwise be clipped. */
+  padding-right: 0.16em;
+  margin-right: -0.16em;
+  padding-bottom: 0.3em;
+  margin-bottom: -0.3em;
+}
+
+.line::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0.0055em 0.0055em 0 rgb(112, 112, 112),
+    0.011em 0.011em 0 rgb(106, 106, 106),
+    0.0165em 0.0165em 0 rgb(99, 99, 99),
+    0.022em 0.022em 0 rgb(93, 93, 93),
+    0.0275em 0.0275em 0 rgb(86, 86, 86),
+    0.033em 0.033em 0 rgb(80, 80, 80),
+    0.0385em 0.0385em 0 rgb(73, 73, 73),
+    0.044em 0.044em 0 rgb(67, 67, 67),
+    0.0495em 0.0495em 0 rgb(60, 60, 60),
+    0.055em 0.055em 0 rgb(54, 54, 54),
+    0.0605em 0.0605em 0 rgb(47, 47, 47),
+    0.066em 0.066em 0 rgb(41, 41, 41),
+    0.0715em 0.0715em 0 rgb(34, 34, 34),
+    0.077em 0.077em 0 rgb(28, 28, 28),
+    0.0825em 0.0825em 0 rgba(var(--accent, 79, 139, 255), 0.9),
+    0.097em 0.097em 0.22em rgba(var(--accent, 79, 139, 255), 0.45),
+    0.127em 0.157em 0.5em rgba(0, 0, 0, 0.6);
+  animation: lineIn 1100ms var(--ease-out) both;
+}
+
+.line:nth-child(2)::before {
+  animation-delay: 90ms;
+}

@@ -70,7 +70,7 @@ export function Hero() {
 
         <h1 id="hero-title" className={styles.name}>
           {profile.name.split(' ').map((word) => (
-            <span key={word} className={styles.line}>
+            <span key={word} className={styles.line} data-text={word}>
               <span>{word}</span>
             </span>
           ))}
