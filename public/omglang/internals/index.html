@@ -429,14 +429,24 @@ try {
             <li>
               <strong>The C backend</strong> turns a program's bytecode into C source. An ordinary C compiler then
               produces a small stand-alone executable, around 30 KB, that needs neither Rust nor the VM. On Linux and
-              macOS the whole OMG toolchain can be built this way, after which it rebuilds itself with no Rust
-              involved at all.
+              macOS the whole OMG toolchain is built this way. It is a single program, <code>omg</code>, holding the
+              compiler, the VM and both backends. Given its own source it writes the C for a new copy of itself, so
+              it rebuilds with no Rust involved at all.
             </li>
             <li>
               <strong>The JavaScript backend</strong> does the same job with JavaScript as the target, which is what
               lets OMG run in a web page.
             </li>
           </ul>
+          <p>
+            That OMG-written <code>omg</code> is where the backends are used from. It is the file
+            <code>bootstrap/bin/omg</code> in the repository:
+          </p>
+
+          <pre class="code">omg --build hello.omg             <span class="tok-comment"># a stand-alone executable</span>
+omg --emit-c hello.omg hello.c    <span class="tok-comment"># or stop at the C</span>
+omg --emit-js hello.omg hello.js  <span class="tok-comment"># or produce JavaScript</span></pre>
+
           <p>
             Both keep the shape of the bytecode: each instruction becomes a line or two that does the same thing to a
             stack. Here is what they produce. The output is long because it is complete, so scroll down to the
@@ -491,18 +501,21 @@ emit 1 + 2 * 3
             <table>
               <tbody>
                 <tr><th colspan="2">The OMG toolchain, in OMG</th></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/omg.omg"><code>omg.omg</code></a></td><td>The <code>omg</code> command. It imports the files below and is the whole toolchain.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/compiler.omg"><code>compiler.omg</code></a></td><td>Lexer, parser and bytecode generator.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/vm.omg"><code>vm.omg</code></a></td><td>The virtual machine.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/native-c.omg"><code>native-c.omg</code></a></td><td>The C backend.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/native-js.omg"><code>native-js.omg</code></a></td><td>The JavaScript backend.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/backend.omg"><code>backend.omg</code></a></td><td>What the two backends share: working out where each name in a program lives.</td></tr>
 
                 <tr><th colspan="2">The Rust runtime</th></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/lexer.rs"><code>lexer.rs</code></a></td><td>The first lexer.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/parser.rs"><code>parser.rs</code></a></td><td>The first parser.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/compiler.rs"><code>compiler.rs</code></a></td><td>The first compiler.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/vm.rs"><code>vm.rs</code></a></td><td>The virtual machine every native run uses.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/vm.rs"><code>vm.rs</code></a></td><td>The virtual machine behind the Rust <code>omg</code>.</td></tr>
 
                 <tr><th colspan="2">Further reading</th></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/toolchain.md">What each part is for</a></td><td>One page on the two <code>omg</code> commands, the VMs and the backends, and which one you want.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/compilation-pipeline.md">Compilation pipeline</a></td><td>How <code>omg foo.omg</code> runs a script, in more detail.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/tree/main/docs/native">Native compilation</a></td><td>The path from OMG to a stand-alone executable.</td></tr>
               </tbody>
