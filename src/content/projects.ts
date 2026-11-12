@@ -185,19 +185,22 @@ export const projects: Project[] = [
     // Sources: the README and docs of sentrychris/vigil-collector and the product
     // site at /vigil, read on 2026-11-11. The dashboard now lives in that repository
     // and is built into the binary; the old hub and Vigil Pro are gone. Renamed from
-    // "Vigil Collector" to "Vigil" on 2026-11-11.
+    // "Vigil Collector" to "Vigil" on 2026-11-11. The Windows desktop window, its
+    // Settings page and the tray menu were added on 2026-11-12 from the same README
+    // and docs/ARCHITECTURE.md.
     id: 'vigil',
     ref: '02',
     name: 'Vigil',
     kind: 'System monitoring',
     tagline: 'A system monitoring utility with remote connection capabilities, light enough to barely register on the machine it watches.',
     description:
-      'One small Rust program that samples a machine once a second, serves the result over HTTP and WebSocket to the same machine or across the network, and carries its own live dashboard: charts for processor, memory, disks, network and the busiest processes, built into the binary.',
+      'One small Rust program that samples a machine once a second, serves the result over HTTP and WebSocket to the same machine or across the network, and carries its own live dashboard: charts for processor, memory, disks, network and the busiest processes, built into the binary. On Windows it sits in the system tray and opens that dashboard in its own window, with a Settings page.',
     purpose: 'See what a machine is doing right now, from the machine itself or from anywhere on the network, without the monitor becoming one of the things using it up.',
     challenges: [
       'Keeping Vigil cheap. A profiled tick cost about 11,000 microseconds, most of it scanning processes. Scanning the top processes and reading processor frequency every fifth tick, and re-listing mounted disks once a minute, brought the average to about 3,000.',
       'Serving many dashboards for the price of one. A single sampler builds each snapshot and caches it as ready-made JSON, so every HTTP request and WebSocket frame is a read of that cache, not new work.',
       'One codebase for Linux, Windows and macOS. Each platform reads disks, disk activity, temperature and process memory in its own way, with a fallback so every field is always present in the payload.',
+      'A Settings page only the desktop window can reach. The window loads from a second listener on 127.0.0.1 with a token made afresh each run and swapped for a session cookie; the public server answers 404 for the same addresses, so a browser never sees it, on that computer or another.',
       'Processor temperature on Windows without a kernel driver. Vigil reads it from HWiNFO, MSI Afterburner or LibreHardwareMonitor when one is running, and otherwise from the ACPI thermal zone, but only once that value has been seen to change, since many desktops report a fixed placeholder there.',
     ],
     implementation: [
@@ -206,7 +209,9 @@ export const projects: Project[] = [
       'A configurable list of URLs is checked on request for reachability and response time.',
       'The dashboard is built with Vue 3, TypeScript and Pinia, with the charts drawn in D3. It shows live data over WebSocket, or polls over HTTP every 30 seconds, with a switch between the two.',
       'The dashboard is built with Vite as part of the Cargo build and embedded in the binary, so one file serves both the API and the page. It always talks to the copy of Vigil that served it, so there is nothing to configure.',
-      'On Windows it runs in the system tray, one copy per computer, with a menu to open the dashboard, see how many dashboards are connected, restart or quit.',
+      'On Windows it runs in the system tray, one copy per computer, with a menu to open the window or the browser, open Settings, stop and start serving, restart or quit.',
+      'The tray opens the dashboard in its own window: a WebView2 control, made when the window opens and destroyed when it closes, so sitting in the tray costs what it did before. The dashboard\'s top bar is the window\'s title bar, with the minimise, maximise and close buttons in its corner.',
+      'A supervisor owns the server, so the tray and the Settings page can stop it, start it, restart it or move it to another address or port without ending the process. A new port is opened before the old one is closed.',
     ],
     achievements: [
       'Idle processor use settles at around 0.23% of one core, however many clients are connected.',
@@ -217,6 +222,7 @@ export const projects: Project[] = [
       { label: 'Backend', value: 'Rust · Tokio · Axum' },
       { label: 'Dashboard', value: 'Vue 3 · D3, built in' },
       { label: 'Runs on', value: 'Linux · Windows · macOS' },
+      { label: 'On Windows', value: 'Tray icon · desktop window' },
       { label: 'Cadence', value: 'One snapshot a second' },
       { label: 'Licence', value: 'MIT' },
     ],
@@ -228,6 +234,8 @@ export const projects: Project[] = [
     ],
     images: [
       { src: vigilShot('01'), thumb: vigilShot('01-thumb'), alt: 'The Vigil dashboard: cards for platform, processor, memory and disk, a service status list, gauges, and live charts of network traffic, disk activity, processor and memory use.', width: 1600, height: 900, caption: 'The dashboard, live on a Windows PC.' },
+      { src: vigilShot('02'), thumb: vigilShot('02-thumb'), alt: 'Vigil as a desktop window on Windows: the same dashboard under one slim bar holding the logo, the live switch, the settings gear, the theme switch and the minimise, maximise and close buttons.', width: 1600, height: 900, caption: 'The same dashboard in its own window on Windows.' },
+      { src: vigilShot('03'), thumb: vigilShot('03-thumb'), alt: 'The Settings page in the Vigil window: the server\'s address with stop, restart and browser buttons, a choice of who can connect, the port, the connection limit and update interval, and the live log.', width: 1600, height: 900, caption: 'Settings, which only the window has.' },
     ],
     diagram: {
       caption: 'From the machine being watched to the charts on screen.',
@@ -284,6 +292,16 @@ export const projects: Project[] = [
           tech: ['vue', 'typescript', 'd3'],
         },
         {
+          id: 'window',
+          label: 'Desktop window',
+          sub: 'Windows · tray',
+          kind: 'surface',
+          col: 4,
+          row: 0,
+          detail: 'On Windows the tray icon opens the same dashboard in its own window, drawn by the WebView2 runtime that comes with Windows 10 and 11. Only this window has the Settings page: stop, start and restart the server, choose who can connect and the port, set the connection limit and update interval, and follow the log.',
+          optional: true,
+        },
+        {
           id: 'probes',
           label: 'Health checks',
           sub: 'your list of URLs',
@@ -308,6 +326,7 @@ export const projects: Project[] = [
         { from: 'sampler', to: 'cache' },
         { from: 'cache', to: 'server' },
         { from: 'server', to: 'dashboard' },
+        { from: 'dashboard', to: 'window', fromSide: 't', toSide: 'b', dashed: true },
         { from: 'probes', to: 'server', fromSide: 'b', toSide: 't' },
         { from: 'server', to: 'own', fromSide: 'b', toSide: 't', dashed: true },
       ],

@@ -6,7 +6,7 @@
     <title>Vigil — Real-time system monitoring</title>
     <meta
       name="description"
-      content="Vigil is a free system monitoring utility with remote connection capabilities, for Linux, Windows and macOS. One small binary samples your machine every second and serves a live dashboard, on the machine itself or across your network."
+      content="Vigil is a free system monitoring utility with remote connection capabilities, for Linux, Windows and macOS. One small binary samples your machine every second and serves a live dashboard, on the machine itself or across your network. On Windows it opens in its own window from the system tray."
     />
     <meta name="author" content="Chris Rowles" />
     <link rel="canonical" href="https://versyx.digital/vigil/" />
@@ -507,7 +507,8 @@
         transform-origin: 50% 50%;
         transition:
           transform 600ms cubic-bezier(.2, .8, .2, 1),
-          filter 400ms ease;
+          filter 400ms ease,
+          opacity 400ms ease;
         will-change: transform;
       }
       /* Front card flows naturally — its image's natural height
@@ -555,6 +556,16 @@
         z-index: 10;
         transform: translate3d(0, -9%, 0) scale(0.92);
         filter: brightness(0.8);
+      }
+      /* Three cards show at a time. The rest wait behind the last of
+         them, out of sight, until a click brings them round. */
+      .stack-card[data-pos="3"],
+      .stack-card[data-pos="4"] {
+        z-index: 5;
+        transform: translate3d(0, -9%, 0) scale(0.92);
+        filter: brightness(0.8);
+        opacity: 0;
+        pointer-events: none;
       }
 
       /* ─── Stack controls ───────────────────────────────── */
@@ -1356,6 +1367,7 @@
           capabilities. One small binary samples your machine every second and
           serves a live dashboard of CPU, memory, disks, network, processes and
           service checks, on the machine itself or to anywhere on your network.
+          On Windows it lives in the system tray and opens in its own window.
           There's nothing else to install or host.
         </p>
         <div class="hero-cta">
@@ -1394,8 +1406,10 @@
     </section>
 
     <!-- ───────────── Screenshot stack ─────────────
-         Three layered "browser" cards. Click any card to shuffle
-         (front goes to back). -->
+         Layered cards, three showing at a time. Click any card to
+         shuffle (front goes to back). The dashboard in a browser has a
+         "browser" bar; the Vigil window on Windows has its own title
+         bar in the picture, so those cards have none. -->
     <section class="preview wrap reveal">
       <div class="card-stack" id="cardStack" data-expanded="false" role="group" aria-label="Vigil dashboard screenshots — click to cycle">
         <div class="stack-card" data-pos="0">
@@ -1411,6 +1425,16 @@
         </div>
         <div class="stack-card" data-pos="1">
           <div class="browser">
+            <img class="browser-shot" src="/vigil/window.webp" alt="Vigil as a desktop window on Windows: the same dashboard under a slim title bar with the logo, the dashboard's controls and the minimise, maximise and close buttons" loading="lazy" />
+          </div>
+        </div>
+        <div class="stack-card" data-pos="2">
+          <div class="browser">
+            <img class="browser-shot" src="/vigil/window-settings.webp" alt="The Settings page in the Vigil window: the server with stop, restart and who can connect, the connection limit and update interval, and the live log" loading="lazy" />
+          </div>
+        </div>
+        <div class="stack-card" data-pos="3">
+          <div class="browser">
             <div class="browser-bar">
               <span class="browser-dot r"></span>
               <span class="browser-dot y"></span>
@@ -1420,7 +1444,7 @@
             <img class="browser-shot" src="/vigil/dashboard-light.webp" alt="The same dashboard in the light theme" loading="lazy" />
           </div>
         </div>
-        <div class="stack-card" data-pos="2">
+        <div class="stack-card" data-pos="4">
           <div class="browser">
             <div class="browser-bar">
               <span class="browser-dot r"></span>
@@ -1528,7 +1552,69 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
             </div>
             <h3>Linux, Windows &amp; macOS</h3>
-            <p>One codebase, native on each. On Windows it sits in the system tray. No admin rights needed, and CPU temperature on Windows from HWiNFO, Afterburner or LibreHardwareMonitor.</p>
+            <p>One codebase, native on each. On Windows it sits in the system tray and opens in its own window. No admin rights needed, and CPU temperature on Windows from HWiNFO, Afterburner or LibreHardwareMonitor.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── Desktop window (Windows) ───────────── -->
+    <section id="desktop" class="section" style="padding-top: 0;">
+      <div class="wrap">
+        <div class="reveal">
+          <div class="section-eyebrow">On Windows</div>
+          <h2 class="section-title">A desktop app, still one small exe.</h2>
+          <p class="section-lede">
+            Start Vigil and it moves to the system tray. From there the
+            dashboard opens in its own window, and closing the window leaves
+            Vigil running in the tray. The window is drawn by the WebView2
+            runtime that comes with Windows 10 and 11, so there is still
+            nothing else to install. On Linux and macOS the dashboard is in
+            your browser, as before.
+          </p>
+        </div>
+
+        <div class="patterns reveal">
+          <div class="pattern-card">
+            <span class="pattern-pill" style="color: var(--cyan);">Window</span>
+            <h4>The dashboard, without the browser</h4>
+            <p>
+              One slim title bar that is part of the app: the logo, the
+              dashboard's controls, and minimise, maximise and close.
+              Nothing of the window stays in memory until it's opened again.
+              Without WebView2, the dashboard opens in your browser instead.
+            </p>
+          </div>
+          <div class="pattern-card">
+            <span class="pattern-pill" style="color: var(--emerald);">Settings</span>
+            <h4>Change it while it runs</h4>
+            <p>
+              Stop, start and restart the server. Choose who can connect
+              (this computer only, any device on the network, or one
+              address) and the port. Set the connection limit and update
+              interval, follow the live log and edit the service checks.
+              All of it takes effect without a restart.
+            </p>
+          </div>
+          <div class="pattern-card">
+            <span class="pattern-pill" style="color: var(--blue);">Tray</span>
+            <h4>One icon, one menu</h4>
+            <p>
+              Open Vigil, Open in browser, Settings, Stop or Start serving,
+              Restart and Quit. Stop serving closes it to other devices and
+              browsers while Vigil keeps monitoring and the window keeps
+              working.
+            </p>
+          </div>
+          <div class="pattern-card">
+            <span class="pattern-pill" style="color: var(--purple);">Private</span>
+            <h4>Settings stay in the window</h4>
+            <p>
+              Only the window has the Settings page. A browser never sees
+              it, on this computer or another, and the public server
+              answers <code>404</code> for its API. Other devices still
+              watch the dashboard exactly as before.
+            </p>
           </div>
         </div>
       </div>
@@ -1590,7 +1676,7 @@
               <li>Embedded in the binary, served at /</li>
               <li>Live, or a snapshot every 30 s</li>
               <li>Light + dark themes</li>
-              <li>Nothing to deploy separately</li>
+              <li>Its own window on Windows</li>
             </ul>
           </div>
         </div>
@@ -1624,7 +1710,7 @@
               Start Vigil and open <code>localhost:4500</code>.
               By default it only listens locally, so it's good for dev
               boxes, gaming PCs and any "what is this machine doing right
-              now?" moment.
+              now?" moment. On Windows, open it from the tray icon instead.
             </p>
           </div>
           <div class="pattern-card">
@@ -1693,6 +1779,10 @@
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>Live dashboard built in, nothing else to host</span>
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>A desktop window with a Settings page on Windows</span>
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
