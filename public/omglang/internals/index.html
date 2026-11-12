@@ -428,8 +428,8 @@ try {
           <ul>
             <li>
               <strong>The C backend</strong> turns a program's bytecode into C source. An ordinary C compiler then
-              produces a small stand-alone executable, around 30 KB, that needs neither Rust nor the VM. On Linux and
-              macOS the whole OMG toolchain is built this way. It is a single program, <code>omg</code>, holding the
+              produces a small stand-alone executable, around 30 KB, that needs neither Rust nor the VM. The whole
+              OMG toolchain is built this way, on Linux, macOS and Windows. It is a single program, <code>omg</code>, holding the
               compiler, the VM and both backends. Given its own source it writes the C for a new copy of itself, so
               it rebuilds with no Rust involved at all.
             </li>
