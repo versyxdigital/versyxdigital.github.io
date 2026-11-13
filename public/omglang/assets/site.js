@@ -44,15 +44,15 @@
   // =========================================================================
 
   const KEYWORDS = new Set([
-    'alloc', 'and', 'as', 'break', 'elif', 'else', 'emit', 'except', 'facts',
-    'if', 'import', 'loop', 'or', 'proc', 'return', 'try',
+    'alloc', 'and', 'as', 'break', 'continue', 'elif', 'else', 'emit', 'except', 'facts',
+    'for', 'if', 'import', 'in', 'loop', 'not', 'or', 'proc', 'return', 'try',
   ]);
 
   const BUILTINS = new Set([
     'length', 'chr', 'ascii', 'string_bytes', 'bytes_to_string',
     'int', 'float', 'floor', 'ceil', 'round', 'abs', 'sqrt', 'pow', 'log', 'sin', 'cos', 'tan',
     'hex', 'binary', 'float_bits', 'bits_to_float',
-    'freeze', 'dict_keys', 'has_key', 'list_repeat',
+    'freeze', 'dict_keys', 'has_key', 'list_repeat', 'append',
     'read_file', 'file_open', 'file_read', 'file_write', 'file_close', 'file_seek', 'file_tell',
     'file_exists', 'is_dir', 'read_dir', 'make_dir',
     'stdin_readline', 'stdin_read', 'stdin_read_bytes', 'stdin_set_raw', 'stdin_read_key',

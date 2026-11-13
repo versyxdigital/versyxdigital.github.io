@@ -134,7 +134,7 @@ emit length(s)       # 5</pre>
 } else {
     emit "positive"
 }
-# and, or, ==, !=, &lt;, &lt;=, &gt;, &gt;=</pre>
+# and, or, not, ==, !=, &lt;, &lt;=, &gt;, &gt;=</pre>
           </div>
           <div class="ref-item">
             <b>Loops</b>
@@ -143,6 +143,10 @@ loop i &lt; 5 {
     if i == 3 { break }
     emit i
     i := i + 1
+}
+for x in [1, 2, 3] {
+    if x == 2 { continue }
+    emit x
 }</pre>
           </div>
 
@@ -150,7 +154,7 @@ loop i &lt; 5 {
           <div class="ref-item">
             <b>Lists</b>
             <pre data-omg>alloc xs := [1, 2, 3]
-xs := xs + [4]       # append
+append(xs, 4)        # add to the end
 xs[0] := 99          # replace
 emit xs[-1]          # last item
 emit xs[1:3]         # slice

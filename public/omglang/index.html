@@ -159,14 +159,14 @@ emit p.name         # Chris</pre>
 
             <a class="card" href="learn/#loops">
               <div class="card-body">
-                <h3>One loop</h3>
-                <p>There is a single looping construct. It runs while its condition holds, and <code>break</code> leaves it.</p>
+                <h3>Two loops</h3>
+                <p><code>loop</code> runs while its condition holds. <code>for</code> walks a list or a string. <code>break</code> and <code>continue</code> work in both.</p>
               </div>
               <pre data-omg>alloc n := 1
-loop n &lt;= 100 {
-    n := n * 2
-}
-emit n              # 128</pre>
+loop n &lt;= 100 { n := n * 2 }
+emit n              # 128
+
+for ch in "omg" { emit ch }</pre>
             </a>
 
             <a class="card" href="learn/#errors">
@@ -251,11 +251,12 @@ Emit</code>
           </div>
 
           <p class="fact">
-            <strong>The compiler is written in OMG.</strong> A first compiler, written in Rust, exists to get things
-            started. The real one is about 2,700 lines of OMG, and it compiles itself. Both must produce identical
-            bytecode, byte for byte, and a test checks that on every change. This site goes one step further: the code
-            running in your browser is that OMG compiler and an OMG virtual machine, turned into JavaScript by a
-            backend that is also written in OMG.
+            <strong>The compiler is written in OMG.</strong> It is about 3,000 lines, and it compiles itself. So does
+            everything around it: the <code>omg</code> command is an OMG program that writes its own executable, machine
+            code and all, with no C compiler and no other language involved. Build it twice and you get the same file,
+            byte for byte, and a test checks that on every change. A first version, written in Rust, got things started
+            and has since been retired. This site goes one step further: the code running in your browser is that OMG
+            compiler and an OMG virtual machine, turned into JavaScript by a backend that is also written in OMG.
           </p>
 
           <div class="cta" style="margin-top: 28px">
@@ -280,11 +281,15 @@ Emit</code>
             </li>
             <li>
               <span class="what">a virtual machine</span>
-              <span class="desc">A second VM, in OMG, that runs the same bytecode as the Rust one. It powers this site.</span>
+              <span class="desc">It runs bytecode one instruction at a time. It is what <code>omg hello.omg</code> uses, and it powers this site.</span>
             </li>
             <li>
-              <span class="what">two backends</span>
-              <span class="desc">One turns bytecode into C for small native programs, the other into JavaScript. With the compiler and the VM they make up a single <code>omg</code> command, which builds itself.</span>
+              <span class="what">three backends</span>
+              <span class="desc">One turns bytecode into x86-64 machine code and writes the executable file itself, for Linux and Windows. One writes C, for every other system. One writes JavaScript, for the web. With the compiler and the VM they make up a single <code>omg</code> command, which builds itself.</span>
+            </li>
+            <li>
+              <span class="what">its own runtime</span>
+              <span class="desc">The code every built program carries with it, for strings, lists, memory and files. It talks to Linux and Windows directly, so an executable needs no C library.</span>
             </li>
             <li>
               <span class="what">a SQL database</span>
@@ -317,20 +322,26 @@ Emit</code>
             <div class="kicker"># on your machine</div>
             <h2>Run it locally</h2>
             <p style="color: var(--text-2)">
-              You need <a href="https://rustup.rs/">Rust</a> 1.80 or newer and nothing else. The runtime builds on
-              Linux, macOS and Windows. Run <code>omg</code> with no arguments for an interactive prompt.
+              There is nothing to install. The repository comes with <code>omg</code> ready to run on Linux and
+              Windows (x86-64), and it rebuilds itself from its own source in a few seconds. On macOS and ARM it is
+              built once with a C compiler; the
+              <a href="https://github.com/sentrychris/omglang/blob/main/docs/01-quickstart.md#other-systems">quickstart</a>
+              has the three commands. Run <code>omg</code> with no arguments for an interactive prompt.
             </p>
             <div class="cta">
               <a class="btn" href="https://github.com/sentrychris/omglang">View the source on GitHub</a>
             </div>
           </div>
-          <pre class="code"><span class="tok-comment"># build the runtime</span>
+          <pre class="code"><span class="tok-comment"># get it (on Windows, say bin\omg.exe below)</span>
 git clone https://github.com/sentrychris/omglang
 cd omglang
-cargo build --release --manifest-path rust/Cargo.toml
 
 <span class="tok-comment"># run a program</span>
-rust/target/release/omg examples/hello_world.omg</pre>
+bin/omg examples/hello_world.omg
+
+<span class="tok-comment"># or turn it into a stand-alone executable</span>
+bin/omg --build examples/hello_world.omg hello
+./hello</pre>
         </div>
       </section>
     </main>

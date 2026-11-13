@@ -312,10 +312,8 @@ emit chr(65 + 1)            # B
 # Shift every letter of a word one place along the alphabet.
 alloc word := "HAL"
 alloc out := ""
-alloc i := 0
-loop i < length(word) {
-    out := out + chr(ascii(word[i]) + 1)
-    i := i + 1
+for letter in word {
+    out := out + chr(ascii(letter) + 1)
 }
 emit out
 </textarea>
@@ -336,6 +334,8 @@ emit 5 != 4             # true
 emit "abc" < "abd"      # true     strings compare alphabetically
 emit true and false     # false
 emit true or false      # true
+emit not true           # false
+emit not 5 > 3          # false    the comparison happens first
 </textarea>
           </div>
 
@@ -390,8 +390,8 @@ if score >= 90 {
         <section id="loops">
           <h2><span class="num">08</span>Loops</h2>
           <p>
-            OMG has one looping construct: <code>loop</code>, followed by a condition and a block. The block runs for
-            as long as the condition holds, like <code>while</code> in other languages.
+            OMG has two kinds of loop. The first is <code>loop</code>, followed by a condition and a block. The block
+            runs for as long as the condition holds, like <code>while</code> in other languages.
           </p>
 
           <div class="snippet">
@@ -407,8 +407,7 @@ loop i < 5 {
           </div>
 
           <p>
-            <code>break</code> leaves the innermost loop early. There is no <code>for</code>: count with a variable,
-            as above.
+            <code>break</code> leaves the innermost loop early.
           </p>
 
           <div class="snippet">
@@ -424,6 +423,44 @@ loop true {
     n := n * 2
 }
 emit n
+</textarea>
+          </div>
+
+          <p><code>continue</code> skips the rest of the block and goes back to the condition.</p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+# The odd numbers below 10.
+alloc i := 0
+loop i < 10 {
+    i := i + 1
+    if i % 2 == 0 {
+        continue
+    }
+    emit i
+}
+</textarea>
+          </div>
+
+          <p>
+            The second kind is <code>for</code>, which walks through a list one item at a time, or through a string
+            one character at a time. There is no counter to keep. <code>break</code> and <code>continue</code> work
+            here too.
+          </p>
+
+          <div class="snippet">
+            <textarea>
+;;;omg
+
+for name in ["ada", "grace", "linus"] {
+    emit "hello, " + name
+}
+
+for letter in "omg" {
+    emit letter
+}
 </textarea>
           </div>
 
@@ -453,7 +490,8 @@ emit xs[1:3]            # [20, 30]
 
 xs[0] := 99             # replace one element
 xs := xs + [40]         # joining makes a new, longer list
-emit xs                 # [99, 20, 30, 40]
+append(xs, 50)          # append adds to the end of this list
+emit xs                 # [99, 20, 30, 40, 50]
 </textarea>
           </div>
 
@@ -483,13 +521,11 @@ alloc temps := [14, 17, 21, 19, 12]
 
 alloc sum := 0
 alloc highest := temps[0]
-alloc i := 0
-loop i < length(temps) {
-    sum := sum + temps[i]
-    if temps[i] > highest {
-        highest := temps[i]
+for t in temps {
+    sum := sum + t
+    if t > highest {
+        highest := t
     }
-    i := i + 1
 }
 
 emit "average: " + sum / length(temps)
@@ -526,8 +562,8 @@ emit has_key(person, "job")     # true
           </div>
 
           <p>
-            Entries keep the order they were added in. <code>dict_keys</code> gives you the keys as a list, which is
-            how you walk over a dictionary.
+            Entries keep the order they were added in. <code>dict_keys</code> gives you the keys as a list, and
+            <code>for</code> over that list is how you walk a dictionary.
           </p>
 
           <div class="snippet">
@@ -536,16 +572,12 @@ emit has_key(person, "job")     # true
 
 alloc stock := {apples: 12, pears: 0, plums: 7}
 
-alloc keys := dict_keys(stock)
-alloc i := 0
-loop i < length(keys) {
-    alloc k := keys[i]
+for k in dict_keys(stock) {
     if stock[k] == 0 {
         emit k + ": sold out"
     } else {
         emit k + ": " + stock[k]
     }
-    i := i + 1
 }
 </textarea>
           </div>
@@ -889,6 +921,10 @@ facts max(1, 2) == 1        # wrong on purpose
                 <tr><td><code>sin(x)</code>, <code>cos(x)</code>, <code>tan(x)</code></td><td>Trigonometry, in radians.</td></tr>
                 <tr><td><code>hex(n)</code></td><td>Lower-case hexadecimal text for an integer.</td></tr>
                 <tr><td><code>binary(n)</code>, <code>binary(n, w)</code></td><td>Binary text. With a width, the low <code>w</code> bits, padded with zeros.</td></tr>
+
+                <tr><th colspan="2">Lists</th></tr>
+                <tr><td><code>append(list, item)</code></td><td>Add <code>item</code> to the end of <code>list</code>, in place.</td></tr>
+                <tr><td><code>list_repeat(item, n)</code></td><td>A new list holding <code>item</code> <code>n</code> times.</td></tr>
 
                 <tr><th colspan="2">Dictionaries</th></tr>
                 <tr><td><code>dict_keys(d)</code></td><td>The keys, in the order they were added.</td></tr>

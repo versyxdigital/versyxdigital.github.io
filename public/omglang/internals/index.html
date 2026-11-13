@@ -74,7 +74,7 @@
           <li><a href="#vm">The virtual machine</a></li>
           <li><a href="#control">Loops, functions, errors</a></li>
           <li><a href="#self-hosting">A compiler in its own language</a></li>
-          <li><a href="#backends">Native code and JavaScript</a></li>
+          <li><a href="#backends">Machine code, C and JavaScript</a></li>
           <li><a href="#this-site">What runs on this site</a></li>
           <li><a href="#source">Read the source</a></li>
         </ol>
@@ -358,31 +358,17 @@ try {
         <section id="self-hosting">
           <h2><span class="num">07</span>A compiler in its own language</h2>
           <p>
-            Here is the part that makes OMG more than an exercise. There are two compilers, and one of them is
-            written in OMG.
-          </p>
-          <ul>
-            <li>
-              <strong>The Rust compiler</strong> came first. A new language cannot compile itself on day one, because
-              nothing yet exists to run it, so the first compiler has to be written in something else. This one,
-              along with the VM, is the Rust program you get from <code>cargo build</code>.
-            </li>
-            <li>
-              <strong>The OMG compiler</strong> is the same lexer, parser and code generator, written again in OMG:
-              about 2,700 lines in a single file, <code>compiler.omg</code>. It is an ordinary OMG program that reads
-              source text and writes bytecode.
-            </li>
-          </ul>
-          <p>
-            When the Rust program is built, it uses the Rust compiler once, to compile <code>compiler.omg</code> into
-            bytecode, and stores that bytecode inside itself. From then on, running <code>omg hello.omg</code> does
-            this:
+            Here is the part that makes OMG more than an exercise. The compiler is written in OMG. The lexer, the
+            parser and the code generator from the sections above are about 3,000 lines in a single file,
+            <code>compiler.omg</code>. It is an ordinary OMG program that reads source text and writes bytecode. The
+            virtual machine is an OMG program too (<code>vm.omg</code>), and so is the <code>omg</code> command that
+            ties them together. Running <code>omg hello.omg</code> does this:
           </p>
 
           <div class="layers">
-            <div class="layer"><b>1</b><span>The VM runs the OMG compiler, which reads <code>hello.omg</code> and writes bytecode.</span></div>
+            <div class="layer"><b>1</b><span>The OMG compiler reads <code>hello.omg</code> and writes bytecode.</span></div>
             <div class="layers-arrow">▼</div>
-            <div class="layer"><b>2</b><span>The same VM then runs that bytecode. This is your program.</span></div>
+            <div class="layer"><b>2</b><span>The OMG virtual machine runs that bytecode. This is your program.</span></div>
           </div>
 
           <p>
@@ -390,48 +376,67 @@ try {
             do this is called self-hosting.
           </p>
 
-          <h3>How do you know the two agree?</h3>
+          <h3>Where did the first one come from?</h3>
           <p>
-            Two compilers for one language is a risk: they could drift apart. OMG guards against that with a strict
-            test. Both compilers are given the same source, and their outputs must be identical, byte for byte. The
-            hardest input to get right is the compiler itself, so that is what the test uses:
-          </p>
-
-          <pre class="code">omg --verify-self-hosted src/compiler.omg</pre>
-
-          <p>
-            This compiles <code>compiler.omg</code> once with the Rust compiler and once with the OMG compiler, and
-            compares the results. It is called a fixed-point check: a compiler, fed its own source, produces itself.
-            It runs on every change to the repository. If the two ever disagree, one of them has a bug.
+            A new language cannot compile itself on day one, because nothing yet exists to run it. The first compiler
+            has to be written in something else. For OMG that was Rust: a lexer, a parser, a compiler and a VM, there
+            to get things started. Once the OMG compiler could compile itself, and <code>omg</code> could write its
+            own executable (the next section), the Rust version had done its job. It is still in the repository,
+            frozen at the last point where the two agreed, as proof that the whole chain can be rebuilt from the
+            beginning. Nothing uses it day to day.
           </p>
           <p>
-            There is a stronger version. OMG also has a second virtual machine, written in OMG
-            (<code>vm.omg</code>). With it, the OMG compiler can run on the OMG VM, which itself runs on the Rust VM.
-            That is three layers of interpretation, and the output still has to match:
+            Today each <code>omg</code> is built by the one before it. The current one is kept in the repository,
+            ready to run, and this is the entire build:
           </p>
 
-          <pre class="code">omg --verify-omg-vm src/compiler.omg</pre>
+          <pre class="code">omg --build src/omg.omg bin/omg</pre>
 
+          <h3>How do you know it is right?</h3>
           <p>
-            When that passes, every step that understands the language happened inside OMG. Rust is only the floor
-            it stands on.
+            A compiler that builds itself could go wrong quietly and keep reproducing its own mistake. OMG guards
+            against that with strict tests, which run on every change to the repository.
+          </p>
+          <ul>
+            <li>
+              <strong>Build it twice.</strong> The freshly built <code>omg</code> builds <code>omg</code> again, and
+              the two files must be identical, byte for byte. This is called a fixed-point check: a compiler, fed
+              its own source, produces itself.
+            </li>
+            <li>
+              <strong>Run it two ways.</strong> The compiler compiles <code>compiler.omg</code> once as machine code
+              and once as bytecode on the VM. Both must write exactly the same bytes.
+            </li>
+            <li>
+              <strong>Ask every backend.</strong> A set of test programs each state what they must print. Every one
+              is run on the VM, as machine code, through C and as JavaScript, and all four must give the stated
+              answer.
+            </li>
+          </ul>
+          <p>
+            If any of these disagree, something has a bug, and the change does not go in.
           </p>
         </section>
 
         <!-- ───────────── Backends ───────────── -->
         <section id="backends">
-          <h2><span class="num">08</span>Native code and JavaScript</h2>
+          <h2><span class="num">08</span>Machine code, C and JavaScript</h2>
           <p>
-            A VM is the simplest way to run bytecode, not the only one. OMG has two backends that translate bytecode
-            into another language instead, so that something faster can run it. Both are written in OMG.
+            A VM is the simplest way to run bytecode, not the only one. OMG has three backends that translate
+            bytecode into something else instead, so that it runs with no VM in between. All three are written in
+            OMG.
           </p>
           <ul>
             <li>
-              <strong>The C backend</strong> turns a program's bytecode into C source. An ordinary C compiler then
-              produces a small stand-alone executable, around 30 KB, that needs neither Rust nor the VM. The whole
-              OMG toolchain is built this way, on Linux, macOS and Windows. It is a single program, <code>omg</code>, holding the
-              compiler, the VM and both backends. Given its own source it writes the C for a new copy of itself, so
-              it rebuilds with no Rust involved at all.
+              <strong>The machine-code backend</strong> turns bytecode into x86-64 instructions, the ones the
+              processor itself runs, and writes the finished executable: an ELF file for Linux or a
+              <code>.exe</code> for Windows. No C compiler, assembler or linker takes part. Hello world comes out at
+              about 23 KB and needs nothing else to run. Either system can build for the other.
+            </li>
+            <li>
+              <strong>The C backend</strong> turns bytecode into C source, and an ordinary C compiler does the rest.
+              It is how OMG reaches the systems the machine-code backend does not cover, such as macOS and ARM. It
+              is also a second opinion: the tests build every program both ways and compare.
             </li>
             <li>
               <strong>The JavaScript backend</strong> does the same job with JavaScript as the target, which is what
@@ -439,18 +444,28 @@ try {
             </li>
           </ul>
           <p>
-            That OMG-written <code>omg</code> is where the backends are used from. It is the file
+            A built program still needs help while it runs. Something has to join strings, grow lists, hand out
+            memory, open files and print. That is the runtime. For machine code it is written in OMG as well, and it
+            talks to the operating system directly: system calls on Linux, <code>kernel32</code> on Windows. Only
+            the parts a program uses are put into its executable.
+          </p>
+          <p>
+            The <code>omg</code> command is built the same way. It is a single program holding the compiler, the VM
+            and all three backends. Given its own source it writes a new copy of itself in a few seconds, and on
+            Linux and Windows nothing but OMG is involved from the first step to the last. It is the file
             <code>bin/omg</code> in the repository:
           </p>
 
-          <pre class="code">omg --build hello.omg             <span class="tok-comment"># a stand-alone executable</span>
-omg --emit-c hello.omg hello.c    <span class="tok-comment"># or stop at the C</span>
-omg --emit-js hello.omg hello.js  <span class="tok-comment"># or produce JavaScript</span></pre>
+          <pre class="code">omg --build hello.omg hello                       <span class="tok-comment"># a stand-alone executable</span>
+omg --build hello.omg hello --target windows-x64  <span class="tok-comment"># hello.exe, from any system</span>
+omg --build hello.omg hello --target c            <span class="tok-comment"># go through a C compiler instead</span>
+omg --emit-c hello.omg hello.c                    <span class="tok-comment"># or stop at the C</span>
+omg --emit-js hello.omg hello.js                  <span class="tok-comment"># or produce JavaScript</span></pre>
 
           <p>
-            Both keep the shape of the bytecode: each instruction becomes a line or two that does the same thing to a
-            stack. Here is what they produce. The output is long because it is complete, so scroll down to the
-            numbered <code>case</code> lines and match them against the bytecode.
+            The C and JavaScript backends keep the shape of the bytecode: each instruction becomes a line or two that
+            does the same thing to a stack. Here is what they produce. The output is long because it is complete, so
+            scroll down to the numbered <code>case</code> lines and match them against the bytecode.
           </p>
 
           <div class="lab" data-stages="js,c,bytecode">
@@ -458,6 +473,14 @@ omg --emit-js hello.omg hello.js  <span class="tok-comment"># or produce JavaScr
 emit 1 + 2 * 3
 </textarea>
           </div>
+
+          <p>
+            The machine-code backend is not shown here, because a browser cannot run x86-64. It is also a little
+            smarter. Instead of pushing and popping at run time, it keeps track of where each value already is, a
+            constant, a variable or a processor register, and only writes an instruction when a value really has to
+            exist. Arithmetic on whole numbers is done on the spot, with the processor's own add and multiply.
+            Anything bigger, such as joining two strings, is a call into the runtime.
+          </p>
         </section>
 
         <!-- ───────────── This site ───────────── -->
@@ -504,20 +527,23 @@ emit 1 + 2 * 3
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/omg.omg"><code>omg.omg</code></a></td><td>The <code>omg</code> command. It imports the files below and is the whole toolchain.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/compiler.omg"><code>compiler.omg</code></a></td><td>Lexer, parser and bytecode generator.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/vm.omg"><code>vm.omg</code></a></td><td>The virtual machine.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/native-x64.omg"><code>native-x64.omg</code></a></td><td>The machine-code backend: x86-64 instructions, and the ELF and <code>.exe</code> files that hold them.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/native-c.omg"><code>native-c.omg</code></a></td><td>The C backend.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/native-js.omg"><code>native-js.omg</code></a></td><td>The JavaScript backend.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/backend.omg"><code>backend.omg</code></a></td><td>What the two backends share: working out where each name in a program lives.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/backend.omg"><code>backend.omg</code></a></td><td>What the three backends share: working out where each name in a program lives.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/tree/main/src/runtime/x64"><code>runtime/x64/</code></a></td><td>The runtime for machine code: values, memory, strings, numbers and files, with one file each for Linux and Windows.</td></tr>
 
-                <tr><th colspan="2">The Rust runtime</th></tr>
+                <tr><th colspan="2">Where it started: the Rust runtime, now frozen</th></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/lexer.rs"><code>lexer.rs</code></a></td><td>The first lexer.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/parser.rs"><code>parser.rs</code></a></td><td>The first parser.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/compiler.rs"><code>compiler.rs</code></a></td><td>The first compiler.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/vm.rs"><code>vm.rs</code></a></td><td>The virtual machine behind the Rust <code>omg</code>.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/vm.rs"><code>vm.rs</code></a></td><td>The first virtual machine.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/README.md"><code>README.md</code></a></td><td>Where it was frozen, and how to rebuild OMG from it.</td></tr>
 
                 <tr><th colspan="2">Further reading</th></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/toolchain.md">What each part is for</a></td><td>One page on the two <code>omg</code> commands, the VMs and the backends, and which one you want.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/toolchain.md">What each part is for</a></td><td>One page on the <code>omg</code> command, the VM and the backends, and which one you want.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/compilation-pipeline.md">Compilation pipeline</a></td><td>How <code>omg foo.omg</code> runs a script, in more detail.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/tree/main/docs">The manual</a></td><td>Quickstart, language tour, and the path from OMG to a stand-alone executable.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/tree/main/docs">The manual</a></td><td>Quickstart, language tour, and the path from OMG source to machine code.</td></tr>
               </tbody>
             </table>
           </div>
