@@ -19,8 +19,8 @@
 //
 // All three are copied unchanged from the OMG repository
 // (https://github.com/sentrychris/omglang): web/omg-web.js,
-// web/omg-explorer.js and bootstrap/src/omg_rt.js. To move the site to a
-// newer OMG, run bootstrap/build-web.sh there and copy the three files again.
+// web/omg-explorer.js and src/runtime/omg_rt.js. To move the site to a
+// newer OMG, run scripts/build-web.sh there and copy the three files again.
 //
 // A bundle is a script that runs top to bottom, reading its input from a few
 // `let` bindings at the top (args, the output functions, the file system).

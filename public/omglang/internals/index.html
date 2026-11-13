@@ -397,7 +397,7 @@ try {
             hardest input to get right is the compiler itself, so that is what the test uses:
           </p>
 
-          <pre class="code">omg --verify-self-hosted bootstrap/src/compiler.omg</pre>
+          <pre class="code">omg --verify-self-hosted src/compiler.omg</pre>
 
           <p>
             This compiles <code>compiler.omg</code> once with the Rust compiler and once with the OMG compiler, and
@@ -410,7 +410,7 @@ try {
             That is three layers of interpretation, and the output still has to match:
           </p>
 
-          <pre class="code">omg --verify-omg-vm bootstrap/src/compiler.omg</pre>
+          <pre class="code">omg --verify-omg-vm src/compiler.omg</pre>
 
           <p>
             When that passes, every step that understands the language happened inside OMG. Rust is only the floor
@@ -440,7 +440,7 @@ try {
           </ul>
           <p>
             That OMG-written <code>omg</code> is where the backends are used from. It is the file
-            <code>bootstrap/bin/omg</code> in the repository:
+            <code>bin/omg</code> in the repository:
           </p>
 
           <pre class="code">omg --build hello.omg             <span class="tok-comment"># a stand-alone executable</span>
@@ -501,23 +501,23 @@ emit 1 + 2 * 3
             <table>
               <tbody>
                 <tr><th colspan="2">The OMG toolchain, in OMG</th></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/omg.omg"><code>omg.omg</code></a></td><td>The <code>omg</code> command. It imports the files below and is the whole toolchain.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/compiler.omg"><code>compiler.omg</code></a></td><td>Lexer, parser and bytecode generator.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/vm.omg"><code>vm.omg</code></a></td><td>The virtual machine.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/native-c.omg"><code>native-c.omg</code></a></td><td>The C backend.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/native-js.omg"><code>native-js.omg</code></a></td><td>The JavaScript backend.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/bootstrap/src/backend.omg"><code>backend.omg</code></a></td><td>What the two backends share: working out where each name in a program lives.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/omg.omg"><code>omg.omg</code></a></td><td>The <code>omg</code> command. It imports the files below and is the whole toolchain.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/compiler.omg"><code>compiler.omg</code></a></td><td>Lexer, parser and bytecode generator.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/vm.omg"><code>vm.omg</code></a></td><td>The virtual machine.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/native-c.omg"><code>native-c.omg</code></a></td><td>The C backend.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/native-js.omg"><code>native-js.omg</code></a></td><td>The JavaScript backend.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/src/backends/backend.omg"><code>backend.omg</code></a></td><td>What the two backends share: working out where each name in a program lives.</td></tr>
 
                 <tr><th colspan="2">The Rust runtime</th></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/lexer.rs"><code>lexer.rs</code></a></td><td>The first lexer.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/parser.rs"><code>parser.rs</code></a></td><td>The first parser.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/compiler.rs"><code>compiler.rs</code></a></td><td>The first compiler.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/runtime/src/vm.rs"><code>vm.rs</code></a></td><td>The virtual machine behind the Rust <code>omg</code>.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/lexer.rs"><code>lexer.rs</code></a></td><td>The first lexer.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/parser.rs"><code>parser.rs</code></a></td><td>The first parser.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/compiler.rs"><code>compiler.rs</code></a></td><td>The first compiler.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/rust/src/vm.rs"><code>vm.rs</code></a></td><td>The virtual machine behind the Rust <code>omg</code>.</td></tr>
 
                 <tr><th colspan="2">Further reading</th></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/toolchain.md">What each part is for</a></td><td>One page on the two <code>omg</code> commands, the VMs and the backends, and which one you want.</td></tr>
                 <tr><td><a href="https://github.com/sentrychris/omglang/blob/main/docs/compilation-pipeline.md">Compilation pipeline</a></td><td>How <code>omg foo.omg</code> runs a script, in more detail.</td></tr>
-                <tr><td><a href="https://github.com/sentrychris/omglang/tree/main/docs/native">Native compilation</a></td><td>The path from OMG to a stand-alone executable.</td></tr>
+                <tr><td><a href="https://github.com/sentrychris/omglang/tree/main/docs">The manual</a></td><td>Quickstart, language tour, and the path from OMG to a stand-alone executable.</td></tr>
               </tbody>
             </table>
           </div>
