@@ -496,5 +496,8 @@ loop k < length(keys) {
       $select.value = 'starter:0';
     }
     run();
+    // Fetch the link packer while nothing else is going on, so that Share
+    // can copy the link the moment it is pressed.
+    setTimeout(OMG.share.warm, 1500);
   })();
 })();

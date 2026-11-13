@@ -674,8 +674,15 @@
   // =========================================================================
 
   // The source travels in the URL fragment as "#code=<tag><base64url>", so a
-  // link is self-contained and nothing is sent to a server. "d1" payloads
-  // are deflate-compressed, "b1" are plain UTF-8.
+  // link is self-contained and nothing is sent to a server. The tag says how
+  // the source was packed:
+  //   "2"   by omg-share.js, a compressor that already knows what OMG looks
+  //         like. Links made today. A snippet from this site packs into a
+  //         dozen characters, a fresh program into about half of "d1".
+  //   "d1"  deflate. Older links, and the fallback if omg-share.js cannot be
+  //         loaded.
+  //   "b1"  plain UTF-8. Older links, and the last resort.
+  // Every tag that was ever handed out still opens.
 
   function b64urlEncode(bytes) {
     let bin = '';
@@ -696,20 +703,74 @@
     return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer());
   }
 
+  // omg-share.js is about 70 KB, most of it the text its model learns from,
+  // so it is fetched only when a link is made or opened. Resolves to null if
+  // it cannot be loaded.
+  let packerLoading = null;
+  function loadPacker() {
+    if (!packerLoading) {
+      packerLoading = new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = new URL('omg-share.js', ASSETS).href;
+        script.onload = () => {
+          try {
+            window.OMGShareCodec.warm();
+            resolve(window.OMGShareCodec);
+          } catch (e) {
+            console.warn('Share links fall back to the older format:', e);
+            resolve(null);
+          }
+        };
+        script.onerror = () => resolve(null);
+        document.head.appendChild(script);
+      });
+    }
+    return packerLoading;
+  }
+
+  function sameBytes(a, b) {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+    return true;
+  }
+
+  // Packs the source every way this browser can and keeps the shortest.
   async function encodeShare(source) {
     const bytes = new TextEncoder().encode(source);
-    if (typeof CompressionStream !== 'undefined') {
+    let best = 'b1' + b64urlEncode(bytes);
+    const consider = (payload) => {
+      if (payload.length < best.length) best = payload;
+    };
+
+    const packer = await loadPacker();
+    if (packer) {
       try {
-        const packed = await pipe(bytes, new CompressionStream('deflate-raw'));
-        if (packed.length < bytes.length) return 'd1' + b64urlEncode(packed);
+        const packed = packer.pack(bytes);
+        // A link that opens as the wrong program is worse than a long one,
+        // so the packed form only counts once it has been unpacked again.
+        if (sameBytes(packer.unpack(packed), bytes)) consider('2' + b64urlEncode(packed));
       } catch (_) {
-        /* fall through to the plain form */
+        /* too long for the packer, or something is off: use the others */
       }
     }
-    return 'b1' + b64urlEncode(bytes);
+    // Deflate only wins on text that looks nothing like OMG, and plain only
+    // on text that does not compress at all, but both are cheap to try.
+    if (typeof CompressionStream !== 'undefined') {
+      try {
+        consider('d1' + b64urlEncode(await pipe(bytes, new CompressionStream('deflate-raw'))));
+      } catch (_) {
+        /* keep what we have */
+      }
+    }
+    return best;
   }
 
   async function decodeShare(payload) {
+    if (payload[0] === '2') {
+      const packer = await loadPacker();
+      if (!packer) throw new Error('could not load omg-share.js');
+      return new TextDecoder().decode(packer.unpack(b64urlDecode(payload.slice(1))));
+    }
     const tag = payload.slice(0, 2);
     const bytes = b64urlDecode(payload.slice(2));
     if (tag === 'd1') return new TextDecoder().decode(await pipe(bytes, new DecompressionStream('deflate-raw')));
@@ -1080,7 +1141,7 @@
     formatMs,
     toast,
     icons: { play: ICON_PLAY, stop: ICON_STOP },
-    share: { encode: encodeShare, decode: decodeShare, read: readSharedSource, playgroundURL },
+    share: { encode: encodeShare, decode: decodeShare, read: readSharedSource, playgroundURL, warm: loadPacker },
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
