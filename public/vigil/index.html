@@ -560,7 +560,8 @@
       /* Three cards show at a time. The rest wait behind the last of
          them, out of sight, until a click brings them round. */
       .stack-card[data-pos="3"],
-      .stack-card[data-pos="4"] {
+      .stack-card[data-pos="4"],
+      .stack-card[data-pos="5"] {
         z-index: 5;
         transform: translate3d(0, -9%, 0) scale(0.92);
         filter: brightness(0.8);
@@ -1277,6 +1278,17 @@
       }
       .foot-built a { color: var(--text-mute); transition: color 160ms ease; }
       .foot-built a:hover { color: var(--text); }
+      /* Credit line for Slint, which asks for its badge on a public page. */
+      .foot-credit { margin-top: 0.9rem; }
+      .foot-credit img {
+        height: 36px;
+        width: auto;
+        margin-left: 0.4rem;
+        vertical-align: middle;
+        opacity: 0.85;
+        transition: opacity 160ms ease;
+      }
+      .foot-credit a:hover img { opacity: 1; }
       @keyframes heartbeat {
         0%, 60%, 100% { transform: scale(1); }
         20% { transform: scale(1.18); }
@@ -1367,8 +1379,9 @@
           capabilities. One small binary samples your machine every second and
           serves a live dashboard of CPU, memory, disks, network, processes and
           service checks, on the machine itself or to anywhere on your network.
-          On Windows it lives in the system tray and opens in its own window.
-          There's nothing else to install or host.
+          On Windows it lives in the system tray and opens in a compact window
+          it draws itself, with no browser behind it. There's nothing else to
+          install or host.
         </p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="https://status.edcs.app" target="_blank" rel="noopener">
@@ -1398,7 +1411,7 @@
           </a>
         </div>
         <div class="hero-meta">
-          <span><b>Binary</b> ~5 MB</span>
+          <span><b>Binary</b> ~6 MB · 14 MB on Windows</span>
           <span><b>Dashboard</b> built in</span>
           <span><b>Idle CPU</b> ~0.2% of a core</span>
         </div>
@@ -1408,8 +1421,8 @@
     <!-- ───────────── Screenshot stack ─────────────
          Layered cards, three showing at a time. Click any card to
          shuffle (front goes to back). The dashboard in a browser has a
-         "browser" bar; the Vigil window on Windows has its own title
-         bar in the picture, so those cards have none. -->
+         "browser" bar; Vigil's own windows on Windows have their title
+         bars in the picture, so those cards have none. -->
     <section class="preview wrap reveal">
       <div class="card-stack" id="cardStack" data-expanded="false" role="group" aria-label="Vigil dashboard screenshots — click to cycle">
         <div class="stack-card" data-pos="0">
@@ -1425,15 +1438,20 @@
         </div>
         <div class="stack-card" data-pos="1">
           <div class="browser">
-            <img class="browser-shot" src="/vigil/window.webp" alt="Vigil as a desktop window on Windows: the same dashboard under a slim title bar with the logo, the dashboard's controls and the minimise, maximise and close buttons" loading="lazy" />
+            <img class="browser-shot" src="/vigil/compact.webp" alt="The Vigil window on Windows in its dark and light themes: platform, CPU, memory, disk and network each on one line with a sparkline, the service checks and the busiest programs, under a bar with the live and theme switches" loading="lazy" />
           </div>
         </div>
         <div class="stack-card" data-pos="2">
           <div class="browser">
-            <img class="browser-shot" src="/vigil/window-settings.webp" alt="The Settings page in the Vigil window: the server with stop, restart and who can connect, the connection limit and update interval, and the live log" loading="lazy" />
+            <img class="browser-shot" src="/vigil/window.webp" alt="The full dashboard in a window of its own on Windows: the same dashboard under a slim title bar with the logo, the dashboard's controls and the minimise, maximise and close buttons" loading="lazy" />
           </div>
         </div>
         <div class="stack-card" data-pos="3">
+          <div class="browser">
+            <img class="browser-shot" src="/vigil/window-settings.webp" alt="The Settings page in the full dashboard's window: the server with stop, restart and who can connect, the connection limit and update interval, and the live log" loading="lazy" />
+          </div>
+        </div>
+        <div class="stack-card" data-pos="4">
           <div class="browser">
             <div class="browser-bar">
               <span class="browser-dot r"></span>
@@ -1444,7 +1462,7 @@
             <img class="browser-shot" src="/vigil/dashboard-light.webp" alt="The same dashboard in the light theme" loading="lazy" />
           </div>
         </div>
-        <div class="stack-card" data-pos="4">
+        <div class="stack-card" data-pos="5">
           <div class="browser">
             <div class="browser-bar">
               <span class="browser-dot r"></span>
@@ -1552,7 +1570,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
             </div>
             <h3>Linux, Windows &amp; macOS</h3>
-            <p>One codebase, native on each. On Windows it sits in the system tray and opens in its own window. No admin rights needed, and CPU temperature on Windows from HWiNFO, Afterburner or LibreHardwareMonitor.</p>
+            <p>One codebase, native on each. On Windows it sits in the system tray and opens in a native window of its own. No admin rights needed, and CPU temperature on Windows from HWiNFO, Afterburner or LibreHardwareMonitor.</p>
           </div>
         </div>
       </div>
@@ -1563,57 +1581,86 @@
       <div class="wrap">
         <div class="reveal">
           <div class="section-eyebrow">On Windows</div>
-          <h2 class="section-title">A desktop app, still one small exe.</h2>
+          <h2 class="section-title">A native window, still one exe.</h2>
           <p class="section-lede">
-            Start Vigil and it moves to the system tray. From there the
-            dashboard opens in its own window, and closing the window leaves
-            Vigil running in the tray. The window is drawn by the WebView2
-            runtime that comes with Windows 10 and 11, so there is still
-            nothing else to install. On Linux and macOS the dashboard is in
-            your browser, as before.
+            Start Vigil and it moves to the system tray. Double-click the
+            icon and the Vigil window opens: a small monitor for a corner of
+            the screen that Vigil draws itself, with no browser engine
+            behind it. Closing it leaves Vigil running in the tray. The full
+            dashboard and Settings open in a second window when you ask for
+            them, and there is still nothing else to install. On Linux and
+            macOS the dashboard is in your browser, as before.
           </p>
         </div>
 
         <div class="patterns reveal">
           <div class="pattern-card">
             <span class="pattern-pill" style="color: var(--cyan);">Window</span>
-            <h4>The dashboard, without the browser</h4>
+            <h4>Drawn by Vigil, not a browser</h4>
             <p>
-              One slim title bar that is part of the app: the logo, the
-              dashboard's controls, and minimise, maximise and close.
-              Nothing of the window stays in memory until it's opened again.
-              Without WebView2, the dashboard opens in your browser instead.
+              Platform, CPU, memory, disk and network each on one line with
+              the last minute as a sparkline, then the service checks and
+              the busiest programs. The layout is written in Slint and
+              painted on the processor into an ordinary window, only when a
+              reading changes. Its top bar is the title bar, with switches
+              for the theme and for pausing the readings.
+            </p>
+          </div>
+          <div class="pattern-card">
+            <span class="pattern-pill" style="color: var(--amber);">Footprint</span>
+            <h4>One process, 14 MB</h4>
+            <p>
+              Measured on a Windows 11 PC (i7-11700) with the window open
+              at 420 × 580 for 60 seconds: one process, 14 MB of private
+              memory (35 MB working set) and 0.65% of one CPU core. The
+              WebView2 window it replaces took 7 processes and 219 MB
+              (427 MB working set). With no window open, Vigil alone is
+              about 7 MB. One run, on one machine.
+            </p>
+          </div>
+          <div class="pattern-card">
+            <span class="pattern-pill" style="color: var(--rose);">Full dashboard</span>
+            <h4>The charts, a click away</h4>
+            <p>
+              The button beside close, or Full dashboard in the tray menu,
+              opens the dashboard with its charts and tables in a window of
+              its own. It is the page a browser gets, drawn by the WebView2
+              runtime that comes with Windows 10 and 11, and it exists only
+              while it is open. Without WebView2 it opens in your browser
+              instead. The two windows share a theme, and each remembers
+              its place and size.
             </p>
           </div>
           <div class="pattern-card">
             <span class="pattern-pill" style="color: var(--emerald);">Settings</span>
             <h4>Change it while it runs</h4>
             <p>
-              Stop, start and restart the server. Choose who can connect
-              (this computer only, any device on the network, or one
-              address) and the port. Set the connection limit and update
-              interval, follow the live log and edit the service checks.
-              All of it takes effect without a restart.
+              The gear in either window opens Settings. Stop, start and
+              restart the server. Choose who can connect (this computer
+              only, any device on the network, or one address) and the
+              port. Set the connection limit and update interval, follow
+              the live log and edit the service checks. All of it takes
+              effect without a restart.
             </p>
           </div>
           <div class="pattern-card">
             <span class="pattern-pill" style="color: var(--blue);">Tray</span>
             <h4>One icon, one menu</h4>
             <p>
-              Open Vigil, Open in browser, Settings, Stop or Start serving,
-              Restart and Quit. Stop serving closes it to other devices and
-              browsers while Vigil keeps monitoring and the window keeps
-              working.
+              Open Vigil, Full dashboard, Open in browser, Settings, Stop
+              or Start serving, Restart and Quit. Stop serving closes it to
+              other devices and browsers while Vigil keeps monitoring and
+              the window keeps working.
             </p>
           </div>
           <div class="pattern-card">
             <span class="pattern-pill" style="color: var(--purple);">Private</span>
-            <h4>Settings stay in the window</h4>
+            <h4>Settings stay on your desktop</h4>
             <p>
-              Only the window has the Settings page. A browser never sees
-              it, on this computer or another, and the public server
-              answers <code>404</code> for its API. Other devices still
-              watch the dashboard exactly as before.
+              Only Vigil's own window has the Settings page. A browser
+              never sees it, on this computer or another, and the public
+              server answers <code>404</code> for its API. Other devices
+              still watch the dashboard exactly as before.
             </p>
           </div>
         </div>
@@ -1676,7 +1723,7 @@
               <li>Embedded in the binary, served at /</li>
               <li>Live, or a snapshot every 30 s</li>
               <li>Light + dark themes</li>
-              <li>Its own window on Windows</li>
+              <li>A native compact window on Windows</li>
             </ul>
           </div>
         </div>
@@ -1782,7 +1829,7 @@
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>A desktop window with a Settings page on Windows</span>
+                <span>A native desktop window and a Settings page on Windows</span>
               </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1896,6 +1943,10 @@
         <p class="foot-built">
           Built with <span class="heart" aria-label="love">❤</span> by
           <a href="https://github.com/sentrychris" target="_blank" rel="noopener">chris</a>
+        </p>
+        <p class="foot-built foot-credit">
+          The Vigil window on Windows is
+          <a href="https://slint.dev" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/slint-ui/slint/master/logo/MadeWithSlint-logo-dark.svg" alt="Made with Slint" height="36" loading="lazy" /></a>
         </p>
       </div>
     </footer>

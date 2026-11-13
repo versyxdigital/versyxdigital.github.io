@@ -187,20 +187,22 @@ export const projects: Project[] = [
     // and is built into the binary; the old hub and Vigil Pro are gone. Renamed from
     // "Vigil Collector" to "Vigil" on 2026-11-11. The Windows desktop window, its
     // Settings page and the tray menu were added on 2026-11-12 from the same README
-    // and docs/ARCHITECTURE.md.
+    // and docs/ARCHITECTURE.md. The native compact window was added on 2026-11-13
+    // from the same two files; its figures are one measured run on a Windows 11 PC.
     id: 'vigil',
     ref: '02',
     name: 'Vigil',
     kind: 'System monitoring',
     tagline: 'A system monitoring utility with remote connection capabilities, light enough to barely register on the machine it watches.',
     description:
-      'One small Rust program that samples a machine once a second, serves the result over HTTP and WebSocket to the same machine or across the network, and carries its own live dashboard: charts for processor, memory, disks, network and the busiest processes, built into the binary. On Windows it sits in the system tray and opens that dashboard in its own window, with a Settings page.',
+      'One small Rust program that samples a machine once a second, serves the result over HTTP and WebSocket to the same machine or across the network, and carries its own live dashboard: charts for processor, memory, disks, network and the busiest processes, built into the binary. On Windows it sits in the system tray and opens a compact window that it draws itself, with no browser engine, and the full dashboard and a Settings page are a click away in a second window.',
     purpose: 'See what a machine is doing right now, from the machine itself or from anywhere on the network, without the monitor becoming one of the things using it up.',
     challenges: [
       'Keeping Vigil cheap. A profiled tick cost about 11,000 microseconds, most of it scanning processes. Scanning the top processes and reading processor frequency every fifth tick, and re-listing mounted disks once a minute, brought the average to about 3,000.',
       'Serving many dashboards for the price of one. A single sampler builds each snapshot and caches it as ready-made JSON, so every HTTP request and WebSocket frame is a read of that cache, not new work.',
       'One codebase for Linux, Windows and macOS. Each platform reads disks, disk activity, temperature and process memory in its own way, with a fallback so every field is always present in the payload.',
-      'A Settings page only the desktop window can reach. The window loads from a second listener on 127.0.0.1 with a token made afresh each run and swapped for a session cookie; the public server answers 404 for the same addresses, so a browser never sees it, on that computer or another.',
+      'A desktop window that costs little to leave open. The first one was the web dashboard in WebView2, which took seven processes and 219 MB of private memory for a small window. Vigil now draws its compact window itself, with Slint\'s software renderer in an ordinary Win32 window: one process and 14 MB.',
+      'A Settings page only the desktop window can reach. The full dashboard\'s window loads from a second listener on 127.0.0.1 with a token made afresh each run and swapped for a session cookie; the public server answers 404 for the same addresses, so a browser never sees it, on that computer or another.',
       'Processor temperature on Windows without a kernel driver. Vigil reads it from HWiNFO, MSI Afterburner or LibreHardwareMonitor when one is running, and otherwise from the ACPI thermal zone, but only once that value has been seen to change, since many desktops report a fixed placeholder there.',
     ],
     implementation: [
@@ -209,20 +211,22 @@ export const projects: Project[] = [
       'A configurable list of URLs is checked on request for reachability and response time.',
       'The dashboard is built with Vue 3, TypeScript and Pinia, with the charts drawn in D3. It shows live data over WebSocket, or polls over HTTP every 30 seconds, with a switch between the two.',
       'The dashboard is built with Vite as part of the Cargo build and embedded in the binary, so one file serves both the API and the page. It always talks to the copy of Vigil that served it, so there is nothing to configure.',
-      'On Windows it runs in the system tray, one copy per computer, with a menu to open the window or the browser, open Settings, stop and start serving, restart or quit.',
-      'The tray opens the dashboard in its own window: a WebView2 control, made when the window opens and destroyed when it closes, so sitting in the tray costs what it did before. The dashboard\'s top bar is the window\'s title bar, with the minimise, maximise and close buttons in its corner.',
+      'On Windows it runs in the system tray, one copy per computer, with a menu to open the window, the full dashboard or the browser, open Settings, stop and start serving, restart or quit.',
+      'The tray opens a compact window that Vigil draws itself. The layout is written in Slint and painted by its software renderer into an ordinary Win32 window, only when a reading changes, with no WebView2, no browser engine and no second process. Its top bar is the title bar, with switches for the theme and for pausing the readings.',
+      'The full dashboard and Settings are still the web page, in a WebView2 window of their own that is made when it opens and destroyed when it closes. The two windows share a theme, and each remembers its place and size.',
       'A supervisor owns the server, so the tray and the Settings page can stop it, start it, restart it or move it to another address or port without ending the process. A new port is opened before the old one is closed.',
     ],
     achievements: [
       'Idle processor use settles at around 0.23% of one core, however many clients are connected.',
-      'The release binary is about 5 MB with the dashboard included, and needs nothing shipped alongside it.',
+      'The release binary is about 6 MB on Linux and 13.9 MB on Windows, where it also carries the native window. The dashboard is included, and nothing needs shipping alongside it.',
+      'Open at 420 by 580 on a Windows 11 PC (i7-11700), the native window measured one process, 14 MB of private memory and 0.65% of one processor core over 60 seconds. The WebView2 window it replaced took seven processes and 219 MB.',
       'Continuous integration builds it on Linux, Windows and macOS, then starts the binary and checks each endpoint responds.',
     ],
     facts: [
       { label: 'Backend', value: 'Rust · Tokio · Axum' },
       { label: 'Dashboard', value: 'Vue 3 · D3, built in' },
       { label: 'Runs on', value: 'Linux · Windows · macOS' },
-      { label: 'On Windows', value: 'Tray icon · desktop window' },
+      { label: 'On Windows', value: 'Tray icon · native window' },
       { label: 'Cadence', value: 'One snapshot a second' },
       { label: 'Licence', value: 'MIT' },
     ],
@@ -234,8 +238,9 @@ export const projects: Project[] = [
     ],
     images: [
       { src: vigilShot('01'), thumb: vigilShot('01-thumb'), alt: 'The Vigil dashboard: cards for platform, processor, memory and disk, a service status list, gauges, and live charts of network traffic, disk activity, processor and memory use.', width: 1600, height: 900, caption: 'The dashboard, live on a Windows PC.' },
-      { src: vigilShot('02'), thumb: vigilShot('02-thumb'), alt: 'Vigil as a desktop window on Windows: the same dashboard under one slim bar holding the logo, the live switch, the settings gear, the theme switch and the minimise, maximise and close buttons.', width: 1600, height: 900, caption: 'The same dashboard in its own window on Windows.' },
-      { src: vigilShot('03'), thumb: vigilShot('03-thumb'), alt: 'The Settings page in the Vigil window: the server\'s address with stop, restart and browser buttons, a choice of who can connect, the port, the connection limit and update interval, and the live log.', width: 1600, height: 900, caption: 'Settings, which only the window has.' },
+      { src: vigilShot('04'), thumb: vigilShot('04-thumb'), alt: 'The Vigil window on Windows in its dark and light themes: platform, processor, memory, disk and network each on one line with a sparkline, the service checks and the busiest programs, under a bar with the live and theme switches.', width: 1600, height: 900, caption: 'The native window on Windows, in both themes.' },
+      { src: vigilShot('02'), thumb: vigilShot('02-thumb'), alt: 'The full dashboard in a window of its own on Windows: the same dashboard under one slim bar holding the logo, the live switch, the settings gear, the theme switch and the minimise, maximise and close buttons.', width: 1600, height: 900, caption: 'The full dashboard in a window of its own.' },
+      { src: vigilShot('03'), thumb: vigilShot('03-thumb'), alt: 'The Settings page in the full dashboard\'s window: the server\'s address with stop, restart and browser buttons, a choice of who can connect, the port, the connection limit and update interval, and the live log.', width: 1600, height: 900, caption: 'Settings, which only Vigil\'s own window has.' },
     ],
     diagram: {
       caption: 'From the machine being watched to the charts on screen.',
@@ -298,7 +303,7 @@ export const projects: Project[] = [
           kind: 'surface',
           col: 4,
           row: 0,
-          detail: 'On Windows the tray icon opens the same dashboard in its own window, drawn by the WebView2 runtime that comes with Windows 10 and 11. Only this window has the Settings page: stop, start and restart the server, choose who can connect and the port, set the connection limit and update interval, and follow the log.',
+          detail: 'On Windows the tray icon opens a compact window that Vigil draws itself from the newest snapshot, with no browser engine. From its bar the full dashboard opens in a second window, drawn by the WebView2 runtime that comes with Windows 10 and 11. Only that second window has the Settings page: stop, start and restart the server, choose who can connect and the port, set the connection limit and update interval, and follow the log.',
           optional: true,
         },
         {
