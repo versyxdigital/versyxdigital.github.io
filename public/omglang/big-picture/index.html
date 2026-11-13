@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The big picture — how languages get built, and why C is under most of them</title>
+    <meta
+      name="description"
+      content="A plain-English guide to how programming languages are made: interpreters, compilers, virtual machines, LLVM, linkers and runtimes. Why nearly all of them lean on C, and how OMG gets by without it."
+    />
+    <meta name="author" content="Chris Rowles" />
+    <link rel="canonical" href="https://versyx.digital/omglang/big-picture/" />
+    <meta property="og:title" content="The big picture — how languages get built, and why C is under most of them" />
+    <meta
+      property="og:description"
+      content="How programming languages are made, why nearly all of them lean on C, and how OMG gets by without it. No programming knowledge needed."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://versyx.digital/omglang/big-picture/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#0e0d14" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('omg-theme');
+          if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="../" aria-label="OMG home">
+          <span class="brand-mark" aria-hidden="true">;;;</span>
+          <span class="brand-name">OMG</span>
+        </a>
+        <nav class="nav-links" aria-label="Site">
+          <a class="nav-link" href="../learn/">Learn</a>
+          <a class="nav-link" href="../playground/">Playground</a>
+          <a class="nav-link" href="../internals/">How it works</a>
+          <a class="nav-link" href="./" aria-current="page"><span class="nav-long">The big picture</span><span class="nav-short">Big picture</span></a>
+        </nav>
+        <div class="nav-end">
+          <a class="icon-btn gh" href="https://github.com/sentrychris/omglang" aria-label="OMG on GitHub">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.32c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.81.06 1.23.83 1.23.83.72 1.23 1.88.88 2.34.67.07-.52.28-.88.51-1.08-1.77-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          </a>
+          <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch between light and dark">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap doc">
+      <nav class="toc" aria-label="On this page">
+        <div class="toc-title">The big picture</div>
+        <select class="select toc-select" aria-label="Jump to a section"></select>
+        <ol>
+          <li><a href="#machine">What a processor understands</a></li>
+          <li><a href="#three-ways">Three ways to run a program</a></li>
+          <li><a href="#compiler">Inside a compiler</a></li>
+          <li><a href="#after">Linkers, runtimes, the system</a></li>
+          <li><a href="#bootstrapping">Who compiles the compiler?</a></li>
+          <li><a href="#why-c">Why C is under everything</a></li>
+          <li><a href="#compare">What seven languages lean on</a></li>
+          <li><a href="#pipelines">Seven toolchains, drawn</a></li>
+          <li><a href="#omg">Where OMG fits</a></li>
+          <li><a href="#video">The test: a video player</a></li>
+          <li><a href="#honest">What OMG is not</a></li>
+          <li><a href="#words">Words used on this page</a></li>
+        </ol>
+      </nav>
+
+      <main id="main" class="prose">
+        <header>
+          <h1>How languages get built, and why C is under most of them</h1>
+          <p class="lede">
+            Every programming language has the same problem to solve: a processor only understands numbers, and
+            people do not want to write numbers. This page explains how languages solve it, why nearly all of them
+            end up leaning on a fifty-year-old language called C, and what is different about the way OMG does it.
+            You do not need to know how to program to follow it.
+          </p>
+        </header>
+
+        <div class="note">
+          <p><strong>The short version.</strong></p>
+          <ul>
+            <li>
+              A language is a translator. Something has to turn text a person can read into instructions a
+              processor can run.
+            </li>
+            <li>
+              Writing the whole translator yourself takes years, so almost every language borrows parts, and the
+              parts are nearly always written in C or its close relative C++.
+            </li>
+            <li>
+              C got that position by being in the right place first. Operating systems are written in it, so
+              everything else has to speak to it.
+            </li>
+            <li>
+              OMG is a small hobby language that borrows nothing: its compiler, its machine-code generator and the
+              support code its programs carry are all written in OMG. That is unusual, but it is not new. Go does
+              the same thing at a far larger scale.
+            </li>
+          </ul>
+        </div>
+
+        <!-- ───────────── 01 Machine code ───────────── -->
+        <section id="machine">
+          <h2><span class="num">01</span>What a processor understands</h2>
+          <p>
+            The processor in your computer does very simple things, very fast. Add two numbers. Copy a number from
+            one place to another. Compare two numbers. Skip to a different instruction. Each instruction is itself
+            stored as a number, so a program, as the processor sees it, is one long row of numbers. This is called
+            machine code. Here is "put 2 somewhere, then add 3 to it" for the processor in most laptops:
+          </p>
+
+          <pre class="code">b8 02 00 00 00    <span class="tok-comment"># put 2 in a slot called eax</span>
+83 c0 03          <span class="tok-comment"># add 3 to that slot</span></pre>
+
+          <p>Nobody wants to write that, and two more facts make it worse.</p>
+          <ul>
+            <li>
+              <strong>Processors disagree.</strong> The family in most laptops and desktops (called x86-64, made by
+              Intel and AMD) and the family in phones and newer Macs (called ARM) use different numbers for the
+              same jobs. Machine code for one is noise to the other.
+            </li>
+            <li>
+              <strong>A program never works alone.</strong> To show a letter on the screen or read a file, it has
+              to ask the operating system: Windows, Linux, macOS. Each one has its own way of being asked.
+            </li>
+          </ul>
+          <p>
+            So a programming language is a deal. You write something a person can read, and a tool turns it into
+            what one particular processor and operating system can run. All the variety in how languages are built
+            comes down to two questions: how does that tool work, and who wrote it?
+          </p>
+        </section>
+
+        <!-- ───────────── 02 Three ways ───────────── -->
+        <section id="three-ways">
+          <h2><span class="num">02</span>Three ways to run a program</h2>
+          <p>
+            Picture a recipe written in French, and a cook who reads only English. There are two obvious ways to
+            get dinner made. Someone can stand in the kitchen and translate one line at a time, every time the dish
+            is cooked. Or someone can translate the whole recipe onto paper once, and go home. Languages have the
+            same choice, plus a popular third option that sits between the two.
+          </p>
+
+          <div class="ways">
+            <div class="way">
+              <h3>An interpreter</h3>
+              <p>Reads your program and does what it says, a piece at a time. Nothing is translated in advance.</p>
+              <div class="vflow">
+                <div class="bx is-file"><b>your program</b></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx"><b>interpreter</b><small>reads a piece, does it, repeats</small></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx is-file"><b>output</b></div>
+              </div>
+            </div>
+            <div class="way">
+              <h3>A virtual machine</h3>
+              <p>Translates to a simple in-between form first, then a second program runs that.</p>
+              <div class="vflow">
+                <div class="bx is-file"><b>your program</b></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx"><b>compiler</b><small>quick, done each run</small></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx is-file"><b>bytecode</b></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx"><b>virtual machine</b><small>runs the bytecode</small></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx is-file"><b>output</b></div>
+              </div>
+            </div>
+            <div class="way">
+              <h3>A compiler</h3>
+              <p>Translates the whole program to machine code once, and writes the result to a file.</p>
+              <div class="vflow">
+                <div class="bx is-file"><b>your program</b></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx"><b>compiler</b><small>slow, done once</small></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx is-file"><b>machine code file</b></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx"><b>the processor</b><small>runs it directly</small></div>
+                <span class="arr" aria-hidden="true">↓</span>
+                <div class="bx is-file"><b>output</b></div>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            <strong>An interpreter</strong> is the easiest to build and the nicest to use: change a line, run it
+            again. It is also the slowest, because the reading and deciding happens afresh on every run, and again
+            on every trip round a loop.
+          </p>
+          <p>
+            <strong>A compiler</strong> does the translating once. The file it writes runs on its own at the
+            processor's full speed, and the person you give it to needs nothing else installed. The costs are that
+            a compiler is much harder to write, and that the file only works on one kind of processor and one
+            operating system.
+          </p>
+          <p>
+            <strong>A virtual machine</strong>, or VM, is the middle road and the most common one today. A small
+            compiler turns the program into bytecode: instructions for a simple, made-up processor that does not
+            exist. Then a program called a virtual machine plays the part of that processor. Bytecode is far
+            quicker to run than raw text, and the same bytecode works anywhere the VM has been installed.
+          </p>
+          <p>
+            Fast VMs add one more trick. While the program runs, they watch for the parts that run most often and
+            translate just those into real machine code on the spot. This is called just-in-time compilation, or
+            JIT. It is why Java and JavaScript are much faster than a plain VM would be.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th></th><th>Interpreter</th><th>Virtual machine</th><th>Compiler</th></tr>
+              </thead>
+              <tbody>
+                <tr><th>Starts running</th><td>at once</td><td>almost at once</td><td>after a build step</td></tr>
+                <tr><th>Runs</th><td>slowly</td><td>middling, or fast with a JIT</td><td>fast</td></tr>
+                <tr><th>What you hand over</th><td>your program, and they need the interpreter</td><td>your program, and they need the VM</td><td>one file that runs alone</td></tr>
+                <tr><th>Work to build</th><td>least</td><td>more</td><td>most</td></tr>
+                <tr><th>Who does it</th><td>shell scripts, early BASIC</td><td>Python, Ruby, PHP; with a JIT: Java, C#, JavaScript</td><td>C, C++, Rust, Go, Swift</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            People often call Python "interpreted", but like most languages given that label it really compiles to
+            bytecode first and runs that on a VM. OMG does two of the three. <code>omg hello.omg</code> runs a
+            program on a VM, and <code>omg --build hello.omg</code> compiles it to machine code. The
+            <a href="../internals/">How it works</a> page follows one line through both.
+          </p>
+        </section>
+
+        <!-- ───────────── 03 Inside a compiler ───────────── -->
+        <section id="compiler">
+          <h2><span class="num">03</span>Inside a compiler</h2>
+          <p>A compiler is usually built as three parts in a row, like a factory line.</p>
+          <ul>
+            <li>
+              <strong>The front end</strong> understands the language. It reads the text, checks that it makes
+              sense, and builds a tidy description of what the program means. It is different for every language.
+            </li>
+            <li>
+              <strong>The middle</strong> improves the program without changing what it does: removing work that
+              is never used, doing sums ahead of time, rearranging loops. It works on an in-between form that
+              belongs to neither the language nor the processor.
+            </li>
+            <li>
+              <strong>The backend</strong> turns that in-between form into machine code for one specific
+              processor. It has to know every instruction that processor has, and exactly how each is written
+              down as numbers.
+            </li>
+          </ul>
+          <p>
+            The front end is the fun part, and the smallest. The backend is where the years go. A good one knows
+            hundreds of instructions, decides which values get to live in the processor's handful of fast storage
+            slots, and applies decades of collected tricks. And you need a separate backend for every family of
+            processor you want to support.
+          </p>
+
+          <h3>The shortcut nearly everyone takes: LLVM</h3>
+          <p>
+            This is why most new languages do not write a backend at all. They use LLVM: a ready-made middle and
+            backend that began as a university project in 2000 and is now kept up by Apple, Google and many
+            others. A new language only has to produce LLVM's in-between form. LLVM does the rest, for every
+            processor that matters.
+          </p>
+
+          <div class="funnel" role="img" aria-label="Diagram: front ends for C and C++, Rust, Swift and Julia all feed LLVM, which produces machine code for x86-64, ARM, RISC-V and WebAssembly.">
+            <div class="funnel-col">
+              <div class="funnel-head">front ends, one per language</div>
+              <div class="bx"><b>C and C++</b><small>Clang</small></div>
+              <div class="bx"><b>Rust</b></div>
+              <div class="bx"><b>Swift</b></div>
+              <div class="bx"><b>Julia</b></div>
+            </div>
+            <span class="arr" aria-hidden="true"></span>
+            <div class="funnel-mid">
+              <div class="bx is-c"><b>LLVM</b><small>the shared middle and backends<br />written in C++</small></div>
+            </div>
+            <span class="arr" aria-hidden="true"></span>
+            <div class="funnel-col">
+              <div class="funnel-head">machine code, one kind per processor</div>
+              <div class="bx is-file"><b>x86-64</b><small>most PCs</small></div>
+              <div class="bx is-file"><b>ARM</b><small>phones, newer Macs</small></div>
+              <div class="bx is-file"><b>RISC-V</b></div>
+              <div class="bx is-file"><b>WebAssembly</b><small>browsers</small></div>
+            </div>
+          </div>
+
+          <p>
+            It is a good bargain: years of other people's work for nothing, and fast programs from the first day.
+            The price is that your language now depends on several million lines of C++ you did not write, your
+            compiler can be no quicker than LLVM is, and you can only do what it allows.
+          </p>
+          <p>
+            There is an older shortcut too: have your compiler write out C, and let a C compiler finish the job.
+            Every kind of computer has a C compiler, so your language runs everywhere at a stroke. OMG can do this, and it
+            is how OMG reaches the systems its own backend does not cover.
+          </p>
+        </section>
+
+        <!-- ───────────── 04 After the compiler ───────────── -->
+        <section id="after">
+          <h2><span class="num">04</span>Linkers, runtimes and the operating system</h2>
+          <p>
+            Machine code is not yet a program you can double-click. Three more things stand between a compiler's
+            output and something running on your screen.
+          </p>
+
+          <h3>The linker</h3>
+          <p>
+            Big programs are compiled in pieces, and they use ready-made pieces written by other people, called
+            libraries. A linker glues the pieces into one file and fills in where everything ended up, so that
+            one piece can find another. The finished file has a strict layout that the operating system insists
+            on. Linux calls its layout ELF. Windows calls its one PE, and that is what a <code>.exe</code> file
+            is. Most languages do not write their own linker. They use the one that comes with the system's C
+            compiler.
+          </p>
+
+          <h3>The runtime</h3>
+          <p>
+            Every program carries helper code its author did not write: code to hand out memory and take it back,
+            join pieces of text, grow a list, report an error. This is the language's runtime. In C it is small.
+            In Go or Java it is large, and includes a garbage collector, which hunts for memory the program has
+            stopped using so that it can be used again.
+          </p>
+
+          <h3>The operating system</h3>
+          <p>
+            A program cannot touch the disk, the screen or the network itself. It asks the core of the operating
+            system, called the kernel, to do it. Each request is a system call. On most systems a program does
+            not make system calls directly. It goes through a library the system provides, and that library was
+            written in C, for C programs to use. It is called the C library, or libc for short. On Windows and
+            macOS, going through the system's own libraries is the only route that is officially supported. Linux
+            is the exception: its system calls are a documented, stable list that any program may use directly.
+          </p>
+
+          <div class="layers" role="img" aria-label="Diagram: what a typical program stands on. Your program, on the language's runtime, on the C library, on the operating system kernel, on the processor.">
+            <div class="layer is-you"><b>Your program</b><span>in whatever language you like</span></div>
+            <div class="layers-arrow">▼ leans on</div>
+            <div class="layer"><b>The language's runtime</b><span>memory, text, lists, errors</span></div>
+            <div class="layers-arrow">▼ which calls</div>
+            <div class="layer is-c"><b>The C library</b><span>the system's front door</span><code>written in C</code></div>
+            <div class="layers-arrow">▼ which asks</div>
+            <div class="layer is-c"><b>The operating system kernel</b><span>files, screen, network, memory</span><code>written in C</code></div>
+            <div class="layers-arrow">▼ which drives</div>
+            <div class="layer"><b>The processor</b><span>and the rest of the hardware</span></div>
+          </div>
+
+          <p>
+            Read it from the top. Whatever language the top box is written in, on most computers the third and
+            fourth boxes are C.
+          </p>
+        </section>
+
+        <!-- ───────────── 05 Bootstrapping ───────────── -->
+        <section id="bootstrapping">
+          <h2><span class="num">05</span>Who compiles the compiler?</h2>
+          <p>
+            A compiler is a program. So it has to be written in some language, and then translated by some
+            compiler. That looks like a chicken-and-egg problem. The way out is called bootstrapping, after the
+            idea of lifting yourself by your own bootstraps.
+          </p>
+          <ol>
+            <li>Write a first compiler for your new language in a language that already exists.</li>
+            <li>Write a second compiler for your language, this time <em>in</em> your language.</li>
+            <li>
+              Use the first compiler to translate the second. You now have a compiler for your language, written
+              in your language, that runs.
+            </li>
+            <li>
+              From here on, each new version of the compiler is built by the one before it. The first compiler
+              can be put away.
+            </li>
+          </ol>
+          <p>
+            A language that compiles itself is called self-hosting. It is something of a rite of passage. A
+            compiler is a large and fussy program, so being able to write one is good evidence that the language
+            is fit for real work.
+          </p>
+          <p>
+            Most serious languages have done it. The big C compilers are written in C and C++, and compile
+            themselves. Go's compiler was written in C until 2015, when it was translated into Go. Rust's first
+            compiler was written in a language called OCaml. Follow any of these chains back far enough and it
+            ends in the 1950s, with someone writing machine code by hand. OMG went the same way: its first
+            compiler was written in Rust, and the
+            <a href="../internals/#self-hosting">How it works</a> page tells that story.
+          </p>
+          <div class="note">
+            <p>
+              <strong>Self-hosting means less than it sounds.</strong> Rust's compiler is written in Rust, but the
+              machine code still comes from LLVM, which is C++. "The compiler is written in its own language" and
+              "nothing else is involved" are two different claims. <a href="#compare">Section 07</a> shows which
+              languages can make which.
+            </p>
+          </div>
+        </section>
+
+        <!-- ───────────── 06 Why C ───────────── -->
+        <section id="why-c">
+          <h2><span class="num">06</span>Why C is under everything</h2>
+          <p>
+            C was created by Dennis Ritchie at Bell Labs around 1972, for one job: writing an operating system
+            called Unix. Until then, operating systems were written in assembly, which is machine code with names
+            in place of the numbers, and is different for every processor. An operating system written that way is
+            stuck on the machine it was written for.
+          </p>
+          <p>
+            In 1973 Unix was rewritten in C. That made it one of the first operating systems that could be moved
+            to a different kind of computer: write a C compiler for the new machine, which is a small job by
+            design, then translate Unix again and fix the few parts that really were tied to the hardware. Bell
+            Labs' owner, the telephone company AT&amp;T, was not allowed to sell software as a business, so Unix
+            went out to universities for next to nothing, with its source code included. A generation of
+            programmers learned Unix and C together, and took both with them into industry.
+          </p>
+
+          <ol class="timeline">
+            <li><span class="when">1957</span><span>Fortran: the first widely used language with a compiler.</span></li>
+            <li><span class="when">1969</span><span>Unix begins at Bell Labs, written in assembly.</span></li>
+            <li><span class="when">1972</span><span>C.</span></li>
+            <li><span class="when">1973</span><span>Unix is rewritten in C, and starts to spread.</span></li>
+            <li><span class="when">1985</span><span>C++ goes on sale: C with a great deal added.</span></li>
+            <li><span class="when">1989</span><span>C becomes an official standard.</span></li>
+            <li><span class="when">1991</span><span>Linux, written in C. Python, whose interpreter is written in C.</span></li>
+            <li><span class="when">1995</span><span>Java and JavaScript, each run by a virtual machine written in C or C++.</span></li>
+            <li><span class="when">2003</span><span>The first release of LLVM, written in C++.</span></li>
+            <li><span class="when">2009</span><span>Go is announced. Its compiler is written in C.</span></li>
+            <li><span class="when">2015</span><span>Go's compiler is rewritten in Go. Rust 1.0 arrives, built on LLVM.</span></li>
+          </ol>
+
+          <p>That history left C holding four positions that no other language has been able to take from it.</p>
+
+          <h3>1. It is a thin layer over the machine</h3>
+          <p>
+            C has almost no runtime. A line of C becomes a handful of machine instructions that you could have
+            predicted. That makes it fast, and it makes a C compiler small enough to be the first thing written
+            for any new processor. A new chip gets a C compiler before it gets anything else.
+          </p>
+
+          <h3>2. The operating systems are written in it</h3>
+          <p>
+            The cores of Linux, Windows, macOS, Android and iOS are all written mostly in C, with some C++. (Linux
+            has recently begun to accept a little Rust.) So the front door of every one of those systems is shaped
+            for C programs to walk through.
+          </p>
+
+          <h3>3. Fifty years of libraries</h3>
+          <p>
+            A great deal of the software that everything else stands on is written in C, and has been hardened by
+            decades of use:
+          </p>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><td><strong>SQLite</strong></td><td>A database in a single file. It is inside every phone and every web browser.</td></tr>
+                <tr><td><strong>OpenSSL</strong></td><td>The encryption behind a large share of the web's padlocks.</td></tr>
+                <tr><td><strong>zlib</strong></td><td>Compression: zip files, PNG images, web pages on their way to you.</td></tr>
+                <tr><td><strong>FFmpeg</strong></td><td>Reads and writes nearly every kind of video and sound. It is inside browsers, media players and video sites.</td></tr>
+                <tr><td><strong>curl</strong></td><td>Fetches things over the network. It ships in cars, televisions and games consoles.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Nobody wants to write these again. A new language that could not use them would begin fifty years
+            behind, so every new language makes sure that it can.
+          </p>
+
+          <h3>4. It is the common tongue</h3>
+          <p>
+            When one piece of machine code calls another, the two must agree on details at the level of the
+            processor: where the inputs are put, where the answer comes back, how a group of values is laid out
+            in memory. That agreement is called an ABI, short for application binary interface. Every operating
+            system defines one, and defines it in terms of C. It has become the one thing every language agrees
+            on. When Python uses a library written in Rust, or Swift uses one written in Go, both sides talk as
+            if they were C. No C code needs to be involved, but C's rules are the meeting point.
+          </p>
+
+          <h3>What leaning on C looks like</h3>
+          <p>
+            Put the four together. The standard version of Python is a C program. The engines that run Java and
+            JavaScript are C++ programs. Rust and Swift hand their machine code over to LLVM, which is C++, then
+            to a linker from the C world, and the programs they produce call the C library while they run. A
+            program can have no C at all in its own source and still have C under it, beside it and behind it.
+          </p>
+
+          <h3>The price</h3>
+          <p>
+            C trusts the programmer completely. It does not check that a program stays inside the memory it asked
+            for, and mistakes of that kind are the biggest single source of serious security holes. Microsoft, and
+            the Chrome team at Google, have each reported that about 70% of their serious security bugs come from
+            this one family of mistake in C and C++ code. Newer languages such as Rust and Go exist largely to put
+            a stop to it. But they still have to live in a world that was built in C, and that is why the
+            dependence lasts.
+          </p>
+        </section>
+
+        <!-- ───────────── 07 Comparison ───────────── -->
+        <section id="compare">
+          <h2><span class="num">07</span>What seven languages lean on</h2>
+          <p>
+            Here is the same question asked of seven languages: for each job on the way from text to a running
+            program, who does it, and what is that part written in?
+          </p>
+
+          <div class="key" aria-hidden="true">
+            <span class="tag is-own">the language itself</span>
+            <span class="tag is-c">C or C++</span>
+            <span class="tag">not needed, or the system</span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="compare">
+              <thead>
+                <tr>
+                  <th>Language</th>
+                  <th>Compiler or interpreter</th>
+                  <th>Machine code made by</th>
+                  <th>Linker</th>
+                  <th>Runtime</th>
+                  <th>Reaches the system through</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Python</th>
+                  <td><span class="tag is-c">C</span></td>
+                  <td><span class="tag">none made</span></td>
+                  <td><span class="tag">none</span></td>
+                  <td><span class="tag is-c">C</span></td>
+                  <td><span class="tag is-c">C library</span></td>
+                </tr>
+                <tr>
+                  <th>JavaScript</th>
+                  <td><span class="tag is-c">C++</span></td>
+                  <td><span class="tag is-c">its JIT, C++</span></td>
+                  <td><span class="tag">none</span></td>
+                  <td><span class="tag is-c">C++</span></td>
+                  <td><span class="tag is-c">C library</span></td>
+                </tr>
+                <tr>
+                  <th>Java</th>
+                  <td><span class="tag is-own">Java</span> <span class="tag is-c">VM in C++</span></td>
+                  <td><span class="tag is-c">its JIT, C++</span></td>
+                  <td><span class="tag">none</span></td>
+                  <td><span class="tag is-c">C++</span></td>
+                  <td><span class="tag is-c">C library</span></td>
+                </tr>
+                <tr>
+                  <th>Swift</th>
+                  <td><span class="tag is-c">mostly C++</span></td>
+                  <td><span class="tag is-c">LLVM, C++</span></td>
+                  <td><span class="tag is-c">borrowed</span></td>
+                  <td><span class="tag is-c">C++</span></td>
+                  <td><span class="tag is-c">C library</span></td>
+                </tr>
+                <tr>
+                  <th>Rust</th>
+                  <td><span class="tag is-own">Rust</span></td>
+                  <td><span class="tag is-c">LLVM, C++</span></td>
+                  <td><span class="tag is-c">borrowed</span></td>
+                  <td><span class="tag is-own">Rust</span></td>
+                  <td><span class="tag is-c">C library</span></td>
+                </tr>
+                <tr>
+                  <th>Go</th>
+                  <td><span class="tag is-own">Go</span></td>
+                  <td><span class="tag is-own">Go</span></td>
+                  <td><span class="tag is-own">Go</span></td>
+                  <td><span class="tag is-own">Go</span></td>
+                  <td><span class="tag is-own">itself, on Linux</span></td>
+                </tr>
+                <tr>
+                  <th>OMG</th>
+                  <td><span class="tag is-own">OMG</span></td>
+                  <td><span class="tag is-own">OMG</span></td>
+                  <td><span class="tag">none needed</span></td>
+                  <td><span class="tag is-own">OMG</span></td>
+                  <td><span class="tag is-own">itself, on Linux</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Some notes, because a table this small has to round things off.</p>
+          <ul>
+            <li>
+              Each row is the usual version of the language: the standard Python from python.org, the V8 engine
+              that runs JavaScript in Chrome and Node, the HotSpot virtual machine for Java. Other versions exist
+              and make other choices.
+            </li>
+            <li>
+              Python makes no machine code of its own. Its interpreter is a C program, so the machine code that
+              actually runs was made by a C compiler, long before your program existed.
+            </li>
+            <li>
+              On Windows and macOS, <em>every</em> language reaches the system through libraries the system
+              provides, Go and OMG included, because that is the only supported way in. The last column is about
+              Linux, where there is a choice.
+            </li>
+            <li>
+              The OMG row is true for Linux and Windows on x86-64 processors, which is all its own backend
+              covers. On macOS and on ARM, OMG writes C and borrows a C compiler like nearly everyone else.
+            </li>
+            <li>
+              Go is not alone at the bottom of the table either. OCaml, Free Pascal and D also make their own
+              machine code. Seven rows cannot hold everybody.
+            </li>
+          </ul>
+        </section>
+
+        <!-- ───────────── 08 Pipelines ───────────── -->
+        <section id="pipelines">
+          <h2><span class="num">08</span>Seven toolchains, drawn</h2>
+          <p>
+            The set of tools that turns source text into a running program is called a toolchain. Here are the
+            same seven, drawn as the route a "hello world" program takes. Solid boxes are tools; dashed boxes are
+            files. Count the amber boxes on each line.
+          </p>
+
+          <div class="key" aria-hidden="true">
+            <span class="bx is-own"><b>tool</b><small>written in the language itself</small></span>
+            <span class="bx is-c"><b>tool</b><small>written in C or C++</small></span>
+            <span class="bx is-file"><b>a file</b></span>
+            <span class="bx"><b>the system</b></span>
+          </div>
+
+          <div class="lanes">
+            <div class="lane">
+              <div class="lane-name"><b>Python</b><span>virtual machine</span></div>
+              <div class="lane-body">
+                <ol class="lane-steps">
+                  <li class="bx is-file"><b>hello.py</b></li>
+                  <li class="bx is-c"><b>Python's compiler</b><small>C</small></li>
+                  <li class="bx is-file"><b>bytecode</b></li>
+                  <li class="bx is-c"><b>Python's VM</b><small>C</small></li>
+                </ol>
+                <ol class="lane-steps">
+                  <li class="via">runs on</li>
+                  <li class="bx is-c"><b>C library</b><small>C</small></li>
+                  <li class="bx"><b>operating system</b></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="lane">
+              <div class="lane-name"><b>JavaScript</b><span>VM with a JIT</span></div>
+              <div class="lane-body">
+                <ol class="lane-steps">
+                  <li class="bx is-file"><b>app.js</b></li>
+                  <li class="bx is-c"><b>V8: compiler, VM and JIT</b><small>C++</small></li>
+                  <li class="bx is-file"><b>machine code</b><small>made while running</small></li>
+                </ol>
+                <ol class="lane-steps">
+                  <li class="via">runs on</li>
+                  <li class="bx is-c"><b>C library</b><small>C</small></li>
+                  <li class="bx"><b>operating system</b></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="lane">
+              <div class="lane-name"><b>Java</b><span>VM with a JIT</span></div>
+              <div class="lane-body">
+                <ol class="lane-steps">
+                  <li class="bx is-file"><b>Hello.java</b></li>
+                  <li class="bx is-own"><b>javac</b><small>Java</small></li>
+                  <li class="bx is-file"><b>bytecode</b></li>
+                  <li class="bx is-c"><b>Java VM and JIT</b><small>C++</small></li>
+                </ol>
+                <ol class="lane-steps">
+                  <li class="via">runs on</li>
+                  <li class="bx is-c"><b>C library</b><small>C</small></li>
+                  <li class="bx"><b>operating system</b></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="lane">
+              <div class="lane-name"><b>Swift</b><span>compiled</span></div>
+              <div class="lane-body">
+                <ol class="lane-steps">
+                  <li class="bx is-file"><b>hello.swift</b></li>
+                  <li class="bx is-c"><b>Swift front end</b><small>mostly C++</small></li>
+                  <li class="bx is-c"><b>LLVM</b><small>C++</small></li>
+                  <li class="bx is-c"><b>linker</b><small>C++</small></li>
+                  <li class="bx is-file"><b>executable</b></li>
+                </ol>
+                <ol class="lane-steps">
+                  <li class="via">runs on</li>
+                  <li class="bx is-c"><b>Swift runtime</b><small>C++</small></li>
+                  <li class="bx is-c"><b>C library</b><small>C</small></li>
+                  <li class="bx"><b>operating system</b></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="lane">
+              <div class="lane-name"><b>Rust</b><span>compiled</span></div>
+              <div class="lane-body">
+                <ol class="lane-steps">
+                  <li class="bx is-file"><b>hello.rs</b></li>
+                  <li class="bx is-own"><b>Rust front end</b><small>Rust</small></li>
+                  <li class="bx is-c"><b>LLVM</b><small>C++</small></li>
+                  <li class="bx is-c"><b>linker</b><small>C or C++</small></li>
+                  <li class="bx is-file"><b>executable</b><small>its library inside</small></li>
+                </ol>
+                <ol class="lane-steps">
+                  <li class="via">runs on</li>
+                  <li class="bx is-c"><b>C library</b><small>C</small></li>
+                  <li class="bx"><b>operating system</b></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="lane">
+              <div class="lane-name"><b>Go</b><span>compiled</span></div>
+              <div class="lane-body">
+                <ol class="lane-steps">
+                  <li class="bx is-file"><b>hello.go</b></li>
+                  <li class="bx is-own"><b>Go compiler</b><small>Go</small></li>
+                  <li class="bx is-own"><b>Go linker</b><small>Go</small></li>
+                  <li class="bx is-file"><b>executable</b><small>its runtime inside</small></li>
+                </ol>
+                <ol class="lane-steps">
+                  <li class="via">runs on</li>
+                  <li class="bx"><b>operating system</b><small>directly, on Linux</small></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="lane is-omg">
+              <div class="lane-name"><b>OMG</b><span>compiled</span></div>
+              <div class="lane-body">
+                <ol class="lane-steps">
+                  <li class="bx is-file"><b>hello.omg</b></li>
+                  <li class="bx is-own"><b>OMG compiler</b><small>OMG</small></li>
+                  <li class="bx is-file"><b>bytecode</b></li>
+                  <li class="bx is-own"><b>x86-64 backend</b><small>OMG; no linker needed</small></li>
+                  <li class="bx is-file"><b>executable</b><small>its runtime inside</small></li>
+                </ol>
+                <ol class="lane-steps">
+                  <li class="via">runs on</li>
+                  <li class="bx"><b>operating system</b><small>directly, on Linux</small></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            The picture is not a ranking. The amber boxes are some of the most carefully engineered software there
+            is, and using them is the sensible choice for almost any language with work to do. What the last two
+            lines show is only that it is <em>possible</em> to do without them.
+          </p>
+        </section>
+
+        <!-- ───────────── 09 OMG ───────────── -->
+        <section id="omg">
+          <h2><span class="num">09</span>Where OMG fits</h2>
+          <p>
+            OMG is a hobby language, made by one person to learn how all of the above works. It has nothing that
+            a professional language lacks, and it lacks a great deal that they have. What it does have is a
+            complete toolchain with no borrowed parts, small enough to read.
+          </p>
+
+          <div class="stats">
+            <div class="stat"><b>20,000</b><span>lines of OMG make up the whole toolchain</span></div>
+            <div class="stat"><b>0</b><span>lines of C or C++ between your program and its executable, on Linux and Windows</span></div>
+            <div class="stat"><b>1.4 s</b><span>for the toolchain to rebuild itself from source</span></div>
+            <div class="stat"><b>17 KB</b><span>for a hello world that needs nothing else installed</span></div>
+          </div>
+
+          <p>Each part from the sections above has an OMG version, written in OMG:</p>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><td><strong>Front end</strong></td><td>The compiler: about 3,000 lines. It turns OMG text into bytecode, and compiles itself.</td></tr>
+                <tr><td><strong>Virtual machine</strong></td><td>About 1,400 lines. It is what runs a program when you have not built it.</td></tr>
+                <tr><td><strong>Backend</strong></td><td>About 4,900 lines. It turns bytecode into x86-64 machine code, with no LLVM.</td></tr>
+                <tr><td><strong>Linker</strong></td><td>None. The backend lays out the finished ELF or <code>.exe</code> file itself.</td></tr>
+                <tr><td><strong>Runtime</strong></td><td>About 7,700 lines. Memory, text, lists, numbers and files, speaking to Linux by direct system calls and to Windows through its system libraries. No C library.</td></tr>
+                <tr><td><strong>Bootstrapping</strong></td><td>Done. The first compiler was written in Rust and has been retired. Each <code>omg</code> is now built by the one before it.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>What going without C changed</h3>
+          <p>
+            OMG did not start out this way. Until recently, building a program meant writing out C and handing it
+            to a C compiler, the old shortcut from section 03. Rebuilding the OMG toolchain by that route, and by
+            its own backend, on the same machine:
+          </p>
+
+          <figure class="chart">
+            <figcaption>Time for OMG to rebuild itself, in seconds. Shorter is better.</figcaption>
+            <div class="bars" style="--max: 126">
+              <div class="bar-row"><span class="bar-label">Its own backend</span><span class="bar-track"><span class="bar is-omg" style="--v: 1.4"></span><span class="bar-val">1.4 s</span></span></div>
+              <div class="bar-row"><span class="bar-label">Through a C compiler</span><span class="bar-track"><span class="bar" style="--v: 126"></span><span class="bar-val">126 s</span></span></div>
+            </div>
+          </figure>
+
+          <p>
+            That is not because OMG's backend is clever. It is because it does so much less. A C compiler spends
+            those two minutes trying hard to make the result fast; OMG's backend makes one quick pass and stops.
+            For OMG the quick pass happens to give the faster program as well, because the C that OMG writes
+            imitates its virtual machine step by step, and a C compiler cannot do much with that.
+          </p>
+
+          <h3>What a hello world needs</h3>
+          <p>
+            The same one-line program, built on the same Linux machine in four languages. The third column is the
+            point: it lists what must already be on a computer before the file will run.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Built with</th><th>File size</th><th>Needs on the computer</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>C, the usual way</td><td>14 KB</td><td>the C library</td></tr>
+                <tr><td>C, with the C library copied in</td><td>707 KB</td><td>nothing</td></tr>
+                <tr><td>Rust</td><td>343 KB</td><td>the C library, and a second C support library</td></tr>
+                <tr><td>Go</td><td>1,435 KB</td><td>nothing</td></tr>
+                <tr><td>OMG</td><td>17 KB</td><td>nothing</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            OMG's file is small for an unflattering reason as well as a good one. The good one is that only the
+            parts of the runtime a program uses are put into it. The other is that OMG's runtime simply does
+            less. Go's megabyte includes a garbage collector and the machinery for running thousands of tasks at
+            once. OMG has neither. (Sizes are with debugging information removed. The compilers were GCC 13,
+            Rust 1.97 and Go 1.24.)
+          </p>
+
+          <h3>How fast is the result?</h3>
+          <p>
+            One small test, the same in every language: work out the 35th Fibonacci number the slow way, which
+            takes about thirty million function calls. Times are in seconds, on one machine.
+          </p>
+
+          <figure class="chart">
+            <figcaption>Seconds to compute fib(35). Shorter is better.</figcaption>
+            <div class="bars" style="--max: 0.95">
+              <div class="bar-row"><span class="bar-label">C</span><span class="bar-track"><span class="bar" style="--v: 0.02"></span><span class="bar-val">0.02</span></span></div>
+              <div class="bar-row"><span class="bar-label">Rust</span><span class="bar-track"><span class="bar" style="--v: 0.03"></span><span class="bar-val">0.03</span></span></div>
+              <div class="bar-row"><span class="bar-label">Go</span><span class="bar-track"><span class="bar" style="--v: 0.05"></span><span class="bar-val">0.05</span></span></div>
+              <div class="bar-row"><span class="bar-label">Java</span><span class="bar-track"><span class="bar" style="--v: 0.08"></span><span class="bar-val">0.08</span></span></div>
+              <div class="bar-row"><span class="bar-label">OMG, built</span><span class="bar-track"><span class="bar is-omg" style="--v: 0.09"></span><span class="bar-val">0.09</span></span></div>
+              <div class="bar-row"><span class="bar-label">JavaScript</span><span class="bar-track"><span class="bar" style="--v: 0.12"></span><span class="bar-val">0.12</span></span></div>
+              <div class="bar-row"><span class="bar-label">Python</span><span class="bar-track"><span class="bar" style="--v: 0.95"></span><span class="bar-val">0.95</span></span></div>
+            </div>
+          </figure>
+
+          <p>
+            Do not read much into this. It is one tiny program that measures one thing, calling functions and
+            adding small numbers, and that happens to be what OMG's backend handles best. The Java and JavaScript
+            times include starting their virtual machines. Run on OMG's own VM instead of being built, the same
+            program takes 36 seconds: the VM is there for convenience, not speed. And the next section shows a
+            job where OMG is far behind.
+          </p>
+        </section>
+
+        <!-- ───────────── 10 Video ───────────── -->
+        <section id="video">
+          <h2><span class="num">10</span>The test: a video player</h2>
+          <p>
+            "No C anywhere" is an easy thing to say about hello world. The real test is a job that everybody uses
+            C for, and playing video is that job. Nearly every player in the world hands the work to FFmpeg, from
+            section 06, or to a special chip.
+          </p>
+          <p>
+            So OMG has a video player, and every part of it is OMG. It opens an MP4 file, unpacks it, decodes the
+            video (the format is called H.264, and it is what most video on the web uses), and puts the pictures
+            in a window. The decoder is about 6,300 lines. The window is opened by OMG's runtime talking to the
+            system directly. The whole player is a single file of under 1 MB, for Linux or Windows.
+          </p>
+
+          <h3>Is it right?</h3>
+          <p>
+            H.264 has a useful property: decoding is exact. Every correct decoder must produce precisely the same
+            pictures, down to the last dot. So the referee is FFmpeg itself. Over sixty test clips went through
+            both, including real files from the web, and every picture OMG produced matched FFmpeg's bit for bit.
+          </p>
+
+          <h3>Is it fast?</h3>
+          <p>
+            No. To play smoothly at 30 pictures a second, a player has 33 thousandths of a second for each one.
+            Here is how long OMG takes, on one processor core:
+          </p>
+
+          <figure class="chart">
+            <figcaption>Milliseconds to decode and show one picture, by picture size. The line marks 33 ms, the budget for smooth play.</figcaption>
+            <div class="bars has-mark" style="--max: 260; --mark: 33">
+              <div class="bar-row"><span class="bar-label">640 × 360</span><span class="bar-track"><span class="bar is-omg" style="--v: 16"></span><span class="bar-val is-past-mark" style="--v: 16">16 ms · plays smoothly</span></span></div>
+              <div class="bar-row"><span class="bar-label">960 × 540</span><span class="bar-track"><span class="bar is-omg" style="--v: 62"></span><span class="bar-val">62 ms · shows about half</span></span></div>
+              <div class="bar-row"><span class="bar-label">1280 × 720</span><span class="bar-track"><span class="bar is-omg" style="--v: 98"></span><span class="bar-val">98 ms · falls behind</span></span></div>
+              <div class="bar-row"><span class="bar-label">1920 × 1080</span><span class="bar-track"><span class="bar is-omg" style="--v: 260"></span><span class="bar-val">260 ms</span></span></div>
+            </div>
+          </figure>
+
+          <p>
+            Small video plays properly. Anything larger than about 640 × 360 does not: the player skips pictures
+            to keep time, and full HD is beyond it. FFmpeg decodes the same files 20 to 40 times faster, because
+            its busiest loops were written by hand, instruction by instruction, over twenty years. There is also
+            no sound yet.
+          </p>
+          <p>
+            Both halves of that are the point. A small language with nothing underneath it can do a job this
+            demanding, and get every bit right. And the fifty years of work inside the C libraries are real, and
+            not something a hobby project catches up with.
+          </p>
+        </section>
+
+        <!-- ───────────── 11 Honest ───────────── -->
+        <section id="honest">
+          <h2><span class="num">11</span>What OMG is not</h2>
+          <ul>
+            <li>
+              <strong>It is not the first to do this, or the best at it.</strong> Go has always had its own
+              compiler, backend, linker and runtime, all of them written in Go since 2015. It covers a dozen
+              kinds of processor, and a good part of the internet's plumbing runs on it. OMG covers one family
+              of processor on two systems.
+            </li>
+            <li>
+              <strong>It is not free of C everywhere.</strong> On macOS, and on ARM processors, OMG still writes
+              C and borrows a C compiler.
+            </li>
+            <li>
+              <strong>It does not escape the system.</strong> On Windows an OMG program calls Windows' own
+              libraries, as every program must. And the operating system underneath is still written in C.
+            </li>
+            <li>
+              <strong>It does not make fast code.</strong> Its backend does almost none of the improving that
+              LLVM or a C compiler does. Simple programs come out respectably quick; heavy number-crunching, like
+              the video decoder, does not.
+            </li>
+            <li>
+              <strong>It did not come from nowhere.</strong> The first OMG compiler was written in Rust. And the
+              playground on this site runs OMG inside your browser's JavaScript engine, which is C++.
+            </li>
+            <li>
+              <strong>It is not for serious work.</strong> There is one author, no ecosystem of libraries, and
+              plenty that bigger languages take for granted is missing.
+            </li>
+          </ul>
+          <p>
+            What it is: the whole journey from section 01 to section 04 in about 20,000 lines that one person can
+            read from end to end. The well-known toolchains are too large for that. LLVM alone is millions of
+            lines. If you want to see how a compiler, a backend, an executable file and a runtime actually fit
+            together, small is the feature.
+          </p>
+        </section>
+
+        <!-- ───────────── 12 Glossary ───────────── -->
+        <section id="words">
+          <h2><span class="num">12</span>Words used on this page</h2>
+          <div class="table-wrap">
+            <table>
+              <tbody>
+                <tr><td><strong>ABI</strong></td><td>The rules two pieces of machine code follow so that one can call the other. Each operating system sets them, in terms of C.</td></tr>
+                <tr><td><strong>Backend</strong></td><td>The part of a compiler that writes machine code for one kind of processor.</td></tr>
+                <tr><td><strong>Bootstrapping</strong></td><td>Getting a compiler written in its own language off the ground, by first writing one in another language.</td></tr>
+                <tr><td><strong>Bytecode</strong></td><td>Instructions for a made-up processor, simple enough for a virtual machine to run quickly.</td></tr>
+                <tr><td><strong>C library</strong></td><td>The library an operating system provides so that programs can ask it for things. Also called libc.</td></tr>
+                <tr><td><strong>Compiler</strong></td><td>A program that translates a whole program from one form into another, usually into machine code.</td></tr>
+                <tr><td><strong>ELF, PE</strong></td><td>The file layouts for programs on Linux and Windows. A <code>.exe</code> is a PE file.</td></tr>
+                <tr><td><strong>Executable</strong></td><td>A file of machine code that the operating system can start.</td></tr>
+                <tr><td><strong>Front end</strong></td><td>The part of a compiler that reads and understands one language.</td></tr>
+                <tr><td><strong>Interpreter</strong></td><td>A program that runs another program by reading it and doing what it says.</td></tr>
+                <tr><td><strong>JIT</strong></td><td>Just-in-time compilation: turning the busiest parts of a program into machine code while it runs.</td></tr>
+                <tr><td><strong>Kernel</strong></td><td>The core of an operating system, in charge of the hardware.</td></tr>
+                <tr><td><strong>Linker</strong></td><td>The tool that joins separately compiled pieces into one executable.</td></tr>
+                <tr><td><strong>LLVM</strong></td><td>A shared compiler middle and backend, written in C++, that many languages build on.</td></tr>
+                <tr><td><strong>Machine code</strong></td><td>The numbers a processor runs directly.</td></tr>
+                <tr><td><strong>Runtime</strong></td><td>Helper code that every program in a language carries with it.</td></tr>
+                <tr><td><strong>Self-hosting</strong></td><td>Said of a language whose compiler is written in that language.</td></tr>
+                <tr><td><strong>System call</strong></td><td>A request from a program to the kernel: open this file, send these bytes.</td></tr>
+                <tr><td><strong>Toolchain</strong></td><td>All the tools that take source text to a running program.</td></tr>
+                <tr><td><strong>Virtual machine</strong></td><td>A program that plays the part of a processor and runs bytecode. VM for short.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="next">
+            <a class="card" href="../internals/">
+              <div class="card-body">
+                <h3>See it happen</h3>
+                <p>How it works runs OMG's real compiler on whatever you type, one stage at a time.</p>
+              </div>
+            </a>
+            <a class="card" href="../learn/">
+              <div class="card-body">
+                <h3>Learn the language</h3>
+                <p>A tour of OMG with examples you can edit and run.</p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <span>OMG is made by <a href="https://versyx.digital/">Chris Rowles</a> and released under the MIT licence.</span>
+        <span class="footer-links">
+          <a href="../">Home</a>
+          <a href="../learn/">Learn</a>
+          <a href="../playground/">Playground</a>
+          <a href="../internals/">How it works</a>
+          <a href="https://github.com/sentrychris/omglang">GitHub</a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="../assets/site.js"></script>
+  </body>
+</html>

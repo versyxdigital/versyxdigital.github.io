@@ -1117,8 +1117,19 @@
     mark();
   }
 
+  // On a phone the row of nav links scrolls sideways. Start with the link
+  // for the page being read in view.
+  function initNav() {
+    const current = document.querySelector('.nav-links [aria-current="page"]');
+    if (!current) return;
+    const strip = current.parentElement;
+    const over = current.getBoundingClientRect().right - strip.getBoundingClientRect().right + 24;
+    if (over > 0) strip.scrollLeft += over;
+  }
+
   function init() {
     initTheme();
+    initNav();
     for (const el of document.querySelectorAll('pre[data-omg], [data-omg-file$=".omg"]')) el.innerHTML = highlight(el.textContent.replace(/\n$/, ''));
     for (const box of document.querySelectorAll('.snippet')) initSnippet(box);
     for (const box of document.querySelectorAll('.lab')) initLab(box);

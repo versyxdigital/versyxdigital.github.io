@@ -256,6 +256,11 @@ kbd {
   background: var(--accent-soft);
 }
 
+/* A long label has a short form for phones. */
+.nav-short {
+  display: none;
+}
+
 .nav-end {
   display: flex;
   align-items: center;
@@ -300,8 +305,40 @@ kbd {
     display: none;
   }
   .nav-link {
-    padding: 7px 8px;
-    font-size: 0.88rem;
+    padding: 7px 6px;
+    font-size: 0.84rem;
+  }
+  /* The theme button has space of its own inside, so the row can run
+     closer to the right-hand edge. */
+  .nav > .wrap {
+    width: auto;
+    margin: 0 12px 0 20px;
+  }
+  /* Four links do not fit a phone, so the row scrolls sideways and fades
+     out at the right-hand edge to show that there is more. */
+  .nav-links {
+    overflow-x: auto;
+    padding-block: 4px;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 10px, #000 calc(100% - 18px), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 10px, #000 calc(100% - 18px), transparent);
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-links::before {
+    content: "";
+    flex: 0 0 4px;
+  }
+  .nav-links::after {
+    content: "";
+    flex: 0 0 18px;
+  }
+  .nav-long {
+    display: none;
+  }
+  .nav-short {
+    display: inline;
   }
   .nav-end .gh {
     display: none;
@@ -1540,6 +1577,470 @@ td {
   font-size: 0.78rem;
   font-family: var(--font-mono);
   line-height: 1;
+}
+
+/* ───────────── The big picture: diagrams, charts, comparison ───────────── */
+
+/* A labelled box: a tool, a file or the system. Every diagram is made of these. */
+.bx {
+  display: block;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-code);
+  color: var(--text);
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+.bx b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.bx small {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  color: var(--text-2);
+}
+
+/* Written in the language itself. */
+.bx.is-own,
+.tag.is-own {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Written in C or C++. */
+.bx.is-c,
+.tag.is-c,
+.layer.is-c {
+  border-color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 13%, transparent);
+}
+
+/* A file, not a tool. */
+.bx.is-file {
+  border-style: dashed;
+  background: transparent;
+}
+
+.arr {
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1;
+  text-align: center;
+}
+
+/* Three ways to run a program, side by side. */
+.ways {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 1.4em 0 1.8em;
+}
+
+.way {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raise);
+}
+
+.prose .way h3 {
+  margin: 0 0 6px;
+  font-size: 1.02rem;
+}
+
+.way p {
+  margin: 0 0 14px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.vflow {
+  display: grid;
+  gap: 5px;
+  text-align: center;
+}
+
+/* Many languages in, one shared backend, many processors out. */
+.funnel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1.15fr) 22px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  margin: 1.4em 0 1.8em;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raise);
+}
+
+.funnel-col {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.funnel-head {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: var(--text-3);
+  margin-bottom: 2px;
+}
+
+.funnel-mid .bx {
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.funnel-mid .bx b {
+  font-size: 1.2rem;
+}
+
+.funnel > .arr::before {
+  content: "→";
+  font-size: 1.05rem;
+}
+
+/* A short history, one line a year. */
+.prose ol.timeline {
+  list-style: none;
+  margin: 1.4em 0 1.8em 6px;
+  padding: 0;
+  border-left: 1px solid var(--line-strong);
+}
+
+.timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.2em minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 5px 0 5px 18px;
+  font-size: 0.92rem;
+  color: var(--text-2);
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 0.95em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.timeline .when {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text);
+  padding-top: 1px;
+}
+
+/* The key above a diagram or table, and the small labels inside the table. */
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 1.2em 0 0.9em;
+}
+
+.tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--bg-code);
+  color: var(--text);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+table.compare {
+  min-width: 660px;
+}
+
+.compare th,
+.compare td {
+  padding: 9px 10px;
+}
+
+.compare thead th {
+  white-space: normal;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  vertical-align: bottom;
+}
+
+.compare .tag {
+  margin: 1px 0;
+}
+
+/* One toolchain per line. */
+.lanes {
+  display: grid;
+  gap: 8px;
+  margin: 1em 0 1.8em;
+}
+
+.lane {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raise);
+}
+
+.lane.is-omg {
+  border-color: var(--accent);
+}
+
+.lane-name b {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.lane-name span {
+  font-size: 0.78rem;
+  color: var(--text-3);
+}
+
+.lane-name span::before {
+  content: " · ";
+}
+
+.prose ol.lane-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+}
+
+.lane-steps li {
+  position: relative;
+  margin: 0;
+}
+
+.lane-steps li:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: 22px;
+  transform: translateY(-50%);
+  text-align: center;
+  color: var(--text-3);
+  font-size: 0.8rem;
+}
+
+.lane-steps .via {
+  margin-right: -10px;
+  font-size: 0.74rem;
+  font-style: italic;
+  color: var(--text-3);
+}
+
+.lane-steps .via::after {
+  content: none !important;
+}
+
+.lane-body {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Headline numbers. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 1.4em 0 1.8em;
+}
+
+.stat {
+  min-width: 0;
+  padding: 14px 14px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raise);
+}
+
+.stat b {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.stat span {
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+
+/* Bar charts. Each bar's length is --v out of the chart's --max. */
+.chart {
+  margin: 1.4em 0 1.8em;
+  padding: 16px 18px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-raise);
+}
+
+.chart figcaption {
+  margin-bottom: 14px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+
+.bars {
+  --label: 9.6em;
+  --val: 5em;
+  position: relative;
+  display: grid;
+  gap: 7px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: var(--label) minmax(0, 1fr);
+  align-items: center;
+}
+
+.bar-label {
+  padding-right: 12px;
+  font-size: 0.84rem;
+  line-height: 1.3;
+  text-align: right;
+}
+
+.bar-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 3px 0;
+  border-left: 1px solid var(--line-strong);
+}
+
+.bar {
+  flex: none;
+  width: calc((100% - var(--val)) * var(--v) / var(--max));
+  min-width: 2px;
+  height: 16px;
+  border-radius: 0 4px 4px 0;
+  background: var(--text-3);
+}
+
+.bar.is-omg {
+  background: var(--accent);
+}
+
+.bar-val {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+/* A reference line down the chart at --mark, on the same scale as the bars.
+   Each row draws its own piece, so row labels stay clear of it. */
+.bars.has-mark {
+  --val: 6em;
+  margin-bottom: 1.5em;
+}
+
+.has-mark .bar-track {
+  position: relative;
+}
+
+.has-mark .bar-track::before,
+.has-mark .bar-row:last-child .bar-track::after {
+  position: absolute;
+  left: calc((100% - var(--val)) * var(--mark) / var(--max));
+}
+
+.has-mark .bar-track::before {
+  content: "";
+  top: -4px;
+  bottom: -4px;
+  border-left: 1px solid var(--text);
+  opacity: 0.75;
+}
+
+.has-mark .bar-row:last-child .bar-track::after {
+  content: "33 ms";
+  top: calc(100% + 6px);
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+/* A value that would sit under the reference line starts just past it. */
+.bar-val.is-past-mark {
+  margin-left: calc((100% - var(--val)) * (var(--mark) - var(--v)) / var(--max));
+}
+
+@media (max-width: 700px) {
+  .ways {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .funnel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .funnel > .arr::before {
+    content: "↓";
+  }
+  .funnel-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .funnel-head {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .bars {
+    --label: 0px;
+  }
+  .bar-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bar-label {
+    padding: 0 0 2px;
+    text-align: left;
+  }
 }
 
 /* ───────────── Playground ───────────── */
