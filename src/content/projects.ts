@@ -557,7 +557,7 @@ export const projects: Project[] = [
     services: [],
     links: [{ label: 'Game site', href: 'https://versyxdigital.github.io/aldervast/', kind: 'live' }],
     images: [
-      { src: alShot('00'), thumb: alShot('00-thumb'), alt: 'The Aldervast website home page: the game title over a hillside view of a village with red-roofed houses and a windmill.', width: 1919, height: 1079, caption: 'The Aldervast site, with Harrowford from the hills.' },
+      { src: alShot('00'), thumb: alShot('00-thumb'), alt: 'The Aldervast website home page: the game title over a meadow at sunset, with trees silhouetted against an orange sky.', width: 1899, height: 1079, caption: 'The Aldervast site, with sunset over the meadow.' },
       { src: alShot('02'), thumb: alShot('02-thumb'), alt: 'The Aldervast main menu over a misty village of red-roofed houses, with options for single player, hosting a game and joining a server.', width: 1919, height: 1079, caption: 'The main menu.' },
       { src: alShot('03'), thumb: alShot('03-thumb'), alt: 'In-game view of a rainy town square with named characters standing around: a village elder, an innkeeper, an outfitter, a merchant and others.', width: 1919, height: 1079, caption: 'The town square and its characters.' },
       { src: alShot('04'), thumb: alShot('04-thumb'), alt: 'A merchant window listing potions and gems with prices, beside the player inventory with equipped gear.', width: 1919, height: 1079, caption: 'Trading with a merchant.' },
