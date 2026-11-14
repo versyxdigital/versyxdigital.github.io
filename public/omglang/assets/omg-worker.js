@@ -17,10 +17,10 @@
 //                    backend starts with. Used to run the JavaScript the
 //                    explorer generated for a program.
 //
-// All three are copied unchanged from the OMG repository
-// (https://github.com/sentrychris/omglang): web/omg-web.js,
-// web/omg-explorer.js and src/runtime/omg_rt.js. To move the site to a
-// newer OMG, run scripts/build-web.sh there and copy the three files again.
+// All three are built from the OMG repository
+// (https://github.com/sentrychris/omglang) and are never edited here. To
+// move the site to a newer OMG, run scripts/update-site.sh there: it builds
+// the three files, tests them with this loader, and copies them in.
 //
 // A bundle is a script that runs top to bottom, reading its input from a few
 // `let` bindings at the top (args, the output functions, the file system).

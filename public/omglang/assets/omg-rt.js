@@ -37,6 +37,87 @@ function omg_is_dict(v)   { return v instanceof Map; }
 function omg_is_none(v)   { return v === null; }
 function omg_is_closure(v){ return typeof v === 'function' && v.__omg_captured !== undefined; }
 
+// === Byte lists ============================================================
+//
+// A list that can hold nothing but whole numbers from 0 to 255, one
+// byte each: `a` is the storage, of which the first `n` bytes are the
+// items. Whatever reads a list reads a byte list the same way; only
+// storing is stricter.
+
+class OmgBytes {
+    constructor(a, n) { this.a = a; this.n = n; }
+}
+
+// The BigInt of every byte value, so that reading an item makes none.
+const _omg_byte_ints = [];
+for (let i = 0; i < 256; i++) _omg_byte_ints.push(BigInt(i));
+
+function omg_bytes_from(u8) { return new OmgBytes(Uint8Array.from(u8), u8.length); }
+
+// The value as something a byte list can hold, or an error.
+function omg_byte_check(v) {
+    if (typeof v !== 'bigint') {
+        omg_panic('TypeError', 'a byte list holds whole numbers from 0 to 255, not ' + omg_to_string(v));
+    }
+    if (v < 0n || v > 255n) {
+        omg_panic('ValueError', 'a byte list holds whole numbers from 0 to 255, not ' + v);
+    }
+    return Number(v);
+}
+
+function omg_bytes_push(b, c) {
+    if (b.n === b.a.length) {
+        const na = new Uint8Array(b.n < 16 ? 16 : b.n * 2);
+        na.set(b.a);
+        b.a = na;
+    }
+    b.a[b.n++] = c;
+}
+
+// A byte list's items as a plain list.
+function omg_bytes_to_list(b) {
+    const out = new Array(b.n);
+    for (let i = 0; i < b.n; i++) out[i] = _omg_byte_ints[b.a[i]];
+    return out;
+}
+
+function omg_bytes_repeat(item, count) {
+    if (typeof count !== 'bigint') omg_panic('TypeError', 'bytes_repeat() expects (int, int)');
+    if (count < 0n) omg_panic('ValueError', 'bytes_repeat() count must be non-negative, got ' + count);
+    const c = omg_byte_check(item);
+    const n = Number(count);
+    const a = new Uint8Array(n);
+    if (c !== 0) a.fill(c);
+    return new OmgBytes(a, n);
+}
+
+function omg_bytes_copy(src, from, dst, to, count) {
+    if (!(src instanceof OmgBytes) || !(dst instanceof OmgBytes) ||
+        typeof from !== 'bigint' || typeof to !== 'bigint' || typeof count !== 'bigint') {
+        omg_panic('TypeError', 'bytes_copy() expects (byte list, int, byte list, int, int)');
+    }
+    if (count < 0n) omg_panic('ValueError', 'bytes_copy() count must be non-negative, got ' + count);
+    if (from < 0n || from > BigInt(src.n) || count > BigInt(src.n) - from) {
+        omg_panic('IndexError', 'bytes_copy(): ' + count + ' bytes from index ' + from + ' do not fit in a byte list of ' + src.n);
+    }
+    if (to < 0n || to > BigInt(dst.n) || count > BigInt(dst.n) - to) {
+        omg_panic('IndexError', 'bytes_copy(): ' + count + ' bytes to index ' + to + ' do not fit in a byte list of ' + dst.n);
+    }
+    const f = Number(from), t = Number(to), n = Number(count);
+    if (src === dst) dst.a.copyWithin(t, f, f + n);
+    else dst.a.set(src.a.subarray(f, f + n), t);
+    return null;
+}
+
+function omg_to_bytes(x) {
+    if (x instanceof OmgBytes) return new OmgBytes(x.a.slice(0, x.n), x.n);
+    if (typeof x === 'string') return omg_bytes_from(new TextEncoder().encode(x));
+    if (!Array.isArray(x)) omg_panic('TypeError', 'to_bytes() expects a list, a string or a byte list');
+    const a = new Uint8Array(x.length);
+    for (let i = 0; i < x.length; i++) a[i] = omg_byte_check(x[i]);
+    return new OmgBytes(a, x.length);
+}
+
 // === Coercion (mirror of omg_as_int / omg_as_double in omg_rt.h) ==========
 
 function omg_as_int(v) {
@@ -62,7 +143,7 @@ function omg_as_int(v) {
         }
         return BigInt(v);
     }
-    if (Array.isArray(v)) {
+    if (Array.isArray(v) || v instanceof OmgBytes) {
         throw new OmgError('TypeError',
             'cannot convert list to int (use length() instead)');
     }
@@ -90,7 +171,7 @@ function omg_as_float(v) {
         }
         return parseFloat(trimmed);
     }
-    if (Array.isArray(v)) {
+    if (Array.isArray(v) || v instanceof OmgBytes) {
         throw new OmgError('TypeError', 'cannot convert list to float');
     }
     throw new OmgError('TypeError', 'cannot convert value to float');
@@ -104,6 +185,7 @@ function omg_truthy(v) {
     if (typeof v === 'string') return v.length > 0;
     if (Array.isArray(v)) return v.length > 0;
     if (v instanceof Map) return v.size > 0;
+    if (v instanceof OmgBytes) return v.n > 0;
     return true;
 }
 
@@ -253,6 +335,7 @@ function omg_to_string(v, seen) {
         seen.delete(v);
         return '{' + parts.join(', ') + '}';
     }
+    if (v instanceof OmgBytes) return '[' + v.a.subarray(0, v.n).join(', ') + ']';
     if (typeof v === 'function') return '<proc>';
     return String(v);
 }
@@ -284,6 +367,18 @@ function omg_add(a, b) {
     }
     if (Array.isArray(a) && Array.isArray(b)) {
         return a.concat(b);
+    }
+    if (a instanceof OmgBytes) {
+        if (b instanceof OmgBytes) {
+            const out = new Uint8Array(a.n + b.n);
+            out.set(a.a.subarray(0, a.n));
+            out.set(b.a.subarray(0, b.n), a.n);
+            return new OmgBytes(out, a.n + b.n);
+        }
+        // a byte list and a list joined, either way round: a list
+        if (Array.isArray(b)) return omg_bytes_to_list(a).concat(b);
+    } else if (b instanceof OmgBytes && Array.isArray(a)) {
+        return a.concat(omg_bytes_to_list(b));
     }
     if (typeof a === 'number' || typeof b === 'number') {
         return omg_as_float(a) + omg_as_float(b);
@@ -353,6 +448,24 @@ function omg_values_equal(a, b) {
     if ((typeof a === 'bigint' && typeof b === 'number') ||
         (typeof a === 'number' && typeof b === 'bigint')) {
         return omg_as_float(a) === omg_as_float(b);
+    }
+    if (a instanceof OmgBytes || b instanceof OmgBytes) {
+        // A byte list equals a byte list, or a list, that holds the
+        // same numbers.
+        if (a instanceof OmgBytes && b instanceof OmgBytes) {
+            if (a.n !== b.n) return false;
+            for (let i = 0; i < a.n; i++) {
+                if (a.a[i] !== b.a[i]) return false;
+            }
+            return true;
+        }
+        const y = (a instanceof OmgBytes) ? a : b;
+        const l = (a instanceof OmgBytes) ? b : a;
+        if (!Array.isArray(l) || l.length !== y.n) return false;
+        for (let i = 0; i < y.n; i++) {
+            if (!omg_values_equal(_omg_byte_ints[y.a[i]], l[i])) return false;
+        }
+        return true;
     }
     if (typeof a !== typeof b && !(Array.isArray(a) && Array.isArray(b)) && !(a instanceof Map && b instanceof Map)) {
         return false;
@@ -450,6 +563,10 @@ function omg_index(base, idx) {
         const r = _norm_idx(idx, base.length, 'list');
         return base[r];
     }
+    if (base instanceof OmgBytes) {
+        if (typeof idx !== 'bigint') omg_panic('TypeError', 'list index must be int');
+        return _omg_byte_ints[base.a[_norm_idx(idx, base.n, 'list')]];
+    }
     if (base instanceof Map) {
         const key = (typeof idx === 'string') ? idx : omg_to_string(idx);
         if (!base.has(key)) omg_panic('KeyError', "Key '" + key + "' not found");
@@ -466,6 +583,12 @@ function omg_index_set(base, idx, val) {
         base[r] = val;
         return;
     }
+    if (base instanceof OmgBytes) {
+        if (typeof idx !== 'bigint') omg_panic('TypeError', 'list index must be int');
+        const r = _norm_idx(idx, base.n, 'list');
+        base.a[r] = omg_byte_check(val);
+        return;
+    }
     if (base instanceof Map) {
         const key = (typeof idx === 'string') ? idx : omg_to_string(idx);
         if (base.__omg_frozen) omg_panic('FrozenWriteError', 'Imported modules are read-only');
@@ -479,6 +602,7 @@ function omg_slice(base, start_v, end_v) {
     let n;
     if (typeof base === 'string') n = base.length;
     else if (Array.isArray(base)) n = base.length;
+    else if (base instanceof OmgBytes) n = base.n;
     else omg_panic('TypeError', 'cannot slice value');
 
     let start = (start_v === null) ? 0 : Number(omg_as_int(start_v));
@@ -488,6 +612,7 @@ function omg_slice(base, start_v, end_v) {
     if (start < 0) start = 0;
     if (end   > n) end   = n;
     if (start > end) start = end;
+    if (base instanceof OmgBytes) return new OmgBytes(base.a.slice(start, end), end - start);
     return base.slice(start, end);
 }
 
@@ -521,6 +646,7 @@ function omg_length(v) {
     }
     if (Array.isArray(v)) return BigInt(v.length);
     if (v instanceof Map)  return BigInt(v.size);
+    if (v instanceof OmgBytes) return BigInt(v.n);
     omg_panic('TypeError', 'length() expects list, string or dict (type mismatch)');
 }
 
@@ -635,6 +761,10 @@ function omg_list_repeat(item, count) {
 
 // append(list, item): push onto the end of the list, in place.
 function omg_append(list, item) {
+    if (list instanceof OmgBytes) {
+        omg_bytes_push(list, omg_byte_check(item));
+        return null;
+    }
     if (!Array.isArray(list)) omg_panic('TypeError', 'append() expects (list, any)');
     list.push(item);
     return null;
@@ -642,10 +772,10 @@ function omg_append(list, item) {
 
 function omg_string_bytes(s) {
     if (typeof s !== 'string') omg_panic('TypeError', 'string_bytes() expects a string');
-    const enc = new TextEncoder();
-    return Array.from(enc.encode(s)).map(b => BigInt(b));
+    return omg_bytes_from(new TextEncoder().encode(s));
 }
 function omg_bytes_to_string(bs) {
+    if (bs instanceof OmgBytes) return new TextDecoder().decode(bs.a.subarray(0, bs.n));
     if (!Array.isArray(bs)) omg_panic('TypeError', 'bytes_to_string() expects a list of bytes');
     const buf = new Uint8Array(bs.length);
     for (let i = 0; i < bs.length; i++) buf[i] = Number(omg_as_int(bs[i]));
@@ -796,13 +926,38 @@ function omg_file_open(path, mode) {
     return BigInt(fd);
 }
 
-function omg_file_read(handle) {
+// file_read(handle) reads everything that remains; file_read(handle,
+// max) at most max bytes, fewer only when the file ends first.
+function omg_file_read(handle, max) {
     const h = _omg_handles.get(Number(omg_as_int(handle)));
     if (!h) omg_panic('ValueError', 'invalid file handle');
-    const slice = h.buf.subarray(h.pos);
-    h.pos = h.buf.length;
-    if (h.binary) return Array.from(slice).map(b => BigInt(b));
+    let end = h.buf.length;
+    if (max !== undefined) {
+        if (typeof max !== 'bigint') omg_panic('TypeError', 'file_read() expects (handle: int, max_bytes: int)');
+        if (max < 0n) omg_panic('ValueError', 'file_read: max_bytes must be non-negative');
+        if (BigInt(h.pos) + max < BigInt(end)) end = h.pos + Number(max);
+    }
+    const slice = h.buf.subarray(h.pos, end);
+    h.pos = Math.max(h.pos, end);
+    if (h.binary) return omg_bytes_from(slice);
     return slice.toString('utf8');
+}
+
+// file_size(path) in bytes; file_mtime(path), the time of the last
+// write in milliseconds since 1970.
+function _omg_stat(path, what) {
+    _need_fs(what);
+    if (typeof path !== 'string') omg_panic('TypeError', what + '() expects a path');
+    try { return _omg_fs.statSync(path); }
+    catch (e) { omg_panic('ValueError', "cannot stat '" + path + "': " + ((e && e.code) || 'error')); }
+}
+
+function omg_file_size(path) {
+    return BigInt(_omg_stat(path, 'file_size').size);
+}
+
+function omg_file_mtime(path) {
+    return BigInt(Math.floor(_omg_stat(path, 'file_mtime').mtimeMs));
 }
 
 function omg_file_write(handle, data) {
@@ -810,8 +965,17 @@ function omg_file_write(handle, data) {
     if (!h) omg_panic('ValueError', 'invalid file handle');
     let chunk;
     if (h.binary) {
-        if (!Array.isArray(data)) omg_panic('TypeError', 'file_write() binary handle expects list');
-        chunk = Buffer.from(data.map(v => Number(omg_as_int(v))));
+        if (data instanceof OmgBytes) {
+            chunk = Buffer.from(data.a.slice(0, data.n));
+        } else {
+            if (!Array.isArray(data)) omg_panic('TypeError', 'file_write() binary handle expects list');
+            chunk = Buffer.from(data.map(v => {
+                if (typeof v !== 'bigint' || v < 0n || v > 255n) {
+                    omg_panic('TypeError', 'file_write() expects bytes 0-255');
+                }
+                return Number(v);
+            }));
+        }
     } else {
         if (typeof data !== 'string') omg_panic('TypeError', 'file_write() text handle expects string');
         chunk = Buffer.from(data, 'utf8');
@@ -892,9 +1056,9 @@ function omg_stdin_read() {
 }
 
 function omg_stdin_read_bytes() {
-    if (typeof require === 'undefined') return [];
-    try { return Array.from(_omg_fs.readFileSync(0)).map(b => BigInt(b)); }
-    catch (_e) { return []; }
+    if (typeof require === 'undefined') return new OmgBytes(new Uint8Array(0), 0);
+    try { return omg_bytes_from(_omg_fs.readFileSync(0)); }
+    catch (_e) { return new OmgBytes(new Uint8Array(0), 0); }
 }
 
 function omg_subprocess(argv) {
@@ -944,6 +1108,9 @@ const _omg_builtins = {
     dict_keys: omg_dict_keys,
     has_key: omg_has_key,
     list_repeat: omg_list_repeat,
+    bytes_repeat: omg_bytes_repeat,
+    to_bytes: omg_to_bytes,
+    bytes_copy: omg_bytes_copy,
     append: omg_append,
     chmod: omg_chmod,
     string_bytes: omg_string_bytes,
@@ -958,6 +1125,8 @@ const _omg_builtins = {
     read_file: omg_read_file,
     file_open: omg_file_open,
     file_read: omg_file_read,
+    file_size: omg_file_size,
+    file_mtime: omg_file_mtime,
     file_write: omg_file_write,
     file_close: omg_file_close,
     file_seek: omg_file_seek,
@@ -981,6 +1150,25 @@ const _omg_builtins = {
     subprocess: omg_subprocess,
     getpid: omg_getpid,
     executable_path: omg_executable_path,
+    tcp_listen: omg_tcp_listen,
+    tcp_accept: omg_tcp_accept,
+    tcp_connect: omg_tcp_connect,
+    tcp_read: omg_tcp_read,
+    tcp_write: omg_tcp_write,
+    tcp_close: omg_tcp_close,
+    tcp_nonblocking: omg_tcp_nonblocking,
+    tcp_peer: omg_tcp_peer,
+    tcp_poll: omg_tcp_poll,
+    interrupted: omg_interrupted,
+    window_open: omg_window_open,
+    window_draw: omg_window_draw,
+    window_poll: omg_window_poll,
+    window_close: omg_window_close,
+    audio_open: omg_audio_open,
+    audio_write: omg_audio_write,
+    audio_played: omg_audio_played,
+    audio_pause: omg_audio_pause,
+    audio_close: omg_audio_close,
 };
 
 // === Real-time terminal I/O (Node) =======================================
@@ -1032,6 +1220,77 @@ function omg_stdin_read_key() {
 // so we panic rather than fail silently. The browser playground
 // never touches these — the editor that uses them is a native-only
 // tool.
+
+// Sockets: a JS program cannot wait for the network without giving up
+// its turn, and an OMG program is one straight run. These exist so
+// that a program which mentions them still translates; calling one is
+// an error the program can catch.
+function omg_tcp_listen(_host, _port) {
+    omg_panic('RuntimeError', 'tcp_listen is not supported in the JS runtime');
+}
+function omg_tcp_accept(_h) {
+    omg_panic('RuntimeError', 'tcp_accept is not supported in the JS runtime');
+}
+function omg_tcp_connect(_host, _port) {
+    omg_panic('RuntimeError', 'tcp_connect is not supported in the JS runtime');
+}
+function omg_tcp_read(_h, _max) {
+    omg_panic('RuntimeError', 'tcp_read is not supported in the JS runtime');
+}
+function omg_tcp_write(_h, _data, _offset) {
+    omg_panic('RuntimeError', 'tcp_write is not supported in the JS runtime');
+}
+function omg_tcp_close(_h) {
+    omg_panic('RuntimeError', 'tcp_close is not supported in the JS runtime');
+}
+function omg_tcp_nonblocking(_h, _on) {
+    omg_panic('RuntimeError', 'tcp_nonblocking is not supported in the JS runtime');
+}
+function omg_tcp_peer(_h) {
+    omg_panic('RuntimeError', 'tcp_peer is not supported in the JS runtime');
+}
+function omg_tcp_poll(_reads, _writes, _timeout) {
+    omg_panic('RuntimeError', 'tcp_poll is not supported in the JS runtime');
+}
+
+// interrupted(): a JS program is never told of Ctrl-C while it runs
+// (the signal would be delivered between turns, and there are none),
+// so the count stays 0 and Ctrl-C ends the program as it always did.
+function omg_interrupted() {
+    return 0n;
+}
+
+// A window is opened by OMG's own native runtime; a program run as
+// JavaScript has none, and the calls raise.
+function omg_window_open(_title, _w, _h) {
+    omg_panic('ValueError', 'window_open is not supported in the JS runtime');
+}
+function omg_window_draw(_win, _pixels, _w) {
+    omg_panic('ValueError', 'window_draw is not supported in the JS runtime');
+}
+function omg_window_poll(_win) {
+    omg_panic('ValueError', 'window_poll is not supported in the JS runtime');
+}
+function omg_window_close(_win) {
+    omg_panic('ValueError', 'window_close is not supported in the JS runtime');
+}
+
+// Sound, the same.
+function omg_audio_open(_rate, _channels) {
+    omg_panic('ValueError', 'audio_open is not supported in the JS runtime');
+}
+function omg_audio_write(_audio, _samples, _from) {
+    omg_panic('ValueError', 'audio_write is not supported in the JS runtime');
+}
+function omg_audio_played(_audio) {
+    omg_panic('ValueError', 'audio_played is not supported in the JS runtime');
+}
+function omg_audio_pause(_audio, _on) {
+    omg_panic('ValueError', 'audio_pause is not supported in the JS runtime');
+}
+function omg_audio_close(_audio) {
+    omg_panic('ValueError', 'audio_close is not supported in the JS runtime');
+}
 
 function omg_pty_spawn(_argv) {
     omg_panic('RuntimeError', 'pty_spawn is not supported in the JS runtime');
