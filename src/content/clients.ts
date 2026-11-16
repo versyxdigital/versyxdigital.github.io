@@ -22,11 +22,11 @@ export interface Client {
    * treatments so the row reads as a strip of marks; they are not the clients' logos.
    */
   mark?: 'serif' | 'caps' | 'heavy' | 'mono' | 'light' | 'tight';
-  /** Mock-up symbol drawn beside the name (see sections/ClientGlyph.tsx). Not the client's own logo. */
+  /** Inline symbol drawn beside the name (see sections/ClientGlyph.tsx). */
   glyph?: ClientGlyphId;
 }
 
-export type ClientGlyphId = 'wave' | 'roof' | 'grid' | 'block' | 'pivot' | 'infinity' | 'gem' | 'crescent';
+export type ClientGlyphId = 'wave' | 'roof' | 'grid' | 'block' | 'pivot' | 'infinity' | 'gem' | 'crescent' | 'temptations';
 
 // Names given by Chris Rowles on 2026-11-11.
 export const clients: Client[] = [
@@ -38,4 +38,6 @@ export const clients: Client[] = [
   { name: 'Pivotal IQ', mark: 'mono', glyph: 'pivot' },
   { name: 'Miss Infinity Productions', mark: 'light', glyph: 'infinity' },
   { name: 'Platinum Desires', mark: 'caps', glyph: 'gem' },
+  // Name and SVG logo supplied by Chris Rowles on 2026-11-16.
+  { name: 'Temptations', mark: 'serif', glyph: 'temptations' },
 ];

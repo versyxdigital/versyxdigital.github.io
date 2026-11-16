@@ -2,10 +2,9 @@ import type { ReactNode } from 'react';
 import type { ClientGlyphId } from '../content/clients';
 
 /**
- * Mock-up symbols for the "Our clients" band, drawn here as inline SVG in the
- * site's line style. They are stand-ins designed for this site, not the
- * clients' own logos: give a client a real `logo` file in content/clients.ts
- * and it replaces its mock-up.
+ * Inline symbols for the "Our clients" band. Temptations uses its supplied
+ * logo; the other symbols are stand-ins designed for this site. A `logo`
+ * file in content/clients.ts replaces both the symbol and text wordmark.
  */
 const glyphs: Record<ClientGlyphId, ReactNode> = {
   wave: (
@@ -39,11 +38,32 @@ const glyphs: Record<ClientGlyphId, ReactNode> = {
   infinity: <path d="M6.6 8.4c-2.6 0-4.1 1.7-4.1 3.6s1.5 3.6 4.1 3.6c4 0 6.8-7.2 10.8-7.2 2.6 0 4.1 1.7 4.1 3.6s-1.5 3.6-4.1 3.6c-4 0-6.8-7.2-10.8-7.2z" />,
   gem: <path d="M6.5 4h11L21.5 9.5 12 21 2.5 9.5zM2.5 9.5h19M9 9.5 12 21l3-11.5M9 9.5 12 4l3 5.5" />,
   crescent: <path d="M19.5 14.6A8.6 8.6 0 1 1 9.4 4.5a6.9 6.9 0 0 0 10.1 10.1z" />,
+  temptations: (
+    <>
+      <path d="M612,907 L585,923 L564,940 L549,956 L534,977 L519,1010 L514,1036 L514,1056 L519,1080 L532,1107 L543,1122 L591,1172 L608,1197 L616,1214 L616,1196 L610,1171 L599,1146 L567,1087 L558,1061 L553,1032 L555,998 L565,967 L583,937Z" />
+      <path d="M653,547 L660,601 L662,640 L658,699 L650,736 L641,764 L629,793 L606,836 L634,809 L658,777 L675,743 L685,706 L687,659 L682,624 L669,581Z" />
+      <path d="M490,498 L485,525 L485,545 L490,573 L506,610 L550,675 L566,706 L574,735 L574,765 L569,784 L556,806 L538,823 L503,847 L470,873 L450,892 L426,921 L416,937 L402,969 L396,998 L396,1026 L405,1067 L421,1102 L433,1121 L453,1146 L471,1164 L510,1194 L474,1141 L449,1090 L442,1069 L437,1044 L436,1016 L439,996 L447,970 L457,949 L480,916 L515,881 L561,846 L579,828 L589,814 L597,798 L603,780 L606,763 L606,735 L598,701 L585,673 L565,641 L522,581 L504,548 L495,523Z" />
+      <path d="M691,388 L668,394 L656,400 L641,410 L628,422 L666,411 L689,410 L707,414 L723,423 L735,435 L741,444 L760,483 L773,504 L793,526 L836,561 L842,569 L847,582 L846,596 L840,610 L832,621 L820,632 L805,641 L793,645 L780,647 L760,645 L771,660 L778,675 L781,690 L781,706 L776,732 L763,771 L758,793 L758,830 L764,851 L795,907 L812,951 L819,985 L821,1020 L815,1068 L802,1112 L778,1163 L743,1215 L779,1185 L816,1142 L843,1095 L857,1054 L862,1023 L862,990 L857,957 L847,923 L838,901 L798,828 L794,815 L792,794 L796,767 L813,705 L814,672 L821,670 L844,657 L866,634 L878,609 L881,582 L877,564 L868,548 L858,537 L822,510 L801,490 L785,468 L770,439 L756,418 L738,401 L721,392 L710,389Z" />
+      <path d="M713,285 L673,313 L631,335 L534,373 L488,396 L455,420 L434,441 L416,466 L400,499 L392,528 L389,554 L392,591 L401,623 L415,651 L426,666 L443,683 L465,698 L448,675 L436,652 L430,635 L425,610 L425,583 L431,553 L440,529 L453,505 L479,471 L509,443 L542,420 L616,377 L656,348 L693,312Z" />
+      <path d="M846,144 L818,112 L786,86 L742,61 L710,50 L728,79 L736,108 L736,134 L729,159 L718,178 L690,205 L655,225 L610,242 L533,263 L493,276 L449,296 L411,322 L390,343 L374,365 L364,384 L356,407 L351,436 L351,458 L358,498 L358,463 L367,425 L387,388 L407,366 L440,342 L479,324 L525,310 L631,285 L675,269 L710,250 L741,223 L753,207 L762,190 L771,160 L773,120 L795,149 L811,182 L820,221 L820,249 L813,283 L798,318 L773,354 L745,381 L779,372 L800,362 L817,351 L842,328 L858,306 L868,286 L876,257 L877,223 L872,197 L864,175Z" />
+    </>
+  ),
 };
 
 export function ClientGlyph({ id }: { id: ClientGlyphId }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      data-glyph={id}
+      viewBox={id === 'temptations' ? '351 50 530 1165' : '0 0 24 24'}
+      fill={id === 'temptations' ? 'currentColor' : 'none'}
+      stroke={id === 'temptations' ? 'none' : 'currentColor'}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
       {glyphs[id]}
     </svg>
   );

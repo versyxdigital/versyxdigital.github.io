@@ -59,6 +59,12 @@
   height: clamp(1.9rem, 4.4vh, 2.9rem);
 }
 
+/* Keep the supplied tall logo's box fitted to its artwork beside the name. */
+.tile svg[data-glyph='temptations'] {
+  width: auto;
+  aspect-ratio: 530 / 1165;
+}
+
 /* A client's own logo: any SVG is flattened to white, so it sits in the greyscale theme. */
 .tile img {
   display: block;
