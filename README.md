@@ -51,6 +51,13 @@ the machine; it does not download a browser. It writes screenshots to
 
 Everything the site says lives in `src/content`. No component contains copy.
 
+The standalone product sites live in `public/` and are copied unchanged into
+`dist/`. MKEditor's privacy policy is `public/mkeditor/privacy/index.html`;
+it shares the product stylesheet and adds its page layout in
+`public/mkeditor/assets/privacy.css`. The imported MKEditor JavaScript bundle
+includes the product footer's `/mkeditor/privacy/` link; preserve that link
+when replacing the bundle with a newer upstream build.
+
 | File | What it holds |
 | --- | --- |
 | `profile.ts` | The studio: name, introduction, founder, contact details |
