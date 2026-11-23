@@ -157,6 +157,10 @@
   list-style: disc;
 }
 
+.policy-page section ul + p {
+  margin-top: 1.25rem;
+}
+
 .policy-page li::marker {
   color: var(--color-accent);
 }
