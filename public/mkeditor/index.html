@@ -1,63 +1,653 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Chris Rowles" />
-    <meta name="description" content="MKEditor is a simple, fast, and free markdown editor with live preview — now with an in-editor AI assistant (Anthropic, OpenAI, Ollama) on the desktop app. Write, format, and export your markdown instantly." />
-    <meta name="keywords" content="markdown, markdown editor, ai markdown editor, markdown ai assistant, simple markdown editor, online markdown editor, markdown writing, markdown preview, markdown formatting, markdown tool, anthropic, openai, ollama" />
-
-    <meta property="og:title" content="MKEditor - markdown with style." />
-    <meta property="og:description" content="A simple, fast, free markdown editor with live preview — now with an in-editor AI assistant (Anthropic, OpenAI, Ollama) on the desktop app." />
-    <meta property="og:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.webp" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://versyxdigital.github.io/mkeditor/" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MKEditor - markdown with style." />
-    <meta name="twitter:description" content="Write, preview, and export markdown — now with a built-in AI assistant on the desktop app." />
-    <meta name="twitter:image" content="https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.webp" />
-
-    <title>MKEditor - Markdown Editor with Live Preview &amp; AI Assistant</title>
-    <link rel="canonical" href="https://versyxdigital.github.io/mkeditor/" />
-    <link rel="icon" href="/mkeditor/favicon.ico" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "MKEditor",
-            "operatingSystem": "Windows, macOS, Linux",
-            "applicationCategory": "DeveloperApplication",
-            "description": "A simple, fast, and free markdown editor with live preview and an in-editor AI assistant (Anthropic, OpenAI, Ollama) on the desktop app.",
-            "url": "https://versyxdigital.github.io/mkeditor/",
-            "image": "https://versyxdigital.github.io/mkeditor/assets/img/demo-dark.webp",
-            "softwareVersion": "4.1.0",
-            "featureList": [
-                "CommonMark markdown support",
-                "Live HTML preview",
-                "HTML and PDF export",
-                "AI assistant with Anthropic, OpenAI and Ollama providers (desktop)",
-                "Workspace-scoped read/write tools with confirmation",
-                "13 supported languages"
-            ],
-            "author": {
-                "@type": "Person",
-                "name": "Chris Rowles"
-            }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111416" />
+  <meta name="description"
+    content="Meet MKEditor 5.0: a focused, free Markdown editor with live preview, optional AI, ChatGPT plan sign-in and experimental Google Drive support. Explore the new workspace." />
+  <title>MKEditor — Markdown with style.</title>
+  <link rel="canonical" href="https://versyx.digital/mkeditor/" />
+  <link rel="icon" href="./favicon.ico" />
+  <link rel="preload" href="./assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="./assets/screenshots/editor-dark-1600.webp" as="image"
+    imagesrcset="./assets/screenshots/editor-dark-1600.webp 1600w, ./assets/screenshots/editor-dark.webp 3200w"
+    imagesizes="(min-width: 1344px) 1248px, calc(100vw - 48px)" />
+  <link rel="stylesheet" href="./assets/product.css" />
+  <script src="./assets/product.js" defer></script>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MKEditor — A clearer space for Markdown" />
+  <meta property="og:description"
+    content="Explore the new v5.0 workspace. Live preview, optional AI, ChatGPT sign-in and experimental Google Drive support. Free and open source." />
+  <meta property="og:url" content="https://versyx.digital/mkeditor/" />
+  <meta property="og:image" content="https://versyx.digital/mkeditor/assets/screenshots/editor-dark.webp" />
+  <meta property="og:image:alt"
+    content="MKEditor 5.0 with a Markdown document, file explorer and live preview in dark appearance." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MKEditor — Markdown with style." />
+  <meta name="twitter:description"
+    content="A focused, free Markdown editor. Explore the new v5.0 workspace, optional AI and experimental Google Drive support." />
+  <meta name="twitter:image" content="https://versyx.digital/mkeditor/assets/screenshots/editor-dark.webp" />
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "MKEditor",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows, macOS, Linux, Web",
+        "softwareVersion": "5.0.0 preview",
+        "url": "https://versyx.digital/mkeditor/",
+        "image": "https://versyx.digital/mkeditor/assets/screenshots/editor-dark.webp",
+        "description": "Free, open-source Markdown editor with live preview. The v5.0 preview adds a redesigned workspace, ChatGPT plan sign-in and experimental Google Drive integration.",
+        "license": "https://github.com/versyxdigital/mkeditor/blob/main/LICENSE",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+        "author": {
+          "@type": "Organization",
+          "name": "Versyx Digital",
+          "url": "https://versyx.digital/"
         }
+      }
     </script>
-  <script type="module" crossorigin src="/mkeditor/assets/index-1wwT3kWO.js"></script>
-  <link rel="stylesheet" crossorigin href="/mkeditor/assets/index-BlkRq_Fk.css">
 </head>
+
 <body>
-    <div id="root"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-github" viewBox="0 0 24 24">
+      <path
+        d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.86c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" />
+    </symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M6 18 18 6" />
+    </symbol>
+    <symbol id="icon-expand" viewBox="0 0 24 24">
+      <path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6" />
+    </symbol>
+    <symbol id="icon-columns" viewBox="0 0 24 24">
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M12 4v16" />
+    </symbol>
+    <symbol id="icon-file" viewBox="0 0 24 24">
+      <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 13h8m-8 4h6" />
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="m5 12 4 4L19 6" />
+    </symbol>
+    <symbol id="icon-spark" viewBox="0 0 24 24">
+      <path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6Z" />
+    </symbol>
+  </svg>
+
+  <header class="site-header">
+    <nav class="container header-inner" aria-label="Main navigation">
+      <a class="brand" href="./" aria-label="MKEditor home"><img src="./assets/img/icon.png" alt="" width="32"
+          height="32" /><span>MKEditor</span></a>
+      <div class="desktop-nav">
+        <a href="#features">Features</a><a href="#ai">AI assistant</a><a href="#drive">Google Drive</a><a
+          href="https://github.com/versyxdigital/mkeditor" class="source-link"><svg class="icon icon-fill"
+            aria-hidden="true">
+            <use href="#icon-github" />
+          </svg>GitHub</a>
+      </div>
+      <a class="button button-small button-light header-download" href="#download">Get MKEditor</a>
+      <details class="mobile-menu">
+        <summary aria-label="Open navigation">
+          <svg class="icon" aria-hidden="true">
+            <use href="#icon-menu" />
+          </svg>
+        </summary>
+        <div class="mobile-menu-panel">
+          <a href="#features">Features</a><a href="#ai">AI assistant</a><a href="#drive">Google Drive</a><a
+            href="#download">Downloads</a><a href="https://github.com/versyxdigital/mkeditor">Source on GitHub</a>
+        </div>
+      </details>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero container" aria-labelledby="hero-title">
+      <p class="eyebrow release-eyebrow">
+        MKEditor 5.0 <span>Release preview</span>
+      </p>
+      <div class="hero-intro">
+        <h1 id="hero-title">
+          Markdown<br /><span>with
+            <em class="hero-script"><span class="sr-only">style</span><svg viewBox="-4.24 -102.48 259.36 167.52"
+                aria-hidden="true" focusable="false">
+                <path
+                  d="M8.16 8L8.16 8Q1.76 8 1.76 4.48L1.76 4.48Q1.76 1.92 4.48-0.80L4.48-0.80Q6.56-2.88 9.12-4.16Q11.68-5.44 12.32-5.44L12.32-5.44Q13.12-5.44 13.20-4.80Q13.28-4.16 12.48-3.84L12.48-3.84Q10.88-2.88 8.88-1.20Q6.88 0.48 6.88 2.40L6.88 2.40Q6.88 4.96 9.92 4.96L9.92 4.96Q13.60 4.96 17.60 2.80Q21.60 0.64 25.04-2.72Q28.48-6.08 30.64-9.52Q32.80-12.96 32.80-15.52L32.80-15.52Q32.80-17.60 31.36-19.36Q29.92-21.12 25.44-23.52L25.44-23.52Q22.40-25.28 19.60-27.20Q16.80-29.12 15.36-31.84L15.36-31.84Q14.08-29.60 12.08-26.48Q10.08-23.36 7.36-20L7.36-20Q6.40-19.04 5.44-19.04L5.44-19.04Q4.48-19.04 4.48-19.84L4.48-19.84Q4.48-20.32 5.28-21.44L5.28-21.44Q9.60-26.56 11.68-30.88Q13.76-35.20 14.56-37.44L14.56-37.44Q15.20-42.08 18.88-46.24Q22.56-50.40 27.84-53.52Q33.12-56.64 38.64-58.40Q44.16-60.16 48.48-60.16L48.48-60.16Q52.80-60.16 56.16-58.56Q59.52-56.96 59.52-53.44L59.52-53.44Q59.52-51.52 58.40-49.28L58.40-49.28Q56.96-46.24 53.60-43.84L53.60-43.84Q53.44-43.68 53.12-43.68L53.12-43.68Q51.84-43.68 51.84-44.80L51.84-44.80Q51.84-45.60 52.64-46.40L52.64-46.40Q53.92-47.52 54.72-49.12Q55.52-50.72 55.52-52.16L55.52-52.16Q55.52-55.04 52.16-55.04L52.16-55.04Q48.64-55.04 42.96-53.12Q37.28-51.20 32.48-48.16L32.48-48.16Q27.04-44.64 23.36-40.48Q19.68-36.32 19.68-33.12L19.68-33.12Q19.68-31.52 20.72-30.16Q21.76-28.80 24.80-27.04L24.80-27.04Q26.40-26.08 29.28-24.56Q32.16-23.04 34.24-21.76L34.24-21.76Q40.80-17.76 40.80-13.28L40.80-13.28Q40.80-9.60 37.60-5.84Q34.40-2.08 29.36 1.04Q24.32 4.16 18.72 6.08Q13.12 8 8.16 8ZM61.60 1.60L61.60 1.60Q58.72 1.60 56.40 0.32Q54.08-0.96 52.96-4.48L52.96-4.48Q52.80-4.96 52.72-5.44Q52.64-5.92 52.64-6.56L52.64-6.56Q52.64-9.76 54.08-14.56Q55.52-19.36 57.60-23.84L57.60-23.84Q56.64-22.56 55.36-20.72Q54.08-18.88 51.68-16L51.68-16Q51.04-15.36 50.24-15.36L50.24-15.36Q49.12-15.36 49.12-16.64L49.12-16.64Q49.12-17.60 49.76-18.24L49.76-18.24Q53.92-23.52 57.20-27.68Q60.48-31.84 62.08-34.72L62.08-34.72Q62.08-35.04 63.04-36.72Q64-38.40 65.60-41.44L65.60-41.44Q64.32-41.28 63.44-41.20Q62.56-41.12 61.92-41.12L61.92-41.12Q60.80-41.12 60-42.08Q59.20-43.04 59.84-44.48L59.84-44.48Q60.64-46.72 63.36-47.04Q66.08-47.36 68.16-47.52L68.16-47.52Q68.32-47.84 68.80-47.84L68.80-47.84Q70.72-51.36 72.48-54.72Q74.24-58.08 75.44-60.32Q76.64-62.56 76.64-62.72L76.64-62.72Q79.84-67.84 80.80-69.52Q81.76-71.20 83.36-71.52L83.36-71.52Q85.12-71.68 87.12-71.36Q89.12-71.04 89.76-69.92L89.76-69.92Q90.24-69.28 90.24-68.32L90.24-68.32Q90.24-66.88 89.60-65.52Q88.96-64.16 88.32-63.36L88.32-63.36Q87.68-62.24 86.64-61.84Q85.60-61.44 84.80-59.84L84.80-59.84Q83.20-56.80 81.28-53.28Q79.36-49.76 77.28-46.56L77.28-46.56L79.20-46.72Q83.04-47.04 86.48-47.52Q89.92-48 94.40-47.84L94.40-47.84Q95.20-47.84 96.08-47.60Q96.96-47.36 96.96-46.88L96.96-46.88Q96.96-46.24 92.80-45.12L92.80-45.12Q91.20-44.48 85.84-43.76Q80.48-43.04 74.88-42.40L74.88-42.40Q73.28-39.36 72-37.36Q70.72-35.36 70.24-34.40L70.24-34.40Q66.72-27.04 63.92-21.04Q61.12-15.04 60.80-11.20L60.80-11.20Q60.64-10.56 60.64-10Q60.64-9.44 60.64-8.80L60.64-8.80Q60.64-2.40 64.80-2.40L64.80-2.40Q67.36-2.40 71.36-5.20Q75.36-8 79.52-12.08Q83.68-16.16 87.12-19.92Q90.56-23.68 91.84-25.60L91.84-25.60Q92.32-26.08 92.80-26.08L92.80-26.08Q93.44-26.08 93.84-25.60Q94.24-25.12 93.92-24.32L93.92-24.32Q92.48-21.60 89.04-17.52Q85.60-13.44 81.36-9.36Q77.12-5.28 73.12-2.40L73.12-2.40Q71.04-0.80 67.92 0.40Q64.80 1.60 61.60 1.60ZM83.20 58.72L83.20 58.72Q81.28 58.24 79.84 57.76L79.84 57.76Q76.80 56.16 75.52 54.16Q74.24 52.16 74.24 49.92L74.24 49.92Q74.24 46.24 76.72 42Q79.20 37.76 83.20 33.28L83.20 33.28Q87.20 28.48 93.36 23.52Q99.52 18.56 106.24 14Q112.96 9.44 118.08 6.08L118.08 6.08Q120.80 0.48 123.76-5.92Q126.72-12.32 129.44-18.32Q132.16-24.32 134.16-29.28Q136.16-34.24 137.12-36.96L137.12-36.96Q134.56-33.92 131.20-29.36Q127.84-24.80 123.84-19.76Q119.84-14.72 115.60-10.24Q111.36-5.76 106.88-2.96Q102.40-0.16 98.08-0.16L98.08-0.16Q91.68-0.16 89.20-3.44Q86.72-6.72 86.72-11.20L86.72-11.20Q86.72-14.40 87.60-17.60Q88.48-20.80 89.92-23.52L89.92-23.52Q90.88-25.44 92.96-28.64Q95.04-31.84 97.76-35.20Q100.48-38.56 103.28-40.80Q106.08-43.04 108.64-43.04L108.64-43.04Q111.68-43.04 113.28-40.88Q114.88-38.72 113.60-37.92L113.60-37.92Q111.04-36.16 107.28-32.56Q103.52-28.96 99.84-24.32L99.84-24.32Q98.88-23.04 97.52-20.32Q96.16-17.60 95.04-14.48Q93.92-11.36 93.92-8.80L93.92-8.80Q93.92-7.68 94.24-6.64Q94.56-5.60 95.36-5.12L95.36-5.12Q96.64-4.16 98.24-4.16L98.24-4.16Q100.48-4.16 103.28-5.60Q106.08-7.04 108.64-9.28L108.64-9.28Q117.60-17.92 124.64-27.36Q131.68-36.80 139.52-46.08L139.52-46.08Q140-47.68 142.24-47.68L142.24-47.68Q144.80-47.68 147.60-46.16Q150.40-44.64 149.92-43.68L149.92-43.68Q148.48-40.48 146.16-35.20Q143.84-29.92 141.12-23.84Q138.40-17.76 135.68-11.76Q132.96-5.76 130.72-0.96L130.72-0.96Q132.64-1.92 137.60-5.76Q142.56-9.60 148.48-15.12Q154.40-20.64 159.20-26.56L159.20-26.56Q160.16-27.52 160.64-27.52L160.64-27.52Q161.60-27.52 161.60-26.24L161.60-26.24Q161.60-25.12 160.64-23.68L160.64-23.68Q158.24-20.48 154-16.16Q149.76-11.84 144.88-7.44Q140-3.04 135.36 0.56Q130.72 4.16 127.36 6.08L127.36 6.08Q122.40 16.64 117.76 26Q113.12 35.36 109.28 41.12L109.28 41.12Q106.72 45.12 103.04 49.28Q99.36 53.44 95.04 56.24Q90.72 59.04 85.92 59.04L85.92 59.04Q85.28 59.04 84.64 58.96Q84.00 58.88 83.20 58.72ZM83.68 55.20L83.68 55.20Q84.96 55.20 86.80 54.40Q88.64 53.60 90.72 51.84L90.72 51.84Q96.80 46.88 100.96 40.24Q105.12 33.60 108.40 26.24Q111.68 18.88 115.04 12.16L115.04 12.16Q108.80 16.80 100.96 23.12Q93.12 29.44 86.72 35.68L86.72 35.68Q82.88 39.52 81.12 43.28Q79.36 47.04 79.36 49.92L79.36 49.92Q79.36 55.20 83.68 55.20ZM166.56 1.60L166.56 1.60Q159.84 1.60 157.20-1.76Q154.56-5.12 154.56-10.08L154.56-10.08Q154.56-14.72 156.72-21.76Q158.88-28.80 162.40-36.96Q165.92-45.12 170.00-53.20Q174.08-61.28 178.16-68.08Q182.24-74.88 185.28-79.04L185.28-79.04Q188.32-83.04 191.84-87.04Q195.36-91.04 199.68-93.76Q204-96.48 209.44-96.48L209.44-96.48Q213.12-96.48 215.76-94.48Q218.40-92.48 218.40-88.48L218.40-88.48Q218.40-86.88 217.84-84.80Q217.28-82.72 216-80.48L216-80.48Q206.24-63.52 192.72-49.12Q179.20-34.72 164.16-22.40L164.16-22.40Q163.52-20 162.96-18.08Q162.40-16.16 162.08-15.04L162.08-15.04Q161.92-14.24 161.92-13.36Q161.92-12.48 161.92-11.68L161.92-11.68Q161.92-7.84 163.20-4.96Q164.48-2.08 167.52-2.08L167.52-2.08Q170.40-2.08 174.64-4.88Q178.88-7.68 183.20-11.76Q187.52-15.84 191.04-19.68Q194.56-23.52 196-25.60L196-25.60Q196.48-26.08 196.96-26.08L196.96-26.08Q197.60-26.08 198-25.44Q198.40-24.80 197.92-23.84L197.92-23.84Q196.32-21.12 192.80-17.12Q189.28-13.12 184.96-9.04Q180.64-4.96 176.64-1.92L176.64-1.92Q171.68 1.60 166.56 1.60ZM166.40-28.80L166.40-28.80Q172.48-32.96 179.04-39.60Q185.60-46.24 191.92-54.08Q198.24-61.92 203.44-69.60Q208.64-77.28 211.84-83.52L211.84-83.52Q212.80-85.28 213.20-86.64Q213.60-88 213.60-89.12L213.60-89.12Q213.60-92.16 211.04-92.16L211.04-92.16Q208.80-92.16 205.44-89.76L205.44-89.76Q196.80-83.04 189.44-72.56Q182.08-62.08 176.32-50.56Q170.56-39.04 166.40-28.80ZM208.32 2.40L208.32 2.40Q201.12 2.40 195.84-0.96Q190.56-4.32 190.56-11.20L190.56-11.20Q190.56-14.88 192.80-20.16L192.80-20.16Q194.40-23.84 198.72-28.64Q203.04-33.44 208.80-38Q214.56-42.56 220.48-45.52Q226.40-48.48 231.20-48.48L231.20-48.48Q232.96-48.48 234.40-48L234.40-48Q237.12-47.04 238.16-44.96Q239.20-42.88 239.20-40.64L239.20-40.64Q239.20-38.56 238.56-36.64Q237.92-34.72 236.96-33.28L236.96-33.28Q234.08-28.96 228.72-25.60Q223.36-22.24 217.84-20.32Q212.32-18.40 208.80-18.08L208.80-18.08L208.48-18.08Q206.40-18.08 206.40-19.36L206.40-19.36Q206.40-20.16 207.68-20.16L207.68-20.16Q211.52-20.48 217.36-23.76Q223.20-27.04 227.68-30.56L227.68-30.56Q229.60-32.16 232.24-35.04Q234.88-37.92 234.88-40.64L234.88-40.64Q234.88-43.52 232.16-43.52L232.16-43.52Q230.72-43.52 229.20-42.88Q227.68-42.24 226.72-41.92L226.72-41.92Q222.08-39.68 216.48-34.96Q210.88-30.24 206.32-24.40Q201.76-18.56 200-12.64L200-12.64Q199.52-11.36 199.36-10.16Q199.20-8.96 199.20-7.84L199.20-7.84Q199.20-4 201.68-2.40Q204.16-0.80 207.68-0.80L207.68-0.80Q212.96-0.80 218.56-3.12Q224.16-5.44 229.44-9.12Q234.72-12.80 239.12-17.04Q243.52-21.28 246.56-25.28L246.56-25.28Q247.04-25.92 247.68-26Q248.32-26.08 248.48-25.76L248.48-25.76Q249.12-25.60 249.12-24.88Q249.12-24.16 248.80-23.52L248.80-23.52Q244.32-17.28 238-11.36Q231.68-5.44 224.08-1.52Q216.48 2.40 208.32 2.40Z" />
+              </svg></em>.</span>
+        </h1>
+        <div class="hero-copy">
+          <p>
+            A clear place for your documents, with live preview, a flexible
+            workspace and AI when you want a hand.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-accent" href="#download">Download MKEditor</a><a class="button button-outline"
+              href="./web/">Try in your browser</a>
+          </div>
+          <p class="small-note">
+            Free &amp; open source. Windows, macOS, Linux &amp; web.
+          </p>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="media-toolbar">
+          <p>A clean interface designed for productivity.</p>
+          <div class="theme-picker" role="group" aria-label="Screenshot appearance">
+            <button type="button" data-theme-shot="dark" aria-pressed="true">
+              Dark</button><button type="button" data-theme-shot="light" aria-pressed="false">
+              Light
+            </button>
+          </div>
+        </div>
+        <a id="hero-screenshot-link" class="screenshot-link hero-screenshot"
+          href="./assets/screenshots/editor-dark.webp" data-screenshot
+          data-caption="MKEditor 5.0 — the editor and live preview in dark appearance"
+          aria-label="View the MKEditor workspace screenshot at full size"><img id="hero-screenshot"
+            src="./assets/screenshots/editor-dark-1600.webp" srcset="
+                ./assets/screenshots/editor-dark-1600.webp 1600w,
+                ./assets/screenshots/editor-dark.webp      3200w
+              " sizes="(min-width: 1344px) 1248px, calc(100vw - 48px)"
+            alt="MKEditor 5.0: a local folder explorer, Markdown editing and a synchronised live preview in dark appearance."
+            width="1600" height="1000" fetchpriority="high" /><span class="image-expand"><svg class="icon"
+              aria-hidden="true">
+              <use href="#icon-expand" />
+            </svg><span>View full size</span></span></a>
+        <p class="media-caption">
+          Captured from the v5.0 desktop build.
+          <a href="#release-note">About this preview</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="features" class="section container writing-section" aria-labelledby="writing-title">
+      <div class="section-intro">
+        <p class="eyebrow">Built for writers</p>
+        <h2 id="writing-title">
+          A capable editor.<br />A quieter workspace.
+        </h2>
+        <p class="section-lead">
+          Quickly and easily get started writing your markdown documents
+          with MKEditor's rich set of features.
+        </p>
+      </div>
+      <div class="feature-columns">
+        <article>
+          <svg class="icon feature-icon" aria-hidden="true">
+            <use href="#icon-columns" />
+          </svg>
+          <h3>Write and preview together</h3>
+          <p>
+            See the result as you type. Resize the panes, keep scrolling in
+            sync, and choose your preferred preview width.
+          </p>
+        </article>
+        <article>
+          <svg class="icon feature-icon" aria-hidden="true">
+            <use href="#icon-file" />
+          </svg>
+          <h3>Keep your work in reach</h3>
+          <p>
+            Browse folders, filter files and move between tabs. Restore your
+            local workspace and cursor positions when you return.
+          </p>
+        </article>
+        <article>
+          <svg class="icon feature-icon" aria-hidden="true">
+            <use href="#icon-check" />
+          </svg>
+          <h3>Go beyond plain text</h3>
+          <p>
+            CommonMark, tables, highlighted code, alert blocks and LaTeX
+            maths. Export your finished document to HTML or PDF.
+          </p>
+        </article>
+      </div>
+      <div class="writing-detail">
+        <a class="screenshot-link framed-shot" href="./assets/screenshots/editor-light.webp" data-screenshot
+          data-caption="MKEditor 5.0 — Markdown editing and live preview in light appearance"><img
+            src="./assets/screenshots/editor-light-1600.webp" srcset="
+                ./assets/screenshots/editor-light-640.webp   640w,
+                ./assets/screenshots/editor-light-1600.webp 1600w,
+                ./assets/screenshots/editor-light.webp      3200w
+              " sizes="(min-width: 1000px) 780px, calc(100vw - 48px)"
+            alt="The same Fieldnotes document in MKEditor’s light appearance, with its folder explorer and formatted preview."
+            width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
+              <use href="#icon-expand" />
+            </svg><span>Light appearance</span></span></a>
+        <div class="detail-copy">
+          <h3>Familiar tools.<br />Fewer interruptions.</h3>
+          <p>
+            MKEditor is powered by Monaco, with multi-cursor editing, find and replace,
+            undo history and keyboard shortcuts.
+          </p>
+          <ul class="quiet-list">
+            <li>Formatting controls</li>
+            <li>Local images and pasted-image support</li>
+            <li>Light, dark and system themes</li>
+            <li>Available in 13 languages</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai" class="section ai-section" aria-labelledby="ai-title">
+      <div class="container">
+        <div class="split-heading">
+          <div>
+            <p class="eyebrow">Available on Desktop</p>
+            <h2 id="ai-title">
+              A little help,<br />if you ask for it.
+            </h2>
+          </div>
+          <p class="section-lead">
+            Ask for a second opinion, shape an outline or work through a
+            change without leaving your document.
+          </p>
+        </div>
+        <div class="wide-feature">
+          <a class="screenshot-link framed-shot" href="./assets/screenshots/assistant.webp" data-screenshot
+            data-caption="MKEditor 5.0 — an illustrative assistant conversation beside the document"><img
+              src="./assets/screenshots/assistant-1600.webp" srcset="
+                  ./assets/screenshots/assistant-640.webp   640w,
+                  ./assets/screenshots/assistant-1600.webp 1600w,
+                  ./assets/screenshots/assistant.webp      3200w
+                " sizes="(min-width: 1000px) 830px, calc(100vw - 48px)"
+              alt="MKEditor’s AI assistant displays a sample review conversation beside the Markdown document and live preview."
+              width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon"
+                aria-hidden="true">
+                <use href="#icon-expand" />
+              </svg><span>Explore the assistant</span></span></a>
+          <div class="ai-details">
+            <article>
+              <h3>You choose the context</h3>
+              <p>
+                Share the active document or selection, or mention a file with
+                <kbd>@</kbd>. Context controls stay with the conversation.
+              </p>
+            </article>
+            <article>
+              <h3>Review changes first</h3>
+              <p>
+                Workspace writes ask for confirmation by default. Compare
+                proposed edits before they reach your files.
+              </p>
+            </article>
+            <article>
+              <h3>Pick up where you left off</h3>
+              <p>
+                Keep separate conversations for each provider, with saved
+                history and drafts.
+              </p>
+            </article>
+          </div>
+        </div>
+        <div class="provider-row">
+          <article>
+            <p class="provider-name">OpenAI</p>
+            <h3>Your ChatGPT plan,<br />or your API key.</h3>
+            <p>
+              Sign in through your browser to use your plan for eligible
+              requests. You can also choose API-key access explicitly.
+            </p>
+            <p class="provider-note">
+              Plan limits apply. No automatic switch to API billing.
+            </p>
+          </article>
+          <article>
+            <p class="provider-name">Anthropic</p>
+            <h3>Claude through<br />your API key.</h3>
+            <p>
+              Connect an Anthropic API key and use their frontier models for your work.
+            </p>
+            <p class="provider-note">
+              Claude subscriptions cannot be used in MKEditor.
+            </p>
+          </article>
+          <article>
+            <p class="provider-name">Ollama</p>
+            <h3>Keep the model<br />on your machine.</h3>
+            <p>
+              Connect a local Ollama installation, select an installed model
+              and set its context allocation.
+            </p>
+            <p class="provider-note">
+              Your own local runtime. No provider API key.
+            </p>
+          </article>
+        </div>
+        <p class="section-footnote">
+          View our <a href="./privacy/#ai">privacy policy</a> to learn how AI data is handled.
+        </p>
+      </div>
+    </section>
+
+    <section id="drive" class="section container drive-section" aria-labelledby="drive-title">
+      <div class="split-heading">
+        <div>
+          <p class="eyebrow drive-eyebrow">
+            <img src="./assets/img/google-drive.png" alt="" width="22" height="22" />Google Drive <span
+              class="status-label">Beta</span>
+          </p>
+          <h2 id="drive-title">Your Drive files.<br />In your workspace.</h2>
+        </div>
+        <p class="section-lead">
+          Move between local folders and Google Drive.
+          Open and edit your Markdown files within the editor. Upload local files.
+        </p>
+      </div>
+      <a class="screenshot-link framed-shot drive-main-shot" href="./assets/screenshots/google-drive.webp"
+        data-screenshot data-caption="MKEditor 5.0 — Google Drive browsing and a remote Markdown document"><img
+          src="./assets/screenshots/google-drive-1600.webp" srcset="
+              ./assets/screenshots/google-drive-640.webp   640w,
+              ./assets/screenshots/google-drive-1600.webp 1600w,
+              ./assets/screenshots/google-drive.webp      3200w
+            " sizes="(min-width: 1344px) 1248px, calc(100vw - 48px)"
+          alt="MKEditor’s top toolbar selects My Drive while Explorer lists Drive folders and Markdown files; a document is open for editing and preview."
+          width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
+            <use href="#icon-expand" />
+          </svg><span>See the Drive workspace</span></span></a>
+      <div class="recovery-detail">
+        <a class="screenshot-link framed-shot" href="./assets/screenshots/recovery.webp" data-screenshot
+          data-caption="MKEditor 5.0 — comparing a changed Drive document with the local draft"><img
+            src="./assets/screenshots/recovery-640.webp" srcset="
+                ./assets/screenshots/recovery-640.webp   640w,
+                ./assets/screenshots/recovery-1600.webp 1600w
+              " sizes="(min-width: 800px) 440px, calc(100vw - 48px)"
+            alt="A real MKEditor comparison view shows the current Drive document alongside the local version after a save conflict."
+            width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
+              <use href="#icon-expand" />
+            </svg><span>Conflict comparison</span></span></a>
+        <div>
+          <p class="eyebrow">When versions disagree</p>
+          <h3>See the change.<br />Keep your draft.</h3>
+          <p>
+            You can reject saves when conflicts arise. MKEditor shows the current Drive version alongside your local
+            edits, so you can compare and decide what to keep.
+            A rejected save leaves your local edits intact, so you can decide
+            what to keep.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="section settings-section" aria-labelledby="settings-title">
+      <div class="container">
+        <div class="split-heading">
+          <div>
+            <p class="eyebrow">Make it yours</p>
+            <h2 id="settings-title">
+              Settle into<br />your own way of working.
+            </h2>
+          </div>
+          <p class="section-lead">
+            Choose your appearance, editor behaviour and preview styling. Keep
+            useful shortcuts close, and export when the document is ready.
+          </p>
+        </div>
+        <div class="screenshot-grid">
+          <figure>
+            <a class="screenshot-link framed-shot" href="./assets/screenshots/preferences.webp" data-screenshot
+              data-caption="MKEditor 5.0 — editor preferences"><img src="./assets/screenshots/preferences-640.webp"
+                srcset="
+                    ./assets/screenshots/preferences-640.webp   640w,
+                    ./assets/screenshots/preferences-1600.webp 1600w
+                  " sizes="(min-width: 1000px) 600px, calc(100vw - 48px)"
+                alt="MKEditor’s preferences dialog with its section navigation and editor settings." width="1600"
+                height="1000" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
+                  <use href="#icon-expand" />
+                </svg></span></a>
+            <figcaption>
+              <h3>A workspace that fits</h3>
+              <p>
+                Adjust editing, appearance, preview and workspace preferences.
+              </p>
+            </figcaption>
+          </figure>
+          <figure>
+            <a class="screenshot-link framed-shot" href="./assets/screenshots/providers.webp" data-screenshot
+              data-caption="MKEditor 5.0 — AI provider settings and ChatGPT sign-in"><img
+                src="./assets/screenshots/providers-640.webp" srcset="
+                    ./assets/screenshots/providers-640.webp   640w,
+                    ./assets/screenshots/providers-1600.webp 1600w
+                  " sizes="(min-width: 1000px) 600px, calc(100vw - 48px)"
+                alt="AI provider settings show Anthropic API-key access and OpenAI’s ChatGPT plan connection method."
+                width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon"
+                  aria-hidden="true">
+                  <use href="#icon-expand" />
+                </svg></span></a>
+            <figcaption>
+              <h3>Your provider, your choice</h3>
+              <p>
+                Choose connection methods, models and thinking preferences.
+              </p>
+            </figcaption>
+          </figure>
+          <figure id="export">
+            <a class="screenshot-link framed-shot" href="./assets/screenshots/export.webp" data-screenshot
+              data-caption="MKEditor 5.0 — HTML and PDF export preferences"><img
+                src="./assets/screenshots/export-640.webp" srcset="
+                    ./assets/screenshots/export-640.webp   640w,
+                    ./assets/screenshots/export-1600.webp 1600w
+                  " sizes="(min-width: 1000px) 600px, calc(100vw - 48px)"
+                alt="MKEditor’s export preferences for styled output, document width and text appearance." width="1600"
+                height="1000" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
+                  <use href="#icon-expand" />
+                </svg></span></a>
+            <figcaption>
+              <h3>Ready to leave the editor</h3>
+              <p>
+                Export to HTML or PDF, with control over document styling.
+              </p>
+            </figcaption>
+          </figure>
+          <figure id="shortcuts">
+            <a class="screenshot-link framed-shot" href="./assets/screenshots/shortcuts.webp" data-screenshot
+              data-caption="MKEditor 5.0 — keyboard shortcuts"><img src="./assets/screenshots/shortcuts-640.webp"
+                srcset="
+                    ./assets/screenshots/shortcuts-640.webp   640w,
+                    ./assets/screenshots/shortcuts-1600.webp 1600w
+                  " sizes="(min-width: 1000px) 600px, calc(100vw - 48px)"
+                alt="The keyboard shortcut reference in MKEditor, with editing and formatting commands grouped by task."
+                width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon"
+                  aria-hidden="true">
+                  <use href="#icon-expand" />
+                </svg></span></a>
+            <figcaption>
+              <h3>Stay with the keyboard</h3>
+              <p>
+                Find editing, formatting and navigation shortcuts in one
+                place.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="download" class="section container download-section" aria-labelledby="download-title">
+      <div class="split-heading">
+        <div>
+          <p class="eyebrow">Completely 100% free</p>
+          <h2 id="download-title">A good place<br />to start writing.</h2>
+        </div>
+        <div>
+          <p class="section-lead">
+            Install MKEditor on your desktop. Supported for all major operating systems.
+          </p>
+        </div>
+      </div>
+      <div class="download-grid">
+        <article>
+          <p class="download-format">Desktop / EXE</p>
+          <h3>Windows</h3>
+          <p>Install the desktop app for local workspaces and optional AI.</p>
+          <a class="button button-accent" data-download="windows"
+            href="https://github.com/versyxdigital/mkeditor/releases/download/v4.1.0/mkeditor-setup-4.1.0.exe">Download
+            for Windows</a>
+          <p class="download-version">
+            Published release <span data-version="windows">v4.1.0</span>
+          </p>
+        </article>
+        <article>
+          <p class="download-format">Desktop / PKG</p>
+          <h3>macOS</h3>
+          <p>Use MKEditor as a desktop application on your Mac.</p>
+          <a class="button button-outline" data-download="macos"
+            href="https://github.com/versyxdigital/mkeditor/releases/download/v3.6.0/mkeditor-setup-3.6.0.pkg">Download
+            for macOS</a>
+          <p class="download-version">
+            Latest published PKG <span data-version="macos">v3.6.0</span>
+          </p>
+        </article>
+        <article>
+          <p class="download-format">Desktop / DEB</p>
+          <h3>Linux</h3>
+          <p>A Debian package for supported Linux desktop environments.</p>
+          <a class="button button-outline" data-download="linux"
+            href="https://github.com/versyxdigital/mkeditor/releases/download/v4.1.0/mkeditor-setup-4.1.0.deb">Download
+            for Linux</a>
+          <p class="download-version">
+            Published release <span data-version="linux">v4.1.0</span>
+          </p>
+        </article>
+      </div>
+      <div id="web" class="browser-option">
+        <div>
+          <p class="eyebrow">Prefer a browser?</p>
+          <h3>No installation. Just a document.</h3>
+          <p>
+            Use the existing web editor for Markdown and live preview.
+            Desktop-only AI and Drive connections stay in the desktop app.
+          </p>
+        </div>
+        <a class="button button-light" href="./web/">Open the web editor</a>
+      </div>
+      <div class="download-links">
+        <a href="https://github.com/versyxdigital/mkeditor/releases">All releases &amp; release notes</a><a
+          href="https://github.com/versyxdigital/mkeditor#contributing">Build from source</a>
+      </div>
+    </section>
+
+    <section class="section container faq-section" aria-labelledby="faq-title">
+      <div class="faq-heading">
+        <p class="eyebrow">A few useful answers</p>
+        <h2 id="faq-title">Before you<br />settle in.</h2>
+        <p>
+          More detail in the
+          <a href="https://github.com/versyxdigital/mkeditor#readme">project documentation</a>.
+        </p>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>Is MKEditor free?</summary>
+          <div>
+            <p>
+              Yes. MKEditor is free and open source under the MIT licence.
+              Local editing needs no MKEditor account. Optional AI services
+              may have their own subscription limits or API charges.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Can I use my ChatGPT subscription?</summary>
+          <div>
+            <p>
+              Yes, MKEDitor offers ChatGPT sign-in.
+              Eligible requests use your plan and share its limits. API-key
+              access is a separate, explicit choice; MKEditor does not
+              silently fall back to API billing.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>What about a Claude subscription?</summary>
+          <div>
+            <p>
+              Claude subscriptions cannot be used in MKEditor. Anthropic
+              access requires an API key and uses Anthropic’s API billing. You
+              can also connect OpenAI or run a model locally through Ollama.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>How does Google Drive access work?</summary>
+          <div>
+            <p>
+              Connect your Google account from Settings → Connections. Access
+              starts read-only. Enable editing separately to save and create
+              Markdown files in My Drive. Google requests full Drive
+              permission for editing.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>Are my documents uploaded anywhere?</summary>
+          <div>
+            <p>
+              Local editing does not upload your documents to a Versyx Digital
+              storage service. Optional Drive and AI connections send
+              information to the service you choose. The assistant has
+              controls for sharing the active document, selection and
+              mentioned files. Read the
+              <a href="./privacy/">privacy policy</a> for details.
+            </p>
+          </div>
+        </details>
+        <details>
+          <summary>What is different in the browser version?</summary>
+          <div>
+            <p>
+              The browser editor supports Markdown writing and live preview.
+              Local folder access needs a browser with File System Access
+              support, such as Chrome or Edge. AI providers and authenticated
+              Drive connections are desktop-only.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="changelog" class="closing-section container">
+      <img src="./assets/img/icon.png" alt="" width="44" height="44" />
+      <div>
+        <h2>Your next draft is a good place to begin.</h2>
+        <p>
+          Open a document. Find a little focus. Enjoy your writing.
+        </p>
+      </div>
+      <a class="button button-accent" href="#download">Get MKEditor</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-main">
+        <a class="brand" href="./"><img src="./assets/img/icon.png" alt="" width="28"
+            height="28" /><span>MKEditor</span></a>
+        <p>
+          A Markdown editor by
+          <a href="https://versyx.digital/">Versyx Digital</a>.
+        </p>
+        <nav aria-label="Footer navigation">
+          <a href="https://github.com/versyxdigital/mkeditor">GitHub</a><a
+            href="https://github.com/versyxdigital/mkeditor/issues">Report an issue</a><a
+            href="./privacy/">Privacy</a><a href="./terms/">Terms</a>
+        </nav>
+      </div>
+      <p class="footer-note">
+        Free and open source under the MIT licence. Screenshots show the v5.0
+        desktop build with an illustrative demo workspace and assistant
+        conversation; no live accounts were used. Google Drive and provider
+        names belong to their respective owners.
+      </p>
+    </div>
+  </footer>
 </body>
 </html>

@@ -51,13 +51,7 @@ the machine; it does not download a browser. It writes screenshots to
 
 Everything the site says lives in `src/content`. No component contains copy.
 
-The standalone product sites live in `public/` and are copied unchanged into
-`dist/`. MKEditor's legal pages are `public/mkeditor/privacy/index.html` and
-`public/mkeditor/terms/index.html`. They share the product stylesheet and add
-their page layout in `public/mkeditor/assets/legal.css`. The imported MKEditor
-JavaScript bundle includes the product footer's `/mkeditor/privacy/` and
-`/mkeditor/terms/` links; preserve those links when replacing the bundle with
-a newer upstream build.
+The standalone product sites live in `public/` and are copied unchanged into `dist/`. MKEditor's product page is maintained directly as HTML, CSS and JavaScript. Its existing browser application and legal pages remain separate; see the MKEditor product page notes below.
 
 | File | What it holds |
 | --- | --- |
@@ -132,3 +126,27 @@ The flow of an interaction:
   static isometric plot from the same wave function.
 - The field is one draw call with all motion in the vertex shader. Quality
   adapts to measured frame time and rendering pauses when the tab is hidden.
+
+## MKEditor product page
+
+The MKEditor product page is maintained directly in `public/mkeditor/index.html`, `public/mkeditor/assets/product.css` and `public/mkeditor/assets/product.js`. It is a standalone static page, copied unchanged into `dist/` by the portfolio build. Editing it does not require rebuilding a separate imported React bundle. Keep the footer's privacy and terms links and the browser-editor route intact.
+
+Fresh v5.0 desktop screenshots are in `public/mkeditor/assets/screenshots/`; provenance and asset names are documented in `public/mkeditor/SCREENSHOTS.md`. Capture the current built app with the isolated demo workspace, retain the 3200 × 2000 originals, and generate full-size, 1600px and 640px WebP derivatives. Use the smaller files in responsive layouts and full files for enlarged viewing. Keep the five MKEditor images and thumbnails in `src/assets/projects/` aligned with the product page.
+
+To regenerate the full screenshot set on Windows, install dependencies and build the current MKEditor checkout first. With sibling `rowles-portfolio` and `mkeditor` checkouts, run the following from the portfolio root. FFmpeg must be available on `PATH`.
+
+```powershell
+$env:MKEDITOR_SOURCE_ROOT = (Resolve-Path '../mkeditor').Path
+$env:ELECTRON_RUN_AS_NODE = $null
+& "$env:MKEDITOR_SOURCE_ROOT/node_modules/electron/dist/electron.exe" scripts/capture-mkeditor.cjs
+powershell -File scripts/prepare-mkeditor-assets.ps1
+npm run test:mkeditor
+```
+
+`capture-mkeditor.cjs` uses an isolated Electron profile and demo data, producing originals under `qa-screens/mkeditor-captures/originals/`. Set `MKEDITOR_CAPTURE_DIR` to choose a different capture directory. `prepare-mkeditor-assets.ps1` validates all nine originals and generates lossless WebP variants, portfolio images/thumbnails and replacements for the legacy product screenshot filenames. Its output paths are checked against the portfolio root before writing. It preserves the existing product mark and legal pages, and does not delete files.
+
+The page distinguishes the v5.0 preview from published installers. Download enhancement checks GitHub releases separately for Windows, macOS and Linux, retaining verified fallback links if the request fails. Do not assume all three platforms have the same published version.
+
+The embedded browser application under `public/mkeditor/web/` is separately versioned; refreshing product copy or screenshots does not update its bundle. The privacy and terms pages share `product.css` with the homepage and add their reading, contents navigation and print layout in `legal.css`. Do not remove these assets when retiring the old product-page JavaScript.
+
+Run the portfolio's type checking, lint, tests and production build after content changes. Browser checks should cover mobile and desktop layouts, all image sizes, theme switching, screenshot enlargement, keyboard/focus handling, failed release lookups, legal links and the browser-editor link. Browser QA uses the existing `playwright-core` dependency and installed Chrome or Edge; it does not require downloading another browser.

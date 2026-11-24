@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run test:e2e",
-    "test:e2e": "node e2e/smoke.mjs"
+    "test:e2e": "node e2e/smoke.mjs",
+    "test:mkeditor": "node scripts/check-mkeditor.cjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
