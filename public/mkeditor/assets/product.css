@@ -378,6 +378,21 @@ p {
   gap: 10px;
   margin-top: 28px;
 }
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.hero-badges a {
+  display: inline-flex;
+  border-radius: 3px;
+}
+.hero-badges img {
+  width: auto;
+  height: 20px;
+}
 .hero-media {
   margin-top: 58px;
 }
@@ -426,7 +441,7 @@ p {
 }
 .screenshot-link img {
   width: 100%;
-  aspect-ratio: 1.6;
+  aspect-ratio: auto;
   object-fit: contain;
   background: #1e2123;
 }

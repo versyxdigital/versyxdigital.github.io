@@ -1,0 +1,1 @@
+"use strict";(Array.isArray(self.webpackChunkmkeditor)?self.webpackChunkmkeditor:self.webpackChunkmkeditor=[]).push([[3192],{13192(e,r,k){k.d(r,{createArchitectureServices:()=>c.S});var c=k(84549);k(80184)}}]);

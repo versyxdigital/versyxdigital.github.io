@@ -9,8 +9,11 @@
       const theme = button.dataset.themeShot;
       if (!hero || !["dark", "light"].includes(theme)) return;
       const base = `./assets/screenshots/editor-${theme}`;
+      const [width, height] = [1919, 1079];
+      hero.width = width;
+      hero.height = height;
       hero.src = `${base}-1600.webp`;
-      hero.srcset = `${base}-640.webp 640w, ${base}-1600.webp 1600w, ${base}.webp 3200w`;
+      hero.srcset = `${base}-640.webp 640w, ${base}-1600.webp 1600w, ${base}.webp ${width}w`;
       hero.alt = `MKEditor in ${theme} mode, with a file explorer, Markdown editor and live preview.`;
       if (heroLink) {
         heroLink.href = `${base}.webp`;

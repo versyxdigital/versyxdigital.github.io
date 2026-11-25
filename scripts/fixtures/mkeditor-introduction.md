@@ -1,0 +1,50 @@
+# Welcome to MKEditor
+
+Thank you for choosing MKEditor 😊, I hope you find this tool useful for all your markdown needs!
+
+If you have any issues or questions, please feel free to submit an issue over at [Github](https://github.com/versyxdigital/mkeditor/issues).
+
+---
+
+```mermaid
+flowchart LR
+  Draft --> Review --> Publish
+```
+
+Open the help menu using the button at the top right for a complete list of editor shortcuts.
+
+You can also view a cheatsheet [here](https://versyxdigital.github.io/mkeditor/shortcuts).
+
+---
+
+MKEditor fully supports the [CommonMark](https://commonmark.org/) spec and comes with a few additional goodies.
+
+::: primary
+✨ Create alerts
+:::
+
+::: danger
+✨ Wow
+:::
+
+::: warning
+✨ So
+:::
+
+::: success
+✨ Cool
+:::
+
+Format some code:
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+    document.body.write('Syntax-highlighted codeblock!')
+})
+```
+
+MKEditor also includes a built-in, resizable preview renderer and support for exporting your markdown to HTML, with or without styles 🚀.
+
+Customize your settings, switch between light mode and dark mode, write some documents and have fun!
+
+Built with ❤️ by [Versyx Digital](https://versyxdigital.github.io/)

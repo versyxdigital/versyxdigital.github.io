@@ -1,5 +1,7 @@
 param(
-  [switch]$StaticOnly
+  [switch]$StaticOnly,
+  [ValidateSet('editor-dark', 'editor-light', 'assistant', 'google-drive', 'providers', 'preferences', 'export', 'shortcuts', 'recovery')]
+  [string[]]$Views = @('editor-dark', 'editor-light', 'assistant', 'google-drive', 'providers', 'preferences', 'export', 'shortcuts', 'recovery')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -39,7 +41,7 @@ if ($StaticOnly) {
   return
 }
 
-$names = @('editor-dark', 'editor-light', 'assistant', 'google-drive', 'providers', 'preferences', 'export', 'shortcuts', 'recovery')
+$names = @($Views | Select-Object -Unique)
 foreach ($name in $names) {
   $inputFile = Join-Path $screenshotsRoot ($name + '.png')
   if (-not (Test-Path -LiteralPath $inputFile -PathType Leaf)) {
@@ -100,6 +102,7 @@ $portfolioMapping = @(
   @{ Name = 'mkeditor-05'; Shot = 'recovery'; Thumb = 'mkeditor-05-thumb' }
 )
 foreach ($item in $portfolioMapping) {
+  if ($names -notcontains $item.Shot) { continue }
   Copy-Item -LiteralPath (Join-Path $outputRoot ($item.Shot + '.webp')) -Destination (Join-Path $portfolioAssetsRoot ($item.Name + '.webp')) -Force
   Copy-Item -LiteralPath (Join-Path $outputRoot ($item.Shot + '-640.webp')) -Destination (Join-Path $portfolioAssetsRoot ($item.Thumb + '.webp')) -Force
 }
@@ -111,10 +114,15 @@ $legacyMapping = @(
   @{ Name = 'settings.webp'; Shot = 'preferences' }
 )
 foreach ($item in $legacyMapping) {
+  if ($names -notcontains $item.Shot) { continue }
   Copy-Item -LiteralPath (Join-Path $outputRoot ($item.Shot + '.webp')) -Destination (Join-Path $imagesRoot $item.Name) -Force
 }
-Copy-Item -LiteralPath (Join-Path $screenshotsRoot 'export.png') -Destination (Join-Path $imagesRoot 'export-settings.png') -Force
-Copy-Item -LiteralPath (Join-Path $screenshotsRoot 'shortcuts.png') -Destination (Join-Path $imagesRoot 'shortcuts.png') -Force
+if ($names -contains 'export') {
+  Copy-Item -LiteralPath (Join-Path $screenshotsRoot 'export.png') -Destination (Join-Path $imagesRoot 'export-settings.png') -Force
+}
+if ($names -contains 'shortcuts') {
+  Copy-Item -LiteralPath (Join-Path $screenshotsRoot 'shortcuts.png') -Destination (Join-Path $imagesRoot 'shortcuts.png') -Force
+}
 
 $total = (Get-ChildItem -LiteralPath $outputRoot -File | Measure-Object Length -Sum).Sum
-Write-Output "Prepared 27 screenshot WebPs, ten portfolio images/thumbnails, six legacy screenshot replacements, font/license and brand assets. Screenshot total: $([math]::Round($total / 1MB, 2)) MB."
+Write-Output "Prepared $($names.Count * 3) screenshot WebPs and their matching portfolio and legacy assets, font/license and brand assets. Screenshot total: $([math]::Round($total / 1MB, 2)) MB."

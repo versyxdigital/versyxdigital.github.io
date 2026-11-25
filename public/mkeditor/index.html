@@ -12,7 +12,7 @@
   <link rel="icon" href="./favicon.ico" />
   <link rel="preload" href="./assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="./assets/screenshots/editor-dark-1600.webp" as="image"
-    imagesrcset="./assets/screenshots/editor-dark-1600.webp 1600w, ./assets/screenshots/editor-dark.webp 3200w"
+    imagesrcset="./assets/screenshots/editor-dark-640.webp 640w, ./assets/screenshots/editor-dark-1600.webp 1600w, ./assets/screenshots/editor-dark.webp 1919w"
     imagesizes="(min-width: 1344px) 1248px, calc(100vw - 48px)" />
   <link rel="stylesheet" href="./assets/product.css" />
   <script src="./assets/product.js" defer></script>
@@ -131,6 +131,17 @@
             <a class="button button-accent" href="#download">Download MKEditor</a><a class="button button-outline"
               href="./web/">Try in your browser</a>
           </div>
+          <div class="hero-badges" role="group" aria-label="GitHub project status">
+            <a href="https://github.com/versyxdigital/mkeditor/stargazers"><img
+                src="https://img.shields.io/github/stars/versyxdigital/mkeditor?style=flat&amp;label=Stars&amp;logo=github"
+                alt="GitHub stars" height="20" /></a>
+            <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml"><img
+                src="https://github.com/versyxdigital/mkeditor/actions/workflows/tests.yml/badge.svg"
+                alt="CI status" height="20" /></a>
+            <a href="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql"><img
+                src="https://github.com/versyxdigital/mkeditor/actions/workflows/github-code-scanning/codeql/badge.svg"
+                alt="CodeQL status" height="20" /></a>
+          </div>
           <p class="small-note">
             Free &amp; open source. Windows, macOS, Linux &amp; web.
           </p>
@@ -151,11 +162,12 @@
           data-caption="MKEditor 5.0 — the editor and live preview in dark appearance"
           aria-label="View the MKEditor workspace screenshot at full size"><img id="hero-screenshot"
             src="./assets/screenshots/editor-dark-1600.webp" srcset="
+                ./assets/screenshots/editor-dark-640.webp   640w,
                 ./assets/screenshots/editor-dark-1600.webp 1600w,
-                ./assets/screenshots/editor-dark.webp      3200w
+                ./assets/screenshots/editor-dark.webp      1919w
               " sizes="(min-width: 1344px) 1248px, calc(100vw - 48px)"
             alt="MKEditor 5.0: a local folder explorer, Markdown editing and a synchronised live preview in dark appearance."
-            width="1600" height="1000" fetchpriority="high" /><span class="image-expand"><svg class="icon"
+            width="1919" height="1079" fetchpriority="high" /><span class="image-expand"><svg class="icon"
               aria-hidden="true">
               <use href="#icon-expand" />
             </svg><span>View full size</span></span></a>
@@ -170,7 +182,7 @@
       <div class="section-intro">
         <p class="eyebrow">Built for writers</p>
         <h2 id="writing-title">
-          A capable editor.<br />A quieter workspace.
+          A capable editor.<br />A clean workspace.
         </h2>
         <p class="section-lead">
           Quickly and easily get started writing your markdown documents
@@ -215,10 +227,10 @@
             src="./assets/screenshots/editor-light-1600.webp" srcset="
                 ./assets/screenshots/editor-light-640.webp   640w,
                 ./assets/screenshots/editor-light-1600.webp 1600w,
-                ./assets/screenshots/editor-light.webp      3200w
+                ./assets/screenshots/editor-light.webp      1919w
               " sizes="(min-width: 1000px) 780px, calc(100vw - 48px)"
-            alt="The same Fieldnotes document in MKEditor’s light appearance, with its folder explorer and formatted preview."
-            width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
+            alt="MKEditor in light appearance, with a folder explorer, Markdown editor, live preview and AI assistant."
+            width="1919" height="1079" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
               <use href="#icon-expand" />
             </svg><span>Light appearance</span></span></a>
         <div class="detail-copy">
@@ -243,7 +255,7 @@
           <div>
             <p class="eyebrow">Available on Desktop</p>
             <h2 id="ai-title">
-              A little help,<br />if you ask for it.
+              A little help,<br />from your assistant.
             </h2>
           </div>
           <p class="section-lead">
@@ -259,7 +271,7 @@
                   ./assets/screenshots/assistant-1600.webp 1600w,
                   ./assets/screenshots/assistant.webp      3200w
                 " sizes="(min-width: 1000px) 830px, calc(100vw - 48px)"
-              alt="MKEditor’s AI assistant displays a sample review conversation beside the Markdown document and live preview."
+              alt="MKEditor’s AI assistant explains the Mermaid flowchart in introduction.md beside the Markdown document and live preview."
               width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon"
                 aria-hidden="true">
                 <use href="#icon-expand" />
@@ -291,7 +303,7 @@
         <div class="provider-row">
           <article>
             <p class="provider-name">OpenAI</p>
-            <h3>Your ChatGPT plan,<br />or your API key.</h3>
+            <h3>Your ChatGPT plan,<br /> or your API key.</h3>
             <p>
               Sign in through your browser to use your plan for eligible
               requests. You can also choose API-key access explicitly.
@@ -302,7 +314,7 @@
           </article>
           <article>
             <p class="provider-name">Anthropic</p>
-            <h3>Claude through<br />your API key.</h3>
+            <h3>Claude through<br /> your API key.</h3>
             <p>
               Connect an Anthropic API key and use their frontier models for your work.
             </p>
@@ -312,7 +324,7 @@
           </article>
           <article>
             <p class="provider-name">Ollama</p>
-            <h3>Keep the model<br />on your machine.</h3>
+            <h3>Keep the model<br /> on your machine.</h3>
             <p>
               Connect a local Ollama installation, select an installed model
               and set its context allocation.
