@@ -17,6 +17,8 @@
   --quiet: #94a09c;
   --accent: #a6d4c6;
   --accent-dark: #183d33;
+  --color-coffee: #f0a868;
+  --color-coffee-hi: #ffc38d;
   --content: 1248px;
   font-family:
     Geist,
@@ -392,6 +394,50 @@ p {
 .hero-badges img {
   width: auto;
   height: 20px;
+}
+.coffee-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid rgba(240, 168, 104, 0.5);
+  border-radius: 999px;
+  background: rgba(240, 168, 104, 0.1);
+  color: var(--color-coffee);
+  text-decoration: none;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out;
+}
+.coffee-button:hover {
+  border-color: rgba(240, 168, 104, 0.8);
+  background: rgba(240, 168, 104, 0.22);
+  color: var(--color-coffee-hi);
+}
+.coffee-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid rgba(240, 168, 104, 0.4);
+  border-radius: 50%;
+  background: rgba(240, 168, 104, 0.18);
+}
+.coffee-icon .icon {
+  width: 16px;
+  height: 16px;
+}
+.coffee-label {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .coffee-button {
+    transition: none;
+  }
 }
 .hero-media {
   margin-top: 58px;

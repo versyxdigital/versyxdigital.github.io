@@ -1,0 +1,1 @@
+(()=>{const o=location.href;history.replaceState(null,"",location.pathname),window.opener&&window.opener!==window&&window.opener.postMessage({type:"mkeditor-cloud-oauth",url:o},location.origin)})();

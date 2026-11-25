@@ -121,7 +121,9 @@
     "provider_disabled": "無効",
     "ollama_context_label": "コンテキストウィンドウ（トークン）",
     "ollama_context_default": "Ollamaの既定値",
-    "ollama_context_help": "会話履歴、ツール定義、ファイルの内容を含みます。文書には32,768をお試しください。大きいほどメモリが必要です。モデルの上限を超えないでください。今後のメッセージに適用されます。"
+    "ollama_context_help": "会話履歴、ツール定義、ファイルの内容を含みます。文書には32,768をお試しください。大きいほどメモリが必要です。モデルの上限を超えないでください。今後のメッセージに適用されます。",
+    "auto_open_files_label": "AI が作成したファイルを開く",
+    "auto_open_files_help": "新しく作成されたファイルをエディターのタブで自動的に開きます。"
   },
   "assistant-tools": {
     "confirm_title": "{{toolName}} を許可しますか?",
@@ -203,6 +205,13 @@
     "callback_return": "このタブを閉じて MKEditor に戻れます。"
   },
   "cloud": {
+    "dropbox_move_unavailable": "移動前に元のファイルが変更される可能性があるため、Dropbox のファイルは移動できません。",
+    "web_storage_error": "ブラウザーストレージにアクセスできませんでした。このサイトのストレージ権限と空き容量を確認し、もう一度お試しください。",
+    "web_busy": "クラウドストレージが別のタブで開かれています。そのタブを閉じてから、このタブを再読み込みしてください。",
+    "web_lock_unavailable": "このブラウザーは、安全なクラウド編集に必要なストレージのロックに対応していません。",
+    "web_intro": "Google Drive または Dropbox に接続します。タブを閉じたり再読み込みしたりした後は再接続が必要ですが、アカウントと下書きは保存されます。",
+    "web_unavailable": "クラウドストレージには HTTPS と利用可能なブラウザーストレージが必要です。",
+    "web_config_unavailable": "このサイトでは、このプロバイダーのブラウザーログインが設定されていません。",
     "created_duplicate": "{{name}} を作成しました。このフォルダーに同じ名前の項目があるため、両方を保持しました。",
     "connections": "接続",
     "intro": "Google ドライブに接続して Markdown ファイルを参照・表示できます。",
@@ -348,7 +357,11 @@
       "tab_label": "{{connection}} の {{name}}（Dropbox）",
       "recovered_draft": "ローカルの下書きを復元しました。保存する前に Dropbox を確認してください。",
       "checking_recovery": "復元したドキュメントを Dropbox と照合中…"
-    }
+    },
+    "web_reconnect": "{{provider}} に再接続",
+    "web_reconnect_status": "再接続が必要",
+    "web_reconnect_help": "アカウントは保存されています。ファイルを閲覧するには再接続してください。",
+    "web_reconnect_document": "この文書を確認するには {{provider}} に再接続してください。ローカルコピーは保持されています。"
   },
   "menus-alerts": {
     "primary": "プライマリ",
@@ -632,7 +645,11 @@
     "move_into_self_refused": "フォルダを自分自身の中に移動することはできません",
     "move_same_source": "既にその場所にあります",
     "move_collision": "同じ名前のファイルまたはフォルダが既に存在します",
-    "move_parent_missing": "移動先のフォルダが存在しません"
+    "move_parent_missing": "移動先のフォルダが存在しません",
+    "external_draft_name": "{{name}}（復元済み）",
+    "external_files_recovered": "ディスク上のファイルが削除または置換されました。テキストは未保存のタブに保持されています。",
+    "external_file_missing_save": "元のファイルが見つからないか、置換されています。テキストは開いたままです。「名前を付けて保存」でコピーを保存してください。",
+    "filesystem_watch_limit": "一部のフォルダーは自動更新の上限を超えています。ワークスペースを開き直して更新してください。"
   },
   "sidebar": {
     "explorer": "エクスプローラー",
@@ -669,6 +686,8 @@
     "export_pdf_tooltip": "PDF ファイルに書き出す",
     "export_to_prefix": "書き出し先 ",
     "export_html_label": "HTML",
-    "export_pdf_label": "PDF"
+    "export_pdf_label": "PDF",
+    "hide_editor": "エディターを非表示",
+    "show_editor": "エディターを表示"
   }
 }

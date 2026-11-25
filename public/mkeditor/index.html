@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#111416" />
   <meta name="description"
-    content="Meet MKEditor 5.0: a focused, free Markdown editor with live preview, optional AI, ChatGPT plan sign-in and experimental Google Drive support. Explore the new workspace." />
+    content="Meet MKEditor 5.0: a focused, free Markdown editor with live preview, optional AI, ChatGPT plan sign-in, plus Google Drive and Dropbox support. Explore the new workspace." />
   <title>MKEditor — Markdown with style.</title>
   <link rel="canonical" href="https://versyx.digital/mkeditor/" />
   <link rel="icon" href="./favicon.ico" />
@@ -19,7 +19,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="MKEditor — A clearer space for Markdown" />
   <meta property="og:description"
-    content="Explore the new v5.0 workspace. Live preview, optional AI, ChatGPT sign-in and experimental Google Drive support. Free and open source." />
+    content="Explore the new v5.0 workspace. Live preview, optional AI, ChatGPT sign-in, Google Drive and Dropbox support. Free and open source." />
   <meta property="og:url" content="https://versyx.digital/mkeditor/" />
   <meta property="og:image" content="https://versyx.digital/mkeditor/assets/screenshots/editor-dark.webp" />
   <meta property="og:image:alt"
@@ -27,7 +27,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="MKEditor — Markdown with style." />
   <meta name="twitter:description"
-    content="A focused, free Markdown editor. Explore the new v5.0 workspace, optional AI and experimental Google Drive support." />
+    content="A focused, free Markdown editor. Explore the new v5.0 workspace, optional AI, Google Drive and Dropbox support." />
   <meta name="twitter:image" content="https://versyx.digital/mkeditor/assets/screenshots/editor-dark.webp" />
   <script type="application/ld+json">
       {
@@ -39,7 +39,7 @@
         "softwareVersion": "5.0.0 preview",
         "url": "https://versyx.digital/mkeditor/",
         "image": "https://versyx.digital/mkeditor/assets/screenshots/editor-dark.webp",
-        "description": "Free, open-source Markdown editor with live preview. The v5.0 preview adds a redesigned workspace, ChatGPT plan sign-in and experimental Google Drive integration.",
+        "description": "Free, open-source Markdown editor with live preview. The v5.0 preview adds a redesigned workspace, ChatGPT plan sign-in, plus Google Drive and Dropbox integration.",
         "license": "https://github.com/versyxdigital/mkeditor/blob/main/LICENSE",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
         "author": {
@@ -77,6 +77,9 @@
     <symbol id="icon-check" viewBox="0 0 24 24">
       <path d="m5 12 4 4L19 6" />
     </symbol>
+    <symbol id="icon-coffee" viewBox="0 0 576 512">
+      <path d="M152-16c-13.3 0-24 10.7-24 24 0 38.9 23.4 59.4 39.1 73.1l1.1 1c16.3 14.3 23.8 21.8 23.8 37.9 0 13.3 10.7 24 24 24s24-10.7 24-24c0-38.9-23.4-59.4-39.1-73.1l-1.1-1C183.5 31.7 176 24.1 176 8 176-5.3 165.3-16 152-16zM96 192c-17.7 0-32 14.3-32 32l0 192c0 53 43 96 96 96l192 0c41.8 0 77.4-26.7 90.5-64l5.5 0c70.7 0 128-57.3 128-128S518.7 192 448 192L96 192zM448 384l0-128c35.3 0 64 28.7 64 64s-28.7 64-64 64zM288 8c0-13.3-10.7-24-24-24S240-5.3 240 8c0 38.9 23.4 59.4 39.1 73.1l1.1 1c16.3 14.3 23.8 21.8 23.8 37.9 0 13.3 10.7 24 24 24s24-10.7 24-24c0-38.9-23.4-59.4-39.1-73.1l-1.1-1C295.5 31.7 288 24.1 288 8z" />
+    </symbol>
     <symbol id="icon-spark" viewBox="0 0 24 24">
       <path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6Z" />
     </symbol>
@@ -87,13 +90,13 @@
       <a class="brand" href="./" aria-label="MKEditor home"><img src="./assets/img/icon.png" alt="" width="32"
           height="32" /><span>MKEditor</span></a>
       <div class="desktop-nav">
-        <a href="#features">Features</a><a href="#ai">AI assistant</a><a href="#drive">Google Drive</a><a
+        <a href="#features">Features</a><a href="#ai">AI assistant</a><a href="#cloud">Cloud storage</a><a
           href="https://github.com/versyxdigital/mkeditor" class="source-link"><svg class="icon icon-fill"
             aria-hidden="true">
             <use href="#icon-github" />
           </svg>GitHub</a>
       </div>
-      <a class="button button-small button-light header-download" href="#download">Get MKEditor</a>
+      <a class="button button-small button-light header-download" href="./web/">Launch MKEditor Web</a>
       <details class="mobile-menu">
         <summary aria-label="Open navigation">
           <svg class="icon" aria-hidden="true">
@@ -101,7 +104,7 @@
           </svg>
         </summary>
         <div class="mobile-menu-panel">
-          <a href="#features">Features</a><a href="#ai">AI assistant</a><a href="#drive">Google Drive</a><a
+          <a href="#features">Features</a><a href="#ai">AI assistant</a><a href="#cloud">Cloud storage</a><a
             href="#download">Downloads</a><a href="https://github.com/versyxdigital/mkeditor">Source on GitHub</a>
         </div>
       </details>
@@ -129,7 +132,7 @@
           </p>
           <div class="hero-actions">
             <a class="button button-accent" href="#download">Download MKEditor</a><a class="button button-outline"
-              href="./web/">Try in your browser</a>
+              href="./web/">Launch MKEditor Web</a>
           </div>
           <div class="hero-badges" role="group" aria-label="GitHub project status">
             <a href="https://github.com/versyxdigital/mkeditor/stargazers"><img
@@ -145,6 +148,13 @@
           <p class="small-note">
             Free &amp; open source. Windows, macOS, Linux &amp; web.
           </p>
+          <a class="coffee-button" href="https://donate.stripe.com/5kQaEX5Md80n3G5ans2Ry05"
+            target="_blank" rel="noopener" aria-label="Support MKEditor" title="Support MKEditor">
+            <span class="coffee-icon" aria-hidden="true"><svg class="icon icon-fill" focusable="false">
+                <use href="#icon-coffee" />
+              </svg></span>
+            <span class="coffee-label">Donate a coffee</span>
+          </a>
         </div>
       </div>
       <div class="hero-media">
@@ -340,18 +350,20 @@
       </div>
     </section>
 
-    <section id="drive" class="section container drive-section" aria-labelledby="drive-title">
+    <section id="cloud" class="section container drive-section" aria-labelledby="cloud-title">
       <div class="split-heading">
         <div>
           <p class="eyebrow drive-eyebrow">
-            <img src="./assets/img/google-drive.png" alt="" width="22" height="22" />Google Drive <span
+            <img src="./assets/img/google-drive.png" alt="" width="22" height="22" />
+            <img src="./assets/img/dropbox.svg" alt="" width="22" height="22" />Cloud storage <span
               class="status-label">Beta</span>
           </p>
-          <h2 id="drive-title">Your Drive files.<br />In your workspace.</h2>
+          <h2 id="cloud-title">Your cloud files.<br />In your workspace.</h2>
         </div>
         <p class="section-lead">
-          Move between local folders and Google Drive.
-          Open and edit your Markdown files within the editor. Upload local files.
+          Move between local folders, Google Drive and Dropbox.
+          Browse your folders, edit Markdown files and save local drafts to the cloud,
+          on desktop or in your browser.
         </p>
       </div>
       <a class="screenshot-link framed-shot drive-main-shot" href="./assets/screenshots/google-drive.webp"
@@ -364,7 +376,7 @@
           alt="MKEditor’s top toolbar selects My Drive while Explorer lists Drive folders and Markdown files; a document is open for editing and preview."
           width="1600" height="1000" loading="lazy" /><span class="image-expand"><svg class="icon" aria-hidden="true">
             <use href="#icon-expand" />
-          </svg><span>See the Drive workspace</span></span></a>
+          </svg><span>See the cloud workspace</span></span></a>
       <div class="recovery-detail">
         <a class="screenshot-link framed-shot" href="./assets/screenshots/recovery.webp" data-screenshot
           data-caption="MKEditor 5.0 — comparing a changed Drive document with the local draft"><img
@@ -380,10 +392,8 @@
           <p class="eyebrow">When versions disagree</p>
           <h3>See the change.<br />Keep your draft.</h3>
           <p>
-            You can reject saves when conflicts arise. MKEditor shows the current Drive version alongside your local
-            edits, so you can compare and decide what to keep.
-            A rejected save leaves your local edits intact, so you can decide
-            what to keep.
+            Compare the cloud version with your local edits when a save conflict arises.
+            Your draft stays intact while you decide what to keep.
           </p>
         </div>
       </div>
@@ -535,11 +545,11 @@
           <p class="eyebrow">Prefer a browser?</p>
           <h3>No installation. Just a document.</h3>
           <p>
-            Use the existing web editor for Markdown and live preview.
-            Desktop-only AI and Drive connections stay in the desktop app.
+            Use MKEditor in your browser, with live preview and Google Drive or Dropbox
+            alongside your local files.
           </p>
         </div>
-        <a class="button button-light" href="./web/">Open the web editor</a>
+        <a class="button button-light" href="./web/">Launch MKEditor Web</a>
       </div>
       <div class="download-links">
         <a href="https://github.com/versyxdigital/mkeditor/releases">All releases &amp; release notes</a><a
@@ -589,13 +599,12 @@
           </div>
         </details>
         <details>
-          <summary>How does Google Drive access work?</summary>
+          <summary>How does cloud access work?</summary>
           <div>
             <p>
-              Connect your Google account from Settings → Connections. Access
-              starts read-only. Enable editing separately to save and create
-              Markdown files in My Drive. Google requests full Drive
-              permission for editing.
+              Choose Google Drive or Dropbox from the toolbar beside the menu.
+              Connect your account to browse and open files, then enable editing
+              to save changes or create files and folders.
             </p>
           </div>
         </details>
@@ -604,7 +613,7 @@
           <div>
             <p>
               Local editing does not upload your documents to a Versyx Digital
-              storage service. Optional Drive and AI connections send
+              storage service. Optional cloud and AI connections send
               information to the service you choose. The assistant has
               controls for sharing the active document, selection and
               mentioned files. Read the
@@ -616,10 +625,10 @@
           <summary>What is different in the browser version?</summary>
           <div>
             <p>
-              The browser editor supports Markdown writing and live preview.
-              Local folder access needs a browser with File System Access
-              support, such as Chrome or Edge. AI providers and authenticated
-              Drive connections are desktop-only.
+              The browser editor supports Markdown, live preview and connections to
+              Google Drive and Dropbox. Local folder access needs a browser with
+              File System Access support, such as Chrome or Edge. The AI assistant
+              is available in the desktop app.
             </p>
           </div>
         </details>
@@ -656,7 +665,7 @@
       <p class="footer-note">
         Free and open source under the MIT licence. Screenshots show the v5.0
         desktop build with an illustrative demo workspace and assistant
-        conversation; no live accounts were used. Google Drive and provider
+        conversation; no live accounts were used. Google Drive, Dropbox and AI provider
         names belong to their respective owners.
       </p>
     </div>

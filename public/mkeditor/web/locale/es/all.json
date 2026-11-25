@@ -121,7 +121,9 @@
     "provider_disabled": "Desactivado",
     "ollama_context_label": "Ventana de contexto (tokens)",
     "ollama_context_default": "Predeterminado de Ollama",
-    "ollama_context_help": "Incluye el historial, las definiciones de herramientas y los archivos. Prueba 32.768 para documentos. Un contexto mayor necesita más memoria; respeta el límite del modelo. Se aplica a mensajes futuros."
+    "ollama_context_help": "Incluye el historial, las definiciones de herramientas y los archivos. Prueba 32.768 para documentos. Un contexto mayor necesita más memoria; respeta el límite del modelo. Se aplica a mensajes futuros.",
+    "auto_open_files_label": "Abrir archivos creados por la IA",
+    "auto_open_files_help": "Abrir automáticamente los archivos nuevos en una pestaña del editor."
   },
   "assistant-tools": {
     "confirm_title": "¿Permitir {{toolName}}?",
@@ -203,6 +205,13 @@
     "callback_return": "Puedes cerrar esta pestaña y volver a MKEditor."
   },
   "cloud": {
+    "dropbox_move_unavailable": "No se pueden mover archivos de Dropbox porque el archivo de origen podría cambiar.",
+    "web_storage_error": "No se pudo acceder al almacenamiento del navegador. Comprueba los permisos de almacenamiento de este sitio y el espacio disponible e inténtalo de nuevo.",
+    "web_busy": "El almacenamiento en la nube está abierto en otra pestaña. Ciérrala y recarga esta.",
+    "web_lock_unavailable": "Este navegador no admite el bloqueo de almacenamiento necesario para editar en la nube con seguridad.",
+    "web_intro": "Conecta Google Drive o Dropbox. Vuelve a conectarte tras cerrar o recargar la pestaña; tus cuentas y borradores se conservan.",
+    "web_unavailable": "El almacenamiento en la nube requiere HTTPS y almacenamiento disponible en el navegador.",
+    "web_config_unavailable": "Este sitio web no ha configurado el inicio de sesión en el navegador para este proveedor.",
     "created_duplicate": "Se creó {{name}}. Otro elemento de esta carpeta tiene el mismo nombre; se conservaron ambos.",
     "connections": "Conexiones",
     "intro": "Conecta Google Drive para explorar y abrir archivos Markdown.",
@@ -348,7 +357,11 @@
       "tab_label": "{{name}} en {{connection}} (Dropbox)",
       "recovered_draft": "Borrador local recuperado. Comprueba Dropbox antes de guardar.",
       "checking_recovery": "Comprobando el documento recuperado con Dropbox…"
-    }
+    },
+    "web_reconnect": "Volver a conectar con {{provider}}",
+    "web_reconnect_status": "Es necesario volver a conectar",
+    "web_reconnect_help": "Tu cuenta está guardada. Vuelve a conectarte para explorar tus archivos.",
+    "web_reconnect_document": "Vuelve a conectarte a {{provider}} para comprobar este documento. Tu copia local se conserva."
   },
   "menus-alerts": {
     "primary": "Primario",
@@ -632,7 +645,11 @@
     "move_into_self_refused": "No se puede mover una carpeta dentro de sí misma",
     "move_same_source": "Ya está en esa ubicación",
     "move_collision": "Ya existe un archivo o carpeta con ese nombre",
-    "move_parent_missing": "La carpeta de destino no existe"
+    "move_parent_missing": "La carpeta de destino no existe",
+    "external_draft_name": "{{name}} (recuperado)",
+    "external_files_recovered": "Se eliminaron o reemplazaron archivos en el disco. Su texto se conserva en pestañas sin guardar.",
+    "external_file_missing_save": "El archivo original no existe o fue reemplazado. El texto sigue abierto; usa Guardar como para guardar una copia.",
+    "filesystem_watch_limit": "Algunas carpetas superan el límite de actualización automática. Vuelve a abrir el espacio de trabajo para actualizarlas."
   },
   "sidebar": {
     "explorer": "Explorador",
@@ -669,6 +686,8 @@
     "export_pdf_tooltip": "Exportar a archivo PDF",
     "export_to_prefix": "Exportar a ",
     "export_html_label": "HTML",
-    "export_pdf_label": "PDF"
+    "export_pdf_label": "PDF",
+    "hide_editor": "Ocultar editor",
+    "show_editor": "Mostrar editor"
   }
 }
