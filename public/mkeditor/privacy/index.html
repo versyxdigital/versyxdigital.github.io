@@ -43,7 +43,7 @@
         <p class="policy-eyebrow">MKEditor / Privacy</p>
         <h1>Privacy Policy</h1>
         <p class="metadata">
-          Last updated: <time datetime="2026-11-25">25 November 2026</time>
+          Last updated: <time datetime="2026-11-26">26 November 2026</time>
         </p>
         <p>
           MKEditor is an open-source Markdown editor published by
@@ -103,13 +103,15 @@
             <p>
               In the desktop application, saved API keys, account tokens and
               cloud recovery snapshots use operating-system-backed encryption.
-              Browser cloud access tokens live only in memory and require
-              sign-in again after reload or expiry. Browser cloud drafts, saved
-              baselines and unresolved operation records use storage under the
-              website's origin and are not encrypted by MKEditor. Ordinary
-              document files, conversation history, settings and local session
-              files are not encrypted by MKEditor itself; protection also
-              depends on your device, browser, account permissions and backups.
+              Desktop connection names and account labels are not encrypted by
+              MKEditor. Browser cloud access tokens live only in memory and
+              require sign-in again after reload or expiry. Browser account
+              labels, cloud drafts, saved baselines and unresolved operation
+              records use storage under the website's origin and are not
+              encrypted by MKEditor. Ordinary document files, conversation
+              history, settings and local session files are not encrypted by
+              MKEditor itself; protection also depends on your device, browser,
+              account permissions and backups.
             </p>
           </section>
 
@@ -134,24 +136,28 @@
               downloads its contents for editing and preview.
             </p>
             <p>
-              Connections initially request read-only Drive access. If you
-              separately choose <strong>Enable editing</strong>, Google requests
-              broader Drive permission, whose consent description includes
-              viewing, editing, creating and deleting Drive files. MKEditor uses
-              this permission to browse folders, save chosen Markdown documents
-              and create Markdown files or copies in your chosen My Drive
-              folder. The application also lets you create folders and move
-              Markdown documents within My Drive. It does not expose remote
-              delete or rename commands. Shared-drive files remain read-only.
+              Connections initially request
+              <code>https://www.googleapis.com/auth/drive.readonly</code> to
+              browse folders and read documents. If you separately choose
+              <strong>Enable editing</strong>, MKEditor also requests
+              <code>https://www.googleapis.com/auth/drive</code>, whose consent
+              description includes viewing, editing, creating and deleting Drive
+              files. MKEditor uses this permission to browse folders, save
+              chosen Markdown documents and create Markdown files or copies in
+              your chosen My Drive folder. The application also lets you create
+              folders and move Markdown documents within My Drive. It does not
+              expose remote delete or rename commands. Shared-drive files remain
+              read-only.
             </p>
             <p>
               MKEditor sends file contents to Google when you save or create a
               Drive document. It also reads contents and revision metadata to
               detect conflicts or check an uncertain save result. New files
-              include an application operation marker used to check creation
-              without creating a duplicate. These requests travel directly
-              between your desktop application or browser editor and Google;
-              they are not routed through a Versyx Digital document server.
+              include an application operation marker used to check an uncertain
+              creation before attempting it again. These requests travel
+              directly between your desktop application or browser editor and
+              Google; they are not routed through a Versyx Digital document
+              server.
             </p>
             <p>
               On desktop, connection names, account labels and encrypted tokens
@@ -170,16 +176,40 @@
               operating-system backups can persist separately.
             </p>
             <p>
-              MKEditor's use and transfer of information received from Google
-              APIs adheres to the
+              Versyx Digital does not collect Drive documents, account labels or
+              file metadata through the cloud integration. We do not collect,
+              share or sell aggregated or anonymised versions of that data.
+              MKEditor processes document previews, comparisons and recovery
+              copies on your device to support editing and restore your work.
+              Word and character counts are calculated locally for display in
+              the editor. MKEditor does not combine Drive data across users or
+              create anonymised datasets. Optional AI requests and information
+              you choose to send for support are described below.
+            </p>
+            <p>
+              MKEditor's use and transfer of raw or derived information received
+              from Google APIs adheres to the
               <a
                 href="https://developers.google.com/terms/api-services-user-data-policy"
                 >Google API Services User Data Policy</a
-              >, including its Limited Use requirements. Google user data is
-              used to provide the visible features described in this policy. We
-              do not sell it, use it for advertising or use it to train
-              generalized AI models. Any sharing with an AI service occurs
-              through the optional, user-controlled actions described below.
+              >, including its Limited Use requirements and the
+              <a
+                href="https://developers.google.com/workspace/workspace-api-user-data-developer-policy"
+                >Google Workspace user data policy</a
+              >. This covers document text, metadata, local copies and any
+              aggregated or anonymised data derived from them. We use Google
+              data only for the visible features described here and do not sell
+              it, provide it to advertisers or data brokers, use it for credit
+              or lending decisions, or use it to train general-purpose AI
+              models.
+            </p>
+            <p>
+              Transfers of Google data are limited to providing the features you
+              choose with your consent, or to security and legal requirements
+              permitted by Google's policies. We do not routinely read your
+              Drive documents. Human access to Google data you provide is
+              limited to specific content you explicitly provide or authorise us
+              to inspect for support, security needs or legal obligations.
             </p>
           </section>
 
@@ -234,11 +264,21 @@
               conversation.
             </p>
             <p>
-              Opening a Drive document alone does not send its full contents to
-              an AI provider. Drive-derived text can be sent if you paste it
-              into chat, enable sharing of selected text, or include a local
-              copy through the assistant's context or tools. Use these controls
-              only for information you intend to share with that provider.
+              Opening a cloud document alone does not send its full contents to
+              an AI provider. Cloud text can be sent if you paste it into chat,
+              enable sharing of selected text, use a tool that reads the current
+              selection, or include a local copy through the assistant's context
+              or tools. These requests go to your chosen provider, including
+              OpenAI when using ChatGPT plan sign-in. Text included in a request
+              can also become part of your locally saved conversation history.
+            </p>
+            <p>
+              Google's Limited Use restrictions continue to apply to Drive text
+              copied into local files, selections or conversations. Drive data
+              must not be sent to a third-party AI service that uses it to train
+              general-purpose models. Check the service's terms and your
+              account's data controls before sharing it. MKEditor does not
+              verify or change your provider's training settings.
             </p>
             <p>
               API keys authenticate requests to the corresponding provider. If
@@ -313,10 +353,25 @@
                 not delete documents or their backups.
               </li>
               <li>
-                <strong>Sessions and browser data:</strong> use Settings to
-                clear the saved session. You can also clear the editor's site
-                data through your browser. Clearing stored sessions does not
-                delete source files.
+                <strong>Sessions and recovery data:</strong> saved drafts,
+                document baselines and session information remain on your device
+                until replaced or cleared; they have no automatic expiry. Use
+                <strong>Settings → Clear saved session</strong> to remove saved
+                session drafts. Unresolved cloud-operation records, which can
+                include document text, remain until their result is checked and
+                acknowledged. Closing a tab or disconnecting an account does not
+                necessarily clear those records. Later document activity can
+                create new checkpoints. Clearing a session does not delete files
+                stored locally or in your cloud account.
+              </li>
+              <li>
+                <strong>Browser data:</strong> closing the editor tab discards
+                its in-memory cloud tokens but keeps account labels and recovery
+                data. To remove all MKEditor browser settings, account records,
+                drafts and folder-access handles, close the editor and clear
+                site data for <code>versyx.digital</code> through your browser.
+                Site data is shared by pages on that origin, so this can also
+                remove data saved by other pages on the website.
               </li>
               <li>
                 <strong>Google Drive:</strong> Disconnect removes locally stored
@@ -328,6 +383,16 @@
                 <a href="https://myaccount.google.com/connections"
                   >Google account connections</a
                 >. Disconnecting does not delete files stored in Drive or undo a
+                request already sent.
+              </li>
+              <li>
+                <strong>Dropbox:</strong> Disconnect and Remove clear
+                credentials and connection information in the same way as Google
+                Drive. Open documents and recovery data remain subject to the
+                controls above. You can revoke MKEditor's access through
+                <a href="https://www.dropbox.com/account/connected_apps"
+                  >Dropbox's connected-app settings</a
+                >. These actions do not delete Dropbox files or reverse a
                 request already sent.
               </li>
               <li>
@@ -357,7 +422,7 @@
           <section aria-labelledby="contact">
             <h2 id="contact">Your choices and contact</h2>
             <p>
-              You can continue editing local documents without Drive or AI
+              You can continue editing local documents without cloud or AI
               connections. You control which accounts to connect, the assistant
               context you share and where you save documents. Google processes
               information under its

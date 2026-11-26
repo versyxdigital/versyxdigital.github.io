@@ -43,7 +43,7 @@
         <p class="policy-eyebrow">MKEditor / Terms</p>
         <h1>Terms of Service</h1>
         <p class="metadata">
-          Last updated: <time datetime="2026-11-23">23 November 2026</time>
+          Last updated: <time datetime="2026-11-26">26 November 2026</time>
         </p>
         <p>
           MKEditor is a free, open-source Markdown editor published by
@@ -130,8 +130,8 @@
           <section aria-labelledby="connected-services">
             <h2 id="connected-services">Connected services and costs</h2>
             <p>
-              Google Drive, AI providers and other external services are
-              optional and are operated by their respective providers. Using
+              Google Drive, Dropbox, AI providers and other external services
+              are optional and are operated by their respective providers. Using
               them may require a separate account, authorization, subscription
               or API key. Their terms, privacy policies, usage limits and
               eligibility rules apply to your use of those services.
@@ -151,10 +151,23 @@
               reverse requests already sent or cancel a provider’s subscription.
             </p>
             <p>
-              Google Drive editing sends your chosen changes to Google. Review
-              conflict notices and save confirmations before relying on a remote
-              copy. You can use local editing without connecting Google Drive or
-              an AI provider.
+              Google Drive and Dropbox connections start read-only. Choosing
+              <strong>Enable editing</strong> requests additional permission to
+              save documents and create files and folders. Supported Drive moves
+              also require editing access. MKEditor provides no remote delete
+              command, even where a provider's permission description includes
+              deletion. Cloud requests travel directly between your device and
+              the provider.
+            </p>
+            <p>
+              Review conflict notices and save confirmations before relying on a
+              remote copy. In the browser editor, account labels and drafts are
+              remembered, but cloud access must be authorised again after reload
+              or token expiry. You can use local editing without any cloud or AI
+              connection. Disconnecting a service does not remove open
+              documents, recovery records or copies already saved elsewhere; the
+              <a href="../privacy/#retention">Privacy Policy</a> explains how to
+              clear them.
             </p>
           </section>
 
@@ -166,6 +179,14 @@
               text, conversation history and information returned by workspace
               tools. Review the context controls before sending sensitive
               material.
+            </p>
+            <p>
+              Google's Limited Use restrictions apply to Drive data and text
+              derived from it, including copies shared with an AI service. Do
+              not send that data to a service that uses it to train
+              general-purpose models. Review the provider's terms and account
+              controls; MKEditor does not verify its training settings. These
+              terms do not authorise data uses prohibited by Google's policies.
             </p>
             <p>
               AI responses may be inaccurate, incomplete or unsuitable for your
@@ -211,9 +232,9 @@
             <h2 id="privacy">Privacy</h2>
             <p>
               The <a href="../privacy/">Privacy Policy</a> explains how local
-              storage, Google Drive, AI providers, website hosting and support
-              correspondence handle information. Connecting a service or sending
-              information to it is a separate choice; these terms do not
+              storage, Google Drive, Dropbox, AI providers, website hosting and
+              support correspondence handle information. Connecting a service or
+              sending information to it is a separate choice; these terms do not
               themselves grant consent to share your documents or personal
               information.
             </p>
@@ -264,10 +285,10 @@
               responsible.
             </p>
             <p>
-              We do not operate Google Drive or AI providers and cannot control
-              their independent decisions or availability. This does not exclude
-              responsibility for our own actions or for obligations we owe you
-              under applicable law.
+              We do not operate Google Drive, Dropbox or AI providers and cannot
+              control their independent decisions or availability. This does not
+              exclude responsibility for our own actions or for obligations we
+              owe you under applicable law.
             </p>
           </section>
 
